@@ -26,11 +26,11 @@ Rectangle {
                 ctx.moveTo(0, i * cellHeight);
                 ctx.lineTo(width, i * cellHeight)
             }
-            for(var i = 0; i < cols; ++i)
-            {
-                ctx.moveTo(i * cellWidth, 0);
-                ctx.lineTo(i * cellWidth, height)
-            }
+//            for(var i = 0; i < cols; ++i)
+//            {
+//                ctx.moveTo(i * cellWidth, 0);
+//                ctx.lineTo(i * cellWidth, height)
+//            }
             ctx.stroke();
             ctx.closePath();
         }
