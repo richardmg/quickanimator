@@ -1,24 +1,31 @@
 import QtQuick 2.1
 
-Flickable {
+Rectangle {
     id: root
     
     property int cellHeight: 20
     property int cellWidth: 10
+    property int rows: 50
+    property int columns: 20
 
-    contentWidth: 1000
-    contentHeight: 1000
+    border.width: 2
 
     StoryBoardGrid {
         y: cellHeight
-        width: root.contentWidth
-        height: root.contentHeight - y
+        width: root.width
+        height: root.height - y
     }
 
     StoryBoardTimeBar {
-        width: root.contentWidth
-        height: contentHeight
+        anchors.fill: parent
         index: 20
     }
+
+//    Rectangle {
+//        width: parent.width
+//        height: cellHeight
+//        border.width: 2
+//        color: Qt.rgba(0, 0, 0, 0)
+//    }
 }
 

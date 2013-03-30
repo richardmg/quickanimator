@@ -6,6 +6,7 @@ ApplicationWindow {
     height: 480
 
     StoryBoard {
-        anchors.fill: parent
+        width: 600
+        height: 300
     }
 }
