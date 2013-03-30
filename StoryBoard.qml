@@ -9,11 +9,6 @@ Flickable {
     contentWidth: 1000
     contentHeight: 1000
 
-//    StoryBoardGridView {
-//        width: root.contentWidth
-//        height: root.contentHeight
-//    }
-
     StoryBoardGrid {
         y: cellHeight
         width: root.contentWidth
@@ -21,8 +16,9 @@ Flickable {
     }
 
     StoryBoardTimeBar {
-        x: 100
+        width: root.contentWidth
         height: contentHeight
+        index: 20
     }
 }
 
