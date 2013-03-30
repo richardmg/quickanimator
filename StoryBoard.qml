@@ -25,16 +25,18 @@ Rectangle {
 //        height: root.height - y
 //    }
 
+
+    Rectangle {
+        width: parent.width
+        height: cellHeight + 2
+        border.width: 1
+        color: "lightgray"
+    }
     StoryBoardTimeBar {
         anchors.fill: parent
         index: 20
     }
 
-//    Rectangle {
-//        width: parent.width
-//        height: cellHeight
-//        border.width: 2
-//        color: Qt.rgba(0, 0, 0, 0)
-//    }
+
 }
 
