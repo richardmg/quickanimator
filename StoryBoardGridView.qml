@@ -1,17 +1,19 @@
 import QtQuick 2.1
 
-GridView {
-    cellWidth: 10
-    cellHeight: 20
-    model: Math.floor(width / cellWidth) * Math.floor(height / cellHeight)
+ListView {
+    id: view
+    model: rows
+    clip: true
     delegate: Rectangle {
-        width: GridView.view.cellWidth
-        height: GridView.view.cellHeight
+        width: view.width
+        height: cellHeight
         color: "black"
+        property int i: index
         Rectangle {
+            y: i == 0 ? 1 : 0
+            width: parent.width
+            height: parent.height - y - 1
             color: "white"
-            width: parent.width - 1
-            height: parent.height - 1
         }
     }
 }

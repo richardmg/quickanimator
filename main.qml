@@ -6,6 +6,8 @@ ApplicationWindow {
     height: 480
 
     StoryBoard {
+        y: 50
+        x: 20
         width: 600
         height: 300
     }
