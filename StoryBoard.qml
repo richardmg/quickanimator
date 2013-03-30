@@ -8,6 +8,7 @@ Rectangle {
     property int rows: 10
     property int columns: 20
 
+    color: "lightgray"
     border.width: 1
     clip: true
 
