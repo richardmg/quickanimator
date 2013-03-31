@@ -2,7 +2,7 @@ import QtQuick 2.1
 import QtQuick.Controls 1.0
 
 ApplicationWindow {
-    id: root
+    id: window
     width: 640
     height: 480
 
@@ -53,9 +53,16 @@ ApplicationWindow {
                 }
             }
             StoryBoard {
+                id: storyBoard
                 width: 2 * parent.width / 3
                 height: parent.height
             }
         }
+    }
+
+    function addSprite(url)
+    {
+        print("Add:", url)
+        storyBoard.rows += 1
     }
 }

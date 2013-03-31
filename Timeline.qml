@@ -18,6 +18,7 @@ ListView {
             ToolButton {
                 text: "+"
                 height: parent.height
+                onClicked: window.addSprite("dummy.png") 
             }
         }
     }
