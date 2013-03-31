@@ -6,25 +6,25 @@ Item {
 
     Rectangle {
         color: "red"
-        x: handle.x
+        x: handle.x + (cellWidth / 2) - 1
         y: cellHeight + 2
         width: 1
         height: parent.height - y - 1
     }
 
-    Rectangle {
-        color: "red"
-        x: handle.x + cellWidth - 3
-        y: cellHeight + 2
-        width: 1
-        height: parent.height - y - 1
-    }
+//    Rectangle {
+//        color: "red"
+//        x: handle.x + cellWidth - 3
+//        y: cellHeight + 2
+//        width: 1
+//        height: parent.height - y - 1
+//    }
 
     Rectangle {
         id: handle
         x: (index * cellWidth) + 1
         y: 1
-        width: cellWidth - 2
+        width: cellWidth - 1
         height: cellHeight
         color: "red"
     }
