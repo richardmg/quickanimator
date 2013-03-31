@@ -14,7 +14,7 @@ Item {
         id: palette
     }
     
-    StoryBoardGridView {
+    Timeline {
         y: cellHeight
         width: root.width
         height: root.height - y
@@ -24,7 +24,7 @@ Item {
         title: "0.0s"
     }
 
-    StoryBoardTimeBar {
+    TimelineIndicator {
         anchors.fill: parent
         index: 20
     }
