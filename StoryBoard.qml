@@ -19,18 +19,11 @@ Rectangle {
         height: root.height - y - border.width
     }
 
-//    StoryBoardGrid {
-//        y: cellHeight
-//        width: root.width
-//        height: root.height - y
-//    }
-
-
     Rectangle {
         width: parent.width
         height: cellHeight + 2
         border.width: 1
-        color: "lightgray"
+        color: root.color
     }
     StoryBoardTimeBar {
         anchors.fill: parent
