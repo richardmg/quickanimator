@@ -19,10 +19,12 @@ ApplicationWindow {
                 width: parent.width / 3
                 onWidthChanged: keyframeProps.width = width
                 height: parent.height
+                spacing: 5
                 TitleBar {
                     title: "Sprite"
                 }
                 TextField {
+                    x: 3
                     placeholderText: "name"
                 }
             }
@@ -40,11 +42,13 @@ ApplicationWindow {
                 id: keyframeProps
                 width: parent.width / 3
                 height: parent.height
+                spacing: 5
                 onWidthChanged: spriteProps.width = width
                 TitleBar {
                     title: "Keyframe"
                 }
                 TextField {
+                    x: 3
                     placeholderText: "State name"
                 }
             }
