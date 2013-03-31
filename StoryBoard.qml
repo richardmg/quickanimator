@@ -1,25 +1,24 @@
 import QtQuick 2.1
 
-Rectangle {
+Item {
     id: root
     
     property int cellHeight: 20
     property int cellWidth: 10
-    property int rows: 10
+    property int rows: 1
     property int columns: 20
 
     SystemPalette {
         id: palette
     }
     
-    color: palette.base
+//    color: "green"//palette.base
     clip: true
 
     StoryBoardGridView {
-        x: border.width
-        y: cellHeight + border.width
-        width: root.width - (border.width * 2)
-        height: root.height - y - border.width
+        y: cellHeight
+        width: root.width
+        height: root.height - y
     }
 
     TitleBar {
