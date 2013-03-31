@@ -8,13 +8,12 @@ Item {
     property int rows: 1
     property int columns: 20
 
+    clip: true
+
     SystemPalette {
         id: palette
     }
     
-//    color: "green"//palette.base
-    clip: true
-
     StoryBoardGridView {
         y: cellHeight
         width: root.width
