@@ -19,8 +19,8 @@ ApplicationWindow {
                 width: parent.width / 3
                 onWidthChanged: keyframeProps.width = width
                 height: parent.height
-                Label {
-                    text: "Sprite"
+                TitleBar {
+                    title: "Sprite"
                 }
                 TextField {
                     placeholderText: "name"
@@ -30,7 +30,7 @@ ApplicationWindow {
                 id: stage
                 width: 2 * parent.width / 3
                 height: parent.height
-                color: "yellow"
+                color: "white"
             }
         }
         SplitView {
@@ -41,8 +41,8 @@ ApplicationWindow {
                 width: parent.width / 3
                 height: parent.height
                 onWidthChanged: spriteProps.width = width
-                Label {
-                    text: "Keyframe"
+                TitleBar {
+                    title: "Keyframe"
                 }
                 TextField {
                     placeholderText: "State name"

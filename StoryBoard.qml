@@ -12,8 +12,7 @@ Rectangle {
         id: palette
     }
     
-    color: palette.alternateBase
-    border.width: 1
+    color: palette.base
     clip: true
 
     StoryBoardGridView {
@@ -23,17 +22,14 @@ Rectangle {
         height: root.height - y - border.width
     }
 
-    Rectangle {
-        width: parent.width
-        height: cellHeight + 2
-        border.width: 1
-        color: root.color
+    TitleBar {
+        title: "0.0s"
     }
+
     StoryBoardTimeBar {
         anchors.fill: parent
         index: 20
     }
-
 
 }
 
