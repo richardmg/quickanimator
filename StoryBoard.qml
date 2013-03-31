@@ -8,7 +8,11 @@ Rectangle {
     property int rows: 10
     property int columns: 20
 
-    color: "lightgray"
+    SystemPalette {
+        id: palette
+    }
+    
+    color: palette.alternateBase
     border.width: 1
     clip: true
 
