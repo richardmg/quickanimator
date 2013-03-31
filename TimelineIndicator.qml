@@ -7,7 +7,7 @@ Item {
     Rectangle {
         color: "red"
         x: handle.x + (cellWidth / 2) - 1
-        y: cellHeight + 2
+        y: cellHeight + 1
         width: 1
         height: parent.height - y - 1
     }
@@ -15,10 +15,19 @@ Item {
     Rectangle {
         id: handle
         x: (index * cellWidth) + 1
-        y: 1
+        y: 0
         width: cellWidth - 1
         height: cellHeight
-        color: "red"
+        gradient: Gradient {
+            GradientStop {
+                position: 0.0;
+                color: Qt.rgba(1.0, 0.0, 0.0, 1.0)
+            }
+            GradientStop {
+                position: 1.0;
+                color: Qt.rgba(0.8, 0.0, 0.0, 1.0)
+            }
+        }
     }
 
     MouseArea {
