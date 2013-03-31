@@ -15,13 +15,13 @@ ApplicationWindow {
             height: 2 * parent.height / 3
 
             Column {
-                id: spriteProps
+                id: imageProps
                 width: parent.width / 3
                 onWidthChanged: keyframeProps.width = width
                 height: parent.height
                 spacing: 5
                 TitleBar {
-                    title: "Sprite"
+                    title: "Image"
                 }
                 TextField {
                     x: 3
@@ -43,7 +43,7 @@ ApplicationWindow {
                 width: parent.width / 3
                 height: parent.height
                 spacing: 5
-                onWidthChanged: spriteProps.width = width
+                onWidthChanged: imageProps.width = width
                 TitleBar {
                     title: "Keyframe"
                 }
@@ -60,9 +60,15 @@ ApplicationWindow {
         }
     }
 
-    function addSprite(url)
+    Component {
+        id: imageComponent
+        Image { }
+    }
+
+    function addImage(url)
     {
-        print("Add:", url)
+        var image = imageComponent.createObject(stage)
+        image.source = url
         storyBoard.rows += 1
     }
 }

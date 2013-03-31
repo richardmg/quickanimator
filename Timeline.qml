@@ -20,7 +20,7 @@ ListView {
                 x: 2
                 height: parent.height - 4
                 anchors.verticalCenter: parent.verticalCenter
-                onClicked: window.addSprite("dummy.png") 
+                onClicked: window.addImage("dummy.jpeg") 
             }
         }
     }
