@@ -5,7 +5,7 @@ Item {
     
     property int cellHeight: 20
     property int cellWidth: 10
-    property int rows: 1
+    property int rows: 3
     property int columns: 20
     property int selectedX: 0
     property int selectedY: 0
@@ -22,14 +22,27 @@ Item {
         width: root.width
         height: root.height - y
 
-        TimelineIndicator {
-            anchors.fill: parent
+        Rectangle {
+            color: "red"
+            x: (selectedX * cellWidth) + (cellWidth / 2) - 1
+            y: 1
+            width: 1
+            height: (selectedY * cellHeight) - 2
+        }
+        Rectangle {
+            color: "red"
+            x: (selectedX * cellWidth) + (cellWidth / 2) - 1
+            y: ((selectedY + 1) * cellHeight)
+            width: 1
+            height: parent.height - y
         }
     }
 
     TitleBar {
         title: "0.0s"
     }
+
+
 
 }
 

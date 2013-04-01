@@ -5,6 +5,6 @@ ListView {
     id: view
     model: rows
     clip: true
-    delegate: TimeLineDelegate {}
+    delegate: TimelineDelegate {}
 }
 
