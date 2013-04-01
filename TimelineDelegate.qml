@@ -13,21 +13,15 @@ Rectangle {
         width: parent.width
         height: parent.height - y - 1
         color: "white"
-        ToolButton {
-            text: "+"
-            x: 2
-            height: parent.height - 4
-            anchors.verticalCenter: parent.verticalCenter
-            onClicked: window.addImage("dummy.jpeg") 
-        }
     }
+
     MouseArea {
         anchors.fill: parent
         property int supressFlickable:0
         onPressed: supressFlickable = 2
         onReleased: root.ListView.view.interactive = true
         onMouseXChanged: {
-            var newSelectedX = Math.floor(mouseX / cellWidth)
+            var newSelectedX = Math.max(0, Math.floor(mouseX / cellWidth))
             if (newSelectedX != selectedX) {
                 selectedX = newSelectedX
                 if (--supressFlickable === 0)
@@ -37,5 +31,12 @@ Rectangle {
         }
     }
 
+    ToolButton {
+        text: "+"
+        x: 2
+        height: parent.height - 4
+        anchors.verticalCenter: parent.verticalCenter
+        onClicked: window.addImage("dummy.jpeg") 
+    }
 }
 
