@@ -21,21 +21,6 @@ Item {
         y: cellHeight
         width: root.width
         height: root.height - y
-
-        Rectangle {
-            color: "red"
-            x: (selectedX * cellWidth) + (cellWidth / 2) - 1
-            y: 1
-            width: 1
-            height: (selectedY * cellHeight) - 2
-        }
-        Rectangle {
-            color: "red"
-            x: (selectedX * cellWidth) + (cellWidth / 2) - 1
-            y: ((selectedY + 1) * cellHeight)
-            width: 1
-            height: parent.height - y
-        }
     }
 
     TitleBar {

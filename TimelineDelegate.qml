@@ -2,6 +2,7 @@ import QtQuick 2.1
 import QtQuick.Controls 1.0
 
 Rectangle {
+    id: root
     width: view.width
     height: cellHeight
     color: "black"
@@ -28,23 +29,5 @@ Rectangle {
         }
     }
 
-    Rectangle {
-        id: handle
-        visible: index === selectedY
-        x: (selectedX * cellWidth)
-        y: 0
-        width: cellWidth - 1
-        height: cellHeight - 1
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0;
-                color: Qt.rgba(1.0, 0.0, 0.0, 1.0)
-            }
-            GradientStop {
-                position: 1.0;
-                color: Qt.rgba(0.8, 0.0, 0.0, 1.0)
-            }
-        }
-    }
 }
 
