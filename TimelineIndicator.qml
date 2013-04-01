@@ -2,22 +2,22 @@ import QtQuick 2.1
 
 Item {
     id: root
-    property int index: 0
 
     Rectangle {
+        id: line
         color: "red"
         x: handle.x + (cellWidth / 2) - 1
-        y: cellHeight + 1
+        y: 1
         width: 1
-        height: parent.height - y - 1
+        height: parent.height - y
     }
 
     Rectangle {
         id: handle
-        x: (index * cellWidth) + 1
-        y: 0
+        x: (selectedX * cellWidth)
+        y: (selectedY * cellHeight) + 1
         width: cellWidth - 1
-        height: cellHeight
+        height: cellHeight - 2
         gradient: Gradient {
             GradientStop {
                 position: 0.0;
@@ -38,9 +38,9 @@ Item {
         drag.axis: Drag.XAxis
         drag.minimumX: 0
         drag.maximumX: root.width - cellWidth
-        onReleased: x = index * cellWidth
-        onXChanged: index = Math.floor(x / cellWidth)
-        x: index * cellWidth
+        onReleased: x = selectedX * cellWidth
+        onXChanged: selectedX = Math.floor(x / cellWidth)
+        x: selectedX * cellWidth
     }
 }
 

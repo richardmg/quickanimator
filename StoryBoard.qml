@@ -7,6 +7,8 @@ Item {
     property int cellWidth: 10
     property int rows: 1
     property int columns: 20
+    property int selectedX: 0
+    property int selectedY: 0
 
     clip: true
 
@@ -15,18 +17,18 @@ Item {
     }
     
     Timeline {
+        id: timeline
         y: cellHeight
         width: root.width
         height: root.height - y
+
+        TimelineIndicator {
+            anchors.fill: parent
+        }
     }
 
     TitleBar {
         title: "0.0s"
-    }
-
-    TimelineIndicator {
-        anchors.fill: parent
-        index: 20
     }
 
 }
