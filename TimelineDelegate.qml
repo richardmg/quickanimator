@@ -23,8 +23,16 @@ Rectangle {
     }
     MouseArea {
         anchors.fill: parent
+        property int supressFlickable:0
+        onPressed: supressFlickable = 2
+        onReleased: root.ListView.view.interactive = true
         onMouseXChanged: {
-            selectedX = Math.floor(mouseX / cellWidth)
+            var newSelectedX = Math.floor(mouseX / cellWidth)
+            if (newSelectedX != selectedX) {
+                selectedX = newSelectedX
+                if (--supressFlickable === 0)
+                    root.ListView.view.interactive = false
+            }
             selectedY = index
         }
     }
