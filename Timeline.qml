@@ -14,6 +14,7 @@ ListView {
     delegate: TimelineDelegate {}
 
     Rectangle {
+        id: selectorLine
         color: "red"
         x: (selectedX * cellWidth) + (cellWidth / 2) - 1
         y: 1
@@ -22,7 +23,7 @@ ListView {
     }
 
     Rectangle {
-        id: handle
+        id: selectorHandle
         x: (selectedX * cellWidth)
         y: -timeline.contentY + (selectedY * cellHeight)
         z: 10
