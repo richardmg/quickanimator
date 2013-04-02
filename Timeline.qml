@@ -6,7 +6,6 @@ ListView {
     property int cellHeight: 20
     property int cellWidth: 10
     property int rows: 3
-    property int columns: 20
     property int selectedX: 0
     property int selectedY: 0
 

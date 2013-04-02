@@ -13,7 +13,6 @@ Item {
         cellHeight: 20
         cellWidth: 10
         rows: 3
-        columns: 20
         selectedX: 0
         selectedY: 0
     }
