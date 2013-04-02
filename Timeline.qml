@@ -14,7 +14,6 @@ ListView {
     delegate: TimelineDelegate {}
 
     Rectangle {
-        visible: handle.visible
         color: "red"
         x: (selectedX * cellWidth) + (cellWidth / 2) - 1
         y: 1
