@@ -69,6 +69,6 @@ ApplicationWindow {
     {
         var image = imageComponent.createObject(stage)
         image.source = url
-        storyBoard.rows += 1
+        storyBoard.timeline.rows += 1
     }
 }

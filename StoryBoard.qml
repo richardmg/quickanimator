@@ -2,26 +2,24 @@ import QtQuick 2.1
 
 Item {
     id: root
-    
-    property int cellHeight: 20
-    property int cellWidth: 10
-    property int rows: 3
-    property int columns: 20
-    property int selectedX: 0
-    property int selectedY: 0
-
     clip: true
+    property alias timeline: timeline
 
     Timeline {
         id: timeline
         y: cellHeight
         width: root.width
         height: root.height - y
+        cellHeight: 20
+        cellWidth: 10
+        rows: 3
+        columns: 20
+        selectedX: 0
+        selectedY: 0
     }
 
     TitleBar {
         title: "0.0s"
     }
-
 }
 

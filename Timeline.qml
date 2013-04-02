@@ -3,6 +3,13 @@ import QtQuick.Controls 1.0
 
 ListView {
     id: view
+    property int cellHeight: 20
+    property int cellWidth: 10
+    property int rows: 3
+    property int columns: 20
+    property int selectedX: 0
+    property int selectedY: 0
+
     model: rows
     clip: true
     delegate: TimelineDelegate {}
