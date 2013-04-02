@@ -28,11 +28,10 @@ ApplicationWindow {
                     placeholderText: "name"
                 }
             }
-            Rectangle {
+            Stage {
                 id: stage
                 width: 2 * parent.width / 3
                 height: parent.height
-                color: "white"
             }
         }
         SplitView {
@@ -67,7 +66,9 @@ ApplicationWindow {
 
     function addImage(url)
     {
-        var image = imageComponent.createObject(stage)
+        var image = imageComponent.createObject(stage.images)
+        image.x = Math.random() * stage.width
+        image.y = Math.random() * stage.height
         image.source = url
         storyBoard.timeline.rows += 1
     }
