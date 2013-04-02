@@ -12,10 +12,6 @@ Item {
 
     clip: true
 
-    SystemPalette {
-        id: palette
-    }
-    
     Timeline {
         id: timeline
         y: cellHeight
@@ -26,8 +22,6 @@ Item {
     TitleBar {
         title: "0.0s"
     }
-
-
 
 }
 
