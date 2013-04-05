@@ -1,11 +1,13 @@
 import QtQuick 2.1
+import "Stage.js" as StageJS
 
 Item {
     id: root
-    property alias images: images
+    property alias images: layers
+    readonly property var api: new StageJS.StageClass(root)
 
     Rectangle {
-        id: images
+        id: layers
         color: "white"
         anchors.left: parent.left
         anchors.right: parent.right
@@ -15,28 +17,14 @@ Item {
 
     MouseArea {
         anchors.fill: images
-        onPressed: {
-            var index = getImageAt(mouseX, mouseY)
-            if (index != -1) {
-                print("Clicked on image:", index)
-            }
-        }
+        onPressed: api.pressStart(mouseX, mouseY)
+        onReleased: api.pressEnd(mouseX, mouseY)
+        onPositionChanged: api.pressDrag(mouseX, mouseY)
     }
 
     TitleBar {
         id: title
         title: "Stage"
-    }
-
-    function getImageAt(x, y)
-    {
-        for (var i=images.children.length - 1; i>=0; --i) {
-            var img = images.children[i]
-            if (x >= img.x && x <= img.x + img.width
-                && y >= img.y && y <= img.y + img.height)
-                return i
-        }
-        return -1
     }
 }
 

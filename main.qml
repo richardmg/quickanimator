@@ -66,10 +66,12 @@ ApplicationWindow {
 
     function addImage(url)
     {
-        var image = imageComponent.createObject(stage.images)
-        image.x = Math.random() * stage.width
-        image.y = Math.random() * stage.height
-        image.source = url
+        var layer = {}
+        layer.image = imageComponent.createObject(stage.images)
+        layer.image.source = "dummy.jpeg"
+        layer.image.x = Math.random() * stage.width - layer.image.width
+        layer.image.y = Math.random() * stage.height - layer.image.height
+        stage.api.addLayer(layer)
         storyBoard.timeline.rows += 1
     }
 }
