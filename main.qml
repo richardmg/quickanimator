@@ -69,8 +69,8 @@ ApplicationWindow {
         var layer = {}
         layer.image = imageComponent.createObject(stage.images)
         layer.image.source = "dummy.jpeg"
-        layer.image.x = 50
-        layer.image.y = 50
+        layer.image.x = 0
+        layer.image.y = 0
         stage.api.addLayer(layer)
         storyBoard.timeline.rows += 1
     }

@@ -4,7 +4,7 @@ import "Stage.js" as StageJS
 Item {
     id: root
     property alias images: layers
-    readonly property var api: new StageJS.StageClass(root)
+    readonly property var api: new StageJS.StageClass()
 
     Rectangle {
         id: layers
@@ -13,6 +13,11 @@ Item {
         anchors.right: parent.right
         anchors.top: title.bottom
         anchors.bottom: parent.bottom
+    }
+
+    Item {
+        id: focusFrames
+        anchors.fill: layers
     }
 
     MouseArea {
@@ -30,11 +35,24 @@ Item {
     Component {
         id: layerFocus
         Rectangle {
-            anchors.fill:parent
+            property Item target: root
+            x: target.x - ((width - target.width) / 2)
+            y: target.y - ((height - target.height) / 2)
+            width: target.width * target.scale
+            height: target.height * target.scale
+            rotation: target.rotation
             color: "transparent"
-            border.width: 2
+            border.width: 1
             border.color: "red"
             smooth: true
+            Rectangle {
+                width: 60
+                height: 60
+                anchors.centerIn: parent
+                color: "transparent"
+                border.width: 1
+                border.color: parent.border.color
+            }
         }
     }
 }

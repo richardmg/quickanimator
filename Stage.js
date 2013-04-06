@@ -1,4 +1,4 @@
-function StageClass(stage) {
+function StageClass() {
     var selectedLayers = new Array
     var layers = new Array;
 
@@ -75,10 +75,8 @@ function StageClass(stage) {
         if (mousedown) {
             if (currentAction.selecting) {
                 var layer = this.getLayerAt(pos);
-                if (layer && !layer.selected) {
+                if (layer && !layer.selected)
                     layer.select(true);
-                    this.repaint();
-                }
             } else if (selectedLayers.length !== 0) {
                 if (currentAction.dragging) {
                     // continue drag
@@ -102,7 +100,6 @@ function StageClass(stage) {
                     currentAction.angle = aar.angle;
                     currentAction.radius = aar.radius;
                 }
-                this.repaint();
             } else {
                 var startSelect = (Math.abs(pos.x - pressStartPos.x) < 10 || Math.abs(pos.y - pressStartPos.y) < 10);
                 currentAction.selecting = true;
@@ -124,21 +121,6 @@ function StageClass(stage) {
                 currentAction = {};
     //        this_canvas.callback.onClicked(layer);
         }
-        this.repaint();
-    }
-
-    this.drawFocus = function(layer)
-    {
-        var focus = layerFocus.createObject(layer.image)
-    }
-
-    this.repaint = function()
-    {
-        for (var i in layers) {
-            var layer = layers[i];
-            if (layer.selected)
-                this.drawFocus(layer);
-        }
     }
 
     this.addLayer = function(layer)
@@ -154,10 +136,14 @@ function StageClass(stage) {
 
             if (select) {
                 selectedLayers.push(layer);
+                layer.focus = layerFocus.createObject(focusFrames)
+                layer.focus.target = layer.image
             } else {
                 var index = selectedLayers.indexOf(layer);
                 selectedLayers.splice(index, 1);
+                delete layer.focus
             }
+
         }
 
         layer.remove = function()
