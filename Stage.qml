@@ -1,4 +1,5 @@
 import QtQuick 2.1
+import QtQuick.Controls 1.0
 import "Stage.js" as StageJS
 
 Item {
@@ -6,8 +7,8 @@ Item {
     readonly property var api: new StageJS.StageClass()
     property alias images: layers
     property int focusSize: 20
-    property bool rotateFocusItems: true
-    property bool scaleFocusItems: false
+    property alias rotateFocusItems: rotateBox.checked
+    property alias scaleFocusItems: scaleBox.checked
 
     Rectangle {
         id: layers
@@ -33,6 +34,19 @@ Item {
     TitleBar {
         id: title
         title: "Stage"
+        Row {
+            anchors.right: parent.right
+            CheckBox {
+                id: rotateBox
+                text: "Rotate"
+                checked: true
+            }
+            CheckBox {
+                id: scaleBox
+                text: "Scale"
+                checked: false
+            }
+        }
     }
 
     Component {
