@@ -17,9 +17,9 @@ Item {
 
     MouseArea {
         anchors.fill: images
-        onPressed: api.pressStart(mouseX, mouseY)
-        onReleased: api.pressEnd(mouseX, mouseY)
-        onPositionChanged: api.pressDrag(mouseX, mouseY)
+        onPressed: api.pressStart({x:mouseX, y:mouseY})
+        onReleased: api.pressEnd({x:mouseX, y:mouseY})
+        onPositionChanged: api.pressDrag({x:mouseX, y:mouseY})
     }
 
     TitleBar {

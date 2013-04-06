@@ -69,8 +69,8 @@ ApplicationWindow {
         var layer = {}
         layer.image = imageComponent.createObject(stage.images)
         layer.image.source = "dummy.jpeg"
-        layer.image.x = Math.random() * stage.width - layer.image.width
-        layer.image.y = Math.random() * stage.height - layer.image.height
+        layer.image.x = 50
+        layer.image.y = 50
         stage.api.addLayer(layer)
         storyBoard.timeline.rows += 1
     }

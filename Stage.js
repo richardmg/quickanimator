@@ -22,8 +22,9 @@ function StageClass(stage) {
         for (var i=layers.length - 1; i>=0; --i) {
             var image = layers[i].image
             if (p.x >= image.x && p.x <= image.x + image.width
-                && p.y >= image.y && p.y <= image.y + image.height)
-                return layer
+                && p.y >= image.y && p.y <= image.y + image.height) {
+                return layers[i]
+            }
         }
     }
 
@@ -31,10 +32,11 @@ function StageClass(stage) {
     {
         for (var i in selectedLayers) {
             var layer = selectedLayers[i];
-            var lpos = layer.canvasToLayer(pos);
             var image = layer.image
-            if (lpos.x >= image.x-30 && lpos.x <= image.x+30
-                    && lpos.y >= image.y-30 && lpos.y <= image.y+30)
+            var cx = image.x + (image.width / 2)
+            var cy = image.y + (image.height / 2)
+            if (pos.x >= cx - 30 && pos.x <= cx + 30
+                    && pos.y >= cy - 30 && pos.y <= cy + 30)
                 return layer;
         }
         return null;
@@ -47,10 +49,12 @@ function StageClass(stage) {
         pressStartTime = new Date().getTime();
         pressStartPos = pos;
 
+            print("here", selectedLayers.length, selectedLayers[0])
         if (selectedLayers.length !== 0) {
             var layer = this.overlapsHandle(pos);
             if (layer) {
                 // start drag
+                print("start drag on", layer)
                 currentAction = {
                     layer: layer, 
                     dragging: true,
@@ -60,9 +64,8 @@ function StageClass(stage) {
             } else {
                 // Start rotation
                 var layer = selectedLayers[0];
-                var center = { x: layer.image.x, y: layer.image.y };
-                var lpos = layer.layerToCanvas(center);
-                currentAction = this.getAngleAndRadius(lpos, pos);
+                var center = { x: layer.image.x + (layer.image.width / 2), y: layer.image.y  + (layer.image.height / 2)};
+                currentAction = this.getAngleAndRadius(center, pos);
                 currentAction.rotating = true
             }
         }
@@ -75,11 +78,13 @@ function StageClass(stage) {
             if (currentAction.selecting) {
                 var layer = this.getLayerAt(pos);
                 if (layer && !layer.selected) {
+                    print("layer:", layer)
                     layer.select(true);
                     this.repaint();
                 }
             } else if (selectedLayers.length !== 0) {
                 if (currentAction.dragging) {
+                    print("continue drag")
                     // continue drag
                     for (var i in selectedLayers) {
                         var image = selectedLayers[i].image;
@@ -91,9 +96,8 @@ function StageClass(stage) {
                 } else if (currentAction.rotating) {
                     // continue rotate
                     var layer = selectedLayers[0];
-                    var center = { x: layer.image.x, y: layer.image.y };
-                    var lpos = layer.layerToCanvas(center);
-                    var aar = this.getAngleAndRadius(lpos, pos);
+                    var center = { x: layer.image.x + (layer.image.width / 2), y: layer.image.y  + (layer.image.height / 2)};
+                    var aar = this.getAngleAndRadius(center, pos);
                     for (var i in selectedLayers) {
                         var image = selectedLayers[i].image;
                         image.rotation += aar.angle - currentAction.angle;
@@ -119,6 +123,7 @@ function StageClass(stage) {
             && Math.abs(pos.y - pressStartPos.y) < 10;
 
         if (click) {
+            print("click")
             var layer = this.getLayerAt(pos);
             if (!layer || !layer.selected)
                 currentAction = {};
@@ -137,7 +142,7 @@ function StageClass(stage) {
         for (var i in layers) {
             var layer = layers[i];
             if (layer.selected)
-                drawFocus(layer);
+                this.drawFocus(layer);
         }
     }
 
@@ -145,43 +150,6 @@ function StageClass(stage) {
     {
         layers.push(layer);
         layer.selected  = layer.selected || false;
-
-        layer.canvasToLayer = function(p)
-        {
-            var g = this.getAngleAndRadius({x:layer.x, y:layer.y}, p);
-            var angleNorm = g.angle - layer.rotation;
-            return {
-                x: layer.x + (Math.cos(angleNorm) * g.radius),
-                y: layer.y + (Math.sin(angleNorm) * g.radius)
-            }
-        }
-
-        layer.layerToCanvas = function(p)
-        {
-            var g = this.getAngleAndRadius({x:layer.x, y:layer.y}, p);
-            var angleNorm = g.angle + layer.rotation;
-            return {
-                x: layer.x + (Math.cos(angleNorm) * g.radius),
-                y: layer.y + (Math.sin(angleNorm) * g.radius)
-            }
-        }
-
-        layer.containsPos = function(p, checkOpacity)
-        {
-            var image = layer.image;
-            p = layer.canvasToLayer(p);
-            var dx = image.scale * image.width/2;
-            var dy = image.scale * image.height/2;
-            if ((p.x >= image.x-dx && p.x <= image.x + dx)
-                    && (p.y >= image.y-dy && p.y <= image.y+dy)) {
-                // todo: get pixel, check for opacity
-                if (checkOpacity === true)
-                    return true
-                else
-                    return true;
-            }
-            return false;
-        }
 
         layer.select = function(select)
         {
@@ -204,7 +172,6 @@ function StageClass(stage) {
                 var i = selectedLayers.indexOf(layer);
                 selectedLayers.splice(i, 1);
             }
-            this.repaint();
         }
 
         layer.setZ = function(z)
