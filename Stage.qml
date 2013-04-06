@@ -5,6 +5,7 @@ Item {
     id: root
     property alias images: layers
     readonly property var api: new StageJS.StageClass()
+    property int focusSize: 20
 
     Rectangle {
         id: layers
@@ -36,15 +37,14 @@ Item {
         id: layerFocus
         Rectangle {
             property Item target: root
-            property int radius: 30
-            x: target.x + (target.width / 2) - radius
-            y: target.y + (target.height / 2) - radius
-            width: radius * 2
-            height: radius * 2
-            rotation: target.rotation
+            x: target.x + (target.width / 2) - focusSize
+            y: target.y + (target.height / 2) - focusSize
+            width: focusSize * 2
+            height: focusSize * 2
             color: "transparent"
-            border.width: 5
-            border.color: Qt.rgba(255, 0, 0, 0.3)
+            radius: focusSize
+            border.width: 3
+            border.color: Qt.rgba(255, 0, 0, 0.7)
             smooth: true
         }
     }

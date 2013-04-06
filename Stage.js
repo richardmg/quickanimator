@@ -35,9 +35,11 @@ function StageClass() {
             var image = layer.image
             var cx = image.x + (image.width / 2)
             var cy = image.y + (image.height / 2)
-            if (pos.x >= cx - 30 && pos.x <= cx + 30
-                    && pos.y >= cy - 30 && pos.y <= cy + 30)
-                return layer;
+            var dx = pos.x - cx
+            var dy = pos.y - cy
+            var len = Math.sqrt((dx * dx) + (dy * dy))
+            if (len < focusSize)
+                return layer
         }
         return null;
     }
