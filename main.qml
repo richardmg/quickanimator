@@ -32,6 +32,7 @@ ApplicationWindow {
                 id: stage
                 width: 2 * parent.width / 3
                 height: parent.height
+                clip: true
             }
         }
         SplitView {
