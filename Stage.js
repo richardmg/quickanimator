@@ -123,7 +123,7 @@ function StageClass() {
             currentAction = {};
             var layer = this.getLayerAt(pos);
             var select = layer && !layer.selected
-            for (var i in selectedLayers)
+            for (var i = selectedLayers.length - 1; i >= 0; --i)
                 selectedLayers[i].select(false)
             if (select)
                 layer.select(select)
