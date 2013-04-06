@@ -120,10 +120,13 @@ function StageClass() {
             && Math.abs(pos.y - pressStartPos.y) < 10;
 
         if (click) {
+            currentAction = {};
             var layer = this.getLayerAt(pos);
-            if (!layer || !layer.selected)
-                currentAction = {};
-    //        this_canvas.callback.onClicked(layer);
+            var select = layer && !layer.selected
+            for (var i in selectedLayers)
+                selectedLayers[i].select(false)
+            if (select)
+                layer.select(select)
         }
     }
 
@@ -140,12 +143,13 @@ function StageClass() {
 
             if (select) {
                 selectedLayers.push(layer);
-                layer.focus = layerFocus.createObject(focusFrames)
+                layer.focus = layerFocus.createObject(0)
+                layer.focus.parent = focusFrames
                 layer.focus.target = layer.image
             } else {
                 var index = selectedLayers.indexOf(layer);
                 selectedLayers.splice(index, 1);
-                delete layer.focus
+                layer.focus.destroy()
             }
 
         }
