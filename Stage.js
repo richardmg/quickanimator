@@ -96,8 +96,10 @@ function StageClass() {
                     var aar = this.getAngleAndRadius(center, pos);
                     for (var i in selectedLayers) {
                         var image = selectedLayers[i].image;
-                        image.rotation += aar.angle - currentAction.angle;
-                        image.scale *= aar.radius / currentAction.radius;
+                        if (rotateFocusItems)
+                            image.rotation += aar.angle - currentAction.angle;
+                        if (scaleFocusItems)
+                            image.scale *= aar.radius / currentAction.radius;
                     }
                     currentAction.angle = aar.angle;
                     currentAction.radius = aar.radius;

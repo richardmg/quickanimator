@@ -3,9 +3,11 @@ import "Stage.js" as StageJS
 
 Item {
     id: root
-    property alias images: layers
     readonly property var api: new StageJS.StageClass()
+    property alias images: layers
     property int focusSize: 20
+    property bool rotateFocusItems: true
+    property bool scaleFocusItems: false
 
     Rectangle {
         id: layers
