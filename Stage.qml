@@ -36,23 +36,16 @@ Item {
         id: layerFocus
         Rectangle {
             property Item target: root
-            x: target.x - ((width - target.width) / 2)
-            y: target.y - ((height - target.height) / 2)
-            width: target.width * target.scale
-            height: target.height * target.scale
+            property int radius: 30
+            x: target.x + (target.width / 2) - radius
+            y: target.y + (target.height / 2) - radius
+            width: radius * 2
+            height: radius * 2
             rotation: target.rotation
             color: "transparent"
-            border.width: 1
-            border.color: "red"
+            border.width: 5
+            border.color: Qt.rgba(255, 0, 0, 0.3)
             smooth: true
-            Rectangle {
-                width: 60
-                height: 60
-                anchors.centerIn: parent
-                color: "transparent"
-                border.width: 1
-                border.color: parent.border.color
-            }
         }
     }
 }
