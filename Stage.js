@@ -129,7 +129,7 @@ function StageClass(stage) {
 
     this.drawFocus = function(layer)
     {
-        print("Draw focus not implemented!")
+        var focus = layerFocus.createObject(layer.image)
     }
 
     this.repaint = function()

@@ -26,5 +26,16 @@ Item {
         id: title
         title: "Stage"
     }
+
+    Component {
+        id: layerFocus
+        Rectangle {
+            anchors.fill:parent
+            color: "transparent"
+            border.width: 2
+            border.color: "red"
+            smooth: true
+        }
+    }
 }
 
