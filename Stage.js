@@ -12,7 +12,7 @@ function StageClass(stage) {
         var dx = p2.x - p1.x;
         var dy = p1.y - p2.y;
         return {
-            angle: Math.atan2(dx, dy) - Math.PI/2,
+            angle: (Math.atan2(dx, dy) / Math.PI) * 180,
             radius: Math.sqrt(dx*dx + dy*dy)
         }; 
     }
@@ -49,12 +49,10 @@ function StageClass(stage) {
         pressStartTime = new Date().getTime();
         pressStartPos = pos;
 
-            print("here", selectedLayers.length, selectedLayers[0])
         if (selectedLayers.length !== 0) {
             var layer = this.overlapsHandle(pos);
             if (layer) {
                 // start drag
-                print("start drag on", layer)
                 currentAction = {
                     layer: layer, 
                     dragging: true,
@@ -78,13 +76,11 @@ function StageClass(stage) {
             if (currentAction.selecting) {
                 var layer = this.getLayerAt(pos);
                 if (layer && !layer.selected) {
-                    print("layer:", layer)
                     layer.select(true);
                     this.repaint();
                 }
             } else if (selectedLayers.length !== 0) {
                 if (currentAction.dragging) {
-                    print("continue drag")
                     // continue drag
                     for (var i in selectedLayers) {
                         var image = selectedLayers[i].image;
@@ -123,7 +119,6 @@ function StageClass(stage) {
             && Math.abs(pos.y - pressStartPos.y) < 10;
 
         if (click) {
-            print("click")
             var layer = this.getLayerAt(pos);
             if (!layer || !layer.selected)
                 currentAction = {};
