@@ -9,7 +9,6 @@ Item {
     property alias rotateFocusItems: rotateBox.checked
     property alias scaleFocusItems: scaleBox.checked
 
-    property bool mousedown: false
     property var pressStartTime: 0
     property var pressStartPos: undefined
     property var currentAction: new Object()
@@ -63,7 +62,6 @@ Item {
 
         onPressed: {
             // start new layer operation, drag or rotate:
-            mousedown = true;
             var pos = {x:mouseX, y:mouseY}
             pressStartTime = new Date().getTime();
             pressStartPos = pos;
@@ -90,46 +88,43 @@ Item {
 
         onPositionChanged: {
             // drag or rotate current layer:
-            if (mousedown) {
-                var pos = {x:mouseX, y:mouseY}
-                if (currentAction.selecting) {
-                    var layer = storyBoard.getLayerAt(pos, storyBoard.currentTime);
-                    if (layer && !layer.selected)
-                        layer.select(true);
-                } else if (storyBoard.selectedLayers.length !== 0) {
-                    if (currentAction.dragging) {
-                        // continue drag
-                        for (var i in storyBoard.selectedLayers) {
-                            var image = storyBoard.layers[storyBoard.selectedLayers[i]].image;
-                            image.x += pos.x - currentAction.x;
-                            image.y += pos.y - currentAction.y;
-                        }
-                        currentAction.x = pos.x;
-                        currentAction.y = pos.y;
-                    } else if (currentAction.rotating) {
-                        // continue rotate
-                        var layer = storyBoard.layers[storyBoard.selectedLayers[0]]
-                        var center = { x: layer.image.x + (layer.image.width / 2), y: layer.image.y  + (layer.image.height / 2)};
-                        var aar = getAngleAndRadius(center, pos);
-                        for (var i in storyBoard.selectedLayers) {
-                            var image = storyBoard.layers[storyBoard.selectedLayers[i]].image;
-                            if (rotateFocusItems)
-                                image.rotation += aar.angle - currentAction.angle;
-                            if (scaleFocusItems)
-                                image.scale *= aar.radius / currentAction.radius;
-                        }
-                        currentAction.angle = aar.angle;
-                        currentAction.radius = aar.radius;
+            var pos = {x:mouseX, y:mouseY}
+            if (currentAction.selecting) {
+                var layer = storyBoard.getLayerAt(pos, storyBoard.currentTime);
+                if (layer && !layer.selected)
+                    layer.select(true);
+            } else if (storyBoard.selectedLayers.length !== 0) {
+                if (currentAction.dragging) {
+                    // continue drag
+                    for (var i in storyBoard.selectedLayers) {
+                        var image = storyBoard.layers[storyBoard.selectedLayers[i]].image;
+                        image.x += pos.x - currentAction.x;
+                        image.y += pos.y - currentAction.y;
                     }
-                } else {
-                    var startSelect = (Math.abs(pos.x - pressStartPos.x) < 10 || Math.abs(pos.y - pressStartPos.y) < 10);
-                    currentAction.selecting = true;
+                    currentAction.x = pos.x;
+                    currentAction.y = pos.y;
+                } else if (currentAction.rotating) {
+                    // continue rotate
+                    var layer = storyBoard.layers[storyBoard.selectedLayers[0]]
+                    var center = { x: layer.image.x + (layer.image.width / 2), y: layer.image.y  + (layer.image.height / 2)};
+                    var aar = getAngleAndRadius(center, pos);
+                    for (var i in storyBoard.selectedLayers) {
+                        var image = storyBoard.layers[storyBoard.selectedLayers[i]].image;
+                        if (rotateFocusItems)
+                            image.rotation += aar.angle - currentAction.angle;
+                        if (scaleFocusItems)
+                            image.scale *= aar.radius / currentAction.radius;
+                    }
+                    currentAction.angle = aar.angle;
+                    currentAction.radius = aar.radius;
                 }
+            } else {
+                var startSelect = (Math.abs(pos.x - pressStartPos.x) < 10 || Math.abs(pos.y - pressStartPos.y) < 10);
+                currentAction.selecting = true;
             }
         }
 
         onReleased: {
-            mousedown = false;
             var pos = {x:mouseX, y:mouseY}
 
             var click = (new Date().getTime() - pressStartTime) < 300 
