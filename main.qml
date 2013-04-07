@@ -33,6 +33,7 @@ ApplicationWindow {
                 width: 2 * parent.width / 3
                 height: parent.height
                 clip: true
+                storyBoard: storyBoard
             }
         }
         SplitView {
@@ -70,9 +71,6 @@ ApplicationWindow {
         var layer = {}
         layer.image = imageComponent.createObject(stage.images)
         layer.image.source = "dummy.jpeg"
-        layer.image.x = 0
-        layer.image.y = 0
-        stage.api.addLayer(layer)
-        storyBoard.timeline.rows += 1
+        storyBoard.add(layer)
     }
 }

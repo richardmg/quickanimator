@@ -5,10 +5,15 @@ import "Stage.js" as StageJS
 Item {
     id: root
     readonly property var api: new StageJS.StageClass()
+    property Item storyBoard
     property alias images: layers
     property int focusSize: 20
     property alias rotateFocusItems: rotateBox.checked
     property alias scaleFocusItems: scaleBox.checked
+
+    onStoryBoardChanged: {
+        storyBoard.stage = root
+    }
 
     Rectangle {
         id: layers
