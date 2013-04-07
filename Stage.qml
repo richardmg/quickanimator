@@ -92,7 +92,7 @@ Item {
             if (currentAction.selecting) {
                 var layer = storyBoard.getLayerAt(pos, storyBoard.currentTime);
                 if (layer && !layer.selected)
-                    layer.select(true);
+                    storyBoard.selectLayer(layer.z, true);
             } else if (storyBoard.selectedLayers.length !== 0) {
                 if (currentAction.dragging) {
                     // continue drag
