@@ -5,6 +5,7 @@ Item {
     clip: true
     property Stage stage: null
     property alias timeline: timeline
+    property int currentTime: 0
 
     property int layerCount: 0
     property var layers: new Array()
@@ -90,5 +91,18 @@ Item {
         layers.splice(oldZ, 1);
         layers.splice(newZ, 0, layer);
     }
+
+    function getLayerAt(p, time)
+    {
+        // todo: respect time
+        for (var i=layers.length - 1; i>=0; --i) {
+            var image = layers[i].image
+            if (p.x >= image.x && p.x <= image.x + image.width
+                && p.y >= image.y && p.y <= image.y + image.height) {
+                return layers[i]
+            }
+        }
+    }
+
 }
 

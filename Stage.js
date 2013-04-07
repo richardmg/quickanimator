@@ -14,18 +14,6 @@ function StageClass() {
         }; 
     }
 
-    this.getLayerAt = function(p)
-    {
-        for (var i=storyBoard.layers.length - 1; i>=0; --i) {
-            var layer = storyBoard.layers[i]
-            var image = layer.image
-            if (p.x >= image.x && p.x <= image.x + image.width
-                && p.y >= image.y && p.y <= image.y + image.height) {
-                return layer
-            }
-        }
-    }
-
     this.overlapsHandle = function(pos)
     {
         for (var i in storyBoard.selectedLayers) {
@@ -74,7 +62,7 @@ function StageClass() {
         // drag or rotate current layer:
         if (mousedown) {
             if (currentAction.selecting) {
-                var layer = this.getLayerAt(pos);
+                var layer = storyBoard.getLayerAt(pos, storyBoard.currentTime);
                 if (layer && !layer.selected)
                     layer.select(true);
             } else if (storyBoard.selectedLayers.length !== 0) {
@@ -119,7 +107,7 @@ function StageClass() {
 
         if (click) {
             currentAction = {};
-            var layer = this.getLayerAt(pos);
+            var layer = storyBoard.getLayerAt(pos, storyBoard.currentTime);
             var select = layer && !layer.selected
             for (var i = storyBoard.selectedLayers.length - 1; i >= 0; --i)
                 storyBoard.selectLayer(storyBoard.selectedLayers[i], false)
