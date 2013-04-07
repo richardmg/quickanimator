@@ -6,9 +6,9 @@ Item {
     property Stage stage: null
     property alias timeline: timeline
 
+    property int layerCount: 0
     property var layers: new Array()
     property var selectedLayers: new Array()
-    property int layerCount: 0
 
     Timeline {
         id: timeline
@@ -26,35 +26,62 @@ Item {
         title: "0.0s"
     }
 
-    function add(layer)
+    function getCurrentKeyFrame(z)
     {
-        layers[layerCount] = new Array()
-        layers[layerCount][0] = layer
-        layer.z = layerCount
-        stage.api.addLayer(layer)
-        layerCount++;
+        return layers[z][0]
     }
 
-    function select(z, select)
+    function addLayer(layer)
+    {
+        layers[layerCount] = new Array()
+        layers[layerCount] = layer
+        layer.keyframes = new Array()
+        layer.z = layerCount++
+        layer.selected = false
+        addKeyframe(layer.z, 0)
+        stage.layerAdded(layer)
+    }
+
+    function addKeyframe(z, time)
+    {
+        // todo: respect time
+        layers[z].keyframes.push({
+            x:0,
+            y:0,
+            width:0,
+            height:0,
+            rotation:0,
+            scale:1,
+            time:time
+        })
+    }
+
+    function selectLayer(z, select)
     {
         var layer = layers[z] 
         if (select === layer.selected)
             return;
         layer.selected = select;
-        stage.select(layer, select)
+        if (select) {
+            selectedLayers.push(layer.z)
+        } else {
+            var i = selectedLayers.indexOf(z);
+            selectedLayers.splice(i, 1);
+        }
+        stage.layerSelected(layer, select)
     }
     
-    function remove(z)
+    function removeLayer(z)
     {
         var layer = layers[z]
         layers.splice(z, 1);
         if (layer.selected) {
-            var i = selectedLayers.indexOf(layer);
+            var i = selectedLayers.indexOf(z);
             selectedLayers.splice(i, 1);
         }
     }
 
-    function setZ(oldZ, newZ)
+    function setLayerZ(oldZ, newZ)
     {
         var layer = layers[oldZ]
         newZ = Math.max(0, Math.min(layers.length - 1, newZ));

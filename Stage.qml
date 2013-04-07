@@ -69,5 +69,21 @@ Item {
             smooth: true
         }
     }
+
+    function layerAdded(layer)
+    {
+    }
+
+    function layerSelected(layer, select)
+    {
+        if (select) {
+            layer.focus = layerFocus.createObject(0)
+            layer.focus.parent = focusFrames
+            layer.focus.target = layer.image
+        } else {
+            layer.focus.destroy()
+        }
+    }
+
 }
 

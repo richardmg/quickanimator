@@ -71,6 +71,6 @@ ApplicationWindow {
         var layer = {}
         layer.image = imageComponent.createObject(stage.images)
         layer.image.source = "dummy.jpeg"
-        storyBoard.add(layer)
+        storyBoard.addLayer(layer)
     }
 }
