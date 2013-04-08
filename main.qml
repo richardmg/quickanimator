@@ -7,6 +7,8 @@ ApplicationWindow {
     width: 640
     height: 480
 
+    property Item item: storyBoard.selectedLayer.image || null
+
     SplitView {
         orientation: Qt.Vertical
         anchors.fill: parent
@@ -76,6 +78,7 @@ ApplicationWindow {
                         id: xField 
                         Layout.row: 2
                         Layout.column:1
+                        text: item ? item.x : ""
                     }
                     Label {
                         text: "y:"
@@ -88,6 +91,7 @@ ApplicationWindow {
                         id: yField 
                         Layout.row: 3
                         Layout.column:1
+                        text: item ? item.y : ""
                     }
                     Label {
                         text: "rotation:"
@@ -100,6 +104,7 @@ ApplicationWindow {
                         id: rotationField 
                         Layout.row: 4
                         Layout.column:1
+                        text: item ? item.rotation.toFixed(3) : ""
                     }
                     Label {
                         text: "scale:"
@@ -112,6 +117,7 @@ ApplicationWindow {
                         id: scaleField 
                         Layout.row: 5
                         Layout.column:1
+                        text: item ? item.scale.toFixed(3) : ""
                     }
                     Rectangle {
                         Layout.row: 6

@@ -10,6 +10,7 @@ Item {
     property int layerCount: 0
     property var layers: new Array()
     property var selectedLayers: new Array()
+    property var selectedLayer: new Object()
 
     Timeline {
         id: timeline
@@ -36,6 +37,7 @@ Item {
         layer.selected = false;
         layer.currentKeyframe = addKeyframe(layer.z, 0);
         stage.layerAdded(layer);
+        selectedLayer = layer;
     }
 
     function addKeyframe(z, time)
