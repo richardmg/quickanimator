@@ -78,7 +78,8 @@ ApplicationWindow {
                         id: xField 
                         Layout.row: 2
                         Layout.column:1
-                        text: item ? item.x : ""
+                        text: item ? item.x.toFixed(3) : ""
+                        onTextChanged: if (item && item.x != text) item.x = text;
                     }
                     Label {
                         text: "y:"
@@ -91,7 +92,7 @@ ApplicationWindow {
                         id: yField 
                         Layout.row: 3
                         Layout.column:1
-                        text: item ? item.y : ""
+                        text: item ? item.y.toFixed(3) : ""
                     }
                     Label {
                         text: "rotation:"
