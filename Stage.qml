@@ -97,9 +97,13 @@ Item {
                 if (currentAction.dragging) {
                     // continue drag
                     for (var i in storyBoard.selectedLayers) {
-                        var image = storyBoard.layers[storyBoard.selectedLayers[i]].image;
+                        var layer = storyBoard.layers[storyBoard.selectedLayers[i]];
+                        var keyframe = layer.currentKeyframe;
+                        var image = layer.image
                         image.x += pos.x - currentAction.x;
                         image.y += pos.y - currentAction.y;
+                        keyframe.x = image.x;
+                        keyframe.y = image.y;
                     }
                     currentAction.x = pos.x;
                     currentAction.y = pos.y;
@@ -109,11 +113,15 @@ Item {
                     var center = { x: layer.image.x + (layer.image.width / 2), y: layer.image.y  + (layer.image.height / 2)};
                     var aar = getAngleAndRadius(center, pos);
                     for (var i in storyBoard.selectedLayers) {
-                        var image = storyBoard.layers[storyBoard.selectedLayers[i]].image;
+                        var layer = storyBoard.layers[storyBoard.selectedLayers[i]];
+                        var keyframe = layer.currentKeyframe;
+                        var image = layer.image
                         if (rotateFocusItems)
                             image.rotation += aar.angle - currentAction.angle;
                         if (scaleFocusItems)
                             image.scale *= aar.radius / currentAction.radius;
+                        keyframe.rotation = image.rotation;
+                        keyframe.scale = image.scale;
                     }
                     currentAction.angle = aar.angle;
                     currentAction.radius = aar.radius;

@@ -27,26 +27,21 @@ Item {
         title: "0.0s"
     }
 
-    function getCurrentKeyFrame(z)
-    {
-        return layers[z][0]
-    }
-
     function addLayer(layer)
     {
-        layers[layerCount] = new Array()
-        layers[layerCount] = layer
-        layer.keyframes = new Array()
-        layer.z = layerCount++
-        layer.selected = false
-        addKeyframe(layer.z, 0)
-        stage.layerAdded(layer)
+        layers[layerCount] = new Array();
+        layers[layerCount] = layer;
+        layer.keyframes = new Array();
+        layer.z = layerCount++;
+        layer.selected = false;
+        layer.currentKeyframe = addKeyframe(layer.z, 0);
+        stage.layerAdded(layer);
     }
 
     function addKeyframe(z, time)
     {
         // todo: respect time
-        layers[z].keyframes.push({
+        var keyframe = {
             x:0,
             y:0,
             width:0,
@@ -54,7 +49,9 @@ Item {
             rotation:0,
             scale:1,
             time:time
-        })
+        };
+        layers[z].keyframes.push(keyframe);
+        return keyframe;
     }
 
     function selectLayer(z, select)
