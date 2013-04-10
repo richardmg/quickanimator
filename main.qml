@@ -55,74 +55,54 @@ ApplicationWindow {
                     anchors.right: parent.right
                     anchors.rightMargin: 5
                     rowSpacing: 2
+                    columns: 2
+
                     Label {
                         text: "state name:"
-                        Layout.row: 1
-                        Layout.column:0
                         anchors.right: nameField.left
                         anchors.rightMargin: 5
                     }
                     TextField {
                         id: nameField
-                        Layout.row: 1
-                        Layout.column:1
                     }
                     Label {
                         text: "x:"
-                        Layout.row: 2
-                        Layout.column:0
                         anchors.right: xField.left
                         anchors.rightMargin: 5
                     }
                     TextField {
                         id: xField 
-                        Layout.row: 2
-                        Layout.column:1
                         text: item ? item.x.toFixed(3) : ""
                         onTextChanged: if (item && item.x != text) item.x = text;
                     }
                     Label {
                         text: "y:"
-                        Layout.row: 3
-                        Layout.column:0
                         anchors.right: yField.left
                         anchors.rightMargin: 5
                     }
                     TextField {
                         id: yField 
-                        Layout.row: 3
-                        Layout.column:1
                         text: item ? item.y.toFixed(3) : ""
                     }
                     Label {
                         text: "rotation:"
-                        Layout.row: 4
-                        Layout.column:0
                         anchors.right: rotationField.left
                         anchors.rightMargin: 5
                     }
                     TextField {
                         id: rotationField 
-                        Layout.row: 4
-                        Layout.column:1
                         text: item ? item.rotation.toFixed(3) : ""
                     }
                     Label {
                         text: "scale:"
-                        Layout.row: 5
-                        Layout.column:0
                         anchors.right: scaleField.left
                         anchors.rightMargin: 5
                     }
                     TextField {
                         id: scaleField 
-                        Layout.row: 5
-                        Layout.column:1
                         text: item ? item.scale.toFixed(3) : ""
                     }
                     Rectangle {
-                        Layout.row: 6
-                        Layout.column: 1
                         Layout.columnSpan: 2
                         Layout.fillHeight: true
                     }
