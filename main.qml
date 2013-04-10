@@ -72,7 +72,8 @@ ApplicationWindow {
                     }
                     SpinBox {
                         id: xField 
-                        value: item ? item.x.toFixed(3) : 0 
+                        value: StoryBoard.layerCount;//item ? item.x : 0 
+                        decimals: 3
                         onValueChanged: if (item && item.x != value) item.x = value;
                     }
                     Label {
@@ -82,7 +83,8 @@ ApplicationWindow {
                     }
                     SpinBox {
                         id: yField 
-                        value: item ? item.y.toFixed(3) : 0 
+                        value: item ? item.y : 0 
+                        decimals: 3
                         onValueChanged: if (item && item.y != value) item.y = value;
                     }
                     Label {
@@ -93,6 +95,7 @@ ApplicationWindow {
                     SpinBox {
                         id: rotationField 
                         value: item ? item.rotation.toFixed(3) : 0 
+                        decimals: 3
                         onValueChanged: if (item && item.rotation != value) item.rotation = value;
                     }
                     Label {
@@ -103,6 +106,7 @@ ApplicationWindow {
                     SpinBox {
                         id: scaleField 
                         value: item ? item.scale.toFixed(3) : 0 
+                        decimals: 3
                         onValueChanged: if (item && item.scale != value) item.scale = value;
                     }
                     Rectangle {
@@ -129,6 +133,7 @@ ApplicationWindow {
         var layer = {}
         layer.image = imageComponent.createObject(stage.images)
         layer.image.source = "dummy.jpeg"
-        storyBoard.addLayer(layer)
+        storyBoard.addLayer(layer);
+        storyBoard.selectLayer(layer.z, true);
     }
 }

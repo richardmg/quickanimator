@@ -37,7 +37,6 @@ Item {
         layer.selected = false;
         layer.currentKeyframe = addKeyframe(layer.z, 0);
         stage.layerAdded(layer);
-        selectedLayer = layer;
     }
 
     function addKeyframe(z, time)
@@ -64,9 +63,12 @@ Item {
         layer.selected = select;
         if (select) {
             selectedLayers.push(layer.z)
+            selectedLayer = layer;
         } else {
             var i = selectedLayers.indexOf(z);
             selectedLayers.splice(i, 1);
+            if (selectedLayer == layer)
+                selectedLayer = null;
         }
         stage.layerSelected(layer, select)
     }
