@@ -70,37 +70,40 @@ ApplicationWindow {
                         anchors.right: xField.left
                         anchors.rightMargin: 5
                     }
-                    TextField {
+                    SpinBox {
                         id: xField 
-                        text: item ? item.x.toFixed(3) : ""
-                        onTextChanged: if (item && item.x != text) item.x = text;
+                        value: item ? item.x.toFixed(3) : 0 
+                        onValueChanged: if (item && item.x != value) item.x = value;
                     }
                     Label {
                         text: "y:"
                         anchors.right: yField.left
                         anchors.rightMargin: 5
                     }
-                    TextField {
+                    SpinBox {
                         id: yField 
-                        text: item ? item.y.toFixed(3) : ""
+                        value: item ? item.y.toFixed(3) : 0 
+                        onValueChanged: if (item && item.y != value) item.y = value;
                     }
                     Label {
                         text: "rotation:"
                         anchors.right: rotationField.left
                         anchors.rightMargin: 5
                     }
-                    TextField {
+                    SpinBox {
                         id: rotationField 
-                        text: item ? item.rotation.toFixed(3) : ""
+                        value: item ? item.rotation.toFixed(3) : 0 
+                        onValueChanged: if (item && item.rotation != value) item.rotation = value;
                     }
                     Label {
                         text: "scale:"
                         anchors.right: scaleField.left
                         anchors.rightMargin: 5
                     }
-                    TextField {
+                    SpinBox {
                         id: scaleField 
-                        text: item ? item.scale.toFixed(3) : ""
+                        value: item ? item.scale.toFixed(3) : 0 
+                        onValueChanged: if (item && item.scale != value) item.scale = value;
                     }
                     Rectangle {
                         Layout.columnSpan: 2
