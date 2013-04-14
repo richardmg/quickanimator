@@ -19,7 +19,7 @@ Item {
         height: root.height - y
         cellHeight: 20
         cellWidth: 10
-        rows: layerCount + 1
+        rows: 20//layerCount + 1
         selectedX: 0
         selectedY: 0
         property alias time: timeline.selectedX

@@ -1,20 +1,46 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.0
 
-ListView {
+Item {
     id: view
     property int cellHeight: 20
     property int cellWidth: 10
-    property int rows: 3
+    property int rows: 10
     property int selectedX: 0
     property int selectedY: 0
     
     signal clicked
     signal doubleClicked
 
-    model: rows
     clip: true
-    delegate: TimelineDelegate {}
+
+    Flickable {
+        id: flickable
+        anchors.fill: parent
+        contentWidth: Math.max(20 * cellWidth, width)
+        contentHeight: rows * cellHeight
+
+        Canvas {
+            width: flickable.contentWidth
+            height: flickable.contentHeight
+            renderTarget: Canvas.FramebufferObject
+            property color fgcolor: "black"
+            property real lineWidth: 0.2
+            onPaint: {
+                var ctx = getContext('2d');        
+                ctx.strokeStyle = fgcolor
+                ctx.lineWidth = lineWidth
+                ctx.beginPath();
+                for(var i = 0; i < rows; ++i)
+                {
+                    ctx.moveTo(0, i * cellHeight);
+                    ctx.lineTo(width, i * cellHeight)
+                }
+                ctx.stroke();
+                ctx.closePath();
+            }
+        }
+    }
 
     Rectangle {
         id: selectorLine
@@ -28,7 +54,7 @@ ListView {
     Rectangle {
         id: selectorHandle
         x: (selectedX * cellWidth)
-        y: -timeline.contentY + (selectedY * cellHeight)
+        y: -flickable.contentY + (selectedY * cellHeight)
         z: 10
         width: cellWidth - 1
         height: cellHeight - 1
