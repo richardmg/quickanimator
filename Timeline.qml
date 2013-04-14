@@ -8,6 +8,9 @@ ListView {
     property int rows: 3
     property int selectedX: 0
     property int selectedY: 0
+    
+    signal clicked
+    signal doubleClicked
 
     model: rows
     clip: true

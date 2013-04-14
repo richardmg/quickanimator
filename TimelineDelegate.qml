@@ -29,6 +29,8 @@ Rectangle {
             }
             selectedY = index
         }
+        onClicked: root.ListView.view.clicked();
+        onDoubleClicked: root.ListView.view.doubleClicked();
     }
 
     ToolButton {

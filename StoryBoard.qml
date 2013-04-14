@@ -22,6 +22,9 @@ Item {
         rows: layerCount + 1
         selectedX: 0
         selectedY: 0
+        onDoubleClicked: {
+            print("clicked on:", selectedX, selectedY)
+        }
     }
 
     TitleBar {
