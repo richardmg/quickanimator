@@ -24,6 +24,18 @@ Item {
         selectedY: 0
 
         onSelectedXChanged: {
+            var time = selectedX;
+            for (var l in root.layers) {
+                var layer = layers[l];
+                for (var i = 0; i < layer.states.length - 1; ++i) {
+                    var stateBefore = layer.states[i];
+                    var stateAfter = layer.states[i + 1];
+                    if (time >= stateBefore.time && time < stateAfter.time)
+                        break;
+                }
+                layer.currentState = layer.states[i];
+                updateItemState(layer);
+            }
         }
 
         onDoubleClicked: {
@@ -41,7 +53,6 @@ Item {
             }
             layer.currentState = createStateFromItem(layer.image, time);
             layer.states.splice(i + 1, 0, layer.currentState);
-            updateLayer(layer);
         }
     }
 
@@ -49,19 +60,14 @@ Item {
         title: "0.0s"
     }
 
-    function updateLayers()
+    function updateItemState(layer)
     {
-        for (var layer in layers)
-            updateLayer(layer)
-    }
-
-    function updateLayer(layer)
-    {
-        var item = layer.item;
-        item.x = layer.x;
-        item.y = layer.y;
-        item.rotation = layer.rotation;
-        item.scale = layer.scale;
+        var item = layer.image;
+        var state = layer.currentState;
+        item.x = state.x;
+        item.y = state.y;
+        item.rotation = state.rotation;
+        item.scale = state.scale;
     }
 
     function addLayer(layer)
