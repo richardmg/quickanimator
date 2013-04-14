@@ -33,29 +33,28 @@ Item {
 
     function addLayer(layer)
     {
-        layers[layerCount] = new Array();
-        layers[layerCount] = layer;
-        layer.keyframes = new Array();
+        layers.push(layer);
         layer.z = layerCount++;
         layer.selected = false;
-        layer.currentKeyframe = addKeyframe(layer.z, 0);
+        layer.states = new Array();
+        layer.currentState = createState(layer.z, 0, layer.image);
+        layer.states.push(layer.currentState);
         stage.layerAdded(layer);
     }
 
-    function addKeyframe(z, time)
+    function createState(z, time, item)
     {
         // todo: respect time
-        var keyframe = {
-            x:0,
-            y:0,
-            width:0,
-            height:0,
-            rotation:0,
-            scale:1,
+        var state = {
+            x:item.x,
+            y:item.y,
+            width:item.width,
+            height:item.height,
+            rotation:item.rotation,
+            scale:item.scale,
             time:time
         };
-        layers[z].keyframes.push(keyframe);
-        return keyframe;
+        return state;
     }
 
     function selectLayer(z, select)

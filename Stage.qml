@@ -96,14 +96,14 @@ Item {
                     // continue drag
                     for (var i in storyBoard.selectedLayers) {
                         var layer = storyBoard.layers[storyBoard.selectedLayers[i]];
-                        var keyframe = layer.currentKeyframe;
+                        var state = layer.currentState;
                         var image = layer.image
                         if (xBox.checked)
                             image.x += pos.x - currentAction.x;
                         if (yBox.checked)
                             image.y += pos.y - currentAction.y;
-                        keyframe.x = image.x;
-                        keyframe.y = image.y;
+                        state.x = image.x;
+                        state.y = image.y;
                     }
                     currentAction.x = pos.x;
                     currentAction.y = pos.y;
@@ -114,14 +114,14 @@ Item {
                     var aar = getAngleAndRadius(center, pos);
                     for (var i in storyBoard.selectedLayers) {
                         var layer = storyBoard.layers[storyBoard.selectedLayers[i]];
-                        var keyframe = layer.currentKeyframe;
+                        var state = layer.currentState;
                         var image = layer.image
                         if (rotateBox.checked)
                             image.rotation += aar.angle - currentAction.angle;
                         if (scaleBox.checked)
                             image.scale *= aar.radius / currentAction.radius;
-                        keyframe.rotation = image.rotation;
-                        keyframe.scale = image.scale;
+                        state.rotation = image.rotation;
+                        state.scale = image.scale;
                     }
                     currentAction.angle = aar.angle;
                     currentAction.radius = aar.radius;
