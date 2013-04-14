@@ -68,50 +68,42 @@ ApplicationWindow {
                         anchors.right: xField.left
                         anchors.rightMargin: 5
                     }
-                    SpinBox {
+                    ItemSpinBox {
                         id: xField 
-                        decimals: 3
-                        onValueChanged: {
-                            if (storyBoard.selectedLayer.image)
-                                storyBoard.selectedLayer.image.x = value;
-                        }
-                        Connections {
-                            target: storyBoard.selectedLayer ? storyBoard.selectedLayer.image : null;
-                            onXChanged: xField.value = storyBoard.selectedLayer.image.x
-                        }
+                        target: storyBoard.selectedLayer ? storyBoard.selectedLayer.image : null;
+                        property: "x"
                     }
                     Label {
                         text: "y:"
                         anchors.right: yField.left
                         anchors.rightMargin: 5
                     }
-                    SpinBox {
+                    ItemSpinBox {
                         id: yField 
-                        value: item ? item.y : 0 
-                        decimals: 3
-                        onValueChanged: if (item && item.y != value) item.y = value;
+                        target: storyBoard.selectedLayer ? storyBoard.selectedLayer.image : null;
+                        property: "y"
                     }
                     Label {
                         text: "rotation:"
                         anchors.right: rotationField.left
                         anchors.rightMargin: 5
                     }
-                    SpinBox {
+                    ItemSpinBox {
                         id: rotationField 
-                        value: item ? item.rotation.toFixed(3) : 0 
-                        decimals: 3
-                        onValueChanged: if (item && item.rotation != value) item.rotation = value;
+                        target: storyBoard.selectedLayer ? storyBoard.selectedLayer.image : null;
+                        property: "rotation"
+                        stepSize: 45
                     }
                     Label {
                         text: "scale:"
                         anchors.right: scaleField.left
                         anchors.rightMargin: 5
                     }
-                    SpinBox {
+                    ItemSpinBox {
                         id: scaleField 
-                        value: item ? item.scale.toFixed(3) : 0 
-                        decimals: 3
-                        onValueChanged: if (item && item.scale != value) item.scale = value;
+                        target: storyBoard.selectedLayer ? storyBoard.selectedLayer.image : null;
+                        property: "scale"
+                        stepSize: 0.1
                     }
                     Rectangle {
                         Layout.columnSpan: 2
