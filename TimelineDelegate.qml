@@ -6,6 +6,8 @@ Rectangle {
     width: view.width
     height: cellHeight
     color: "black"
+    objectName: "timelineDelegate"
+    property int index2: index
 
     property int i: index
     Rectangle {

@@ -46,11 +46,28 @@ ListView {
 
     function addCell(cellComponent, posX, posY)
     {
-        var cell = cellComponent.createObject(this);
+        var delegate = getDelegateInstanceAt(posY);
+        if (!delegate) {
+            console.warn("Error: could not add cell at:", posX, posY);
+            return;
+        }
+        var cell = cellComponent.createObject(delegate);
         cell.x = posX * cellWidth;
-        cell.y = posY * cellHeight;
         cell.width = cellWidth;
         cell.height = cellHeight;
     }
+
+    function getDelegateInstanceAt(index) {
+        for(var i = 0; i < contentItem.children.length; ++i) {
+            var item = contentItem.children[i];
+            // We have to check for the specific objectName we gave our
+            // delegates above, since we also get some items that are not
+            // our delegates here.
+            if (item.objectName == "timelineDelegate" && item.index2 == index)
+                return item;
+        }
+        return undefined;
+    }
+  
 }
 
