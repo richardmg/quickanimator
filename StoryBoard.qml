@@ -22,8 +22,22 @@ Item {
         rows: layerCount + 1
         selectedX: 0
         selectedY: 0
+
         onDoubleClicked: {
-            print("clicked on:", selectedX, selectedY)
+            var time = selectedX;
+            var layer = layers[selectedY];
+            // Add the new state into the correct position in the array according to time:
+            for (var i = layer.states.length - 1; i >= 0; --i) {
+                var state = layer.states[i];
+                if (time === state.time) {
+                    // A state already exist at this time:
+                    return;
+                } else if (time > state.time) {
+                    break;
+                }
+            }
+            layer.currentState = createStateFromItem(layer.image, time);
+            layer.states.splice(i + 1, 0, layer.currentState);
         }
     }
 
@@ -37,14 +51,13 @@ Item {
         layer.z = layerCount++;
         layer.selected = false;
         layer.states = new Array();
-        layer.currentState = createState(layer.z, 0, layer.image);
+        layer.currentState = createStateFromItem(layer.image, 0);
         layer.states.push(layer.currentState);
         stage.layerAdded(layer);
     }
 
-    function createState(z, time, item)
+    function createStateFromItem(item, time)
     {
-        // todo: respect time
         var state = {
             x:item.x,
             y:item.y,
