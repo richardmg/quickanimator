@@ -6,8 +6,6 @@ Item {
     property Item storyBoard
     property alias images: layers
     property int focusSize: 20
-    property alias rotateFocusItems: rotateBox.checked
-    property alias scaleFocusItems: scaleBox.checked
 
     property var pressStartTime: 0
     property var pressStartPos: undefined
@@ -100,8 +98,10 @@ Item {
                         var layer = storyBoard.layers[storyBoard.selectedLayers[i]];
                         var keyframe = layer.currentKeyframe;
                         var image = layer.image
-                        image.x += pos.x - currentAction.x;
-                        image.y += pos.y - currentAction.y;
+                        if (xBox.checked)
+                            image.x += pos.x - currentAction.x;
+                        if (yBox.checked)
+                            image.y += pos.y - currentAction.y;
                         keyframe.x = image.x;
                         keyframe.y = image.y;
                     }
@@ -116,9 +116,9 @@ Item {
                         var layer = storyBoard.layers[storyBoard.selectedLayers[i]];
                         var keyframe = layer.currentKeyframe;
                         var image = layer.image
-                        if (rotateFocusItems)
+                        if (rotateBox.checked)
                             image.rotation += aar.angle - currentAction.angle;
-                        if (scaleFocusItems)
+                        if (scaleBox.checked)
                             image.scale *= aar.radius / currentAction.radius;
                         keyframe.rotation = image.rotation;
                         keyframe.scale = image.scale;
@@ -156,6 +156,16 @@ Item {
         title: "Stage"
         Row {
             anchors.right: parent.right
+            CheckBox {
+                id: xBox
+                text: "X"
+                checked: true
+            }
+            CheckBox {
+                id: yBox
+                text: "Y"
+                checked: true
+            }
             CheckBox {
                 id: rotateBox
                 text: "Rotate"
