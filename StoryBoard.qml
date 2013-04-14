@@ -52,11 +52,19 @@ Item {
             }
             layer.currentState = createStateFromItem(layer.image, time);
             layer.states.splice(i + 1, 0, layer.currentState);
+            timeline.addCell(cell, time, layer.z);
         }
     }
 
     TitleBar {
         title: "Time: " + timeline.time
+    }
+
+    Component {
+        id: cell
+        Rectangle {
+            color: "red"
+        }
     }
 
     function updateItemState(layer)
@@ -78,6 +86,7 @@ Item {
         layer.currentState = createStateFromItem(layer.image, 0);
         layer.states.push(layer.currentState);
         stage.layerAdded(layer);
+        timeline.addCell(cell, 0, layer.z);
     }
 
     function createStateFromItem(item, time)

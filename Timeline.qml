@@ -43,5 +43,14 @@ ListView {
             }
         }
     }
+
+    function addCell(cellComponent, posX, posY)
+    {
+        var cell = cellComponent.createObject(this);
+        cell.x = posX * cellWidth;
+        cell.y = posY * cellHeight;
+        cell.width = cellWidth;
+        cell.height = cellHeight;
+    }
 }
 
