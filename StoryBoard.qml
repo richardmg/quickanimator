@@ -10,7 +10,7 @@ Item {
     property int layerCount: 0
     property var layers: new Array()
     property var selectedLayers: new Array()
-    property var selectedLayer: new Object()
+    property var selectedLayer: null
 
     Timeline {
         id: timeline

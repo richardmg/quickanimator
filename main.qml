@@ -7,8 +7,6 @@ ApplicationWindow {
     width: 640
     height: 480
 
-    property Item item: storyBoard.selectedLayer.image || null
-
     SplitView {
         orientation: Qt.Vertical
         anchors.fill: parent
@@ -72,9 +70,15 @@ ApplicationWindow {
                     }
                     SpinBox {
                         id: xField 
-                        value: StoryBoard.layerCount;//item ? item.x : 0 
                         decimals: 3
-                        onValueChanged: if (item && item.x != value) item.x = value;
+                        onValueChanged: {
+                            if (storyBoard.selectedLayer.image)
+                                storyBoard.selectedLayer.image.x = value;
+                        }
+                        Connections {
+                            target: storyBoard.selectedLayer ? storyBoard.selectedLayer.image : null;
+                            onXChanged: xField.value = storyBoard.selectedLayer.image.x
+                        }
                     }
                     Label {
                         text: "y:"
