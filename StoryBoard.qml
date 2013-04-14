@@ -23,6 +23,9 @@ Item {
         selectedX: 0
         selectedY: 0
 
+        onSelectedXChanged: {
+        }
+
         onDoubleClicked: {
             var time = selectedX;
             var layer = layers[selectedY];
@@ -38,11 +41,27 @@ Item {
             }
             layer.currentState = createStateFromItem(layer.image, time);
             layer.states.splice(i + 1, 0, layer.currentState);
+            updateLayer(layer);
         }
     }
 
     TitleBar {
         title: "0.0s"
+    }
+
+    function updateLayers()
+    {
+        for (var layer in layers)
+            updateLayer(layer)
+    }
+
+    function updateLayer(layer)
+    {
+        var item = layer.item;
+        item.x = layer.x;
+        item.y = layer.y;
+        item.rotation = layer.rotation;
+        item.scale = layer.scale;
     }
 
     function addLayer(layer)
