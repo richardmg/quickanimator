@@ -22,9 +22,9 @@ Item {
         rows: layerCount + 1
         selectedX: 0
         selectedY: 0
+        property alias time: timeline.selectedX
 
         onSelectedXChanged: {
-            var time = selectedX;
             for (var l in root.layers) {
                 var layer = layers[l];
                 for (var i = 0; i < layer.states.length - 1; ++i) {
@@ -39,7 +39,6 @@ Item {
         }
 
         onDoubleClicked: {
-            var time = selectedX;
             var layer = layers[selectedY];
             // Add the new state into the correct position in the array according to time:
             for (var i = layer.states.length - 1; i >= 0; --i) {
@@ -57,7 +56,7 @@ Item {
     }
 
     TitleBar {
-        title: "0.0s"
+        title: "Time: " + timeline.time
     }
 
     function updateItemState(layer)
