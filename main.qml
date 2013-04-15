@@ -57,16 +57,13 @@ ApplicationWindow {
 
                     Label {
                         text: "state name:"
-                        anchors.right: nameField.left
-                        anchors.rightMargin: 5
+                        Layout.alignment: Qt.AlignRight
                     }
                     TextField {
-                        id: nameField
                     }
                     Label {
                         text: "x:"
                         Layout.alignment: Qt.AlignRight
-                        anchors.rightMargin: 5
                     }
                     ItemSpinBox {
                         target: storyBoard.selectedLayer ? storyBoard.selectedLayer.image : null;
@@ -75,7 +72,6 @@ ApplicationWindow {
                     Label {
                         text: "y:"
                         Layout.alignment: Qt.AlignRight
-                        anchors.rightMargin: 5
                     }
                     ItemSpinBox {
                         target: storyBoard.selectedLayer ? storyBoard.selectedLayer.image : null;
@@ -84,7 +80,6 @@ ApplicationWindow {
                     Label {
                         text: "rotation:"
                         Layout.alignment: Qt.AlignRight
-                        anchors.rightMargin: 5
                     }
                     ItemSpinBox {
                         target: storyBoard.selectedLayer ? storyBoard.selectedLayer.image : null;
@@ -94,7 +89,6 @@ ApplicationWindow {
                     Label {
                         text: "scale:"
                         Layout.alignment: Qt.AlignRight
-                        anchors.rightMargin: 5
                     }
                     ItemSpinBox {
                         target: storyBoard.selectedLayer ? storyBoard.selectedLayer.image : null;
