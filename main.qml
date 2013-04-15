@@ -60,6 +60,7 @@ ApplicationWindow {
                         Layout.alignment: Qt.AlignRight
                     }
                     TextField {
+                        enabled: storyBoard.selectedLayer;
                     }
                     Label {
                         text: "x:"
