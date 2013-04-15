@@ -66,7 +66,6 @@ ApplicationWindow {
                     Label {
                         text: "x:"
                         Layout.alignment: Qt.AlignRight
-                        anchors.right: xField.left
                         anchors.rightMargin: 5
                     }
                     ItemSpinBox {

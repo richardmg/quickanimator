@@ -2,7 +2,7 @@ import QtQuick 2.1
 import QtQuick.Controls 1.0
 
 Item {
-    id: view
+    id: root
     property int cellHeight: 20
     property int cellWidth: 10
     property int rows: 10
@@ -38,6 +38,29 @@ Item {
                 }
                 ctx.stroke();
                 ctx.closePath();
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                property int supressFlickable:0
+                onPressed: supressFlickable = 2
+                onReleased: flickable.interactive = true
+                onMouseXChanged: {
+                    var newSelectedX = Math.max(0, Math.floor(mouseX / cellWidth))
+                    if (newSelectedX != selectedX) {
+                        selectedX = newSelectedX
+                        if (--supressFlickable === 0)
+                            flickable.interactive = false
+                    }
+                    var newSelectedY = Math.max(0, Math.floor(mouseY / cellHeight))
+                    if (newSelectedY != selectedY) {
+                        selectedY = newSelectedY
+                        if (--supressFlickable === 0)
+                            flickable.interactive = false
+                    }
+                }
+                onClicked: root.clicked();
+                onDoubleClicked: root.doubleClicked();
             }
         }
     }
