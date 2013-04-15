@@ -65,42 +65,39 @@ ApplicationWindow {
                     }
                     Label {
                         text: "x:"
+                        Layout.alignment: Qt.AlignRight
                         anchors.right: xField.left
                         anchors.rightMargin: 5
                     }
                     ItemSpinBox {
-                        id: xField 
                         target: storyBoard.selectedLayer ? storyBoard.selectedLayer.image : null;
                         property: "x"
                     }
                     Label {
                         text: "y:"
-                        anchors.right: yField.left
+                        Layout.alignment: Qt.AlignRight
                         anchors.rightMargin: 5
                     }
                     ItemSpinBox {
-                        id: yField 
                         target: storyBoard.selectedLayer ? storyBoard.selectedLayer.image : null;
                         property: "y"
                     }
                     Label {
                         text: "rotation:"
-                        anchors.right: rotationField.left
+                        Layout.alignment: Qt.AlignRight
                         anchors.rightMargin: 5
                     }
                     ItemSpinBox {
-                        id: rotationField 
                         target: storyBoard.selectedLayer ? storyBoard.selectedLayer.image : null;
                         property: "rotation"
                         stepSize: 45
                     }
                     Label {
                         text: "scale:"
-                        anchors.right: scaleField.left
+                        Layout.alignment: Qt.AlignRight
                         anchors.rightMargin: 5
                     }
                     ItemSpinBox {
-                        id: scaleField 
                         target: storyBoard.selectedLayer ? storyBoard.selectedLayer.image : null;
                         property: "scale"
                         stepSize: 0.1
