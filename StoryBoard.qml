@@ -1,4 +1,5 @@
 import QtQuick 2.1
+import QtQuick.Controls 1.0
 
 Item {
     id: root
@@ -58,6 +59,17 @@ Item {
 
     TitleBar {
         title: "Time: " + timeline.time
+        Row {
+            anchors.fill: parent
+            ToolButton {
+                anchors.right: parent.right
+                text: "+"
+                x: 2
+                height: parent.height - 4
+                anchors.verticalCenter: parent.verticalCenter
+                onClicked: window.addImage("dummy.jpeg") 
+            }
+        }
     }
 
     Component {
