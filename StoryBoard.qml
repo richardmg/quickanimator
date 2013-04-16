@@ -20,9 +20,9 @@ Item {
         height: root.height - y
         cellHeight: 20
         cellWidth: 10
-        rows: 20//layerCount + 1
         selectedX: 0
         selectedY: 0
+        model: layers
         property alias time: timeline.selectedX
 
         onSelectedXChanged: {
@@ -53,22 +53,19 @@ Item {
             }
             layer.currentState = createStateFromItem(layer.image, time);
             layer.states.splice(i + 1, 0, layer.currentState);
-            timeline.addCell(cell, time, layer.z);
+            timeline.updateModel()
         }
     }
 
     TitleBar {
         title: "Time: " + timeline.time
-        Row {
-            anchors.fill: parent
-            ToolButton {
-                anchors.right: parent.right
-                text: "+"
-                x: 2
-                height: parent.height - 4
-                anchors.verticalCenter: parent.verticalCenter
-                onClicked: window.addImage("dummy.jpeg") 
-            }
+        ToolButton {
+            anchors.right: parent.right
+            text: "+"
+            x: 2
+            height: parent.height - 4
+            anchors.verticalCenter: parent.verticalCenter
+            onClicked: window.addImage("dummy.jpeg") 
         }
     }
 
@@ -98,7 +95,7 @@ Item {
         layer.currentState = createStateFromItem(layer.image, 0);
         layer.states.push(layer.currentState);
         stage.layerAdded(layer);
-        timeline.addCell(cell, 0, layer.z);
+        timeline.updateModel()
     }
 
     function createStateFromItem(item, time)

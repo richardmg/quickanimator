@@ -5,36 +5,51 @@ Item {
     id: root
     property int cellHeight: 20
     property int cellWidth: 10
-    property int rows: 10
     property int selectedX: 0
     property int selectedY: 0
+    property var model: null
     
     signal clicked
     signal doubleClicked
 
     clip: true
 
+    function updateModel()
+    {
+        canvas.requestPaint();
+    }
+
     Flickable {
         id: flickable
         anchors.fill: parent
-        contentWidth: Math.max(20 * cellWidth, width)
-        contentHeight: rows * cellHeight
+        contentWidth: width
+        contentHeight: 20 * cellHeight
 
         Canvas {
+            id: canvas
             width: flickable.contentWidth
             height: flickable.contentHeight
             renderTarget: Canvas.FramebufferObject
             property color fgcolor: "black"
-            property real lineWidth: 0.2
+            property real lineWidth: 1.0
             onPaint: {
                 var ctx = getContext('2d');        
                 ctx.strokeStyle = fgcolor
                 ctx.lineWidth = lineWidth
                 ctx.beginPath();
-                for(var i = 0; i < rows; ++i)
-                {
-                    ctx.moveTo(0, i * cellHeight);
-                    ctx.lineTo(width, i * cellHeight)
+                for (var row=0; row<20; ++row) {
+                    ctx.moveTo(0, row * cellHeight);
+                    ctx.lineTo(width, row * cellHeight)
+
+                }
+                for (var row=0; row<20; ++row) {
+                    var rowData = root.model[row];
+                    if (rowData) {
+                        for (var c in rowData.states) {
+                            var state = rowData.states[c];
+                            ctx.fillRect(state.time * cellWidth, row * cellHeight, cellWidth, cellHeight);
+                        }
+                    }
                 }
                 ctx.stroke();
                 ctx.closePath();
@@ -91,31 +106,6 @@ Item {
                 color: Qt.rgba(0.8, 0.0, 0.0, 1.0)
             }
         }
-    }
-
-    function addCell(cellComponent, posX, posY)
-    {
-        var delegate = getDelegateInstanceAt(posY);
-        if (!delegate) {
-            console.warn("Error: could not add cell at:", posX, posY);
-            return;
-        }
-        var cell = cellComponent.createObject(delegate);
-        cell.x = posX * cellWidth;
-        cell.width = cellWidth;
-        cell.height = cellHeight;
-    }
-
-    function getDelegateInstanceAt(index) {
-        for(var i = 0; i < contentItem.children.length; ++i) {
-            var item = contentItem.children[i];
-            // We have to check for the specific objectName we gave our
-            // delegates above, since we also get some items that are not
-            // our delegates here.
-            if (item.objectName == "timelineDelegate" && item.index2 == index)
-                return item;
-        }
-        return undefined;
     }
   
 }
