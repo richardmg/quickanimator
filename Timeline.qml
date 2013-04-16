@@ -93,10 +93,10 @@ Item {
 
     Rectangle {
         id: selectorHandle
-        x: (selectedX * cellWidth)
+        x: 1 + (selectedX * cellWidth)
         y: -flickable.contentY + (selectedY * cellHeight)
         z: 10
-        width: cellWidth - 1
+        width: cellWidth - 2
         height: cellHeight - 1
         gradient: Gradient {
             GradientStop {
