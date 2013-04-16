@@ -42,12 +42,14 @@ Item {
                     ctx.lineTo(width, row * cellHeight)
 
                 }
+                ctx.fillStyle = Qt.rgba(0.4, 0.4, 0.6, 1);
                 for (var row=0; row<20; ++row) {
                     var rowData = root.model[row];
                     if (rowData) {
                         for (var c in rowData.states) {
                             var state = rowData.states[c];
-                            ctx.fillRect(state.time * cellWidth, row * cellHeight, cellWidth, cellHeight);
+                            ctx.fillRect(1 + (state.time * cellWidth),
+                                1 + (row * cellHeight), cellWidth - 2, cellHeight - 2);
                         }
                     }
                 }
