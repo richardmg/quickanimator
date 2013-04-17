@@ -72,6 +72,11 @@ Item {
         }
     }
 
+    onSelectedStateChanged: {
+        if (selectedState)
+            timeline.setHighlight(selectedState.time, selectedLayer.z);
+    }
+
     Component {
         id: cell
         Rectangle {
@@ -91,6 +96,7 @@ Item {
 
     function addLayer(layer)
     {
+        unselectAllLayers();
         layers.push(layer);
         layer.z = layerCount++;
         layer.selected = false;
@@ -98,8 +104,8 @@ Item {
         layer.currentState = createStateFromItem(layer, 0);
         layer.states.push(layer.currentState);
         stage.layerAdded(layer);
+        selectLayer(layer.z, true);
         timeline.updateModel()
-        root.selectedState = layer.currentState;
     }
 
     function createStateFromItem(layer, time)
@@ -116,6 +122,16 @@ Item {
             time:time
         };
         return state;
+    }
+
+    function unselectAllLayers()
+    {
+        for (var i in selectedLayers) {
+            var layer = layers[selectedLayers[i]];
+            layer.selected = false;
+            stage.layerSelected(layer, false);
+        }
+        selectedLayers = new Array();
     }
 
     function selectLayer(z, select)

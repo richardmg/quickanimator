@@ -87,6 +87,14 @@ Item {
     }
 
     Rectangle {
+        id: highlight
+        visible: false
+        width: timeline.cellWidth
+        height: timeline.cellHeight
+        color: "blue"
+    }
+
+    Rectangle {
         id: selectorLine
         color: "red"
         x: (selectedX * cellWidth) + (cellWidth / 2) - 1
@@ -112,6 +120,13 @@ Item {
                 color: Qt.rgba(0.8, 0.0, 0.0, 1.0)
             }
         }
+    }
+
+    function setHighlight(x, y)
+    {
+        highlight.visible = x >= 0
+        highlight.x = x * cellWidth
+        highlight.y = y * cellHeight
     }
   
 }

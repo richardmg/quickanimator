@@ -130,6 +130,5 @@ ApplicationWindow {
         layer.image = imageComponent.createObject(stage.images)
         layer.image.source = "dummy.jpeg"
         storyBoard.addLayer(layer);
-        storyBoard.selectLayer(layer.z, true);
     }
 }
