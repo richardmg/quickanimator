@@ -99,6 +99,7 @@ Item {
         layer.states.push(layer.currentState);
         stage.layerAdded(layer);
         timeline.updateModel()
+        root.selectedState = layer.currentState;
     }
 
     function createStateFromItem(layer, time)
@@ -126,11 +127,14 @@ Item {
         if (select) {
             selectedLayers.push(layer.z)
             selectedLayer = layer;
+            root.selectedState = layer.currentState;
         } else {
             var i = selectedLayers.indexOf(z);
             selectedLayers.splice(i, 1);
-            if (selectedLayer == layer)
+            if (selectedLayer == layer) {
                 selectedLayer = null;
+                root.selectedState = null;
+            }
         }
         stage.layerSelected(layer, select)
     }
