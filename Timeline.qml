@@ -60,7 +60,11 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 property int supressFlickable:0
-                onPressed: supressFlickable = 2
+                property int startY:0
+                onPressed: { 
+                    supressFlickable = 2
+                    startY = Math.max(0, Math.floor(mouseY / cellHeight))
+                }
                 onReleased: flickable.interactive = true
                 onMouseXChanged: {
                     var newSelectedX = Math.max(0, Math.floor(mouseX / cellWidth))
@@ -71,9 +75,9 @@ Item {
                     }
                     var newSelectedY = Math.max(0, Math.floor(mouseY / cellHeight))
                     if (newSelectedY != selectedY) {
+                        if (supressFlickable > 0 && Math.abs(newSelectedY - startY) === 1)
+                            supressFlickable = 100;
                         selectedY = newSelectedY
-                        if (--supressFlickable === 0)
-                            flickable.interactive = false
                     }
                 }
                 onClicked: root.clicked();
