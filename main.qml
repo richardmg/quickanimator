@@ -60,7 +60,16 @@ ApplicationWindow {
                         Layout.alignment: Qt.AlignRight
                     }
                     TextField {
-                        enabled: storyBoard.selectedLayer;
+                        id: stateName
+                        enabled: storyBoard.selectedState;
+                        onTextChanged: storyBoard.selectedState.name = text;
+                        Connections {
+                            target: storyBoard
+                            onSelectedStateChanged: {
+                                if (storyBoard.selectedState)
+                                    stateName.text = storyBoard.selectedState.name;
+                            }
+                        }
                     }
                     Label {
                         text: "x:"

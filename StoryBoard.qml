@@ -12,6 +12,7 @@ Item {
     property var layers: new Array()
     property var selectedLayers: new Array()
     property var selectedLayer: null
+    property var selectedState: null
 
     Timeline {
         id: timeline
@@ -36,6 +37,7 @@ Item {
                 }
                 layer.currentState = layer.states[i];
                 updateItemState(layer);
+                root.selectedState = layer.currentState;
             }
         }
 
@@ -51,9 +53,10 @@ Item {
                     break;
                 }
             }
-            layer.currentState = createStateFromItem(layer.image, time);
+            layer.currentState = createStateFromItem(layer, time);
             layer.states.splice(i + 1, 0, layer.currentState);
             timeline.updateModel()
+            root.selectedState = layer.currentState;
         }
     }
 
@@ -92,17 +95,19 @@ Item {
         layer.z = layerCount++;
         layer.selected = false;
         layer.states = new Array();
-        layer.currentState = createStateFromItem(layer.image, 0);
+        layer.currentState = createStateFromItem(layer, 0);
         layer.states.push(layer.currentState);
         stage.layerAdded(layer);
         timeline.updateModel()
     }
 
-    function createStateFromItem(item, time)
+    function createStateFromItem(layer, time)
     {
+        var item = layer.image
         var state = {
             x:item.x,
             y:item.y,
+            name:"state_" + time + "_" + layer.z,
             width:item.width,
             height:item.height,
             rotation:item.rotation,
