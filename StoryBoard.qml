@@ -68,7 +68,7 @@ Item {
             x: 2
             height: parent.height - 4
             anchors.verticalCenter: parent.verticalCenter
-            onClicked: window.addImage("dummy.jpeg") 
+            onClicked: myApp.addImage("dummy.jpeg") 
         }
     }
 

@@ -3,9 +3,10 @@ import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
 
 ApplicationWindow {
-    id: window
+    id: myApp
     width: 640
     height: 480
+    property alias storyBoard: storyBoard
 
     SplitView {
         orientation: Qt.Vertical
@@ -76,7 +77,6 @@ ApplicationWindow {
                         Layout.alignment: Qt.AlignRight
                     }
                     ItemSpinBox {
-                        target: storyBoard.selectedLayer ? storyBoard.selectedLayer.image : null;
                         property: "x"
                     }
                     Label {
@@ -84,7 +84,6 @@ ApplicationWindow {
                         Layout.alignment: Qt.AlignRight
                     }
                     ItemSpinBox {
-                        target: storyBoard.selectedLayer ? storyBoard.selectedLayer.image : null;
                         property: "y"
                     }
                     Label {
@@ -92,7 +91,6 @@ ApplicationWindow {
                         Layout.alignment: Qt.AlignRight
                     }
                     ItemSpinBox {
-                        target: storyBoard.selectedLayer ? storyBoard.selectedLayer.image : null;
                         property: "rotation"
                         stepSize: 45
                     }
@@ -101,7 +99,6 @@ ApplicationWindow {
                         Layout.alignment: Qt.AlignRight
                     }
                     ItemSpinBox {
-                        target: storyBoard.selectedLayer ? storyBoard.selectedLayer.image : null;
                         property: "scale"
                         stepSize: 0.1
                     }
