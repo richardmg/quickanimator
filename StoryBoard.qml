@@ -77,13 +77,6 @@ Item {
             timeline.setHighlight(selectedState.time, selectedLayer.z);
     }
 
-    Component {
-        id: cell
-        Rectangle {
-            color: "red"
-        }
-    }
-
     function updateItemState(layer)
     {
         var item = layer.image;
