@@ -73,7 +73,7 @@ Item {
     }
 
     onSelectedStateChanged: {
-        if (selectedState)
+        if (selectedState && selectedLayer)
             timeline.setHighlight(selectedState.time, selectedLayer.z);
     }
 
