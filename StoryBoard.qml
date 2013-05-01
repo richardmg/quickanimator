@@ -112,7 +112,8 @@ Item {
             height:item.height,
             rotation:item.rotation,
             scale:item.scale,
-            time:time
+            time:time,
+            layer: layer.z
         };
         return state;
     }
