@@ -5,9 +5,10 @@ Item {
 
     function walk(frames) { start("walk"); }
     function run(frames) { start("run"); }
+    property var current: "walk"
 
     property int time: 0
-    property var current: "walk"
+    property real msPerFrame: 500
 
     // Create sprites:
     property list<Image> sprites: [
@@ -16,26 +17,25 @@ Item {
     ]
 
     // Create one animation per sprite:
-    NumberAnimation {
-        id: animation0
-        target: sprites[0]
-        properties: "x, y, width, height, rotation, scale"
-        duration: 500//<time to state>
-    }
-
-    NumberAnimation {
-        id: animation1
-        target: sprites[1]
-        properties: "x, y, width, height, rotation, scale"
-        duration: 500//<time to state>
-    }
+    property list<NumberAnimation> animations: [
+        NumberAnimation {
+            target: sprites[0]
+            properties: "x, y, width, height, rotation, scale"
+            duration: 500//<time to state>
+        },
+        NumberAnimation {
+            target: sprites[1]
+            properties: "x, y, width, height, rotation, scale"
+            duration: 500//<time to state>
+        }
+    ]
 
     // Create an array of states per timeline:
     property var timeline_walk: [
-        { name: "state_0_0", time: 0, x: 0, y: 0 },
-        { name: "state_1_0", time: 0, x: 0, y: 100 },
-        { name: "state_1_5", time: 5, x: 10, y: 10 },
-        { name: "state_0_10", time: 10, x: 100, y: 150 }
+        { spriteNr: 0, time: 0, x: 0, y: 0 },
+        { spriteNr: 1, time: 0, x: 0, y: 100 },
+        { spriteNr: 1, time: 5, x: 10, y: 10 },
+        { spriteNr: 0, time: 10, x: 100, y: 150 }
     ]
 
     Timer { id: nextStateTimer }
@@ -50,13 +50,21 @@ Item {
             var state = timeline[i];
             if (state.time != 0)
                 break;
-            var sprite = sprites[i];
+            var sprite = sprites[state.spriteNr];
             sprite.x = state.x;
             sprite.y = state.y;
         }
 
-        // - get next state (and all states at the same time)
-        // - 
+        // Get next state (and all states at the same time)
+        var nextStateTime = state.time;
+        for (; i < timeline.length; ++i) {
+            state = timeline[i];
+            animations[state.spriteNr].duration = state.time * msPerFrame;
+            sprite = sprites[state.spriteNr];
+            sprite.x = state.x;
+            sprite.y = state.y;
+        }
+
     }
 
     width: 640
