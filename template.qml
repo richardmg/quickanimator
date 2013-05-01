@@ -10,20 +10,22 @@ Item {
     property var current: "walk"
 
     // Create sprites:
-    Image { id: sprite1; source: "dummy.jpeg" }
-    Image { id: sprite2; source: "dummy.jpeg" }
+    property list<Image> sprites: [
+        Image { source: "dummy.jpeg"; parent: storyboard },
+        Image { source: "dummy.jpeg"; parent: storyboard }
+    ]
 
     // Create one animation per sprite:
     NumberAnimation {
-        id: sprite1Animation
-        target: sprite1
+        id: animation0
+        target: sprites[0]
         properties: "x, y, width, height, rotation, scale"
         duration: 500//<time to state>
     }
 
     NumberAnimation {
-        id: sprite2Animation
-        target: sprite2
+        id: animation1
+        target: sprites[1]
         properties: "x, y, width, height, rotation, scale"
         duration: 500//<time to state>
     }
@@ -31,7 +33,7 @@ Item {
     // Create an array of states per timeline:
     property var timeline_walk: [
         { name: "state_0_0", time: 0, x: 0, y: 0 },
-        { name: "state_1_0", time: 0, x: 0, y: 0 },
+        { name: "state_1_0", time: 0, x: 0, y: 100 },
         { name: "state_1_5", time: 5, x: 10, y: 10 },
         { name: "state_0_10", time: 10, x: 100, y: 150 }
     ]
@@ -42,7 +44,17 @@ Item {
     {
         current = timelineName;
         var timeline = storyboard["timeline_" + timelineName];
-        // - 1 move all sprites to states at time 0 in current
+
+        // Move all sprites to states at time 0:
+        for (var i = 0; i < timeline.length; ++i) {
+            var state = timeline[i];
+            if (state.time != 0)
+                break;
+            var sprite = sprites[i];
+            sprite.x = state.x;
+            sprite.y = state.y;
+        }
+
         // - get next state (and all states at the same time)
         // - 
     }
