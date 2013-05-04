@@ -6,10 +6,13 @@ Item {
     property int currentStateIndex: 0
     property int timeToNextState: 0
     property var timeplan: []
+    property var time: 0
 
     property Timer timer: Timer {
         interval: 1
         onTriggered: {
+            time += timeplan[currentStateIndex];
+            storyboard.time = Math.max(storyboard.time, time);
             var nextState = sprite.states[++currentStateIndex];
             if (nextState) {
                 sprite.timeToNextState = timeplan[currentStateIndex] * msPerFrame;

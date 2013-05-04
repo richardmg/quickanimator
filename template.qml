@@ -1,12 +1,16 @@
 import QtQuick 2.1
 
 Item {
+    id: storyboard
+
     function walk(frames) { start("walk"); }
     function run(frames) { start("run"); }
     property var current: "walk"
 
     property var time: 0
-    property real msPerFrame: 500
+    property real msPerFrame: 2000
+
+    onTimeChanged: print("time:", time)
 
     // Create sprites:
     property list<Item> sprites: [
