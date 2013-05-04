@@ -9,62 +9,105 @@ Item {
 
     property int time: 0
     property real msPerFrame: 500
+    
+    property int _nextStateSpriteIndex: 0
+    property int _nextStateTime: 0
 
     // Create sprites:
     property list<Image> sprites: [
-        Image { source: "dummy.jpeg"; parent: storyboard },
-        Image { source: "dummy.jpeg"; parent: storyboard }
-    ]
-
-    // Create one animation per sprite:
-    property list<NumberAnimation> animations: [
-        NumberAnimation {
-            target: sprites[0]
-            properties: "x, y, width, height, rotation, scale"
-            duration: 500//<time to state>
+        Image {
+            id: sprite1
+            source: "dummy.jpeg";
+            parent: storyboard
+            property int stateNr: 0
+            property int timeToNextState: 0
+            transitions: Transition {
+                NumberAnimation {
+                    properties: "x, y, width, height, rotation, scale"
+                    duration: sprite1.timeToNextState
+                }
+            }
+            states: [
+                State {
+                    property int time: 0
+                    PropertyChanges { target: sprite1; x: 0; y: 0 }
+                },
+                State {
+                    property int time: 2
+                    PropertyChanges { target: sprite1; x: 200; y: 50 }
+                }
+            ]
         },
-        NumberAnimation {
-            target: sprites[1]
-            properties: "x, y, width, height, rotation, scale"
-            duration: 500//<time to state>
+        Image {
+            id: sprite2
+            source: "dummy.jpeg";
+            parent: storyboard
+            property int timeToNextState: 0
+            transitions: Transition {
+                NumberAnimation {
+                    properties: "x, y, width, height, rotation, scale"
+                    duration: sprite2.timeToNextState
+                }
+            }
+            states: [
+                State {
+                    property int time: 0
+                    PropertyChanges { target: sprite2; x: 0; y: 100 }
+                }
+            ]
         }
     ]
 
-    // Create an array of states per timeline:
-    property var timeline_walk: [
-        { spriteNr: 0, time: 0, x: 0, y: 0 },
-        { spriteNr: 1, time: 0, x: 0, y: 100 },
-        { spriteNr: 1, time: 5, x: 10, y: 10 },
-        { spriteNr: 0, time: 10, x: 100, y: 150 }
-    ]
+    Timer {
+        id: nextStateTimer
+        onTriggered: {
+            // Move all sprites to first state:
+            for (var i = 0; i < sprites.length; ++i) {
+                var sprite = sprites[i];
+                var state = sprite.states[0];
+                sprite.timeToNextState = state.time * msPerFrame;
+                sprite.state = state.name;
+                if (sprite.states.length > 1) {
+                    var time = sprite.states[1].time;
+                    print(storyboard._nextStateTime)
+                    if (time > storyboard._nextStateTime) {
+                        storyboard._nextStateSpriteIndex = i;
+                        storyboard._nextStateTime = time;
+                    }
+                }
+            }
 
-    Timer { id: nextStateTimer }
+            // Prepare for next state:
+            if (storyboard._nextStateTime > 0) {
+                nextStateTimer.interval = storyboard._nextStateTime * msPerFrame;
+                nextStateTimer.start();
+            }
+        }
+    }
 
     function start(timelineName)
     {
-        current = timelineName;
-        var timeline = storyboard["timeline_" + timelineName];
-
-        // Move all sprites to states at time 0:
-        for (var i = 0; i < timeline.length; ++i) {
-            var state = timeline[i];
-            if (state.time != 0)
-                break;
-            var sprite = sprites[state.spriteNr];
-            sprite.x = state.x;
-            sprite.y = state.y;
+        // Move all sprites to first state:
+        for (var i = 0; i < sprites.length; ++i) {
+            var sprite = sprites[i];
+            var state = sprite.states[0];
+            sprite.timeToNextState = state.time * msPerFrame;
+            sprite.state = state.name;
+            if (sprite.states.length > 1) {
+                var time = sprite.states[1].time;
+                print(storyboard._nextStateTime)
+                if (time > storyboard._nextStateTime) {
+                    storyboard._nextStateSpriteIndex = i;
+                    storyboard._nextStateTime = time;
+                }
+            }
         }
 
-        // Get next state (and all states at the same time)
-        var nextStateTime = state.time;
-        for (; i < timeline.length; ++i) {
-            state = timeline[i];
-            animations[state.spriteNr].duration = state.time * msPerFrame;
-            sprite = sprites[state.spriteNr];
-            sprite.x = state.x;
-            sprite.y = state.y;
+        // Prepare for next state:
+        if (storyboard._nextStateTime > 0) {
+            nextStateTimer.interval = storyboard._nextStateTime * msPerFrame;
+            nextStateTimer.start();
         }
-
     }
 
     width: 640
