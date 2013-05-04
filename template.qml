@@ -1,8 +1,6 @@
 import QtQuick 2.1
 
 Item {
-    id: storyboard
-
     function walk(frames) { start("walk"); }
     function run(frames) { start("run"); }
     property var current: "walk"

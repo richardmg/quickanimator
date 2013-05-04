@@ -6,6 +6,7 @@ Item {
     property int currentStateIndex: 0
     property int timeToNextState: 0
     property var timeplan: []
+
     property Timer timer: Timer {
         interval: 1
         onTriggered: {
@@ -16,6 +17,7 @@ Item {
             }
         }
     }
+
     transitions: Transition {
         SequentialAnimation {
             NumberAnimation {
