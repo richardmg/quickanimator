@@ -15,19 +15,21 @@ Item {
         StoryboardSprite {
             id: sprite1
             Image { source: "dummy.jpeg" }
+            timeplan: [0, 1, 4]
             states: [
-                State { property int time: 0; PropertyChanges { target: sprite1; x: 0; y: 0 } },
-                State { property int time: 1; PropertyChanges { target: sprite1; x: 200; y: 50 } },
-                State { property int time: 4; PropertyChanges { target: sprite1; x: 100; y: 150; scale: 0.5 } }
+                State { PropertyChanges { target: sprite1; x: 0; y: 0 } },
+                State { PropertyChanges { target: sprite1; x: 200; y: 50 } },
+                State { PropertyChanges { target: sprite1; x: 100; y: 150; scale: 0.5 } }
             ]
         },
         StoryboardSprite {
             id: sprite2
             Image { source: "dummy.jpeg" }
+            timeplan: [0, 2, 4]
             states: [
-                State { property int time: 0; PropertyChanges { target: sprite2; x: 0; y: 100 } },
-                State { property int time: 2; PropertyChanges { target: sprite2; x: 0; y: 0; rotation: 45 } },
-                State { property int time: 4; PropertyChanges { target: sprite2; x: 100; y: 150; scale: 0.5 } }
+                State { PropertyChanges { target: sprite2; x: 0; y: 100 } },
+                State { PropertyChanges { target: sprite2; x: 0; y: 0; rotation: 45 } },
+                State { PropertyChanges { target: sprite2; x: 100; y: 150; scale: 0.5 } }
             ]
         }
     ]

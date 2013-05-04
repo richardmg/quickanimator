@@ -5,13 +5,14 @@ Item {
     parent: storyboard
     property int currentStateIndex: 0
     property int timeToNextState: 0
+    property var timeplan: []
     property Timer timer: Timer {
         interval: 1
         onTriggered: {
-            var nextState = sprite.states[++sprite.currentStateIndex];
+            var nextState = sprite.states[++currentStateIndex];
             if (nextState) {
-                sprite.timeToNextState = nextState.time * msPerFrame;
-                sprite.state = nextState.name;
+                sprite.timeToNextState = timeplan[currentStateIndex] * msPerFrame;
+                state = nextState.name;
             }
         }
     }
@@ -19,9 +20,9 @@ Item {
         SequentialAnimation {
             NumberAnimation {
                 properties: "x, y, width, height, rotation, scale"
-                duration: sprite.timeToNextState
+                duration: timeToNextState
             }
-            ScriptAction { script: sprite.timer.restart(); }
+            ScriptAction { script: timer.restart(); }
         }
     }
 }
