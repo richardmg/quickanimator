@@ -31,4 +31,29 @@ Item {
             ScriptAction { script: timer.restart(); }
         }
     }
+
+    function setTime(time, duration)
+    {
+        sprite.time = time
+
+        // Binary search timplan array:
+        var low = 0, high = timeplan.length - 1;
+        var t, i = 0;
+
+        while (low <= high) {
+            i = Math.floor((low + high) / 2) - 1;
+            t = timeplan[i];
+            if (time < t) {
+                high = i - 1;
+                continue;
+            };
+            if (time == t)
+                break;
+            t = timeplan[++i];
+            if (time <= t)
+                break;
+            low = i + 1;
+        }
+        print("found i,t:", i, timeplan[i]);
+    }
 }
