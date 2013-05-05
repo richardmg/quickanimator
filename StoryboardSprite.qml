@@ -11,12 +11,12 @@ Item {
     property Timer timer: Timer {
         interval: 1
         onTriggered: {
-            time += timeplan[currentStateIndex];
+            time = timeplan[currentStateIndex];
             if (time > storyboard.time)
                 storyboard.time = time;
             var nextState = sprite.states[++currentStateIndex];
             if (nextState) {
-                sprite.timeToNextState = timeplan[currentStateIndex] * msPerFrame;
+                sprite.timeToNextState = (timeplan[currentStateIndex] - time) * msPerFrame;
                 state = nextState.name;
             }
         }
