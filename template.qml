@@ -36,6 +36,12 @@ Item {
         }
     ]
 
+    function setTime(time)
+    {
+        for (var i = 0; i < sprites.length; ++i)
+            sprites[i].setTime(time);
+    }
+
     function start(timelineName)
     {
         for (var i = 0; i < sprites.length; ++i) {
