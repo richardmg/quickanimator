@@ -14,9 +14,9 @@ Item {
             time = timeplan[currentStateIndex];
             if (time > storyboard.time)
                 storyboard.time = time;
-            var nextState = sprite.states[++currentStateIndex];
+            var nextState = states[++currentStateIndex];
             if (nextState) {
-                sprite.timeToNextState = (timeplan[currentStateIndex] - time) * msPerFrame;
+                timeToNextState = (timeplan[currentStateIndex] - time) * msPerFrame;
                 state = nextState.name;
             }
         }
@@ -32,7 +32,7 @@ Item {
         }
     }
 
-    function setTime(time, duration)
+    function setTime(time)
     {
         sprite.time = time
 
@@ -54,6 +54,9 @@ Item {
                 break;
             low = i + 1;
         }
-        print("found i,t:", i, timeplan[i]);
+
+        currentStateIndex = i;
+        timeToNextState = Math.max(0, timeplan[i] - time) * msPerFrame;
+        state = states[i].name;
     }
 }

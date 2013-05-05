@@ -27,7 +27,7 @@ Item {
         StoryboardSprite {
             id: sprite2
             Image { source: "dummy.jpeg" }
-            timeplan: [0, 2, 3]
+            timeplan: [0, 2, 4]
             states: [
                 State { PropertyChanges { target: sprite2; x: 0; y: 100 } },
                 State { PropertyChanges { target: sprite2; x: 0; y: 0; rotation: 45 } },
