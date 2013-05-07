@@ -8,18 +8,11 @@ Item {
     property var timeplan: []
     property var time: 0
 
-    property Timer timer: Timer {
+    Timer {
+        id: setStateTimer
         interval: 1
-        onTriggered: {
-            time = timeplan[currentStateIndex];
-            if (time > storyboard.time)
-                storyboard.time = time;
-            var nextState = states[++currentStateIndex];
-            if (nextState) {
-                timeToNextState = (timeplan[currentStateIndex] - time) * msPerFrame;
-                state = nextState.name;
-            }
-        }
+        property string pendingState
+        onTriggered: sprite.state = pendingState
     }
 
     transitions: Transition {
@@ -30,10 +23,23 @@ Item {
             }
             ScriptAction {
                 script: {
+                    time = timeplan[currentStateIndex];
+                    if (time > storyboard.time)
+                        storyboard.time = time;
+
                     var after = states[currentStateIndex].after;
-                    if (after)
+                    if (after) {
                         after();
-                    timer.restart();
+                        if (setStateTimer.running)
+                            return;
+                    }
+
+                    var nextState = states[++currentStateIndex];
+                    if (nextState) {
+                        timeToNextState = (timeplan[currentStateIndex] - time) * msPerFrame;
+                        setStateTimer.pendingState = nextState.name;
+                        setStateTimer.restart();
+                    }
                 }
             }
         }
@@ -64,6 +70,7 @@ Item {
 
         currentStateIndex = i;
         timeToNextState = Math.max(0, timeSpan === -1 ? timeplan[i] - time : timeSpan) * msPerFrame;
-        state = states[i].name;
+        setStateTimer.pendingState = states[i].name;
+        setStateTimer.restart();
     }
 }
