@@ -15,6 +15,7 @@ Item {
 
     function setTime(time)
     {
+        storyboard.time = time;
         for (var i = 0; i < sprites.length; ++i)
             sprites[i].setTime(time, -1);
     }
@@ -51,7 +52,7 @@ Item {
                 State { PropertyChanges { target: sprite2; x: 100; y: 150; scale: 0.5 }
                     property var after: function() {
                         if (!global.loop)
-                            global.loop = 1;
+                            global.loop = 0;
                         if (global.loop++ < 1)
                             setTime(0);
                         else
