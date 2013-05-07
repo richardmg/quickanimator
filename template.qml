@@ -8,7 +8,7 @@ Item {
     property var current: "walk"
 
     property var time: 0
-    property real msPerFrame: 2000
+    property real msPerFrame: 500
 
     onTimeChanged: print("time:", time)
 
@@ -31,7 +31,9 @@ Item {
             states: [
                 State { PropertyChanges { target: sprite2; x: 0; y: 100 } },
                 State { PropertyChanges { target: sprite2; x: 0; y: 0; rotation: 45 } },
-                State { PropertyChanges { target: sprite2; x: 100; y: 150; scale: 0.5 } }
+                State { PropertyChanges { target: sprite2; x: 100; y: 150; scale: 0.5 }
+                    property var after: function() { setTime(0); }
+                }
             ]
         }
     ]

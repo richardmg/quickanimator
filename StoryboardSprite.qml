@@ -28,7 +28,14 @@ Item {
                 properties: "x, y, width, height, rotation, scale"
                 duration: timeToNextState
             }
-            ScriptAction { script: timer.restart(); }
+            ScriptAction {
+                script: {
+                    var after = states[currentStateIndex].after;
+                    if (after)
+                        after();
+                    timer.restart();
+                }
+            }
         }
     }
 
