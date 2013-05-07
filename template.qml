@@ -3,12 +3,13 @@ import QtQuick 2.1
 Item {
     id: storyboard
 
-    function walk(frames) { start("walk"); }
-    function run(frames) { start("run"); }
+    function walk(frameCount) { _start(0, frameCount); }
+    function run(frameCount) { _start(4, frameCount); }
     property var current: "walk"
 
     property var time: 0
     property real msPerFrame: 500
+    property var global: new Object()
 
     onTimeChanged: print("time:", time)
 
@@ -32,7 +33,14 @@ Item {
                 State { PropertyChanges { target: sprite2; x: 0; y: 100 } },
                 State { PropertyChanges { target: sprite2; x: 0; y: 0; rotation: 45 } },
                 State { PropertyChanges { target: sprite2; x: 100; y: 150; scale: 0.5 }
-                    property var after: function() { setTime(0); }
+                    property var after: function() {
+                        if (!global.loop)
+                            global.loop = 0;
+                        if (global.loop++ < 3)
+                            setTime(0);
+                        else
+                            run(0);
+                    }
                 }
             ]
         }
@@ -41,16 +49,13 @@ Item {
     function setTime(time)
     {
         for (var i = 0; i < sprites.length; ++i)
-            sprites[i].setTime(time);
+            sprites[i].setTime(time, -1);
     }
 
-    function start(timelineName)
+    function _start(time, timeSpan)
     {
-        for (var i = 0; i < sprites.length; ++i) {
-            var sprite = sprites[i];
-            var nextState = sprite.states[0];
-            sprite.state = nextState.name;
-        }
+        for (var i = 0; i < sprites.length; ++i)
+            sprites[i].setTime(time, timeSpan);
     }
 
     width: 640

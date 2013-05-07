@@ -39,7 +39,7 @@ Item {
         }
     }
 
-    function setTime(time)
+    function setTime(time, timeSpan)
     {
         sprite.time = time
 
@@ -63,7 +63,7 @@ Item {
         }
 
         currentStateIndex = i;
-        timeToNextState = Math.max(0, timeplan[i] - time) * msPerFrame;
+        timeToNextState = Math.max(0, timeSpan === -1 ? timeplan[i] - time : timeSpan) * msPerFrame;
         state = states[i].name;
     }
 }
