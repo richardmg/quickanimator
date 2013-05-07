@@ -65,8 +65,10 @@ Item {
                     property var after: function() {
                         if (global.loop-- > 0)
                             setTime(5);
-                        else
+                        else {
+                            msPerFrame = msPerFrame === 500 ? 100 : 500
                             walk(0);
+                        }
                     }
                 }
             ]
