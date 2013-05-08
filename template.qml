@@ -9,6 +9,7 @@ Item {
 
     property var time: 0
     property real msPerFrame: 100
+    property bool paused: false
     property var global: new Object()
 
     onTimeChanged: print("time:", time)
@@ -18,6 +19,11 @@ Item {
         storyboard.time = time;
         for (var i = 0; i < sprites.length; ++i)
             sprites[i].setTime(time, -1);
+    }
+
+    onPausedChanged: {
+        for (var i = 0; i < sprites.length; ++i)
+            sprites[i].paused = paused;
     }
 
     function _start(time, timeSpan)
@@ -74,6 +80,11 @@ Item {
             ]
         }
     ]
+
+    MouseArea {
+        anchors.fill: parent
+        onClicked: paused = !paused
+    }
 
     width: 640
     height: 480

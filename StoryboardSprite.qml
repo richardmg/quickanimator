@@ -7,6 +7,7 @@ Item {
     property int timeToNextState: 0
     property var timeplan: []
     property var time: 0
+    property bool paused: false
 
     Timer {
         id: setStateTimer
@@ -18,11 +19,14 @@ Item {
     transitions: Transition {
         SequentialAnimation {
             NumberAnimation {
-                properties: "x, y, width, height, rotation, scale"
+                properties: "x, y, width, height, rotation, scale, opacity"
                 duration: timeToNextState
             }
             ScriptAction {
                 script: {
+                    if (sprite.paused)
+                        return;
+
                     time = timeplan[currentStateIndex];
                     if (time > storyboard.time)
                         storyboard.time = time;
@@ -30,7 +34,7 @@ Item {
                     var after = states[currentStateIndex].after;
                     if (after) {
                         after();
-                        if (setStateTimer.running)
+                        if (setStateTimer.running || paused)
                             return;
                     }
 
@@ -72,5 +76,22 @@ Item {
         timeToNextState = Math.max(0, timeSpan === -1 ? timeplan[i] - time : timeSpan) * msPerFrame;
         setStateTimer.pendingState = states[i].name;
         setStateTimer.restart();
+    }
+
+    onPausedChanged: {
+        if (paused) {
+            var _x = x;
+            var _y = y;
+            var _r = rotation;
+            var _s = scale;
+            var _o = opacity;
+            timeToNextState = 0;
+            state = "";
+            x = _x;
+            y = _y;
+            rotation = _r;
+            scale = _s;
+            opacity = _o;
+        }
     }
 }
