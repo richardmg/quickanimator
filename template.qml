@@ -8,11 +8,11 @@ Item {
     property var current: "walk"
 
     property var time: 0
-    property real msPerFrame: 500
     property bool paused: false
     property var global: new Object()
 
-    readonly property int ticksPerFrame: 10
+    property real fps: 10
+    readonly property int ticksPerFrame: 20
     property real tickTime: 0
 
     function setTime(newTime)
@@ -37,7 +37,7 @@ Item {
 
     Timer {
         id: masterTimer
-        interval: 1000 / 60;
+        interval: 1000 / fps;
         repeat: true
         onTriggered: {
             tickTime++;
