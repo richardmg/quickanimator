@@ -56,12 +56,13 @@ Item {
             storyboard: storyboard
             Image { source: "dummy.jpeg" }
         }
-//        ,
-//        StoryboardSprite {
-//            id: sprite2
-//            spriteIndex: 1
-//            Image { source: "dummy.jpeg" }
-//        }
+        ,
+        StoryboardSprite {
+            id: sprite2
+            spriteIndex: 1
+            storyboard: storyboard
+            Image { source: "dummy.jpeg" }
+        }
     ]
 
     MouseArea {
