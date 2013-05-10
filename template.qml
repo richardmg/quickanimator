@@ -20,7 +20,7 @@ Item {
         time = newTime;
         tickTime = time * ticksPerFrame;
         for (var i = 0; i < sprites.length; ++i)
-            sprites[i].setTime(time, -1);
+            sprites[i].setTime(time);
     }
 
 //    onPausedChanged: {

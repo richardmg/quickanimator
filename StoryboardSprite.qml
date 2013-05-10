@@ -43,7 +43,7 @@ Item {
         }
     }
 
-    function setTime(time, timeSpan)
+    function setTime(time)
     {
         var timeline = TLD.sprites[spriteIndex]
 
@@ -72,20 +72,24 @@ Item {
 
         stateIndex = i;
         spriteTime = time;
-
         var nextState = timeline[i];
-        nextStateTime = timeSpan !== -1 ? time + timeSpan : nextState.time;
-        var timeDiff = Math.max(1, nextStateTime - time);
-        calculateIncrements(nextState, timeDiff * 60)
+        nextStateTime = nextState.time;
+
+        if (nextStateTime <= time) {
+            calculateIncrements(nextState, 1);
+            tick();
+        } else {
+            calculateIncrements(nextState, (nextStateTime - time) * 60);
+        }
     }
 
     function calculateIncrements(toState, tickCount)
     {
-        incX = toState.x ? (toState.x - x) / tickCount : 0;
-        incY = toState.y ? (toState.y - y) / tickCount : 0;
-        incScale = toState.scale ? (toState.scale - scale) / tickCount : 0;
-        incRotation = toState.rotation ? (toState.rotation - rotation) / tickCount : 0;
-        incOpacity = toState.opacity ? (toState.opacity - opacity) / tickCount : 0;
+        incX = toState.x == undefined ? 0 : (toState.x - x) / tickCount;
+        incY = toState.y == undefined ? 0 : (toState.y - y) / tickCount;
+        incScale = toState.scale == undefined ? 0 : (toState.scale - scale) / tickCount;
+        incRotation = toState.rotation == undefined ? 0 : (toState.rotation - rotation) / tickCount;
+        incOpacity = toState.opacity == undefined ? 0 : (toState.opacity - opacity) / tickCount;
     }
 
     onPausedChanged: {
