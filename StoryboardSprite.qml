@@ -1,81 +1,91 @@
 import QtQuick 2.1
+import "timelinedata.js" as TLD
 
 Item {
     id: sprite
     parent: storyboard
-    property int currentStateIndex: 0
-    property int timeToNextState: 0
-    property var timeplan: []
-    property var time: 0
+    width: childrenRect.width
+    height: childrenRect.height
+
+    property Item storyboard: storyboard 
+    property var spriteIndex: 0
+    property int stateIndex: 0
+    property var spriteTime: 0
+    property int nextStateTime: 0
     property bool paused: false
 
-    Timer {
-        id: setStateTimer
-        interval: 1
-        property string pendingState
-        onTriggered: sprite.state = pendingState
-    }
+    property var incX: 0
+    property var incY: 0
+    property var incScale: 0
+    property var incRotation: 0
+    property var incOpacity: 0
 
-    transitions: Transition {
-        SequentialAnimation {
-            NumberAnimation {
-                properties: "x, y, width, height, rotation, scale, opacity"
-                duration: timeToNextState
+    function tick(time)
+    {
+        x += incX;
+        y += incY;
+        scale += incScale;
+        rotation += incRotation;
+        opacity += incOpacity;
+
+        if (time === nextStateTime) {
+            var after = TLD.sprites[spriteIndex][stateIndex].after;
+            if (after) {
+                var currentStateIndex = stateIndex;
+                after(sprite);
+                if (currentStateIndex !== stateIndex)
+                    return;
             }
-            ScriptAction {
-                script: {
-                    if (sprite.paused)
-                        return;
-
-                    time = timeplan[currentStateIndex];
-                    if (time > storyboard.time)
-                        storyboard.time = time;
-
-                    var after = states[currentStateIndex].after;
-                    if (after) {
-                        after();
-                        if (setStateTimer.running || paused)
-                            return;
-                    }
-
-                    var nextState = states[++currentStateIndex];
-                    if (nextState) {
-                        timeToNextState = (timeplan[currentStateIndex] - time) * msPerFrame;
-                        setStateTimer.pendingState = nextState.name;
-                        setStateTimer.restart();
-                    }
-                }
-            }
+            var nextState = TLD.sprites[spriteIndex][++stateIndex];
+            nextStateTime = nextState.time;
+            var tickCount = Math.max(1, nextStateTime - time) * ticksPerFrame
+            calculateIncrements(nextState, tickCount);
         }
     }
 
     function setTime(time, timeSpan)
     {
-        sprite.time = time
+        var timeline = TLD.sprites[spriteIndex]
 
         // Binary search timplan array:
-        var low = 0, high = timeplan.length - 1;
+        var low = 0, high = timeline.length - 1;
         var t, i = 0;
 
         while (low <= high) {
             i = Math.floor((low + high) / 2) - 1;
-            t = timeplan[i];
+            if (i < 0) {
+                i = 0;
+                break;
+            }
+            t = timeline[i].time;
             if (time < t) {
                 high = i - 1;
                 continue;
             };
             if (time == t)
                 break;
-            t = timeplan[++i];
+            t = timeline[++i].time;
             if (time <= t)
                 break;
             low = i + 1;
         }
 
-        currentStateIndex = i;
-        timeToNextState = Math.max(0, timeSpan === -1 ? timeplan[i] - time : timeSpan) * msPerFrame;
-        setStateTimer.pendingState = states[i].name;
-        setStateTimer.restart();
+        stateIndex = i;
+        spriteTime = time;
+
+        var nextState = timeline[i];
+        nextStateTime = timeSpan !== -1 ? time + timeSpan : nextState.time;
+        var timeDiff = Math.max(1, nextStateTime - time);
+        calculateIncrements(nextState, timeDiff * 60)
+    }
+
+    function calculateIncrements(toState, tickCount)
+    {
+        incX = toState.x ? (toState.x - x) / tickCount : 0;
+        incY = toState.y ? (toState.y - y) / tickCount : 0;
+        incScale = toState.scale ? (toState.scale - scale) / tickCount : 0;
+        incRotation = toState.rotation ? (toState.rotation - rotation) / tickCount : 0;
+        incOpacity = toState.opacity ? (toState.opacity - opacity) / tickCount : 0;
     }
 
     onPausedChanged: {
