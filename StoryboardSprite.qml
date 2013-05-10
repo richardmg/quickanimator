@@ -1,20 +1,17 @@
 import QtQuick 2.1
+import "timelinedata.js" as TLD
 
 Item {
     id: sprite
     parent: storyboard
+    property var spriteIndex: 0
     property int currentStateIndex: 0
-    property int timeToNextState: 0
-    property var timeplan: []
     property var time: 0
+    property int nextTime: 0
     property bool paused: false
 
-    Timer {
-        id: setStateTimer
-        interval: 1
-        property string pendingState
-        onTriggered: sprite.state = pendingState
-    }
+    property var incX: 0
+    property var incY: 0
 
     transitions: Transition {
         SequentialAnimation {
@@ -49,33 +46,65 @@ Item {
         }
     }
 
+    function tick(time)
+    {
+//        print("tick:", time, nextTime);
+        x += incX;
+        y += incY;
+        print("update...", x, time, nextTime)
+        if (time === nextTime) {
+            var nextState = TLD.sprites[spriteIndex][++currentStateIndex];
+            nextTime = nextState.time;
+            var timeDiff = Math.max(1, nextTime - time);
+            var updateCount = (timeDiff) * ticksPerFrame;
+            incX = (nextState.x - x) / updateCount;
+            incY = (nextState.y - y) / updateCount;
+            print("next:", x, nextState.x, timeDiff, updateCount)
+        }
+    }
+
     function setTime(time, timeSpan)
     {
         sprite.time = time
+        var timeline = TLD.sprites[spriteIndex]
+        print("len:", timeline.length);
 
         // Binary search timplan array:
-        var low = 0, high = timeplan.length - 1;
+        var low = 0, high = timeline.length - 1;
         var t, i = 0;
 
         while (low <= high) {
             i = Math.floor((low + high) / 2) - 1;
-            t = timeplan[i];
+            if (i < 0) {
+                i = 0;
+                break;
+            }
+            t = timeline[i].time;
             if (time < t) {
                 high = i - 1;
                 continue;
             };
             if (time == t)
                 break;
-            t = timeplan[++i];
+            t = timeline[++i].time;
             if (time <= t)
                 break;
             low = i + 1;
         }
 
         currentStateIndex = i;
-        timeToNextState = Math.max(0, timeSpan === -1 ? timeplan[i] - time : timeSpan) * msPerFrame;
-        setStateTimer.pendingState = states[i].name;
-        setStateTimer.restart();
+
+        var nextState = timeline[i];
+        nextTime = timeSpan !== -1 ? time + timeSpan : nextState.time;
+        var timeDiff = Math.max(1, nextTime - time);
+        var updateCount = timeDiff * 60;
+
+        incX = (nextState.x - x) / updateCount;
+        incY = (nextState.y - y) / updateCount;
+
+        tick(time);
+//        setStateTimer.pendingState = states[i].name;
+//        setStateTimer.restart();
     }
 
     onPausedChanged: {

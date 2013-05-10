@@ -8,9 +8,12 @@ Item {
     property var current: "walk"
 
     property var time: 0
-    property real msPerFrame: 100
+    property real msPerFrame: 500
     property bool paused: false
     property var global: new Object()
+
+    readonly property int ticksPerFrame: 10
+    property real tickTime: 1 / ticksPerFrame
 
     onTimeChanged: print("time:", time)
 
@@ -21,64 +24,44 @@ Item {
             sprites[i].setTime(time, -1);
     }
 
-    onPausedChanged: {
-        for (var i = 0; i < sprites.length; ++i)
-            sprites[i].paused = paused;
-    }
+//    onPausedChanged: {
+//        for (var i = 0; i < sprites.length; ++i)
+//            sprites[i].paused = paused;
+//    }
 
     function _start(time, timeSpan)
     {
         for (var i = 0; i < sprites.length; ++i)
             sprites[i].setTime(time, timeSpan);
+        masterTimer.restart();
+    }
+
+    Timer {
+        id: masterTimer
+        interval: 1000 / 60;
+        repeat: true
+        onTriggered: {
+            tickTime += 1 / ticksPerFrame;
+            var t = Math.floor(tickTime);
+            if (time != t)
+                time = t;
+            for (var i = 0; i < sprites.length; ++i)
+                sprites[i].tick(time);
+        }
     }
 
     property list<Item> sprites: [
         StoryboardSprite {
             id: sprite1
+            spriteIndex: 0
             Image { source: "dummy.jpeg" }
-            timeplan: [0, 1, 4, 5, 7]
-            states: [
-                // walk (time: 0):
-                State { PropertyChanges { target: sprite1; x: 0; y: 0 } },
-                State { PropertyChanges { target: sprite1; x: 200; y: 50 } },
-                State { PropertyChanges { target: sprite1; x: 100; y: 150; scale: 0.5 } },
-                // run (time: 5):
-                State { PropertyChanges { target: sprite1; x: 200; y: 200 } },
-                State { PropertyChanges { target: sprite1; x: 200; y: 200; rotation: 180 } }
-            ]
-        },
-        StoryboardSprite {
-            id: sprite2
-            Image { source: "dummy.jpeg" }
-            timeplan: [0, 2, 4, 5, 7]
-            states: [
-                // walk (time: 0):
-                State { PropertyChanges { target: sprite2; x: 0; y: 100 } },
-                State { PropertyChanges { target: sprite2; x: 0; y: 0; rotation: 45 } },
-                State { PropertyChanges { target: sprite2; x: 100; y: 150; scale: 0.5 }
-                    property var after: function() {
-                        if (!global.loop)
-                            global.loop = 0;
-                        if (global.loop++ < 1)
-                            setTime(0);
-                        else
-                            run(0);
-                    }
-                },
-                // run (time: 5):
-                State { PropertyChanges { target: sprite2; x: 100; y: 100 } },
-                State { PropertyChanges { target: sprite2; x: 100; y: 100; rotation: 180 }
-                    property var after: function() {
-                        if (global.loop-- > 0)
-                            setTime(5);
-                        else {
-                            msPerFrame = msPerFrame === 500 ? 100 : 500
-                            walk(0);
-                        }
-                    }
-                }
-            ]
         }
+//        ,
+//        StoryboardSprite {
+//            id: sprite2
+//            spriteIndex: 1
+//            Image { source: "dummy.jpeg" }
+//        }
     ]
 
     MouseArea {
@@ -88,5 +71,5 @@ Item {
 
     width: 640
     height: 480
-    Component.onCompleted: walk();
+    Component.onCompleted: walk(0);
 }
