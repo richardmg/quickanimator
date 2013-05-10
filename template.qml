@@ -10,7 +10,7 @@ Item {
     property var global: new Object()
 
     property real fps: 60
-    readonly property int ticksPerFrame: 10
+    readonly property int ticksPerFrame: 30
 
     function start(name)
     {
