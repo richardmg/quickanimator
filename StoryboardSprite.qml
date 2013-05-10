@@ -13,6 +13,7 @@ Item {
     property var spriteTime: 0
     property int nextStateTime: 0
     property bool paused: false
+    property bool finished: false
 
     property var incX: 0
     property var incY: 0
@@ -20,15 +21,25 @@ Item {
     property var incRotation: 0
     property var incOpacity: 0
 
-    function tick(time)
+    property var _tickTime: 0
+
+    function tick()
     {
+        if (paused || finished)
+            return;
+
         x += incX;
         y += incY;
         scale += incScale;
         rotation += incRotation;
         opacity += incOpacity;
 
-        if (time === nextStateTime) {
+        _tickTime++;
+        var t = Math.floor(_tickTime / storyboard.ticksPerFrame);
+        if (spriteTime != t)
+            spriteTime = t;
+        
+        if (spriteTime === nextStateTime) {
             var after = TLD.sprites[spriteIndex][stateIndex].after;
             if (after) {
                 var currentStateIndex = stateIndex;
@@ -36,10 +47,14 @@ Item {
                 if (currentStateIndex !== stateIndex)
                     return;
             }
-            var nextState = TLD.sprites[spriteIndex][++stateIndex];
-            nextStateTime = nextState.time;
-            var tickCount = Math.max(1, nextStateTime - time) * ticksPerFrame
-            calculateIncrements(nextState, tickCount);
+            if (stateIndex >= TLD.sprites[spriteIndex].length - 1) {
+                finished = true;
+            } else {
+                var nextState = TLD.sprites[spriteIndex][++stateIndex];
+                nextStateTime = nextState.time;
+                var tickCount = Math.max(1, nextStateTime - spriteTime) * ticksPerFrame
+                calculateIncrements(nextState, tickCount);
+            }
         }
     }
 
@@ -72,15 +87,12 @@ Item {
 
         stateIndex = i;
         spriteTime = time;
+        // Subract 1 to let the first call to tick land on \a time:
+        _tickTime = (time * storyboard.ticksPerFrame) - 1;
         var nextState = timeline[i];
+        finished = false;
         nextStateTime = nextState.time;
-
-        if (nextStateTime <= time) {
-            calculateIncrements(nextState, 1);
-            tick();
-        } else {
-            calculateIncrements(nextState, (nextStateTime - time) * 60);
-        }
+        calculateIncrements(nextState, (nextStateTime <= time) ? 1 : (nextStateTime - time) * 60);
     }
 
     function calculateIncrements(toState, tickCount)
@@ -90,22 +102,5 @@ Item {
         incScale = toState.scale == undefined ? 0 : (toState.scale - scale) / tickCount;
         incRotation = toState.rotation == undefined ? 0 : (toState.rotation - rotation) / tickCount;
         incOpacity = toState.opacity == undefined ? 0 : (toState.opacity - opacity) / tickCount;
-    }
-
-    onPausedChanged: {
-        if (paused) {
-            var _x = x;
-            var _y = y;
-            var _r = rotation;
-            var _s = scale;
-            var _o = opacity;
-            timeToNextState = 0;
-            state = "";
-            x = _x;
-            y = _y;
-            rotation = _r;
-            scale = _s;
-            opacity = _o;
-        }
     }
 }
