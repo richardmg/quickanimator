@@ -11,6 +11,7 @@ Item {
 
     property real fps: 60
     readonly property int ticksPerFrame: 30
+    property var sprites: [sprite1, sprite2]
 
     function start(name)
     {
@@ -42,21 +43,17 @@ Item {
         }
     }
 
-    property list<Item> sprites: [
-        StoryboardSprite {
-            id: sprite1
-            spriteIndex: 0
-            storyboard: storyboard
-            Image { source: "dummy.jpeg" }
-        }
-        ,
-        StoryboardSprite {
-            id: sprite2
-            spriteIndex: 1
-            storyboard: storyboard
-            Image { source: "dummy.jpeg" }
-        }
-    ]
+    StoryboardSprite {
+        id: sprite1
+        spriteIndex: 0
+        Image { source: "dummy.jpeg" }
+    }
+
+    StoryboardSprite {
+        id: sprite2
+        spriteIndex: 1
+        Image { source: "dummy.jpeg" }
+    }
 
     MouseArea {
         anchors.fill: parent
