@@ -59,9 +59,8 @@ Item {
 
     function getStateIndexBefore(time)
     {
-        var timeline = TLD.sprites[spriteIndex]
-
         // Binary search timeline:
+        var timeline = TLD.sprites[spriteIndex]
         var low = 0, high = timeline.length - 1;
         var t, i = 0;
 
