@@ -1,4 +1,5 @@
 import QtQuick 2.1
+import "timelinedata.js" as TLD
 
 Item {
     id: storyboard
@@ -46,12 +47,14 @@ Item {
     StoryboardSprite {
         id: sprite1
         spriteIndex: 0
+        timeline: TLD.sprites[spriteIndex]
         Image { source: "dummy.jpeg" }
     }
 
     StoryboardSprite {
         id: sprite2
         spriteIndex: 1
+        timeline: TLD.sprites[spriteIndex]
         Image { source: "dummy.jpeg" }
     }
 

@@ -1,5 +1,4 @@
 import QtQuick 2.1
-import "timelinedata.js" as TLD
 
 Item {
     id: sprite
@@ -7,6 +6,7 @@ Item {
     height: childrenRect.height
 
     property Item storyboard: parent 
+    property var timeline
 
     property var spriteIndex: 0
     property var spriteTime: 0
@@ -21,7 +21,7 @@ Item {
     property var _tickTime: 0
 
     Component.onCompleted: {
-        _toState = _fromState = TLD.sprites[spriteIndex][0];
+        _toState = _fromState = timeline[0];
         if (!_toState)
             print("Warning: sprite", spriteIndex, "needs at least one state!");
     }
@@ -46,11 +46,11 @@ Item {
                 if (currentStateIndex !== _toStateIndex)
                     return;
             }
-            if (_toStateIndex >= TLD.sprites[spriteIndex].length - 1) {
+            if (_toStateIndex >= timeline.length - 1) {
                 finished = true;
             } else {
                 _fromState = _toState;
-                _toState = TLD.sprites[spriteIndex][++_toStateIndex];
+                _toState = timeline[++_toStateIndex];
                 if (_toState.time == _fromState.time)
                     _tickCount--;
             }
@@ -60,7 +60,6 @@ Item {
     function getStateIndexBefore(time)
     {
         // Binary search timeline:
-        var timeline = TLD.sprites[spriteIndex]
         var low = 0, high = timeline.length - 1;
         var t, i = 0;
 
@@ -83,7 +82,6 @@ Item {
     {
         if ((_fromState && time < _fromState.time) || (_toState && time > _toState.time)) {
             var fromStateIndex = getStateIndexBefore(time);
-            var timeline = TLD.sprites[spriteIndex]
             _fromState = timeline[fromStateIndex];
             if (_fromState.time === time) {
                 _toStateIndex = fromStateIndex;
