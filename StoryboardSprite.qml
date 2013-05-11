@@ -63,19 +63,19 @@ Item {
 
         // Binary search timeline:
         var low = 0, high = timeline.length - 1;
-        var t, i;
+        var t, i = 0;
 
-        while (low <= high) {
+        while (low < high) {
             i = Math.floor((low + high) / 2);
             t = timeline[i].time;
             if (time < t) {
-                high = i - 1;
+                high = --i;
                 continue;
-            };
-            t = timeline[i + 1].time;
+            }
+            t = timeline[++i].time;
             if (time <= t)
-                return i;
-            low = i + 2;
+                return i - 1;
+            low = i + 1;
         }
         return i;
     }
