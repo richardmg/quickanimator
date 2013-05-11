@@ -36,7 +36,7 @@ Item {
         if (spriteTime != t)
             spriteTime = t;
 
-        updateSprite();
+        _updateSprite();
 
         if (spriteTime === _toState.time) {
             var after = _toState.after;
@@ -55,32 +55,6 @@ Item {
                     _tickCount--;
             }
         }
-    }
-
-    function updateSprite()
-    {
-        var advance = _tickTime - (_fromState.time * storyboard.ticksPerFrame);
-        var tickRange = (_toState.time - _fromState.time) * storyboard.ticksPerFrame;
-
-        if (_toState.time === _fromState.time) {
-            x = _toState.x;
-            y = _toState.y;
-            scale = _toState.scale;
-            rotation = _toState.rotation;
-            opacity = _toState.opacity;
-        } else {
-            x = getValue(_fromState.x, _toState.x, tickRange, advance, "linear");
-            y = getValue(_fromState.y, _toState.y, tickRange, advance, "linear");
-            scale = getValue(_fromState.scale, _toState.scale, tickRange, advance, "linear");
-            rotation = getValue(_fromState.rotation, _toState.rotation, tickRange, advance, "linear");
-            opacity = getValue(_fromState.opacity, _toState.opacity, tickRange, advance, "linear");
-        }
-    }
-
-    function getValue(from, to, tickdiff, advance, curve)
-    {
-        // Ignore curve for now:
-        return from + ((to - from) / tickdiff) * advance;
     }
 
     function getStateIndexBefore(time)
@@ -130,4 +104,31 @@ Item {
         _tickTime = (time * storyboard.ticksPerFrame) - 1;
         finished = false;
     }
+
+    function _updateSprite()
+    {
+        var advance = _tickTime - (_fromState.time * storyboard.ticksPerFrame);
+        var tickRange = (_toState.time - _fromState.time) * storyboard.ticksPerFrame;
+
+        if (_toState.time === _fromState.time) {
+            x = _toState.x;
+            y = _toState.y;
+            scale = _toState.scale;
+            rotation = _toState.rotation;
+            opacity = _toState.opacity;
+        } else {
+            x = _getValue(_fromState.x, _toState.x, tickRange, advance, "linear");
+            y = _getValue(_fromState.y, _toState.y, tickRange, advance, "linear");
+            scale = _getValue(_fromState.scale, _toState.scale, tickRange, advance, "linear");
+            rotation = _getValue(_fromState.rotation, _toState.rotation, tickRange, advance, "linear");
+            opacity = _getValue(_fromState.opacity, _toState.opacity, tickRange, advance, "linear");
+        }
+    }
+
+    function _getValue(from, to, tickdiff, advance, curve)
+    {
+        // Ignore curve for now:
+        return from + ((to - from) / tickdiff) * advance;
+    }
+
 }
