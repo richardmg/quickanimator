@@ -107,9 +107,6 @@ Item {
 
     function _updateSprite()
     {
-        var advance = _tickTime - (_fromState.time * storyboard.ticksPerFrame);
-        var tickRange = (_toState.time - _fromState.time) * storyboard.ticksPerFrame;
-
         if (_toState.time === _fromState.time) {
             x = _toState.x;
             y = _toState.y;
@@ -117,6 +114,8 @@ Item {
             rotation = _toState.rotation;
             opacity = _toState.opacity;
         } else {
+            var advance = _tickTime - (_fromState.time * storyboard.ticksPerFrame);
+            var tickRange = (_toState.time - _fromState.time) * storyboard.ticksPerFrame;
             x = _getValue(_fromState.x, _toState.x, tickRange, advance, "linear");
             y = _getValue(_fromState.y, _toState.y, tickRange, advance, "linear");
             scale = _getValue(_fromState.scale, _toState.scale, tickRange, advance, "linear");
