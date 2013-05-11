@@ -8,18 +8,16 @@ Item {
     height: childrenRect.height
 
     property Item storyboard: storyboard 
+
     property var spriteIndex: 0
-    property int stateIndex: 0
     property var spriteTime: 0
-    property int nextStateTime: 0
+
     property bool paused: false
     property bool finished: false
 
-    property var incX: 0
-    property var incY: 0
-    property var incScale: 0
-    property var incRotation: 0
-    property var incOpacity: 0
+    property var _fromState
+    property var _toState
+    property int _toStateIndex: 0
 
     property var _tickTime: 0
 
@@ -28,34 +26,56 @@ Item {
         if (paused || finished)
             return;
 
-        x += incX;
-        y += incY;
-        scale += incScale;
-        rotation += incRotation;
-        opacity += incOpacity;
-
         _tickTime++;
         var t = Math.floor(_tickTime / storyboard.ticksPerFrame);
         if (spriteTime != t)
             spriteTime = t;
-        
-        if (spriteTime === nextStateTime) {
-            var after = TLD.sprites[spriteIndex][stateIndex].after;
+
+        updateSprite();
+
+        if (spriteTime === _toState.time) {
+            var after = _toState.after;
             if (after) {
-                var currentStateIndex = stateIndex;
+                var currentStateIndex = _toStateIndex;
                 after(sprite);
-                if (currentStateIndex !== stateIndex)
+                if (currentStateIndex !== _toStateIndex)
                     return;
             }
-            if (stateIndex >= TLD.sprites[spriteIndex].length - 1) {
+            if (_toStateIndex >= TLD.sprites[spriteIndex].length - 1) {
                 finished = true;
             } else {
-                var nextState = TLD.sprites[spriteIndex][++stateIndex];
-                nextStateTime = nextState.time;
-                var tickCount = Math.max(1, nextStateTime - spriteTime) * ticksPerFrame
-                calculateIncrements(nextState, tickCount);
+                _fromState = _toState;
+                _toState = TLD.sprites[spriteIndex][++_toStateIndex];
+                if (_toState.time == _fromState.time)
+                    _tickCount--;
             }
         }
+    }
+
+    function updateSprite()
+    {
+        var advance = _tickTime - (_fromState.time * storyboard.ticksPerFrame);
+        var tickRange = (_toState.time - _fromState.time) * storyboard.ticksPerFrame;
+
+        if (_toState.time === _fromState.time) {
+            x = _toState.x;
+            y = _toState.y;
+            scale = _toState.scale;
+            rotation = _toState.rotation;
+            opacity = _toState.opacity;
+        } else {
+            x = getValue(_fromState.x, _toState.x, tickRange, advance, "linear");
+            y = getValue(_fromState.y, _toState.y, tickRange, advance, "linear");
+            scale = getValue(_fromState.scale, _toState.scale, tickRange, advance, "linear");
+            rotation = getValue(_fromState.rotation, _toState.rotation, tickRange, advance, "linear");
+            opacity = getValue(_fromState.opacity, _toState.opacity, tickRange, advance, "linear");
+        }
+    }
+
+    function getValue(from, to, tickdiff, advance, curve)
+    {
+        // Ignore curve for now:
+        return from + ((to - from) / tickdiff) * advance;
     }
 
     function setTime(time)
@@ -85,22 +105,13 @@ Item {
             low = i + 1;
         }
 
-        stateIndex = i;
+        _toStateIndex = i;
+        _toState = timeline[i];
+        _fromState = i == 0 ? _toState : timeline[i - 1];
         spriteTime = time;
+
         // Subract 1 to let the first call to tick land on \a time:
         _tickTime = (time * storyboard.ticksPerFrame) - 1;
-        var nextState = timeline[i];
         finished = false;
-        nextStateTime = nextState.time;
-        calculateIncrements(nextState, (nextStateTime <= time) ? 1 : (nextStateTime - time) * 60);
-    }
-
-    function calculateIncrements(toState, tickCount)
-    {
-        incX = toState.x == undefined ? 0 : (toState.x - x) / tickCount;
-        incY = toState.y == undefined ? 0 : (toState.y - y) / tickCount;
-        incScale = toState.scale == undefined ? 0 : (toState.scale - scale) / tickCount;
-        incRotation = toState.rotation == undefined ? 0 : (toState.rotation - rotation) / tickCount;
-        incOpacity = toState.opacity == undefined ? 0 : (toState.opacity - opacity) / tickCount;
     }
 }
