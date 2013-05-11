@@ -61,7 +61,7 @@ Item {
     {
         var timeline = TLD.sprites[spriteIndex]
 
-        // Binary search timplan array:
+        // Binary search timeline:
         var low = 0, high = timeline.length - 1;
         var t, i;
 
