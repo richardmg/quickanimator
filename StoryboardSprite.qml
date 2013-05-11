@@ -66,22 +66,18 @@ Item {
         var t, i;
 
         while (low <= high) {
-            i = Math.floor((low + high) / 2) - 1;
-            if (i < 0) 
-                return 0;
+            i = Math.floor((low + high) / 2);
             t = timeline[i].time;
-            if (time <= t) {
+            if (time < t) {
                 high = i - 1;
                 continue;
             };
-            if (time == t)
-                return i;
             t = timeline[i + 1].time;
             if (time <= t)
                 return i;
             low = i + 2;
         }
-        return 0;
+        return i;
     }
 
     function setTime(time)
