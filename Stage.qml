@@ -156,6 +156,7 @@ Item {
         title: "Stage"
         Row {
             anchors.right: parent.right
+            anchors.verticalCenter: parent.verticalCenter
             CheckBox {
                 id: xBox
                 text: "X"
