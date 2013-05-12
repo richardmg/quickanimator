@@ -4,8 +4,8 @@ import QtQuick.Layouts 1.0
 
 ApplicationWindow {
     id: myApp
-    width: 640
-    height: 480
+    width: 800
+    height: 600
     property alias storyBoard: storyBoard
 
     SplitView {
