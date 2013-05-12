@@ -61,7 +61,23 @@ Item {
     }
 
     TitleBar {
-        title: "Time: " + timeline.time
+        ToolButton {
+            id: play
+            anchors.left: parent.left
+            anchors.leftMargin: 2
+            text: "Play"
+            x: 2
+            height: parent.height - 4
+            anchors.verticalCenter: parent.verticalCenter
+            onClicked: play();
+        }
+        Label {
+            id: label
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: play.right
+            anchors.leftMargin: 10
+            text: "Time: " + timeline.time
+        }
         ToolButton {
             anchors.right: parent.right
             text: "+"
