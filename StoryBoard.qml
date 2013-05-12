@@ -16,9 +16,9 @@ Item {
 
     Timeline {
         id: timeline
-        y: cellHeight
+        anchors.top: titlebar.bottom
+        anchors.bottom: root.bottom
         width: root.width
-        height: root.height - y
         cellHeight: 20
         cellWidth: 10
         selectedX: 0
@@ -61,6 +61,7 @@ Item {
     }
 
     TitleBar {
+        id: titlebar
         ToolButton {
             id: play
             anchors.left: parent.left
