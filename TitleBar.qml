@@ -12,13 +12,23 @@ Rectangle {
             color: Qt.rgba(0.9, 0.9, 0.9, 1.0)
         }
         GradientStop {
-            position: 0.2;
+            position: 0.1;
             color: Qt.rgba(1.0, 1.0, 1.0, 1.0)
         }
         GradientStop {
-            position: 1.0;
-            color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
+            position: 0.2;
+            color: Qt.rgba(0.97, 0.97, 0.97, 1.0)
         }
+        GradientStop {
+            position: 1.0;
+            color: Qt.rgba(0.91, 0.91, 0.91, 1.0)
+        }
+    }
+    Rectangle {
+        width: parent.width
+        height: 1
+        anchors.bottom: parent.bottom
+        color: Qt.rgba(0.6, 0.6, 0.6, 1.0)
     }
     Label {
         id: label
