@@ -5,7 +5,7 @@ Item {
     id: root
     clip: true
     property Stage stage: null
-    property alias timeline: timeline
+    property alias timelineGrid: timelineGrid
     property int currentTime: 0
 
     property int layerCount: 0
@@ -14,8 +14,8 @@ Item {
     property var selectedLayer: null
     property var selectedState: null
 
-    Timeline {
-        id: timeline
+    TimelineGrid {
+        id: timelineGrid
         anchors.top: titlebar.bottom
         anchors.bottom: root.bottom
         width: root.width
@@ -24,18 +24,18 @@ Item {
         selectedX: 0
         selectedY: 0
         model: layers
-        property alias time: timeline.selectedX
+        property alias time: timelineGrid.selectedX
 
         onSelectedXChanged: {
             for (var l in root.layers) {
                 var layer = layers[l];
-                for (var i = 0; i < layer.states.length - 1; ++i) {
-                    var stateBefore = layer.states[i];
-                    var stateAfter = layer.states[i + 1];
+                for (var i = 0; i < layer.sprite.timeline.length - 1; ++i) {
+                    var stateBefore = layer.sprite.timeline[i];
+                    var stateAfter = layer.sprite.timeline[i + 1];
                     if (time >= stateBefore.time && time < stateAfter.time)
                         break;
                 }
-                layer.currentState = layer.states[i];
+                layer.currentState = layer.sprite.timeline[i];
                 updateItemState(layer);
                 root.selectedState = layer.currentState;
             }
@@ -44,8 +44,8 @@ Item {
         onDoubleClicked: {
             var layer = layers[selectedY];
             // Add the new state into the correct position in the array according to time:
-            for (var i = layer.states.length - 1; i >= 0; --i) {
-                var state = layer.states[i];
+            for (var i = layer.sprite.timeline.length - 1; i >= 0; --i) {
+                var state = layer.sprite.timeline[i];
                 if (time === state.time) {
                     // A state already exist at this time:
                     return;
@@ -54,8 +54,8 @@ Item {
                 }
             }
             layer.currentState = createStateFromItem(layer, time);
-            layer.states.splice(i + 1, 0, layer.currentState);
-            timeline.updateModel()
+            layer.sprite.timeline.splice(i + 1, 0, layer.currentState);
+            timelineGrid.updateModel()
             root.selectedState = layer.currentState;
         }
     }
@@ -77,7 +77,7 @@ Item {
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: play.right
             anchors.leftMargin: 10
-            text: "Time: " + timeline.time
+            text: "Time: " + timelineGrid.time
         }
         ToolButton {
             anchors.right: parent.right
@@ -91,7 +91,7 @@ Item {
 
     onSelectedStateChanged: {
         if (selectedState && selectedLayer)
-            timeline.setHighlight(selectedState.time, selectedLayer.z);
+            timelineGrid.setHighlight(selectedState.time, selectedLayer.z);
     }
 
     function updateItemState(layer)
@@ -110,12 +110,12 @@ Item {
         layers.push(layer);
         layer.z = layerCount++;
         layer.selected = false;
-        layer.states = new Array();
+        layer.sprite.timeline = new Array();
         layer.currentState = createStateFromItem(layer, 0);
-        layer.states.push(layer.currentState);
+        layer.sprite.timeline.push(layer.currentState);
         stage.layerAdded(layer);
         selectLayer(layer.z, true);
-        timeline.updateModel()
+        timelineGrid.updateModel()
     }
 
     function createStateFromItem(layer, time)
