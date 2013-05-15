@@ -5,7 +5,7 @@ Item {
     width: childrenRect.width
     height: childrenRect.height
 
-    property Item storyboard: parent 
+    property Item stage: parent 
     property var timeline: new Array()
 
     property var spriteIndex: 0
@@ -32,7 +32,7 @@ Item {
             return;
 
         _tickTime++;
-        var t = Math.floor(_tickTime / storyboard.ticksPerFrame);
+        var t = Math.floor(_tickTime / stage.ticksPerFrame);
         if (spriteTime != t)
             spriteTime = t;
 
@@ -94,7 +94,7 @@ Item {
 
         spriteTime = time;
         // Subract 1 to let the first call to tick land on \a time:
-        _tickTime = (time * storyboard.ticksPerFrame) - 1;
+        _tickTime = (time * stage.ticksPerFrame) - 1;
         finished = false;
     }
 
@@ -107,8 +107,8 @@ Item {
             rotation = _toState.rotation;
             opacity = _toState.opacity;
         } else {
-            var advance = _tickTime - (_fromState.time * storyboard.ticksPerFrame);
-            var tickRange = (_toState.time - _fromState.time) * storyboard.ticksPerFrame;
+            var advance = _tickTime - (_fromState.time * stage.ticksPerFrame);
+            var tickRange = (_toState.time - _fromState.time) * stage.ticksPerFrame;
             x = _getValue(_fromState.x, _toState.x, tickRange, advance, "linear");
             y = _getValue(_fromState.y, _toState.y, tickRange, advance, "linear");
             scale = _getValue(_fromState.scale, _toState.scale, tickRange, advance, "linear");

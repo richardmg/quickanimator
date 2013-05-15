@@ -117,8 +117,8 @@ ApplicationWindow {
     }
 
     Component {
-        id: imageComponent
-        StoryboardSprite {
+        id: stageSpriteComponent
+        StageSprite {
             Image {
                 source: "dummy.jpeg"
             }
@@ -128,7 +128,7 @@ ApplicationWindow {
     function addImage(url)
     {
         var layer = {}
-        layer.sprite = imageComponent.createObject(stage.sprites)
+        layer.sprite = stageSpriteComponent.createObject(stage.sprites)
         timeline.addLayer(layer);
     }
 }
