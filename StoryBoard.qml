@@ -110,7 +110,6 @@ Item {
         layers.push(layer);
         layer.z = layerCount++;
         layer.selected = false;
-        layer.sprite.timeline = new Array();
         layer.currentState = createStateFromItem(layer, 0);
         layer.sprite.timeline.push(layer.currentState);
         stage.layerAdded(layer);

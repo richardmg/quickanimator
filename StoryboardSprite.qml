@@ -6,7 +6,7 @@ Item {
     height: childrenRect.height
 
     property Item storyboard: parent 
-    property var timeline
+    property var timeline: new Array()
 
     property var spriteIndex: 0
     property var spriteTime: 0
