@@ -3,7 +3,7 @@ import QtQuick.Controls 1.0
 
 SpinBox {
     id: spinbox
-    property Item target: myApp.storyBoard.selectedLayer ? myApp.storyBoard.selectedLayer.sprite : null;
+    property Item target: myApp.timeline.selectedLayer ? myApp.timeline.selectedLayer.sprite : null;
     property string property: ""
     enabled: target
     decimals: 3
@@ -14,6 +14,6 @@ SpinBox {
     property real proxy: target ? target[property].toFixed(decimals) : 0
     onValueChanged: if (value !== proxy) {
         target[property] = value;
-        myApp.storyBoard.selectedState[property] = value
+        myApp.timeline.selectedState[property] = value
     }
 }

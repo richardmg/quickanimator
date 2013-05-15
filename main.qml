@@ -6,7 +6,7 @@ ApplicationWindow {
     id: myApp
     width: 800
     height: 600
-    property alias storyBoard: storyBoard
+    property alias timeline: timeline
 
     SplitView {
         orientation: Qt.Vertical
@@ -35,7 +35,7 @@ ApplicationWindow {
                 width: 2 * parent.width / 3
                 height: parent.height
                 clip: true
-                storyBoard: storyBoard
+                timeline: timeline
             }
         }
         SplitView {
@@ -62,13 +62,13 @@ ApplicationWindow {
                     }
                     TextField {
                         id: stateName
-                        enabled: storyBoard.selectedState;
-                        onTextChanged: storyBoard.selectedState.name = text;
+                        enabled: timeline.selectedState;
+                        onTextChanged: timeline.selectedState.name = text;
                         Connections {
-                            target: storyBoard
+                            target: timeline
                             onSelectedStateChanged: {
-                                if (storyBoard.selectedState)
-                                    stateName.text = storyBoard.selectedState.name;
+                                if (timeline.selectedState)
+                                    stateName.text = timeline.selectedState.name;
                             }
                         }
                     }
@@ -108,8 +108,8 @@ ApplicationWindow {
                     }
                 }
             }
-            StoryBoard {
-                id: storyBoard
+            Timeline {
+                id: timeline
                 width: 2 * parent.width / 3
                 height: parent.height
             }
@@ -129,6 +129,6 @@ ApplicationWindow {
     {
         var layer = {}
         layer.sprite = imageComponent.createObject(stage.sprites)
-        storyBoard.addLayer(layer);
+        timeline.addLayer(layer);
     }
 }

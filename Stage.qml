@@ -3,7 +3,7 @@ import QtQuick.Controls 1.0
 
 Item {
     id: root
-    property Item storyBoard
+    property Item timeline
     property alias sprites: sprites
     property int focusSize: 20
 
@@ -11,8 +11,8 @@ Item {
     property var pressStartPos: undefined
     property var currentAction: new Object()
 
-    onStoryBoardChanged: {
-        storyBoard.stage = root
+    onTimelineChanged: {
+        timeline.stage = root
     }
 
     Rectangle {
@@ -44,8 +44,8 @@ Item {
 
         function overlapsHandle(pos)
         {
-            for (var i in storyBoard.selectedLayers) {
-                var layer = storyBoard.layers[storyBoard.selectedLayers[i]]
+            for (var i in timeline.selectedLayers) {
+                var layer = timeline.layers[timeline.selectedLayers[i]]
                 var sprite = layer.sprite
                 var cx = sprite.x + (sprite.width / 2)
                 var cy = sprite.y + (sprite.height / 2)
@@ -64,7 +64,7 @@ Item {
             pressStartTime = new Date().getTime();
             pressStartPos = pos;
 
-            if (storyBoard.selectedLayers.length !== 0) {
+            if (timeline.selectedLayers.length !== 0) {
                 var layer = overlapsHandle(pos);
                 if (layer) {
                     // start drag
@@ -76,7 +76,7 @@ Item {
                     };
                 } else {
                     // Start rotation
-                    var layer = storyBoard.layers[storyBoard.selectedLayers[0]]
+                    var layer = timeline.layers[timeline.selectedLayers[0]]
                     var center = { x: layer.sprite.x + (layer.sprite.width / 2), y: layer.sprite.y  + (layer.sprite.height / 2)};
                     currentAction = getAngleAndRadius(center, pos);
                     currentAction.rotating = true
@@ -88,14 +88,14 @@ Item {
             // drag or rotate current layer:
             var pos = {x:mouseX, y:mouseY}
             if (currentAction.selecting) {
-                var layer = storyBoard.getLayerAt(pos, storyBoard.currentTime);
+                var layer = timeline.getLayerAt(pos, timeline.currentTime);
                 if (layer && !layer.selected)
-                    storyBoard.selectLayer(layer.z, true);
-            } else if (storyBoard.selectedLayers.length !== 0) {
+                    timeline.selectLayer(layer.z, true);
+            } else if (timeline.selectedLayers.length !== 0) {
                 if (currentAction.dragging) {
                     // continue drag
-                    for (var i in storyBoard.selectedLayers) {
-                        var layer = storyBoard.layers[storyBoard.selectedLayers[i]];
+                    for (var i in timeline.selectedLayers) {
+                        var layer = timeline.layers[timeline.selectedLayers[i]];
                         var state = layer.currentState;
                         var sprite = layer.sprite
                         if (xBox.checked)
@@ -109,11 +109,11 @@ Item {
                     currentAction.y = pos.y;
                 } else if (currentAction.rotating) {
                     // continue rotate
-                    var layer = storyBoard.layers[storyBoard.selectedLayers[0]]
+                    var layer = timeline.layers[timeline.selectedLayers[0]]
                     var center = { x: layer.sprite.x + (layer.sprite.width / 2), y: layer.sprite.y  + (layer.sprite.height / 2)};
                     var aar = getAngleAndRadius(center, pos);
-                    for (var i in storyBoard.selectedLayers) {
-                        var layer = storyBoard.layers[storyBoard.selectedLayers[i]];
+                    for (var i in timeline.selectedLayers) {
+                        var layer = timeline.layers[timeline.selectedLayers[i]];
                         var state = layer.currentState;
                         var sprite = layer.sprite
                         if (rotateBox.checked)
@@ -141,12 +141,12 @@ Item {
 
             if (click) {
                 currentAction = {};
-                var layer = storyBoard.getLayerAt(pos, storyBoard.currentTime);
+                var layer = timeline.getLayerAt(pos, timeline.currentTime);
                 var select = layer && !layer.selected
-                for (var i = storyBoard.selectedLayers.length - 1; i >= 0; --i)
-                    storyBoard.selectLayer(storyBoard.selectedLayers[i], false)
+                for (var i = timeline.selectedLayers.length - 1; i >= 0; --i)
+                    timeline.selectLayer(timeline.selectedLayers[i], false)
                 if (select)
-                    storyBoard.selectLayer(layer.z, select)
+                    timeline.selectLayer(layer.z, select)
             }
         }
     }
