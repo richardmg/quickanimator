@@ -118,14 +118,17 @@ ApplicationWindow {
 
     Component {
         id: imageComponent
-        Image { }
+        StoryboardSprite {
+            Image {
+                source: "dummy.jpeg"
+            }
+        }
     }
 
     function addImage(url)
     {
         var layer = {}
-        layer.image = imageComponent.createObject(stage.images)
-        layer.image.source = "dummy.jpeg"
+        layer.sprite = imageComponent.createObject(stage.sprites)
         storyBoard.addLayer(layer);
     }
 }

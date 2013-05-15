@@ -3,7 +3,7 @@ import QtQuick.Controls 1.0
 
 SpinBox {
     id: spinbox
-    property Item target: myApp.storyBoard.selectedLayer ? myApp.storyBoard.selectedLayer.image : null;
+    property Item target: myApp.storyBoard.selectedLayer ? myApp.storyBoard.selectedLayer.sprite : null;
     property string property: ""
     enabled: target
     decimals: 3

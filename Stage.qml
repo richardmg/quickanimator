@@ -4,7 +4,7 @@ import QtQuick.Controls 1.0
 Item {
     id: root
     property Item storyBoard
-    property alias images: layers
+    property alias sprites: sprites
     property int focusSize: 20
 
     property var pressStartTime: 0
@@ -16,7 +16,7 @@ Item {
     }
 
     Rectangle {
-        id: layers
+        id: sprites
         color: "white"
         anchors.left: parent.left
         anchors.right: parent.right
@@ -26,11 +26,11 @@ Item {
 
     Item {
         id: focusFrames
-        anchors.fill: layers
+        anchors.fill: sprites
     }
 
     MouseArea {
-        anchors.fill: images
+        anchors.fill: sprites
 
         function getAngleAndRadius(p1, p2)
         {
@@ -46,9 +46,9 @@ Item {
         {
             for (var i in storyBoard.selectedLayers) {
                 var layer = storyBoard.layers[storyBoard.selectedLayers[i]]
-                var image = layer.image
-                var cx = image.x + (image.width / 2)
-                var cy = image.y + (image.height / 2)
+                var sprite = layer.sprite
+                var cx = sprite.x + (sprite.width / 2)
+                var cy = sprite.y + (sprite.height / 2)
                 var dx = pos.x - cx
                 var dy = pos.y - cy
                 var len = Math.sqrt((dx * dx) + (dy * dy))
@@ -77,7 +77,7 @@ Item {
                 } else {
                     // Start rotation
                     var layer = storyBoard.layers[storyBoard.selectedLayers[0]]
-                    var center = { x: layer.image.x + (layer.image.width / 2), y: layer.image.y  + (layer.image.height / 2)};
+                    var center = { x: layer.sprite.x + (layer.sprite.width / 2), y: layer.sprite.y  + (layer.sprite.height / 2)};
                     currentAction = getAngleAndRadius(center, pos);
                     currentAction.rotating = true
                 }
@@ -97,31 +97,31 @@ Item {
                     for (var i in storyBoard.selectedLayers) {
                         var layer = storyBoard.layers[storyBoard.selectedLayers[i]];
                         var state = layer.currentState;
-                        var image = layer.image
+                        var sprite = layer.sprite
                         if (xBox.checked)
-                            image.x += pos.x - currentAction.x;
+                            sprite.x += pos.x - currentAction.x;
                         if (yBox.checked)
-                            image.y += pos.y - currentAction.y;
-                        state.x = image.x;
-                        state.y = image.y;
+                            sprite.y += pos.y - currentAction.y;
+                        state.x = sprite.x;
+                        state.y = sprite.y;
                     }
                     currentAction.x = pos.x;
                     currentAction.y = pos.y;
                 } else if (currentAction.rotating) {
                     // continue rotate
                     var layer = storyBoard.layers[storyBoard.selectedLayers[0]]
-                    var center = { x: layer.image.x + (layer.image.width / 2), y: layer.image.y  + (layer.image.height / 2)};
+                    var center = { x: layer.sprite.x + (layer.sprite.width / 2), y: layer.sprite.y  + (layer.sprite.height / 2)};
                     var aar = getAngleAndRadius(center, pos);
                     for (var i in storyBoard.selectedLayers) {
                         var layer = storyBoard.layers[storyBoard.selectedLayers[i]];
                         var state = layer.currentState;
-                        var image = layer.image
+                        var sprite = layer.sprite
                         if (rotateBox.checked)
-                            image.rotation += aar.angle - currentAction.angle;
+                            sprite.rotation += aar.angle - currentAction.angle;
                         if (scaleBox.checked)
-                            image.scale *= aar.radius / currentAction.radius;
-                        state.rotation = image.rotation;
-                        state.scale = image.scale;
+                            sprite.scale *= aar.radius / currentAction.radius;
+                        state.rotation = sprite.rotation;
+                        state.scale = sprite.scale;
                     }
                     currentAction.angle = aar.angle;
                     currentAction.radius = aar.radius;
@@ -205,7 +205,7 @@ Item {
         if (select) {
             layer.focus = layerFocus.createObject(0)
             layer.focus.parent = focusFrames
-            layer.focus.target = layer.image
+            layer.focus.target = layer.sprite
         } else {
             layer.focus.destroy()
         }

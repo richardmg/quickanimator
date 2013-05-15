@@ -96,7 +96,7 @@ Item {
 
     function updateItemState(layer)
     {
-        var item = layer.image;
+        var item = layer.sprite;
         var state = layer.currentState;
         item.x = state.x;
         item.y = state.y;
@@ -120,7 +120,7 @@ Item {
 
     function createStateFromItem(layer, time)
     {
-        var item = layer.image
+        var item = layer.sprite
         var state = {
             x:item.x,
             y:item.y,
@@ -190,9 +190,9 @@ Item {
     {
         // todo: respect time
         for (var i=layers.length - 1; i>=0; --i) {
-            var image = layers[i].image
-            if (p.x >= image.x && p.x <= image.x + image.width
-                && p.y >= image.y && p.y <= image.y + image.height) {
+            var sprite = layers[i].sprite
+            if (p.x >= sprite.x && p.x <= sprite.x + sprite.width
+                && p.y >= sprite.y && p.y <= sprite.y + sprite.height) {
                 return layers[i]
             }
         }
