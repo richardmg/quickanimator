@@ -30,8 +30,9 @@ Item {
             for (var l in root.layers) {
                 var layer = layers[l];
                 layer.sprite.setTime(selectedX);
+                layer.sprite.updateSprite();
+
                 layer.currentState = layer.sprite._fromState;
-                updateItemState(layer);
                 root.selectedState = layer.currentState;
             }
         }
@@ -89,16 +90,6 @@ Item {
             timelineGrid.setHighlight(selectedState.time, selectedLayer.z);
     }
 
-    function updateItemState(layer)
-    {
-        var item = layer.sprite;
-        var state = layer.currentState;
-        item.x = state.x;
-        item.y = state.y;
-        item.rotation = state.rotation;
-        item.scale = state.scale;
-    }
-
     function addLayer(layer)
     {
         unselectAllLayers();
@@ -123,6 +114,7 @@ Item {
             height:item.height,
             rotation:item.rotation,
             scale:item.scale,
+            opacity:item.opacity,
             time:time,
             layer: layer.z
         };

@@ -36,7 +36,7 @@ Item {
         if (spriteTime != t)
             spriteTime = t;
 
-        _updateSprite();
+        updateSprite();
 
         if (spriteTime === _toState.time) {
             var after = _toState.after;
@@ -83,7 +83,7 @@ Item {
         if ((!_fromState || time < _fromState.time) || (!_toState || time > _toState.time)) {
             var fromStateIndex = getStateIndexBefore(time);
             _fromState = timeline[fromStateIndex];
-            if (_fromState.time === time) {
+            if (_fromState.time === time || fromStateIndex === timeline.length - 1) {
                 _toStateIndex = fromStateIndex;
                 _toState = _fromState;
             } else {
@@ -98,7 +98,7 @@ Item {
         finished = false;
     }
 
-    function _updateSprite()
+    function updateSprite()
     {
         if (_toState.time === _fromState.time) {
             x = _toState.x;

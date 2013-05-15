@@ -22,6 +22,8 @@ Item {
         anchors.right: parent.right
         anchors.top: title.bottom
         anchors.bottom: parent.bottom
+
+        property int ticksPerFrame: 1
     }
 
     Item {
