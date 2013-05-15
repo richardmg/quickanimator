@@ -80,7 +80,7 @@ Item {
 
     function setTime(time)
     {
-        if ((_fromState && time < _fromState.time) || (_toState && time > _toState.time)) {
+        if ((!_fromState || time < _fromState.time) || (!_toState || time > _toState.time)) {
             var fromStateIndex = getStateIndexBefore(time);
             _fromState = timeline[fromStateIndex];
             if (_fromState.time === time) {

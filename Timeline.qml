@@ -29,13 +29,8 @@ Item {
         onSelectedXChanged: {
             for (var l in root.layers) {
                 var layer = layers[l];
-                for (var i = 0; i < layer.sprite.timeline.length - 1; ++i) {
-                    var stateBefore = layer.sprite.timeline[i];
-                    var stateAfter = layer.sprite.timeline[i + 1];
-                    if (time >= stateBefore.time && time < stateAfter.time)
-                        break;
-                }
-                layer.currentState = layer.sprite.timeline[i];
+                layer.sprite.setTime(selectedX);
+                layer.currentState = layer.sprite._fromState;
                 updateItemState(layer);
                 root.selectedState = layer.currentState;
             }
