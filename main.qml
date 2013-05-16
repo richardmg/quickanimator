@@ -95,6 +95,14 @@ ApplicationWindow {
                         property: "y"
                     }
                     Label {
+                        text: "z:"
+                        Layout.alignment: Qt.AlignRight
+                    }
+                    ItemSpinBox {
+                        property: "z"
+                        minimumValue: 0
+                    }
+                    Label {
                         text: "rotation:"
                         Layout.alignment: Qt.AlignRight
                     }
