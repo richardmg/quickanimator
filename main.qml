@@ -109,6 +109,17 @@ ApplicationWindow {
                     ItemSpinBox {
                         property: "scale"
                         stepSize: 0.1
+                        minimumValue: 0
+                    }
+                    Label {
+                        text: "opacity:"
+                        Layout.alignment: Qt.AlignRight
+                    }
+                    ItemSpinBox {
+                        property: "opacity"
+                        stepSize: 0.1
+                        minimumValue: 0
+                        maximumValue: 1
                     }
                 }
             }
