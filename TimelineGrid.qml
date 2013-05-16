@@ -92,7 +92,6 @@ Item {
         id: selectorLine
         color: "red"
         x: (selectedX * cellWidth) + (cellWidth / 2) - 1
-        y: 1
         width: 1
         height: parent.height - y
     }
