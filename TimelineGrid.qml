@@ -24,23 +24,25 @@ Item {
         anchors.fill: parent
         contentWidth: width
         contentHeight: 20 * cellHeight
+        pixelAligned: true
 
         Canvas {
             id: canvas
             width: flickable.contentWidth
             height: flickable.contentHeight
-            renderTarget: Canvas.FramebufferObject
+            renderTarget: Canvas.Image
             property color fgcolor: "black"
             property real lineWidth: 1.0
+            antialiasing: false
+
             onPaint: {
                 var ctx = getContext('2d');        
                 ctx.strokeStyle = fgcolor
-                ctx.lineWidth = lineWidth
+                ctx.lineWidth = 1
                 ctx.beginPath();
                 for (var row=0; row<20; ++row) {
-                    ctx.moveTo(0, row * cellHeight);
-                    ctx.lineTo(width, row * cellHeight)
-
+                    ctx.moveTo(0,  (row * cellHeight) - 1);
+                    ctx.lineTo(width,  (row * cellHeight) - 1)
                 }
                 for (var row=0; row<20; ++row) {
                     var rowData = root.model[row];
@@ -55,7 +57,6 @@ Item {
                     }
                 }
                 ctx.stroke();
-                ctx.closePath();
             }
 
             MouseArea {
