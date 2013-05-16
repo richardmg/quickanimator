@@ -24,6 +24,15 @@ ApplicationWindow {
                 spacing: 5
                 TitleBar {
                     title: "Image"
+                    TitleBarRow {
+                        layoutDirection: Qt.RightToLeft
+                        ToolButton {
+                            text: "+"
+                            height: parent.height
+                            anchors.verticalCenter: parent.verticalCenter
+                            onClicked: myApp.addImage("dummy.jpeg") 
+                        }
+                    }
                 }
                 TextField {
                     x: 3

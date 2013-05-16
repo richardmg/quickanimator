@@ -58,30 +58,24 @@ Item {
 
     TitleBar {
         id: titlebar
-        ToolButton {
-            id: play
-            anchors.left: parent.left
-            anchors.leftMargin: 2
-            text: "Play"
-            x: 2
-            height: parent.height - 4
-            anchors.verticalCenter: parent.verticalCenter
-            onClicked: play();
+        TitleBarRow {
+            ToolButton {
+                id: play
+                height: parent.height
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Play"
+                onClicked: play();
+            }
         }
-        Label {
-            id: label
-            anchors.verticalCenter: parent.verticalCenter
-            anchors.left: play.right
-            anchors.leftMargin: 10
-            text: "Time: " + timelineGrid.time
-        }
-        ToolButton {
-            anchors.right: parent.right
-            text: "+"
-            x: 2
-            height: parent.height - 4
-            anchors.verticalCenter: parent.verticalCenter
-            onClicked: myApp.addImage("dummy.jpeg") 
+
+        TitleBarRow {
+            layoutDirection: Qt.RightToLeft
+            Item { width: 10; height: 10 }
+            Label {
+                id: label
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Time: " + timelineGrid.time
+            }
         }
     }
 
