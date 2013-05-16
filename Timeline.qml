@@ -113,6 +113,7 @@ Item {
         var state = {
             x:item.x,
             y:item.y,
+            y:item.z,
             name:"state_" + time + "_" + layer.z,
             width:item.width,
             height:item.height,

@@ -111,6 +111,7 @@ Item {
             var tickRange = (_toState.time - _fromState.time) * stage.ticksPerFrame;
             x = _getValue(_fromState.x, _toState.x, tickRange, advance, "linear");
             y = _getValue(_fromState.y, _toState.y, tickRange, advance, "linear");
+            z = _getValue(_fromState.z, _toState.z, tickRange, advance, "linear");
             scale = _getValue(_fromState.scale, _toState.scale, tickRange, advance, "linear");
             rotation = _getValue(_fromState.rotation, _toState.rotation, tickRange, advance, "linear");
             opacity = _getValue(_fromState.opacity, _toState.opacity, tickRange, advance, "linear");

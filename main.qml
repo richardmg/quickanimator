@@ -4,8 +4,8 @@ import QtQuick.Layouts 1.0
 
 ApplicationWindow {
     id: myApp
-    width: 800
-    height: 600
+    width: 1024
+    height: 768
     property alias timeline: timeline
 
     SplitView {
