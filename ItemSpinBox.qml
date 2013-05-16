@@ -9,11 +9,11 @@ SpinBox {
     decimals: 3
     minimumValue: -9999
     maximumValue: 9999
-//    value: proxy
-//
-//    property real proxy: target ? target[property].toFixed(decimals) : 0
-//    onValueChanged: if (value !== proxy) {
-//        target[property] = value;
-//        myApp.timeline.selectedState[property] = value
-//    }
+    value: proxy
+
+    property real proxy: target ? target[property].toFixed(decimals) : 0
+    onValueChanged: if (value !== proxy) {
+        target[property] = value;
+        myApp.timeline.selectedState[property] = value
+    }
 }
