@@ -14,6 +14,8 @@ Item {
     property var selectedLayer: null
     property var selectedState: null
 
+    property bool tweenMode: true
+
     TimelineGrid {
         id: timelineGrid
         anchors.top: titlebar.bottom
@@ -30,7 +32,7 @@ Item {
             for (var l in root.layers) {
                 var layer = layers[l];
                 layer.sprite.setTime(selectedX);
-                layer.sprite.updateSprite();
+                layer.sprite.updateSprite(tweenMode);
 
                 layer.currentState = layer.sprite._fromState;
                 root.selectedState = layer.currentState;
@@ -65,6 +67,14 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 text: "Play"
                 onClicked: play();
+            }
+            ToolButton {
+                height: parent.height
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Tween"
+                checkable: true
+                checked: true
+                onCheckedChanged: tweenMode = checked
             }
         }
 

@@ -36,7 +36,7 @@ Item {
         if (spriteTime != t)
             spriteTime = t;
 
-        updateSprite();
+        updateSprite(true);
 
         if (spriteTime === _toState.time) {
             var after = _toState.after;
@@ -98,14 +98,14 @@ Item {
         finished = false;
     }
 
-    function updateSprite()
+    function updateSprite(tween)
     {
-        if (_toState.time === _fromState.time) {
-            x = _toState.x;
-            y = _toState.y;
-            scale = _toState.scale;
-            rotation = _toState.rotation;
-            opacity = _toState.opacity;
+        if (!tween || _toState.time === _fromState.time) {
+            x = _fromState.x;
+            y = _fromState.y;
+            scale = _fromState.scale;
+            rotation = _fromState.rotation;
+            opacity = _fromState.opacity;
         } else {
             var advance = _tickTime - (_fromState.time * stage.ticksPerFrame);
             var tickRange = (_toState.time - _fromState.time) * stage.ticksPerFrame;
