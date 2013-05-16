@@ -31,7 +31,7 @@ Item {
             width: flickable.contentWidth
             height: flickable.contentHeight
             renderTarget: Canvas.Image
-            property color fgcolor: "black"
+            property color fgcolor: Qt.rgba(0.7, 0.7, 0.7, 1)
             property real lineWidth: 1.0
             antialiasing: false
 
@@ -41,18 +41,18 @@ Item {
                 ctx.lineWidth = 1
                 ctx.beginPath();
                 for (var row=0; row<20; ++row) {
-                    ctx.moveTo(0,  (row * cellHeight) - 1);
-                    ctx.lineTo(width,  (row * cellHeight) - 1)
-                }
-                for (var row=0; row<20; ++row) {
+                    ctx.moveTo(0, (row * cellHeight) - 1);
+                    ctx.lineTo(width, (row * cellHeight) - 1)
+                    ctx.fillStyle = row % 2 ? Qt.rgba(0.9, 0.9, 0.9, 1) : Qt.rgba(0.85, 0.85, 0.85, 1);
+                    ctx.fillRect(0, (row * cellHeight) - 1, width, cellHeight);
+
                     var rowData = root.model[row];
                     if (rowData) {
                         for (var c in rowData.sprite.timeline) {
                             var state = rowData.sprite.timeline[c];
                             ctx.fillStyle = (state === selectedState)
-                                ? Qt.rgba(1.0, 0.0, 0.0, 1) : Qt.rgba(0.4, 0.4, 0.6, 1);
-                            ctx.fillRect(1 + (state.time * cellWidth),
-                                1 + (row * cellHeight), cellWidth - 2, cellHeight - 2);
+                                ? Qt.rgba(0.3, 0.3, 0.9, 1) : Qt.rgba(0.5, 0.5, 0.9, 1);
+                            ctx.fillRect((state.time * cellWidth), (row * cellHeight), cellWidth, cellHeight - 1);
                         }
                     }
                 }
