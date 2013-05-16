@@ -32,7 +32,7 @@ Rectangle {
     }
     Label {
         id: label
-        x: 3
+        x: 5
         anchors.verticalCenter: parent.verticalCenter
     }
 }

@@ -60,13 +60,12 @@ ApplicationWindow {
                     title: "Keyframe"
                 }
                 GridLayout {
-                    anchors.right: parent.right
-                    anchors.rightMargin: 5
+                    x: 5
                     rowSpacing: 2
                     columns: 2
 
                     Label {
-                        text: "state name:"
+                        text: "name:"
                         Layout.alignment: Qt.AlignRight
                     }
                     TextField {
@@ -110,10 +109,6 @@ ApplicationWindow {
                     ItemSpinBox {
                         property: "scale"
                         stepSize: 0.1
-                    }
-                    Rectangle {
-                        Layout.columnSpan: 2
-                        Layout.fillHeight: true
                     }
                 }
             }
