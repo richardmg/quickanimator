@@ -62,7 +62,7 @@ ApplicationWindow {
                 GridLayout {
                     x: 5
                     rowSpacing: 2
-                    columns: 2
+                    columns: 3
 
                     Label {
                         text: "name:"
@@ -72,6 +72,7 @@ ApplicationWindow {
                         id: stateName
                         enabled: timeline.selectedState;
                         onTextChanged: timeline.selectedState.name = text;
+                        Layout.columnSpan: 2
                         Connections {
                             target: timeline
                             onSelectedStateChanged: {
@@ -87,6 +88,7 @@ ApplicationWindow {
                     ItemSpinBox {
                         property: "x"
                     }
+                    ItemComboBox { }
                     Label {
                         text: "y:"
                         Layout.alignment: Qt.AlignRight
@@ -94,6 +96,7 @@ ApplicationWindow {
                     ItemSpinBox {
                         property: "y"
                     }
+                    ItemComboBox { }
                     Label {
                         text: "z:"
                         Layout.alignment: Qt.AlignRight
@@ -102,6 +105,7 @@ ApplicationWindow {
                         property: "z"
                         minimumValue: 0
                     }
+                    ItemComboBox { }
                     Label {
                         text: "rotation:"
                         Layout.alignment: Qt.AlignRight
@@ -110,6 +114,7 @@ ApplicationWindow {
                         property: "rotation"
                         stepSize: 45
                     }
+                    ItemComboBox { }
                     Label {
                         text: "scale:"
                         Layout.alignment: Qt.AlignRight
@@ -119,6 +124,7 @@ ApplicationWindow {
                         stepSize: 0.1
                         minimumValue: 0
                     }
+                    ItemComboBox { }
                     Label {
                         text: "opacity:"
                         Layout.alignment: Qt.AlignRight
@@ -129,6 +135,7 @@ ApplicationWindow {
                         minimumValue: 0
                         maximumValue: 1
                     }
+                    ItemComboBox { }
                 }
             }
             Timeline {
