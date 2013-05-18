@@ -78,7 +78,7 @@ Item {
         return i;
     }
 
-    function setTime(time)
+    function setTime(time, tween)
     {
         if ((!_fromState || time < _fromState.time) || (!_toState || time > _toState.time)) {
             var fromStateIndex = getStateIndexBefore(time);
@@ -93,8 +93,8 @@ Item {
         }
 
         spriteTime = time;
-        // Subract 1 to let the first call to tick land on \a time:
-        _tickTime = (time * stage.ticksPerFrame) - 1;
+        _tickTime = (time * stage.ticksPerFrame);
+        updateSprite(tween);
         finished = false;
     }
 

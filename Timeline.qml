@@ -31,9 +31,7 @@ Item {
         onSelectedXChanged: {
             for (var l in root.layers) {
                 var layer = layers[l];
-                layer.sprite.setTime(selectedX);
-                layer.sprite.updateSprite(tweenMode);
-
+                layer.sprite.setTime(selectedX, tweenMode);
                 layer.currentState = layer.sprite._fromState;
                 root.selectedState = layer.currentState;
             }

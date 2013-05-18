@@ -14,7 +14,7 @@ var sprites = [
         { time: 2, x: 200, y: 100, rotation: 0, scale: 1, opacity: 1 },
         { time: 4, x: 200, y: 100, rotation: 180, scale: 1.5, opacity: 0.5, after:
             function(sprite) {
-                sprite.stage.setTime(0);
+                sprite.stage.setTime(0, true);
             }
         }
     ]
