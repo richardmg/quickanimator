@@ -61,35 +61,33 @@ Item {
     {
         // Binary search timeline:
         var low = 0, high = timeline.length - 1;
-        var t, i = 0;
+        var t, i;
 
-        while (low < high) {
+        while (low <= high) {
             i = Math.floor((low + high) / 2);
             t = timeline[i].time;
             if (time < t) {
-                high = --i;
+                high = i - 1;
                 continue;
             }
-            t = timeline[++i].time;
-            if (time <= t)
-                return i - 1;
-            low = i + 1;
+            if (time > t) {
+                low = i + 1
+                continue;
+            }
+            break;
         }
         return i;
     }
 
     function setTime(time, tween)
     {
-        if ((!_fromState || time < _fromState.time) || (!_toState || time > _toState.time)) {
-            var fromStateIndex = getStateIndexBefore(time);
-            _fromState = timeline[fromStateIndex];
-            if (_fromState.time === time || fromStateIndex === timeline.length - 1) {
-                _toStateIndex = fromStateIndex;
-                _toState = _fromState;
-            } else {
-                _toStateIndex = fromStateIndex + 1;
-                _toState = timeline[_toStateIndex];
-            }
+        if ((!_fromState || time < _fromState.time) || (!_toState || time >= _toState.time)) {
+            _toStateIndex = getStateIndexBefore(time);
+            _toState = timeline[_toStateIndex];
+            if (_toState.time <= time)
+                _fromState = _toState;
+            else
+                _fromState = timeline[_toStateIndex - 1];
         }
 
         spriteTime = time;
