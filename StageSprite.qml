@@ -20,6 +20,8 @@ Item {
 
     property var _tickTime: 0
 
+    property bool _invalid: true
+
     function tick()
     {
         if (paused || finished)
@@ -73,7 +75,8 @@ Item {
 
     function setTime(time, tween)
     {
-//        if ((!_fromState || time < _fromState.time) || (!_toState || time >= _toState.time)) {
+        _invalid = _invalid || !_fromState || !_toState || time < _fromState.time || time >= _toState.time;
+        if (_invalid) {
             var fromStateIndex = getFromStateIndex(time);
             _fromState = timeline[fromStateIndex];
             if (_fromState.time === time || fromStateIndex === timeline.length - 1)
@@ -81,7 +84,8 @@ Item {
             else
                 _toStateIndex = fromStateIndex + 1;
             _toState = timeline[_toStateIndex];
-//        }
+            _invalid = false;
+        }
 
         spriteTime = time;
         _tickTime = (time * stage.ticksPerFrame);
@@ -118,6 +122,7 @@ Item {
 
     function invalidateStates()
     {
-        // no caching in set time
+        // update _fomrState && _toState on next setTime:
+        _invalid = true;
     }
 }
