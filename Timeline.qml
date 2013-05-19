@@ -56,11 +56,9 @@ Item {
                     break;
                 }
             }
-            layer.currentState = createStateFromItem(layer, time);
-            layer.sprite.timeline.splice(i + 1, 0, layer.currentState);
-            layer.sprite.invalidateStates();
-            timelineGrid.repaint()
+            layer.currentState = layer.sprite.getStateAtTime(time, true);
             root.selectedState = layer.currentState;
+            timelineGrid.repaint()
         }
     }
 
@@ -106,30 +104,10 @@ Item {
         layers.push(layer);
         layer.layerIndex = layerCount++;
         layer.selected = false;
-        layer.currentState = createStateFromItem(layer, 0);
-        layer.sprite.timeline.push(layer.currentState);
+        layer.currentState = layer.sprite.getStateAtTime(0, true);
         stage.layerAdded(layer);
         selectLayer(layer.layerIndex, true);
         timelineGrid.repaint()
-    }
-
-    function createStateFromItem(layer, time)
-    {
-        var item = layer.sprite
-        var state = {
-            x:item.x,
-            y:item.y,
-            z:0,//item.z,
-            name:"state_" + time + "_" + layer.layerIndex,
-            width:item.width,
-            height:item.height,
-            rotation:item.rotation,
-            scale:item.scale,
-            opacity:item.opacity,
-            time:time,
-            layer:layer.z
-        };
-        return state;
     }
 
     function unselectAllLayers()

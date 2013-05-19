@@ -53,6 +53,30 @@ Item {
         }
     }
 
+    function getStateAtTime(time, create)
+    {
+        var fromStateIndex = getFromStateIndex(time);
+        var state = timeline[fromStateIndex];
+        if (state && (state.time === time || !create))
+            return state;
+        var state = {
+            x:sprite.x,
+            y:sprite.y,
+            z:sprite.z,
+            name:"state_" + spriteIndex + "_" + time,
+            width:sprite.width,
+            height:sprite.height,
+            rotation:sprite.rotation,
+            scale:sprite.scale,
+            opacity:sprite.opacity,
+            time:time,
+            layer:layer.z
+        };
+        timeline.splice(fromStateIndex + 1, 0, state);
+        _invalid = true;
+        return state;
+    }
+
     function getFromStateIndex(time)
     {
         // Binary search timeline:
@@ -110,7 +134,6 @@ Item {
             scale = _getValue(_fromState.scale, _toState.scale, tickRange, advance, "linear");
             rotation = _getValue(_fromState.rotation, _toState.rotation, tickRange, advance, "linear");
             opacity = _getValue(_fromState.opacity, _toState.opacity, tickRange, advance, "linear");
-            print(z, _fromState.z, _toState.z, tickRange, advance)
         }
     }
 
@@ -118,11 +141,5 @@ Item {
     {
         // Ignore curve for now:
         return from + ((to - from) / tickdiff) * advance;
-    }
-
-    function invalidateStates()
-    {
-        // update _fomrState && _toState on next setTime:
-        _invalid = true;
     }
 }
