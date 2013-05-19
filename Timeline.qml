@@ -50,8 +50,8 @@ Item {
                 }
             }
             layer.currentState = createStateFromItem(layer, time);
-            layer.sprite.invalidateStates();
             layer.sprite.timeline.splice(i + 1, 0, layer.currentState);
+            layer.sprite.invalidateStates();
             timelineGrid.repaint()
             root.selectedState = layer.currentState;
         }

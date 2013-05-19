@@ -20,12 +20,6 @@ Item {
 
     property var _tickTime: 0
 
-    Component.onCompleted: {
-        _toState = _fromState = timeline[0];
-        if (!_toState)
-            print("Warning: sprite", spriteIndex, "needs at least one state!");
-    }
-
     function tick()
     {
         if (paused || finished)
@@ -88,9 +82,6 @@ Item {
                 _toStateIndex = fromStateIndex + 1;
             _toState = timeline[_toStateIndex];
 //        }
-
-        print("setTime:", fromStateIndex, _toStateIndex)
-//        print("setTime:", _fromState.time, _toState.time)
 
         spriteTime = time;
         _tickTime = (time * stage.ticksPerFrame);
