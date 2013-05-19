@@ -57,7 +57,7 @@ Item {
         }
     }
 
-    function getStateIndexBefore(time)
+    function getFromStateIndex(time)
     {
         // Binary search timeline:
         var low = 0, high = timeline.length - 1;
@@ -70,25 +70,27 @@ Item {
                 high = i - 1;
                 continue;
             }
-            if (time > t) {
-                low = i + 1
-                continue;
-            }
-            break;
+            if (i == high || time < timeline[i + 1].time)
+                break;
+            low = i + 1
         }
         return i;
     }
 
     function setTime(time, tween)
     {
-        if ((!_fromState || time < _fromState.time) || (!_toState || time >= _toState.time)) {
-            _toStateIndex = getStateIndexBefore(time);
-            _toState = timeline[_toStateIndex];
-            if (_toState.time <= time)
-                _fromState = _toState;
+//        if ((!_fromState || time < _fromState.time) || (!_toState || time >= _toState.time)) {
+            var fromStateIndex = getFromStateIndex(time);
+            _fromState = timeline[fromStateIndex];
+            if (_fromState.time === time || fromStateIndex === timeline.length - 1)
+                _toStateIndex = fromStateIndex;
             else
-                _fromState = timeline[_toStateIndex - 1];
-        }
+                _toStateIndex = fromStateIndex + 1;
+            _toState = timeline[_toStateIndex];
+//        }
+
+        print("setTime:", fromStateIndex, _toStateIndex)
+//        print("setTime:", _fromState.time, _toState.time)
 
         spriteTime = time;
         _tickTime = (time * stage.ticksPerFrame);
@@ -113,6 +115,7 @@ Item {
             scale = _getValue(_fromState.scale, _toState.scale, tickRange, advance, "linear");
             rotation = _getValue(_fromState.rotation, _toState.rotation, tickRange, advance, "linear");
             opacity = _getValue(_fromState.opacity, _toState.opacity, tickRange, advance, "linear");
+            print(z, _fromState.z, _toState.z, tickRange, advance)
         }
     }
 
@@ -122,4 +125,8 @@ Item {
         return from + ((to - from) / tickdiff) * advance;
     }
 
+    function invalidateStates()
+    {
+        // no caching in set time
+    }
 }

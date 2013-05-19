@@ -14,7 +14,7 @@ Item {
 
     clip: true
 
-    function updateModel()
+    function repaint()
     {
         canvas.requestPaint();
     }
@@ -115,10 +115,5 @@ Item {
         }
     }
 
-    function setHighlight(x, y)
-    {
-        updateModel();
-    }
-  
 }
 

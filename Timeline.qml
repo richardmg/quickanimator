@@ -50,8 +50,9 @@ Item {
                 }
             }
             layer.currentState = createStateFromItem(layer, time);
+            layer.sprite.invalidateStates();
             layer.sprite.timeline.splice(i + 1, 0, layer.currentState);
-            timelineGrid.updateModel()
+            timelineGrid.repaint()
             root.selectedState = layer.currentState;
         }
     }
@@ -89,20 +90,20 @@ Item {
 
     onSelectedStateChanged: {
         if (selectedState && selectedLayer)
-            timelineGrid.setHighlight(selectedState.time, selectedLayer.z);
+            timelineGrid.repaint();
     }
 
     function addLayer(layer)
     {
         unselectAllLayers();
         layers.push(layer);
-        layer.z = layerCount++;
+        layer.layerIndex = layerCount++;
         layer.selected = false;
         layer.currentState = createStateFromItem(layer, 0);
         layer.sprite.timeline.push(layer.currentState);
         stage.layerAdded(layer);
-        selectLayer(layer.z, true);
-        timelineGrid.updateModel()
+        selectLayer(layer.layerIndex, true);
+        timelineGrid.repaint()
     }
 
     function createStateFromItem(layer, time)
@@ -111,15 +112,15 @@ Item {
         var state = {
             x:item.x,
             y:item.y,
-            y:item.z,
-            name:"state_" + time + "_" + layer.z,
+            z:0,//item.z,
+            name:"state_" + time + "_" + layer.layerIndex,
             width:item.width,
             height:item.height,
             rotation:item.rotation,
             scale:item.scale,
             opacity:item.opacity,
             time:time,
-            layer: layer.z
+            layer:layer.z
         };
         return state;
     }
@@ -134,18 +135,18 @@ Item {
         selectedLayers = new Array();
     }
 
-    function selectLayer(z, select)
+    function selectLayer(layerIndex, select)
     {
         var layer = layers[z] 
         if (select === layer.selected)
             return;
         layer.selected = select;
         if (select) {
-            selectedLayers.push(layer.z)
+            selectedLayers.push(layer.layerIndex)
             selectedLayer = layer;
             root.selectedState = layer.currentState;
         } else {
-            var i = selectedLayers.indexOf(z);
+            var i = selectedLayers.indexOf(layerIndex);
             selectedLayers.splice(i, 1);
             if (selectedLayer == layer) {
                 selectedLayer = null;
@@ -155,24 +156,24 @@ Item {
         stage.layerSelected(layer, select)
     }
     
-    function removeLayer(z)
+    function removeLayer(layerIndex)
     {
         var layer = layers[z]
-        layers.splice(z, 1);
+        layers.splice(layerIndex, 1);
         if (layer.selected) {
-            var i = selectedLayers.indexOf(z);
+            var i = selectedLayers.indexOf(layerIndex);
             selectedLayers.splice(i, 1);
         }
     }
 
-    function setLayerZ(oldZ, newZ)
+    function setLayerIndex(oldIndex, newIndex)
     {
-        var layer = layers[oldZ]
-        newZ = Math.max(0, Math.min(layers.length - 1, newZ));
-        if (newZ === oldZ)
+        var layer = layers[oldIndex]
+        newIndex = Math.max(0, Math.min(layers.length - 1, newIndex));
+        if (newIndex === oldIndex)
             return;
-        layers.splice(oldZ, 1);
-        layers.splice(newZ, 0, layer);
+        layers.splice(oldIndex, 1);
+        layers.splice(newIndex, 0, layer);
     }
 
     function getLayerAt(p, time)
