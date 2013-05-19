@@ -16,6 +16,13 @@ Item {
 
     property bool tweenMode: true
 
+    onTweenModeChanged: {
+        for (var l in root.layers) {
+            var layer = layers[l];
+            layer.sprite.updateSprite(tweenMode);
+        }
+    }
+
     TimelineGrid {
         id: timelineGrid
         anchors.top: titlebar.bottom
