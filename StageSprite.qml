@@ -55,7 +55,7 @@ Item {
 
     function getStateAtTime(time, create)
     {
-        var fromStateIndex = getFromStateIndex(time);
+        var fromStateIndex = getStateIndexBeforeTime(time);
         var state = timeline[fromStateIndex];
         if (state && (state.time === time || !create))
             return state;
@@ -77,7 +77,7 @@ Item {
         return state;
     }
 
-    function getFromStateIndex(time)
+    function getStateIndexBeforeTime(time)
     {
         // Binary search timeline:
         var low = 0, high = timeline.length - 1;
@@ -101,7 +101,7 @@ Item {
     {
         _invalid = _invalid || !_fromState || !_toState || time < _fromState.time || time >= _toState.time;
         if (_invalid) {
-            var fromStateIndex = getFromStateIndex(time);
+            var fromStateIndex = getStateIndexBeforeTime(time);
             _fromState = timeline[fromStateIndex];
             if (_fromState.time === time || fromStateIndex === timeline.length - 1)
                 _toStateIndex = fromStateIndex;
