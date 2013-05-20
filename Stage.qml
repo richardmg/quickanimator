@@ -98,8 +98,13 @@ Item {
                     // continue drag
                     for (var i in timeline.selectedLayers) {
                         var layer = timeline.layers[timeline.selectedLayers[i]];
-                        var state = layer.currentState;
                         var sprite = layer.sprite
+                        var state = sprite.getCurrentState();
+                        var time = timeline.timelineGrid.time;
+                        if (timeline.tweenMode && state.time !== time) {
+                            state = sprite.createState(time);
+                            timeline.timelineGrid.repaint();
+                        }
                         if (xBox.checked)
                             sprite.x += pos.x - currentAction.x;
                         if (yBox.checked)
@@ -116,8 +121,13 @@ Item {
                     var aar = getAngleAndRadius(center, pos);
                     for (var i in timeline.selectedLayers) {
                         var layer = timeline.layers[timeline.selectedLayers[i]];
-                        var state = layer.currentState;
                         var sprite = layer.sprite
+                        var state = sprite.getCurrentState();
+                        var time = timeline.timelineGrid.time;
+                        if (timeline.tweenMode && state.time !== time) {
+                            state = sprite.createState(time);
+                            timeline.timelineGrid.repaint();
+                        }
                         if (rotateBox.checked)
                             sprite.rotation += aar.angle - currentAction.angle;
                         if (scaleBox.checked)

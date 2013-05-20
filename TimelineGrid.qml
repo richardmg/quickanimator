@@ -48,9 +48,11 @@ Item {
 
                     var rowData = root.model[row];
                     if (rowData) {
-                        for (var c in rowData.sprite.timeline) {
-                            var state = rowData.sprite.timeline[c];
-                            ctx.fillStyle = (state === selectedState)
+                        var sprite = rowData.sprite;
+                        var currentState = sprite.getCurrentState();
+                        for (var c in sprite.timeline) {
+                            var state = sprite.timeline[c];
+                            ctx.fillStyle = (state === currentState)
                                 ? Qt.rgba(0.3, 0.3, 0.9, 1) : Qt.rgba(0.5, 0.5, 0.9, 1);
                             ctx.fillRect((state.time * cellWidth), (row * cellHeight), cellWidth, cellHeight - 1);
                         }

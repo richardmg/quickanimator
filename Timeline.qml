@@ -56,7 +56,7 @@ Item {
                     break;
                 }
             }
-            layer.currentState = layer.sprite.getStateAtTime(time, true);
+            layer.currentState = layer.sprite.createState(time);
             root.selectedState = layer.currentState;
             timelineGrid.repaint()
         }
@@ -104,7 +104,7 @@ Item {
         layers.push(layer);
         layer.layerIndex = layerCount++;
         layer.selected = false;
-        layer.currentState = layer.sprite.getStateAtTime(0, true);
+        layer.currentState = layer.sprite.createState(0);
         stage.layerAdded(layer);
         selectLayer(layer.layerIndex, true);
         timelineGrid.repaint()

@@ -16,11 +16,10 @@ Item {
 
     property var _fromState
     property var _toState
-    property int _toStateIndex: 0
 
     property var _tickTime: 0
 
-    property bool _invalid: true
+    property bool _invalidCache: true
 
     function tick()
     {
@@ -37,28 +36,25 @@ Item {
         if (spriteTime === _toState.time) {
             var after = _toState.after;
             if (after) {
-                var currentStateIndex = _toStateIndex;
+                var currentStateIndex = _toState.index;
                 after(sprite);
-                if (currentStateIndex !== _toStateIndex)
+                if (currentStateIndex !== _toState.index)
                     return;
             }
-            if (_toStateIndex >= timeline.length - 1) {
+            if (_toState.index >= timeline.length - 1) {
                 finished = true;
             } else {
                 _fromState = _toState;
-                _toState = timeline[++_toStateIndex];
+                _toState = timeline[++_toState.index];
                 if (_toState.time == _fromState.time)
                     _tickCount--;
             }
         }
     }
 
-    function getStateAtTime(time, create)
+    function createState(time)
     {
-        var fromStateIndex = getStateIndexBeforeTime(time);
-        var state = timeline[fromStateIndex];
-        if (state && (state.time === time || !create))
-            return state;
+        var index = timeline.length === 0 ? 0 : getState(time).index + 1;
         var state = {
             x:sprite.x,
             y:sprite.y,
@@ -70,47 +66,28 @@ Item {
             scale:sprite.scale,
             opacity:sprite.opacity,
             time:time,
-            layer:layer.z
+            layer:layer.z,
+            index:index
         };
-        timeline.splice(fromStateIndex + 1, 0, state);
-        _invalid = true;
+        timeline.splice(index, 0, state);
+        _invalidCache = true;
         return state;
     }
 
-    function getStateIndexBeforeTime(time)
+    function getCurrentState()
     {
-        // Binary search timeline:
-        var low = 0, high = timeline.length - 1;
-        var t, i;
+        _updateToAndFromState(spriteTime);
+        return _fromState;
+    }
 
-        while (low <= high) {
-            i = Math.floor((low + high) / 2);
-            t = timeline[i].time;
-            if (time < t) {
-                high = i - 1;
-                continue;
-            }
-            if (i == high || time < timeline[i + 1].time)
-                break;
-            low = i + 1
-        }
-        return i;
+    function getState(time)
+    {
+        return (time >= _fromState.time && time < _toState.time) ? getCurrentState() : _getStateBinarySearch(time);
     }
 
     function setTime(time, tween)
     {
-        _invalid = _invalid || !_fromState || !_toState || time < _fromState.time || time >= _toState.time;
-        if (_invalid) {
-            var fromStateIndex = getStateIndexBeforeTime(time);
-            _fromState = timeline[fromStateIndex];
-            if (_fromState.time === time || fromStateIndex === timeline.length - 1)
-                _toStateIndex = fromStateIndex;
-            else
-                _toStateIndex = fromStateIndex + 1;
-            _toState = timeline[_toStateIndex];
-            _invalid = false;
-        }
-
+        _updateToAndFromState(time);
         spriteTime = time;
         _tickTime = (time * stage.ticksPerFrame);
         updateSprite(tween);
@@ -142,4 +119,36 @@ Item {
         // Ignore curve for now:
         return from + ((to - from) / tickdiff) * advance;
     }
+
+    function _updateToAndFromState(time)
+    {
+        _invalidCache = _invalidCache || !_fromState || !_toState || time < _fromState.time || time >= _toState.time;
+        if (_invalidCache) {
+            _fromState = _getStateBinarySearch(time);
+            _toState = (_fromState.time === time || _fromState.index === timeline.length - 1) ? _fromState : timeline[_fromState.index + 1];
+            _invalidCache = false;
+        }
+    }
+
+    function _getStateBinarySearch(time)
+    {
+        // Binary search timeline:
+        var low = 0, high = timeline.length - 1;
+        var t, i;
+
+        while (low <= high) {
+            i = Math.floor((low + high) / 2);
+            t = timeline[i].time;
+            if (time < t) {
+                high = i - 1;
+                continue;
+            }
+            if (i == high || time < timeline[i + 1].time)
+                break;
+            low = i + 1
+        }
+        return timeline[i];
+    }
+
+
 }
