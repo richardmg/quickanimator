@@ -21,42 +21,42 @@ SpinBox {
     onValueChanged: {
         if (_guard)
             return;
-        var sprite = myApp.timeline.layers[0].sprite;
-        if (!sprite)
+        if (!target)
             return;
-        var state = sprite.getCurrentState();
+        var state = target.getCurrentState();
         var time = myApp.timeline.timelineGrid.time;
         if (myApp.timeline.tweenMode && state.time !== time) {
-            state = sprite.createState(time);
+            state = target.createState(time);
             myApp.timeline.timelineGrid.repaint();
         }
         if (!state)
             return;
-        sprite[property] = spinbox.value;
+        target[property] = spinbox.value;
         state[property] = spinbox.value; 
     }
 
     function _setupConnection(set)
     {
-        function targetListener() {
-            _guard = true;
-            spinbox.value = spinbox.target[property];
-            _guard = false;
+        if (property === "" || !target || !set) {
+            if (_boundTarget)  {
+                spinbox._boundTarget[_boundProperty].disconnect(targetListener)
+                _boundTarget = nil;
+            }
+            return;
         }
 
-        if (property === "" || !target || !set) {
-            if (_boundTarget) 
-                spinbox._boundTarget[_boundProperty].disconnect(targetListener)
-            return;
-        }
-        var sprite = myApp.timeline.layers[0].sprite;
-        if (!sprite)
-            return;
-        var state = sprite.getCurrentState().name;
+        var state = target.getCurrentState().name;
         if (!state)
             return;
-        _boundTarget = sprite;
+
+        _boundTarget = target;
         _boundProperty = spinbox.property + "Changed";
         spinbox._boundTarget[_boundProperty].connect(targetListener)
+    }
+
+    function targetListener() {
+        _guard = true;
+        spinbox.value = spinbox.target[property];
+        _guard = false;
     }
 }
