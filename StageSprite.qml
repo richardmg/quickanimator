@@ -67,7 +67,7 @@ Item {
             opacity:sprite.opacity,
             time:time,
             layer:layer.z,
-            index:-1 // NB: index will be set for each getState call!
+            temporaryIndex:-1 // NB: temporaryIndex will be set for each getState call!
         };
         timeline.splice(index, 0, state);
         _invalidCache = true;
