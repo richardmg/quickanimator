@@ -7,6 +7,7 @@ Item {
     property Stage stage: null
     property alias timelineGrid: timelineGrid
     property int currentTime: 0
+    property alias ticksPerFrame: ticksPerFrameBox.value
 
     property int layerCount: 0
     property var layers: new Array()
@@ -91,6 +92,11 @@ Item {
                 checkable: true
                 checked: true
                 onCheckedChanged: tweenMode = checked
+            }
+            SpinBox {
+                id: ticksPerFrameBox
+                value: 30
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
 

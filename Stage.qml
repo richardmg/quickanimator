@@ -23,7 +23,7 @@ Item {
         anchors.top: title.bottom
         anchors.bottom: parent.bottom
 
-        property int ticksPerFrame: 1
+        property int ticksPerFrame: timeline.ticksPerFrame
     }
 
     Item {
