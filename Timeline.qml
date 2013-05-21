@@ -66,6 +66,17 @@ Item {
         id: titlebar
         TitleBarRow {
             ToolButton {
+                id: rewind
+                height: parent.height
+                anchors.verticalCenter: parent.verticalCenter
+                text: "<<"
+                onClicked: {
+                    for (var i = 0; i < layers.length; ++i)
+                        layers[i].sprite.setTime(0);
+                    timelineGrid.selectedX = 0;
+                }
+            }
+            ToolButton {
                 id: play
                 height: parent.height
                 anchors.verticalCenter: parent.verticalCenter
@@ -101,6 +112,7 @@ Item {
         onTriggered: {
             for (var i = 0; i < layers.length; ++i)
                 layers[i].sprite.tick();
+            timelineGrid.selectedX = layers[0].sprite.spriteTime;
         }
     }
 
