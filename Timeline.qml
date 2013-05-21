@@ -69,8 +69,9 @@ Item {
                 id: play
                 height: parent.height
                 anchors.verticalCenter: parent.verticalCenter
-                text: "Play"
-                onClicked: play();
+                text: checked ? "Stop" : "Play"
+                checkable: true
+                onCheckedChanged: if (checked) playTimer.start(); else playTimer.stop()
             }
             ToolButton {
                 height: parent.height
@@ -90,6 +91,16 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
                 text: "Time: " + timelineGrid.time
             }
+        }
+    }
+
+    Timer {
+        id: playTimer
+        interval: 1000 / 60
+        repeat: true
+        onTriggered: {
+            for (var i = 0; i < layers.length; ++i)
+                layers[i].sprite.tick();
         }
     }
 
