@@ -151,7 +151,8 @@ Item {
 
     function selectLayer(layerIndex, select)
     {
-        var layer = layers[z] 
+        print("layerindex:", layerIndex);
+        var layer = layers[layerIndex] 
         if (select === layer.selected)
             return;
         layer.selected = select;
@@ -172,7 +173,7 @@ Item {
     
     function removeLayer(layerIndex)
     {
-        var layer = layers[z]
+        var layer = layers[layerIndex]
         layers.splice(layerIndex, 1);
         if (layer.selected) {
             var i = selectedLayers.indexOf(layerIndex);

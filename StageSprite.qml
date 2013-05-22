@@ -66,7 +66,7 @@ Item {
             scale:sprite.scale,
             opacity:sprite.opacity,
             time:time,
-            layer:layer.z,
+            sprite:sprite,
             temporaryIndex:-1 // NB: temporaryIndex will be set for each getState call!
         };
         timeline.splice(index, 0, state);

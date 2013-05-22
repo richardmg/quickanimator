@@ -92,7 +92,7 @@ Item {
             if (currentAction.selecting) {
                 var layer = timeline.getLayerAt(pos, timeline.currentTime);
                 if (layer && !layer.selected)
-                    timeline.selectLayer(layer.z, true);
+                    timeline.selectLayer(layer.layerIndex, true);
             } else if (timeline.selectedLayers.length !== 0) {
                 if (currentAction.dragging) {
                     // continue drag
@@ -158,7 +158,7 @@ Item {
                 for (var i = timeline.selectedLayers.length - 1; i >= 0; --i)
                     timeline.selectLayer(timeline.selectedLayers[i], false)
                 if (select)
-                    timeline.selectLayer(layer.z, select)
+                    timeline.selectLayer(layer.layerIndex, select)
             }
         }
     }
