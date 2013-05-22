@@ -40,7 +40,7 @@ SpinBox {
         if (property === "" || !target || !set) {
             if (_boundTarget)  {
                 spinbox._boundTarget[_boundProperty].disconnect(targetListener)
-                _boundTarget = nil;
+                _boundTarget = null;
             }
             return;
         }
