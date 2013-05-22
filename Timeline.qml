@@ -151,7 +151,6 @@ Item {
 
     function selectLayer(layerIndex, select)
     {
-        print("layerindex:", layerIndex);
         var layer = layers[layerIndex] 
         if (select === layer.selected)
             return;
