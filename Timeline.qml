@@ -1,6 +1,8 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.0
 
+import FileIO 1.0
+
 Item {
     id: root
     clip: true
@@ -22,6 +24,11 @@ Item {
             var layer = layers[l];
             layer.sprite.updateSprite(tweenMode);
         }
+    }
+
+    FileIO {
+        id: file
+        source: "save.anim"
     }
 
     TimelineGrid {
@@ -92,6 +99,12 @@ Item {
                 checkable: true
                 checked: true
                 onCheckedChanged: tweenMode = checked
+            }
+            ToolButton {
+                height: parent.height
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Save"
+                onClicked: file.write("testing save\n");
             }
             SpinBox {
                 id: ticksPerFrameBox

@@ -15,6 +15,11 @@ int main(int argc, char* argv[])
     QQmlEngine engine;
     QQmlComponent component(&engine);
     component.loadUrl(QUrl("main.qml"));
+    if ( !component.isReady() ) {
+        qWarning("%s", qPrintable(component.errorString()));
+        return -1;
+    }
+
     QObject *topLevel = component.create();
     QQuickWindow *window = qobject_cast<QQuickWindow *>(topLevel);
     window->showFullScreen();
