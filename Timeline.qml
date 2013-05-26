@@ -212,7 +212,7 @@ Item {
 
     FileIO {
         id: file
-        source: "save.anim"
+        source: "save.anim.js"
     }
 
 
@@ -232,7 +232,7 @@ Item {
                 + ", rotation: " + s.rotation
                 + ", scale: " + s.scale
                 + ", opacity: " + s.opacity
-                + ", name: " + s.name
+                + ', name: "' + s.name + '"'
                 + " }"
                 if (j < timeline.length - 1)
                     f += ",\n"

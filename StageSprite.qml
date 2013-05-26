@@ -16,6 +16,7 @@ Item {
 
     property var _fromState
     property var _toState
+    property var _currentIndex: 0
 
     property var _tickTime: 0
 
@@ -36,25 +37,23 @@ Item {
         if (spriteTime === _toState.time) {
             var after = _toState.after;
             if (after) {
-                var currentStateIndex = _toState.temporaryIndex;
+                var tmpIndex = _currentIndex
                 after(sprite);
-                if (currentStateIndex !== _toState.temporaryIndex)
+                if (tmpIndex !== _currentIndex)
                     return;
             }
-            if (_toState.temporaryIndex >= timeline.length - 1) {
+            if (_currentIndex >= timeline.length - 1) {
                 finished = true;
             } else {
                 _fromState = _toState;
-                _toState = timeline[++_toState.temporaryIndex];
-                if (_toState.time == _fromState.time)
-                    _tickCount--;
+                _toState = timeline[++_currentIndex];
             }
         }
     }
 
     function createState(time)
     {
-        var index = timeline.length === 0 ? 0 : getState(time).temporaryIndex + 1;
+        var index = timeline.length === 0 ? 0 : getState(time).lastSearchIndex + 1;
         var state = {
             x:sprite.x,
             y:sprite.y,
@@ -67,7 +66,6 @@ Item {
             opacity:sprite.opacity,
             time:time,
             sprite:sprite,
-            temporaryIndex:-1 // NB: temporaryIndex will be set for each getState call!
         };
         timeline.splice(index, 0, state);
         _invalidCache = true;
@@ -125,7 +123,8 @@ Item {
         _invalidCache = _invalidCache || !_fromState || !_toState || time < _fromState.time || time >= _toState.time;
         if (_invalidCache) {
             _fromState = _getStateBinarySearch(time);
-            _toState = (_fromState.temporaryIndex === timeline.length - 1) ? _fromState : timeline[_fromState.temporaryIndex + 1];
+            _currentIndex = _fromState.lastSearchIndex;
+            _toState = (_currentIndex === timeline.length - 1) ? _fromState : timeline[_currentIndex + 1];
             _invalidCache = false;
         }
     }
@@ -148,7 +147,7 @@ Item {
             low = i + 1
         }
         var state = timeline[i];
-        state.temporaryIndex = i;
+        state.lastSearchIndex = i;
         return state;
     }
 

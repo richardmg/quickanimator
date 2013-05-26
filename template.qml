@@ -1,5 +1,5 @@
 import QtQuick 2.1
-import "timelinedata.js" as TLD
+import "save.anim.js" as TLD
 
 Item {
     id: runtimeStage
@@ -11,8 +11,9 @@ Item {
     property var global: new Object()
 
     property real fps: 60
-    readonly property int ticksPerFrame: 30
-    property var sprites: [sprite1, sprite2]
+    readonly property int ticksPerFrame: 5
+//    property var sprites: [sprite1, sprite2]
+    property var sprites: [sprite1]
 
     function start(name)
     {
@@ -51,12 +52,12 @@ Item {
         Image { source: "dummy.jpeg" }
     }
 
-    StageSprite {
-        id: sprite2
-        spriteIndex: 1
-        timeline: TLD.sprites[spriteIndex]
-        Image { source: "dummy.jpeg" }
-    }
+//    StageSprite {
+//        id: sprite2
+//        spriteIndex: 1
+//        timeline: TLD.sprites[spriteIndex]
+//        Image { source: "dummy.jpeg" }
+//    }
 
     MouseArea {
         anchors.fill: parent
