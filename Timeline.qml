@@ -218,26 +218,26 @@ Item {
 
     function saveJSON()
     {
-        var f = ".pragma library\n\nvar sprites = [\n[\n";
+        var f = ".pragma library\n\nvar sprites = [\n{ image: 'dummy.jpeg', states: [\n";
 
         for (var i = 0; i < layers.length; ++i) {
             var layer = layers[i];
             var timeline = layer.sprite.timeline;
             for (var j = 0; j < timeline.length; ++j) {
                 var s = timeline[j];
-                f += "{ time: " + s.time
+                f += "   { time: " + s.time
                 + ", x: " + s.x
                 + ", y: " + s.y
                 + ", z: " + s.z
                 + ", rotation: " + s.rotation
                 + ", scale: " + s.scale
                 + ", opacity: " + s.opacity
-                + ', name: "' + s.name + '"'
+                + ", name: '" + s.name + "'"
                 + " }"
                 if (j < timeline.length - 1)
                     f += ",\n"
             }
-            f += (i < layers.length - 1) ? "\n],[\n" : "\n]\n";
+            f += (i < layers.length - 1) ? "\n]},{ image: 'dummy.jpeg', states: [\n" : "\n]}\n";
         }
         f += "]\n";
 

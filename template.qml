@@ -48,8 +48,8 @@ Item {
     StageSprite {
         id: sprite1
         spriteIndex: 0
-        timeline: TLD.sprites[spriteIndex]
-        Image { source: "dummy.jpeg" }
+        timeline: TLD.sprites[spriteIndex].states
+        Image { source: TLD.sprites[sprite1.spriteIndex].image }
     }
 
 //    StageSprite {
