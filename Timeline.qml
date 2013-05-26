@@ -226,12 +226,12 @@ Item {
             for (var j = 0; j < timeline.length; ++j) {
                 var s = timeline[j];
                 f += "   { time: " + s.time
-                + ", x: " + s.x
-                + ", y: " + s.y
-                + ", z: " + s.z
-                + ", rotation: " + s.rotation
-                + ", scale: " + s.scale
-                + ", opacity: " + s.opacity
+                + ", x: " + s.x.toFixed(2)
+                + ", y: " + s.y.toFixed(2)
+                + ", z: " + s.z.toFixed(2)
+                + ", rotation: " + s.rotation.toFixed(2)
+                + ", scale: " + s.scale.toFixed(2)
+                + ", opacity: " + s.opacity.toFixed(2)
                 + ", name: '" + s.name + "'"
                 + " }"
                 if (j < timeline.length - 1)
