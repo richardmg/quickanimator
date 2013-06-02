@@ -74,6 +74,18 @@ Item {
         return state;
     }
 
+    function removeState(state, tween)
+    {
+        timeline.splice(timeline.indexOf(state), 1);
+        _invalidCache = true;
+        setTime(spriteTime, tween);
+    }
+
+    function removeCurrentState(tween)
+    {
+        removeState(getCurrentState(), tween);
+    }
+
     function getCurrentState()
     {
         _updateToAndFromState(spriteTime);

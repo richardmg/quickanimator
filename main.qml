@@ -147,6 +147,11 @@ ApplicationWindow {
                         maximumValue: 1
                     }
                     ItemComboBox { }
+                    Button {
+                        Layout.columnSpan: 3
+                        text: "Remove state"
+                        onClicked: timeline.removeCurrentState();
+                    }
                 }
             }
             Timeline {

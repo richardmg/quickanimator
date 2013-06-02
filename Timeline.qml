@@ -174,6 +174,12 @@ Item {
         selectedLayersArrayChanged();
     }
 
+    function removeCurrentState()
+    {
+        selectedLayers[0].sprite.removeCurrentState(tweenMode);
+        timelineGrid.repaint();
+    }
+
     function setLayerIndex(oldIndex, newIndex)
     {
         var layer = layers[oldIndex]
