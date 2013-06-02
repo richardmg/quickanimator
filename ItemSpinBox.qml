@@ -4,7 +4,7 @@ import QtQuick.Controls 1.0
 SpinBox {
     id: spinbox
     implicitWidth: 100
-    property Item target: myApp.timeline.selectedLayer ? myApp.timeline.selectedLayer.sprite : null;
+    property Item target: myApp.timeline.selectionLength ? myApp.timeline.selectedLayers[0].sprite : null;
     property string property: ""
     enabled: target
     decimals: 3

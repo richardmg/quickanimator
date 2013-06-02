@@ -70,14 +70,14 @@ ApplicationWindow {
                     }
                     TextField {
                         id: stateName
-                        enabled: timeline.selectedState;
-                        onTextChanged: timeline.selectedState.name = text;
+                        enabled: timeline.selectionLength > 0
+                        onTextChanged: timeline.selectedLayers[0].currentState.name = text;
                         Layout.columnSpan: 2
                         Connections {
                             target: timeline
-                            onSelectedStateChanged: {
-                                if (timeline.selectedState)
-                                    stateName.text = timeline.selectedState.name;
+                            onSelectionLengthChanged: {
+                                if (timeline.selectionLength > 0)
+                                    stateName.text = timeline.selectedLayers[0].currentState.name;
                             }
                         }
                     }

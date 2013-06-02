@@ -47,7 +47,7 @@ Item {
         function overlapsHandle(pos)
         {
             for (var i in timeline.selectedLayers) {
-                var layer = timeline.layers[timeline.selectedLayers[i]]
+                var layer = timeline.selectedLayers[i]
                 var sprite = layer.sprite
                 var cx = sprite.x + (sprite.width / 2)
                 var cy = sprite.y + (sprite.height / 2)
@@ -78,7 +78,7 @@ Item {
                     };
                 } else {
                     // Start rotation
-                    var layer = timeline.layers[timeline.selectedLayers[0]]
+                    var layer = timeline.selectedLayers[0];
                     var center = { x: layer.sprite.x + (layer.sprite.width / 2), y: layer.sprite.y  + (layer.sprite.height / 2)};
                     currentAction = getAngleAndRadius(center, pos);
                     currentAction.rotating = true
@@ -92,12 +92,12 @@ Item {
             if (currentAction.selecting) {
                 var layer = timeline.getLayerAt(pos, timeline.currentTime);
                 if (layer && !layer.selected)
-                    timeline.selectLayer(layer.layerIndex, true);
+                    timeline.selectLayer(layer, true);
             } else if (timeline.selectedLayers.length !== 0) {
                 if (currentAction.dragging) {
                     // continue drag
                     for (var i in timeline.selectedLayers) {
-                        var layer = timeline.layers[timeline.selectedLayers[i]];
+                        var layer = timeline.selectedLayers[i];
                         var sprite = layer.sprite
                         var state = sprite.getCurrentState();
                         var time = timeline.timelineGrid.time;
@@ -116,11 +116,11 @@ Item {
                     currentAction.y = pos.y;
                 } else if (currentAction.rotating) {
                     // continue rotate
-                    var layer = timeline.layers[timeline.selectedLayers[0]]
+                    var layer = timeline.selectedLayers[0];
                     var center = { x: layer.sprite.x + (layer.sprite.width / 2), y: layer.sprite.y  + (layer.sprite.height / 2)};
                     var aar = getAngleAndRadius(center, pos);
                     for (var i in timeline.selectedLayers) {
-                        var layer = timeline.layers[timeline.selectedLayers[i]];
+                        var layer = timeline.selectedLayers[i];
                         var sprite = layer.sprite
                         var state = sprite.getCurrentState();
                         var time = timeline.timelineGrid.time;
@@ -158,7 +158,7 @@ Item {
                 for (var i = timeline.selectedLayers.length - 1; i >= 0; --i)
                     timeline.selectLayer(timeline.selectedLayers[i], false)
                 if (select)
-                    timeline.selectLayer(layer.layerIndex, select)
+                    timeline.selectLayer(layer, select)
             }
         }
     }

@@ -5,7 +5,7 @@
 TEMPLATE = app
 TARGET = animstudio
 INCLUDEPATH += .
-QT += quick qml
+QT += quick qml widgets
 
 # Input
 HEADERS += fileio.h

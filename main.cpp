@@ -1,5 +1,5 @@
 #include <QDir>
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlEngine>
 #include <QQuickView>
 #include <QQmlComponent>
@@ -8,7 +8,7 @@
 
 int main(int argc, char* argv[])
 {
-    QGuiApplication app(argc,argv);
+    QApplication app(argc,argv);
 
     qmlRegisterType<FileIO>("FileIO", 1, 0, "FileIO");
 

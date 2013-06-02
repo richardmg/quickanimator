@@ -14,10 +14,10 @@ Item {
     property int layerCount: 0
     property var layers: new Array()
     property var selectedLayers: new Array()
-    property var selectedLayer: null
-    property var selectedState: null
 
     property bool tweenMode: true
+
+    property var selectionLength: 0
 
     onTweenModeChanged: {
         for (var l in root.layers) {
@@ -43,7 +43,6 @@ Item {
                 var layer = layers[l];
                 layer.sprite.setTime(selectedX, tweenMode);
                 layer.currentState = layer.sprite._fromState;
-                root.selectedState = layer.currentState;
             }
         }
 
@@ -60,7 +59,6 @@ Item {
                 }
             }
             layer.currentState = layer.sprite.createState(time);
-            root.selectedState = layer.currentState;
             timelineGrid.repaint()
         }
     }
@@ -130,62 +128,49 @@ Item {
         }
     }
 
-    onSelectedStateChanged: {
-        if (selectedState && selectedLayer)
-            timelineGrid.repaint();
-    }
-
     function addLayer(layer)
     {
         unselectAllLayers();
         layers.push(layer);
-        layer.layerIndex = layerCount++;
         layer.selected = false;
         layer.currentState = layer.sprite.createState(0);
         stage.layerAdded(layer);
-        selectLayer(layer.layerIndex, true);
+        selectLayer(layer, true);
         timelineGrid.repaint()
     }
 
     function unselectAllLayers()
     {
         for (var i in selectedLayers) {
-            var layer = layers[selectedLayers[i]];
+            var layer = selectedLayers[i];
             layer.selected = false;
             stage.layerSelected(layer, false);
         }
         selectedLayers = new Array();
+        selectionLength = 0;
     }
 
-    function selectLayer(layerIndex, select)
+    function selectLayer(layer, select)
     {
-        var layer = layers[layerIndex] 
         if (select === layer.selected)
             return;
         layer.selected = select;
         if (select) {
-            selectedLayers.push(layer.layerIndex)
-            selectedLayer = layer;
-            root.selectedState = layer.currentState;
+            selectedLayers.push(layer)
         } else {
-            var i = selectedLayers.indexOf(layerIndex);
+            var i = selectedLayers.indexOf(layer);
             selectedLayers.splice(i, 1);
-            if (selectedLayer == layer) {
-                selectedLayer = null;
-                root.selectedState = null;
-            }
         }
         stage.layerSelected(layer, select)
+        selectionLength = selectedLayers.length;
     }
     
-    function removeLayer(layerIndex)
+    function removeLayer(layer)
     {
-        var layer = layers[layerIndex]
-        layers.splice(layerIndex, 1);
-        if (layer.selected) {
-            var i = selectedLayers.indexOf(layerIndex);
-            selectedLayers.splice(i, 1);
-        }
+        layers.splice(layer.indexOf(layer), 1);
+        if (layer.selected)
+            selectedLayers.splice(selectedLayers.indexOf(layer), 1);
+        selectionLength = selectedLayers.length;
     }
 
     function setLayerIndex(oldIndex, newIndex)
