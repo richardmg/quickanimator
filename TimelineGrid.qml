@@ -50,10 +50,9 @@ Item {
                     if (rowData) {
                         var sprite = rowData.sprite;
                         var currentState = sprite.getCurrentState();
+                        ctx.fillStyle = Qt.rgba(0.3, 0.3, 0.9, 1);
                         for (var c in sprite.timeline) {
                             var state = sprite.timeline[c];
-                            ctx.fillStyle = (state === currentState)
-                                ? Qt.rgba(0.3, 0.3, 0.9, 1) : Qt.rgba(0.5, 0.5, 0.9, 1);
                             ctx.fillRect((state.time * cellWidth), (row * cellHeight), cellWidth, cellHeight - 1);
                         }
                     }
