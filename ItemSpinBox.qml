@@ -52,6 +52,7 @@ SpinBox {
         _boundTarget = target;
         _boundProperty = spinbox.property + "Changed";
         spinbox._boundTarget[_boundProperty].connect(targetListener)
+        spinbox.value = spinbox.target[property];
     }
 
     function targetListener() {

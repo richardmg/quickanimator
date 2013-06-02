@@ -141,13 +141,13 @@ Item {
 
     function unselectAllLayers()
     {
+        selectionLength = 0;
         for (var i in selectedLayers) {
             var layer = selectedLayers[i];
             layer.selected = false;
             stage.layerSelected(layer, false);
         }
         selectedLayers = new Array();
-        selectionLength = 0;
     }
 
     function selectLayer(layer, select)
