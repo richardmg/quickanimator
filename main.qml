@@ -7,6 +7,7 @@ ApplicationWindow {
     width: 1024
     height: 768
     property alias timeline: timeline
+    property int nextSpriteNr: 0
 
     SplitView {
         orientation: Qt.Vertical
@@ -70,8 +71,14 @@ ApplicationWindow {
                     }
                     TextField {
                         id: stateName
-                        onTextChanged: timeline.selectedLayers[0].currentState.name = text;
                         Layout.columnSpan: 2
+                        enabled: false
+
+                        onTextChanged: {
+                            if (timeline.selectedLayers.length > 0)
+                                timeline.selectedLayers[0].currentState.name = text;
+                        }
+
                         Connections {
                             target: timeline
                             onSelectedLayersArrayChanged: {
@@ -80,6 +87,7 @@ ApplicationWindow {
                                     stateName.text = timeline.selectedLayers[0].currentState.name;
                                 } else {
                                     stateName.enabled = false;
+                                    stateName.text = "";
                                 }
                             }
                         }
@@ -162,6 +170,7 @@ ApplicationWindow {
     {
         var layer = {}
         layer.sprite = stageSpriteComponent.createObject(stage.sprites)
+        layer.sprite.name =  "sprite_" + nextSpriteNr++;
         timeline.addLayer(layer);
     }
 }

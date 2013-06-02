@@ -49,6 +49,7 @@ SpinBox {
                 spinbox._boundTarget[_boundProperty].disconnect(targetListener)
                 _boundTarget = null;
             }
+            spinbox.value = 0;
             return;
         }
 

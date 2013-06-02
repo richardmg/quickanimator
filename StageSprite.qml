@@ -14,6 +14,8 @@ Item {
     property bool paused: false
     property bool finished: false
 
+    property string name: "unknown"
+
     property var _fromState
     property var _toState
     property var _currentIndex: 0
@@ -58,7 +60,7 @@ Item {
             x:sprite.x,
             y:sprite.y,
             z:sprite.z,
-            name:"state_" + spriteIndex + "_" + time,
+            name:name + "_" + time,
             width:sprite.width,
             height:sprite.height,
             rotation:sprite.rotation,
