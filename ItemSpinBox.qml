@@ -49,7 +49,9 @@ SpinBox {
                 spinbox._boundTarget[_boundProperty].disconnect(targetListener)
                 _boundTarget = null;
             }
+            _guard = true;
             spinbox.value = 0;
+            _guard = false;
             return;
         }
 
@@ -60,7 +62,9 @@ SpinBox {
         _boundTarget = target;
         _boundProperty = spinbox.property + "Changed";
         spinbox._boundTarget[_boundProperty].connect(targetListener)
+        _guard = true;
         spinbox.value = spinbox.target[property];
+        _guard = false;
     }
 
     function targetListener() {
