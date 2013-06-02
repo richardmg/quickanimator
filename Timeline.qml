@@ -17,7 +17,8 @@ Item {
 
     property bool tweenMode: true
 
-    property var selectionLength: 0
+    // Helper signal, since we cannot listen to pure JS array changes:
+    signal selectedLayersArrayChanged
 
     onTweenModeChanged: {
         for (var l in root.layers) {
@@ -141,7 +142,7 @@ Item {
 
     function unselectAllLayers()
     {
-        selectionLength = 0;
+        selectedLayersArrayChanged();
         for (var i in selectedLayers) {
             var layer = selectedLayers[i];
             layer.selected = false;
@@ -162,7 +163,7 @@ Item {
             selectedLayers.splice(i, 1);
         }
         stage.layerSelected(layer, select)
-        selectionLength = selectedLayers.length;
+        selectedLayersArrayChanged();
     }
     
     function removeLayer(layer)
@@ -170,7 +171,7 @@ Item {
         layers.splice(layer.indexOf(layer), 1);
         if (layer.selected)
             selectedLayers.splice(selectedLayers.indexOf(layer), 1);
-        selectionLength = selectedLayers.length;
+        selectedLayersArrayChanged();
     }
 
     function setLayerIndex(oldIndex, newIndex)

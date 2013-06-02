@@ -4,7 +4,7 @@ import QtQuick.Controls 1.0
 SpinBox {
     id: spinbox
     implicitWidth: 100
-    property Item target: myApp.timeline.selectionLength ? myApp.timeline.selectedLayers[0].sprite : null;
+    property Item target: null
     property string property: ""
     enabled: target
     decimals: 3
@@ -15,8 +15,15 @@ SpinBox {
     property string _boundProperty
     property bool _guard: false
 
-    onTargetChanged: _setupConnection(true);
-    onPropertyChanged: _setupConnection(true);
+    onPropertyChanged: _setupConnection();
+
+    Connections {
+        target: myApp.timeline
+        onSelectedLayersArrayChanged: {
+            spinbox.target =  myApp.timeline.selectedLayers.length ? myApp.timeline.selectedLayers[0].sprite : null;
+            _setupConnection();
+        }
+    }
 
     onValueChanged: {
         if (_guard)
@@ -35,9 +42,9 @@ SpinBox {
         state[property] = spinbox.value; 
     }
 
-    function _setupConnection(set)
+    function _setupConnection()
     {
-        if (property === "" || !target || !set) {
+        if (property === "" || !target) {
             if (_boundTarget)  {
                 spinbox._boundTarget[_boundProperty].disconnect(targetListener)
                 _boundTarget = null;
