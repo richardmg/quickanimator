@@ -102,7 +102,7 @@ Item {
             }
             SpinBox {
                 id: ticksPerFrameBox
-                value: 30
+                value: 1
                 anchors.verticalCenter: parent.verticalCenter
             }
         }
