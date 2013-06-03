@@ -44,11 +44,12 @@ SpinBox {
 
     function _setupConnection()
     {
+        if (_boundTarget)  {
+            spinbox._boundTarget[_boundProperty].disconnect(targetListener)
+            _boundTarget = null;
+        }
+
         if (property === "" || !target) {
-            if (_boundTarget)  {
-                spinbox._boundTarget[_boundProperty].disconnect(targetListener)
-                _boundTarget = null;
-            }
             _guard = true;
             spinbox.value = 0;
             _guard = false;
