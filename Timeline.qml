@@ -135,6 +135,7 @@ Item {
         layers.push(layer);
         layer.selected = false;
         layer.currentState = layer.sprite.createState(0);
+        layer.sprite.setTime(timelineGrid.time, false);
         stage.layerAdded(layer);
         selectLayer(layer, true);
         timelineGrid.repaint()
