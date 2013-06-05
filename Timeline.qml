@@ -14,6 +14,7 @@ Item {
     property int layerCount: 0
     property var layers: new Array()
     property var selectedLayers: new Array()
+    property var selectedState: null
 
     property bool tweenMode: true
 
@@ -37,14 +38,30 @@ Item {
         selectedX: 0
         selectedY: 0
         model: layers
-        property alias time: timelineGrid.selectedX
+
+        onSelectedYChanged: {
+            updateSelectedState();
+        }
 
         onSelectedXChanged: {
             for (var l in root.layers) {
                 var layer = layers[l];
                 layer.sprite.setTime(selectedX, tweenMode);
-                layer.currentState = layer.sprite._fromState;
             }
+            updateSelectedState();
+        }
+
+        function updateSelectedState()
+        {
+            var foundState = null;
+            var layer = myApp.timeline.layers[myApp.timeline.timelineGrid.selectedY];
+            if (layer) {
+                var state = layer.sprite.getCurrentState();
+                if (state && state.time === state.sprite.spriteTime)
+                    foundState = state;
+            }
+            if (foundState != root.selectedState)
+                root.selectedState = foundState;
         }
 
         onDoubleClicked: {
@@ -52,14 +69,13 @@ Item {
             // Add the new state into the correct position in the array according to time:
             for (var i = layer.sprite.timeline.length - 1; i >= 0; --i) {
                 var state = layer.sprite.timeline[i];
-                if (time === state.time) {
+                if (selectedX === state.time) {
                     // A state already exist at this time:
                     return;
-                } else if (time > state.time) {
+                } else if (selectedX > state.time) {
                     break;
                 }
             }
-            layer.currentState = layer.sprite.createState(time);
             timelineGrid.repaint()
         }
     }
@@ -134,7 +150,7 @@ Item {
         unselectAllLayers();
         layers.push(layer);
         layer.selected = false;
-        layer.currentState = layer.sprite.createState(0);
+        layer.sprite.createState(0);
         layer.sprite.setTime(timelineGrid.time, false);
         stage.layerAdded(layer);
         selectLayer(layer, true);

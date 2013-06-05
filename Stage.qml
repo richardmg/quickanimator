@@ -100,7 +100,7 @@ Item {
                         var layer = timeline.selectedLayers[i];
                         var sprite = layer.sprite
                         var state = sprite.getCurrentState();
-                        var time = timeline.timelineGrid.time;
+                        var time = timeline.timelineGrid.selectedX;
                         if (timeline.tweenMode && state.time !== time) {
                             state = sprite.createState(time);
                             timeline.timelineGrid.repaint();
@@ -123,7 +123,7 @@ Item {
                         var layer = timeline.selectedLayers[i];
                         var sprite = layer.sprite
                         var state = sprite.getCurrentState();
-                        var time = timeline.timelineGrid.time;
+                        var time = timeline.timelineGrid.selectedX;
                         if (timeline.tweenMode && state.time !== time) {
                             state = sprite.createState(time);
                             timeline.timelineGrid.repaint();

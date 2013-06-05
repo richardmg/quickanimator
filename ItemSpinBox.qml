@@ -4,9 +4,8 @@ import QtQuick.Controls 1.0
 SpinBox {
     id: spinbox
     implicitWidth: 100
-    property Item target: null
     property string property: ""
-    enabled: target
+    enabled: false
     decimals: 3
     minimumValue: -9999
     maximumValue: 9999
@@ -15,62 +14,60 @@ SpinBox {
     property string _boundProperty
     property bool _guard: false
 
-    onPropertyChanged: _setupConnection();
-
     Connections {
         target: myApp.timeline
-        onSelectedLayersArrayChanged: {
-            spinbox.target =  myApp.timeline.selectedLayers.length ? myApp.timeline.selectedLayers[0].sprite : null;
-            _setupConnection();
-        }
+        onSelectedStateChanged: _updateState();
     }
+
+    onPropertyChanged: _updateState();
 
     onValueChanged: {
         if (_guard)
             return;
-        if (!target)
-            return;
-        var state = target.getCurrentState();
-        var time = myApp.timeline.timelineGrid.time;
-        if (myApp.timeline.tweenMode && state.time !== time) {
-            state = target.createState(time);
+
+        var state = myApp.timeline.selectedState;
+        var time = myApp.timeline.timelineGrid.selectedX;
+
+        if (state.time !== time) {
+            state = state.sprite.createState(time);
             myApp.timeline.timelineGrid.repaint();
         }
-        if (!state)
-            return;
-        target[property] = spinbox.value;
+
         state[property] = spinbox.value; 
+        state.sprite[property] = spinbox.value;
     }
 
-    function _setupConnection()
+    function _updateState()
     {
+        if (!myApp.timeline)
+            return;
         if (_boundTarget)  {
             spinbox._boundTarget[_boundProperty].disconnect(targetListener)
             _boundTarget = null;
         }
 
-        if (property === "" || !target) {
+        var state = myApp.timeline.selectedState;
+
+        if (property === "" || !state) {
             _guard = true;
             spinbox.value = 0;
+            spinbox.enabled = false;
             _guard = false;
             return;
         }
 
-        var state = target.getCurrentState().name;
-        if (!state)
-            return;
-
-        _boundTarget = target;
+        spinbox.enabled = true;
+        _boundTarget = state.sprite;
         _boundProperty = spinbox.property + "Changed";
         spinbox._boundTarget[_boundProperty].connect(targetListener)
         _guard = true;
-        spinbox.value = spinbox.target[property];
+        spinbox.value = state.sprite[property];
         _guard = false;
     }
 
     function targetListener() {
         _guard = true;
-        spinbox.value = spinbox.target[property];
+        spinbox.value = myApp.timeline.selectedState.sprite[property];
         _guard = false;
     }
 }

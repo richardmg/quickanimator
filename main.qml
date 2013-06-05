@@ -75,16 +75,16 @@ ApplicationWindow {
                         enabled: false
 
                         onTextChanged: {
-                            if (timeline.selectedLayers.length > 0)
-                                timeline.selectedLayers[0].currentState.name = text;
+                            if (timeline.selectedState)
+                                timeline.selectedState.name = text;
                         }
 
                         Connections {
                             target: timeline
-                            onSelectedLayersArrayChanged: {
-                                if (timeline.selectedLayers.length > 0) {
+                            onSelectedStateChanged: {
+                                if (timeline.selectedState) {
                                     stateName.enabled = true;
-                                    stateName.text = timeline.selectedLayers[0].currentState.name;
+                                    stateName.text = timeline.selectedState.name;
                                 } else {
                                     stateName.enabled = false;
                                     stateName.text = "";
