@@ -54,11 +54,13 @@ Item {
         function updateSelectedState()
         {
             var foundState = null;
-            var layer = myApp.timeline.layers[myApp.timeline.timelineGrid.selectedY];
-            if (layer) {
-                var state = layer.sprite.getCurrentState();
-                if (state && state.time === state.sprite.spriteTime)
-                    foundState = state;
+            if (!playTimer.running) {
+                var layer = myApp.timeline.layers[myApp.timeline.timelineGrid.selectedY];
+                if (layer) {
+                    var state = layer.sprite.getCurrentState();
+                    if (state && state.time === state.sprite.spriteTime)
+                        foundState = state;
+                }
             }
             if (foundState != root.selectedState)
                 root.selectedState = foundState;
@@ -138,6 +140,8 @@ Item {
         id: playTimer
         interval: 1000 / 60
         repeat: true
+
+        onRunningChanged: updateSelectedState();
         onTriggered: {
             for (var i = 0; i < layers.length; ++i)
                 layers[i].sprite.tick();
