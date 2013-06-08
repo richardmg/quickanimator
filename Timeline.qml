@@ -68,17 +68,15 @@ Item {
 
         onDoubleClicked: {
             var layer = layers[selectedY];
-            // Add the new state into the correct position in the array according to time:
-            for (var i = layer.sprite.timeline.length - 1; i >= 0; --i) {
-                var state = layer.sprite.timeline[i];
-                if (selectedX === state.time) {
-                    // A state already exist at this time:
-                    return;
-                } else if (selectedX > state.time) {
-                    break;
-                }
+            if (!layer)
+                return;
+            var state = layer.sprite.getState(selectedX);
+            if (!state || state.time != selectedX) {
+                // Add the new state at time selectedX:
+                layer.sprite.createState(selectedX);
+                timelineGrid.repaint()
+                updateSelectedState();
             }
-            timelineGrid.repaint()
         }
     }
 
