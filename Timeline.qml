@@ -131,7 +131,7 @@ Item {
             Label {
                 id: label
                 anchors.verticalCenter: parent.verticalCenter
-                text: "Time: " + timelineGrid.time
+                text: "Time: " + timelineGrid.selectedX
             }
         }
     }
