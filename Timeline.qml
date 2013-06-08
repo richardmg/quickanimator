@@ -141,7 +141,7 @@ Item {
         interval: 1000 / 60
         repeat: true
 
-        onRunningChanged: updateSelectedState();
+        onRunningChanged: timelineGrid.updateSelectedState();
         onTriggered: {
             for (var i = 0; i < layers.length; ++i)
                 layers[i].sprite.tick();
