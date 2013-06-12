@@ -16,8 +16,24 @@ Column {
             }
         }
     }
-    TextField {
-        x: 3
-        placeholderText: "name"
+    ListView {
+        width: parent.width
+        height: 200
+        model: 20
+        delegate: Rectangle {
+            width: parent.width
+            height: 20
+            color: index % 2 ? "lightgray" : "gray"
+        }
     }
+//    TableView {
+//        model: 100
+//        width: parent.width
+//
+//        TableViewColumn {
+//            role: "title"
+//            title: "Title"
+//            width: 120
+//        }
+//    }
 }

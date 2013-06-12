@@ -33,8 +33,6 @@ Item {
         anchors.top: titlebar.bottom
         anchors.bottom: root.bottom
         width: root.width
-        cellHeight: 20
-        cellWidth: 10
         selectedX: 0
         selectedY: 0
         model: layers
@@ -74,7 +72,7 @@ Item {
             if (!state || state.time != selectedX) {
                 // Add the new state at time selectedX:
                 layer.sprite.createState(selectedX);
-                timelineGrid.repaint()
+                timelineGrid.timelineList.repaint()
                 updateSelectedState();
             }
         }
@@ -156,7 +154,7 @@ Item {
         layer.sprite.setTime(timelineGrid.time, false);
         stage.layerAdded(layer);
         selectLayer(layer, true);
-        timelineGrid.repaint()
+        timelineGrid.timelineList.repaint()
     }
 
     function unselectAllLayers()
@@ -196,7 +194,7 @@ Item {
     function removeCurrentState()
     {
         selectedLayers[0].sprite.removeCurrentState(tweenMode);
-        timelineGrid.repaint();
+        timelineGrid.timelineList.repaint();
     }
 
     function setLayerIndex(oldIndex, newIndex)

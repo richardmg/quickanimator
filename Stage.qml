@@ -103,7 +103,7 @@ Item {
                         var time = timeline.timelineGrid.selectedX;
                         if (timeline.tweenMode && state.time !== time) {
                             state = sprite.createState(time);
-                            timeline.timelineGrid.repaint();
+                            timeline.timelineGrid.timelineList.repaint();
                         }
                         if (xBox.checked)
                             sprite.x += pos.x - currentAction.x;
@@ -126,7 +126,7 @@ Item {
                         var time = timeline.timelineGrid.selectedX;
                         if (timeline.tweenMode && state.time !== time) {
                             state = sprite.createState(time);
-                            timeline.timelineGrid.repaint();
+                            timeline.timelineGrid.timelineList.repaint();
                         }
                         if (rotateBox.checked)
                             sprite.rotation += aar.angle - currentAction.angle;

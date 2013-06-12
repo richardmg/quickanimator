@@ -20,7 +20,7 @@ ApplicationWindow {
                 id: spriteTree
                 width: parent.width / 3
                 height: parent.height
-                onWidthChanged: keyFrameInfo.width = width
+                onWidthChanged: timelineList.width = width
             }
             Stage {
                 id: stage
@@ -33,16 +33,29 @@ ApplicationWindow {
         SplitView {
             width: parent.width
             height: parent.height / 3
-            KeyFrameInfo {
-                id: keyFrameInfo
+            TimelineList {
+                id: timelineList
+                model: 50
                 width: parent.width / 3
                 height: parent.height
                 onWidthChanged: spriteTree.width = width
+                
+                Binding {
+                    target: timelineList.moving ? null : timelineList
+                    property: "contentY"
+                    value: timeline.timelineGrid.timelineList.contentY
+                }
             }
             Timeline {
                 id: timeline
                 width: 2 * parent.width / 3
                 height: parent.height
+                Binding {
+                    property Item t: timeline.timelineGrid.timelineList
+                    target: t.moving ? null : t
+                    property: "contentY"
+                    value: timelineList.contentY
+                }
             }
         }
     }

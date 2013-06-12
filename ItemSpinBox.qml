@@ -30,7 +30,7 @@ SpinBox {
 
         if (state.time !== time) {
             state = state.sprite.createState(time);
-            myApp.timeline.timelineGrid.repaint();
+            myApp.timeline.timelineGrid.timelineList.repaint();
         }
 
         state[property] = spinbox.value; 
