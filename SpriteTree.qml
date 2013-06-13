@@ -1,11 +1,21 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.0
 
-Column {
-    spacing: 5
-
+Item {
+    ListView {
+        y: titleBar.height
+        width: parent.width
+        height: parent.height - y
+        model: 50
+        delegate: Rectangle {
+            width: parent.width
+            height: 30
+            color: index % 2 ? "white" : "lightblue"
+        }
+    }
     TitleBar {
-        title: "Image"
+        id: titleBar
+        title: "Storyboards"
         TitleBarRow {
             layoutDirection: Qt.RightToLeft
             ToolButton {
@@ -16,24 +26,4 @@ Column {
             }
         }
     }
-    ListView {
-        width: parent.width
-        height: 200
-        model: 20
-        delegate: Rectangle {
-            width: parent.width
-            height: 20
-            color: index % 2 ? "lightgray" : "gray"
-        }
-    }
-//    TableView {
-//        model: 100
-//        width: parent.width
-//
-//        TableViewColumn {
-//            role: "title"
-//            title: "Title"
-//            width: 120
-//        }
-//    }
 }

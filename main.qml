@@ -16,7 +16,7 @@ ApplicationWindow {
             // Top left and top right
             width: parent.width
             height: 2 * parent.height / 3
-            Item {
+            SpriteTree {
                 id: topLeft
                 width: parent.width / 3
                 height: parent.height
