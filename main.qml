@@ -7,20 +7,20 @@ ApplicationWindow {
     height: 768
 
     property alias timeline: timeline
-    property alias spriteTree: spriteTree
 
     SplitView {
         orientation: Qt.Vertical
         anchors.fill: parent
 
         SplitView {
+            // Top left and top right
             width: parent.width
             height: 2 * parent.height / 3
-            SpriteTree {
-                id: spriteTree
+            Item {
+                id: topLeft
                 width: parent.width / 3
                 height: parent.height
-                onWidthChanged: timelineList.width = width
+                onWidthChanged: timelineSprites.width = width
             }
             Stage {
                 id: stage
@@ -31,20 +31,14 @@ ApplicationWindow {
             }
         }
         SplitView {
+            // Bottom left and bottom right
             width: parent.width
             height: parent.height / 3
-            TimelineList {
-                id: timelineList
-                model: 50
+            TimelineSprites {
+                id: timelineSprites
                 width: parent.width / 3
                 height: parent.height
-                onWidthChanged: spriteTree.width = width
-                
-                Binding {
-                    target: timelineList.moving ? null : timelineList
-                    property: "contentY"
-                    value: timeline.timelineGrid.timelineList.contentY
-                }
+                onWidthChanged: topLeft.width = width
             }
             Timeline {
                 id: timeline
@@ -54,7 +48,7 @@ ApplicationWindow {
                     property Item t: timeline.timelineGrid.timelineList
                     target: t.moving ? null : t
                     property: "contentY"
-                    value: timelineList.contentY
+                    value: timelineSprites.timelineList.contentY
                 }
             }
         }
