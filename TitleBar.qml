@@ -30,5 +30,6 @@ Rectangle {
         id: label
         x: 5
         anchors.verticalCenter: parent.verticalCenter
+        color: myApp.text
     }
 }

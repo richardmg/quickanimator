@@ -128,6 +128,7 @@ Item {
                 id: label
                 anchors.verticalCenter: parent.verticalCenter
                 text: "Time: " + timelineGrid.selectedX
+                color: myApp.text
             }
         }
     }
