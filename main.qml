@@ -13,11 +13,13 @@ ApplicationWindow {
     SplitView {
         orientation: Qt.Vertical
         anchors.fill: parent
+        handleDelegate: SplitHandle {}
 
         SplitView {
             // Top left and top right
             width: parent.width
             height: 2 * parent.height / 3
+            handleDelegate: SplitHandle {}
             SpriteTree {
                 id: topLeft
                 width: parent.width / 3
@@ -36,6 +38,7 @@ ApplicationWindow {
             // Bottom left and bottom right
             width: parent.width
             height: parent.height / 3
+            handleDelegate: SplitHandle {}
             TimelineSprites {
                 id: timelineSprites
                 width: parent.width / 3
