@@ -3,7 +3,7 @@ import QtQuick 2.1
 Flickable {
     id: flickable
 
-    property int cellHeight: 20
+    property int cellHeight: myApp.cellHeight
     property int cellWidth: 10
     property int selectedX: 0
     property int selectedY: 0
@@ -26,26 +26,25 @@ Flickable {
         width: flickable.contentWidth
         height: flickable.contentHeight
         renderTarget: Canvas.Image
-        property color fgcolor: Qt.rgba(0.7, 0.7, 0.7, 1)
         property real lineWidth: 1.0
         antialiasing: false
 
         onPaint: {
             var ctx = getContext('2d');        
-            ctx.strokeStyle = fgcolor
+            ctx.strokeStyle = Qt.lighter(myApp.accent, 1.2);
             ctx.lineWidth = 1
             ctx.beginPath();
             for (var row=0; row<20; ++row) {
                 ctx.moveTo(0, (row * cellHeight) - 1);
                 ctx.lineTo(width, (row * cellHeight) - 1)
-                ctx.fillStyle = row % 2 ? Qt.rgba(0.9, 0.9, 0.9, 1) : Qt.rgba(0.85, 0.85, 0.85, 1);
+                ctx.fillStyle = myApp.accent;
                 ctx.fillRect(0, (row * cellHeight) - 1, width, cellHeight);
 
                 var rowData = flickable.model[row];
                 if (rowData) {
                     var sprite = rowData.sprite;
                     var currentState = sprite.getCurrentState();
-                    ctx.fillStyle = Qt.rgba(0.3, 0.3, 0.9, 1);
+                    ctx.fillStyle = Qt.rgba(0.9, 0.5, 0.3, 1);
                     for (var c in sprite.timeline) {
                         var state = sprite.timeline[c];
                         ctx.fillRect((state.time * cellWidth), (row * cellHeight), cellWidth, cellHeight - 1);

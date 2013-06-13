@@ -6,6 +6,8 @@ ApplicationWindow {
     width: 1024
     height: 768
 
+    property color accent: Qt.rgba(0.4, 0.4, 0.4, 1.0)
+    property int cellHeight: 30
     property alias timeline: timeline
 
     SplitView {

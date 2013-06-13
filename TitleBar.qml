@@ -9,26 +9,22 @@ Rectangle {
     gradient: Gradient {
         GradientStop {
             position: 0.0;
-            color: Qt.rgba(0.9, 0.9, 0.9, 1.0)
+            color: Qt.darker(myApp.accent, 1.4)
         }
         GradientStop {
             position: 0.1;
-            color: Qt.rgba(1.0, 1.0, 1.0, 1.0)
-        }
-        GradientStop {
-            position: 0.2;
-            color: Qt.rgba(0.97, 0.97, 0.97, 1.0)
+            color: Qt.darker(myApp.accent, 1.2);
         }
         GradientStop {
             position: 1.0;
-            color: Qt.rgba(0.91, 0.91, 0.91, 1.0)
+            color: Qt.darker(myApp.accent, 1.5);
         }
     }
     Rectangle {
         width: parent.width
         height: 1
         anchors.bottom: parent.bottom
-        color: Qt.rgba(0.6, 0.6, 0.6, 1.0)
+        color: Qt.darker(myApp.accent, 1.9);
     }
     Label {
         id: label

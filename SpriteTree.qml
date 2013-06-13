@@ -9,8 +9,14 @@ Item {
         model: 50
         delegate: Rectangle {
             width: parent.width
-            height: 30
-            color: index % 2 ? "white" : "lightblue"
+            height: myApp.cellHeight
+            color: myApp.accent
+            Rectangle {
+                width: parent.width
+                height: 1
+                anchors.bottom: parent.bottom
+                color: Qt.lighter(myApp.accent, 1.2)
+            }
         }
     }
     TitleBar {
