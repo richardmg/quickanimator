@@ -24,7 +24,7 @@ Item {
 
     Rectangle {
         id: selectorLine
-        color: "red"
+        color: Qt.darker(myApp.accent, 1.3);
         x: (timelineList.selectedX * timelineList.cellWidth) + (timelineList.cellWidth / 2) - 1
         width: 1
         height: parent.height - y
@@ -33,18 +33,18 @@ Item {
     Rectangle {
         id: selectorHandle
         x: 1 + (timelineList.selectedX * timelineList.cellWidth)
-        y: -timelineList.contentY + (timelineList.selectedY * timelineList.cellHeight)
+        y: -timelineList.flickable.contentY + (timelineList.selectedY * timelineList.cellHeight)
         z: 10
         width: timelineList.cellWidth - 2
         height: timelineList.cellHeight - 1
         gradient: Gradient {
             GradientStop {
                 position: 0.0;
-                color: Qt.rgba(1.0, 0.0, 0.0, 1.0)
+                color: Qt.rgba(0.9, 0.9, 0.9, 1.0)
             }
             GradientStop {
                 position: 1.0;
-                color: Qt.rgba(0.8, 0.0, 0.0, 1.0)
+                color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
             }
         }
     }

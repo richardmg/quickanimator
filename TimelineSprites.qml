@@ -11,9 +11,10 @@ Item {
         height: parent.height
         
         Binding {
-            target: timelineList.moving ? null : timelineList
+            property Item t: timelineList.flickable
+            target: t.moving ? null : t
             property: "contentY"
-            value: timeline.timelineList.contentY
+            value: myApp.timeline.timelineList.flickable.contentY
         }
     }
 }
