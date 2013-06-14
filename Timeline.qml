@@ -3,13 +3,10 @@ import QtQuick.Controls 1.0
 
 import FileIO 1.0
 
-Item {
+TimelineGrid {
     id: root
     clip: true
-    property Stage stage: null
-    property alias timelineGrid: timelineGrid
     property int currentTime: 0
-    property alias ticksPerFrame: ticksPerFrameBox.value
 
     property int layerCount: 0
     property var layers: new Array()
@@ -17,6 +14,8 @@ Item {
     property var selectedState: null
 
     property bool tweenMode: true
+
+    model: layers
 
     // Helper signal, since we cannot listen to pure JS array changes:
     signal selectedLayersArrayChanged
@@ -28,109 +27,49 @@ Item {
         }
     }
 
-    TimelineGrid {
-        id: timelineGrid
-        anchors.top: titlebar.bottom
-        anchors.bottom: root.bottom
-        width: root.width
-        selectedX: 0
-        selectedY: 0
-        model: layers
+    onSelectedYChanged: {
+        updateSelectedState();
+    }
 
-        onSelectedYChanged: {
+    onSelectedXChanged: {
+        for (var l in root.layers) {
+            var layer = layers[l];
+            layer.sprite.setTime(selectedX, tweenMode);
+        }
+        updateSelectedState();
+    }
+
+    function updateSelectedState()
+    {
+        var foundState = null;
+        if (!playTimer.running) {
+            var layer = myApp.timeline.layers[myApp.timeline.selectedY];
+            if (layer) {
+                var state = layer.sprite.getCurrentState();
+                if (state && state.time === state.sprite.spriteTime)
+                    foundState = state;
+            }
+        }
+        if (foundState != root.selectedState)
+            root.selectedState = foundState;
+    }
+
+    onDoubleClicked: {
+        var layer = layers[selectedY];
+        if (!layer)
+            return;
+        var state = layer.sprite.getState(selectedX);
+        if (!state || state.time != selectedX) {
+            // Add the new state at time selectedX:
+            layer.sprite.createState(selectedX);
+            timelineList.repaint()
             updateSelectedState();
-        }
-
-        onSelectedXChanged: {
-            for (var l in root.layers) {
-                var layer = layers[l];
-                layer.sprite.setTime(selectedX, tweenMode);
-            }
-            updateSelectedState();
-        }
-
-        function updateSelectedState()
-        {
-            var foundState = null;
-            if (!playTimer.running) {
-                var layer = myApp.timeline.layers[myApp.timeline.timelineGrid.selectedY];
-                if (layer) {
-                    var state = layer.sprite.getCurrentState();
-                    if (state && state.time === state.sprite.spriteTime)
-                        foundState = state;
-                }
-            }
-            if (foundState != root.selectedState)
-                root.selectedState = foundState;
-        }
-
-        onDoubleClicked: {
-            var layer = layers[selectedY];
-            if (!layer)
-                return;
-            var state = layer.sprite.getState(selectedX);
-            if (!state || state.time != selectedX) {
-                // Add the new state at time selectedX:
-                layer.sprite.createState(selectedX);
-                timelineGrid.timelineList.repaint()
-                updateSelectedState();
-            }
         }
     }
 
-    TitleBar {
-        id: titlebar
-        TitleBarRow {
-            ToolButton {
-                id: rewind
-                height: parent.height
-                anchors.verticalCenter: parent.verticalCenter
-                text: "<<"
-                onClicked: {
-                    for (var i = 0; i < layers.length; ++i)
-                        layers[i].sprite.setTime(0);
-                    timelineGrid.selectedX = 0;
-                }
-            }
-            ToolButton {
-                id: play
-                height: parent.height
-                anchors.verticalCenter: parent.verticalCenter
-                text: checked ? "Stop" : "Play"
-                checkable: true
-                onCheckedChanged: if (checked) playTimer.start(); else playTimer.stop()
-            }
-            ToolButton {
-                height: parent.height
-                anchors.verticalCenter: parent.verticalCenter
-                text: "Tween"
-                checkable: true
-                checked: true
-                onCheckedChanged: tweenMode = checked
-            }
-            ToolButton {
-                height: parent.height
-                anchors.verticalCenter: parent.verticalCenter
-                text: "Save"
-                onClicked: saveJSON();
-            }
-            SpinBox {
-                id: ticksPerFrameBox
-                value: 1
-                anchors.verticalCenter: parent.verticalCenter
-            }
-        }
-
-        TitleBarRow {
-            layoutDirection: Qt.RightToLeft
-            Item { width: 10; height: 10 }
-            Label {
-                id: label
-                anchors.verticalCenter: parent.verticalCenter
-                text: "Time: " + timelineGrid.selectedX
-                color: myApp.text
-            }
-        }
+    function togglePlay(play)
+    {
+        playTimer.running = play
     }
 
     Timer {
@@ -138,11 +77,11 @@ Item {
         interval: 1000 / 60
         repeat: true
 
-        onRunningChanged: timelineGrid.updateSelectedState();
+        onRunningChanged: updateSelectedState();
         onTriggered: {
             for (var i = 0; i < layers.length; ++i)
                 layers[i].sprite.tick();
-            timelineGrid.selectedX = layers[0].sprite.spriteTime;
+            selectedX = layers[0].sprite.spriteTime;
         }
     }
 
@@ -152,10 +91,10 @@ Item {
         layers.push(layer);
         layer.selected = false;
         layer.sprite.createState(0);
-        layer.sprite.setTime(timelineGrid.time, false);
-        stage.layerAdded(layer);
+        layer.sprite.setTime(root.time, false);
+        myApp.stage.layerAdded(layer);
         selectLayer(layer, true);
-        timelineGrid.timelineList.repaint()
+        timelineList.repaint()
     }
 
     function unselectAllLayers()
@@ -164,7 +103,7 @@ Item {
         for (var i in selectedLayers) {
             var layer = selectedLayers[i];
             layer.selected = false;
-            stage.layerSelected(layer, false);
+            myApp.stage.layerSelected(layer, false);
         }
         selectedLayers = new Array();
     }
@@ -180,7 +119,7 @@ Item {
             var i = selectedLayers.indexOf(layer);
             selectedLayers.splice(i, 1);
         }
-        stage.layerSelected(layer, select)
+        myApp.stage.layerSelected(layer, select)
         selectedLayersArrayChanged();
     }
     
@@ -195,7 +134,7 @@ Item {
     function removeCurrentState()
     {
         selectedLayers[0].sprite.removeCurrentState(tweenMode);
-        timelineGrid.timelineList.repaint();
+        timelineList.repaint();
     }
 
     function setLayerIndex(oldIndex, newIndex)
@@ -224,7 +163,6 @@ Item {
         id: file
         source: "save.anim.js"
     }
-
 
     function saveJSON()
     {

@@ -1,5 +1,6 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.0
+import QtQuick.Layouts 1.0
 
 ApplicationWindow {
     id: myApp
@@ -9,12 +10,18 @@ ApplicationWindow {
     property color accent: Qt.rgba(0.4, 0.4, 0.4, 1.0)
     property color text: Qt.darker(myApp.accent, 1.5)
     property int cellHeight: 30
+
     property alias timeline: timeline
+    property alias stage: stage
+    property MainToolbar mainToolbar
 
     SplitView {
         orientation: Qt.Vertical
         anchors.fill: parent
-        handleDelegate: SplitHandle {}
+        handleDelegate: MainToolbar {
+            id: mainToolbar
+            Component.onCompleted: myApp.mainToolbar = mainToolbar
+        }
 
         SplitView {
             // Top left and top right
@@ -32,7 +39,6 @@ ApplicationWindow {
                 width: 2 * parent.width / 3
                 height: parent.height
                 clip: true
-                timeline: timeline
             }
         }
         SplitView {
@@ -51,7 +57,7 @@ ApplicationWindow {
                 width: 2 * parent.width / 3
                 height: parent.height
                 Binding {
-                    property Item t: timeline.timelineGrid.timelineList
+                    property Item t: timeline.timelineList
                     target: t.moving ? null : t
                     property: "contentY"
                     value: timelineSprites.timelineList.contentY
