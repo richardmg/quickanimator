@@ -6,9 +6,23 @@ TitleBar {
     property alias ticksPerFrame: ticksPerFrameBox.value
 
     TitleBarRow {
-        anchors.horizontalCenter: parent.horizontalCenter
+        x: 2; y: 2
         width: childrenRect.width
-        height: parent.height
+        height: parent.height - (y * 2)
+
+        ToolButton {
+            text: " + "
+            height: parent.height
+            anchors.verticalCenter: parent.verticalCenter
+            onClicked: myApp.addImage("dummy.jpeg") 
+        }
+    }
+
+    TitleBarRow {
+        anchors.horizontalCenter: parent.horizontalCenter
+        x: 2; y: 2
+        width: childrenRect.width
+        height: parent.height - (y * 2)
 
         ToolButton {
             id: rewind

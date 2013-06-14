@@ -23,35 +23,24 @@ ApplicationWindow {
             Component.onCompleted: myApp.mainToolbar = mainToolbar
         }
 
-        SplitView {
-            // Top left and top right
+        Stage {
+            id: stage
             width: parent.width
             height: 2 * parent.height / 3
-            handleDelegate: SplitHandle {}
-            SpriteTree {
-                id: topLeft
-                width: parent.width / 3
-                height: parent.height
-                onWidthChanged: timelineSprites.width = width
-            }
-            Stage {
-                id: stage
-                width: 2 * parent.width / 3
-                height: parent.height
-                clip: true
-            }
+            clip: true
         }
+
         SplitView {
             // Bottom left and bottom right
             width: parent.width
-            height: parent.height / 3
             handleDelegate: SplitHandle {}
+
             TimelineSprites {
                 id: timelineSprites
                 width: parent.width / 3
                 height: parent.height
-                onWidthChanged: topLeft.width = width
             }
+
             Timeline {
                 id: timeline
                 width: 2 * parent.width / 3
