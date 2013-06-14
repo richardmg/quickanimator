@@ -58,6 +58,10 @@ Rectangle {
                         var sprite = rowData.sprite;
                         var currentState = sprite.getCurrentState();
                         ctx.fillStyle = Qt.rgba(0.9, 0.5, 0.3, 1);
+                        var grd = ctx.createLinearGradient(0, 0, 0, cellHeight * 4);
+                        grd.addColorStop(0, '#8ED6FF');   
+                        grd.addColorStop(1, '#206CD3');
+                        ctx.fillStyle = grd;
                         for (var c in sprite.timeline) {
                             var state = sprite.timeline[c];
                             ctx.fillRect((state.time * cellWidth), (row * cellHeight), cellWidth, cellHeight - 1);
