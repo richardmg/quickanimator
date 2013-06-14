@@ -50,13 +50,13 @@ TitleBar {
             text: "Tween"
             checkable: true
             checked: true
-            onCheckedChanged: tweenMode = checked
+            onCheckedChanged: myApp.timeline.tweenMode = checked
         }
         ToolButton {
             height: parent.height
             anchors.verticalCenter: parent.verticalCenter
             text: "Save"
-            onClicked: saveJSON();
+            onClicked: myApp.timeline.saveJSON();
         }
         SpinBox {
             id: ticksPerFrameBox
