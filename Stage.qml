@@ -12,11 +12,21 @@ Item {
 
     Rectangle {
         id: sprites
-        color: "white"
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: title.bottom
         anchors.bottom: parent.bottom
+
+        gradient: Gradient {
+            GradientStop {
+                position: 0.0;
+                color: Qt.rgba(0.9, 0.9, 0.9, 1.0)
+            }
+            GradientStop {
+                position: 1.0;
+                color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
+            }
+        }
 
         property int ticksPerFrame: myApp.mainToolbar.ticksPerFrame
     }

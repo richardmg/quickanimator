@@ -2,7 +2,22 @@ import QtQuick 2.1
 import QtQuick.Controls 1.0
 
 Item {
+    Rectangle {
+        anchors.fill: listView
+        gradient: Gradient {
+            GradientStop {
+                position: 0.0;
+                color: Qt.rgba(0.9, 0.9, 0.9, 1.0)
+            }
+            GradientStop {
+                position: 1.0;
+                color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
+            }
+        }
+    }
+
     ListView {
+        id: listView
         y: titleBar.height
         width: parent.width
         height: parent.height - y
@@ -10,7 +25,8 @@ Item {
         delegate: Rectangle {
             width: parent.width
             height: myApp.cellHeight
-            color: myApp.accent
+            //color: myApp.accent
+            color: "transparent"
             Rectangle {
                 width: parent.width
                 height: 1
@@ -23,6 +39,7 @@ Item {
         id: titleBar
         title: "Storyboards"
         TitleBarRow {
+            anchors.fill: parent
             layoutDirection: Qt.RightToLeft
             ToolButton {
                 text: "+"

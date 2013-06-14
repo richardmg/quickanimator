@@ -6,6 +6,10 @@ TitleBar {
     property alias ticksPerFrame: ticksPerFrameBox.value
 
     TitleBarRow {
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: childrenRect.width
+        height: parent.height
+
         ToolButton {
             id: rewind
             height: parent.height
@@ -48,6 +52,9 @@ TitleBar {
     }
 
     TitleBarRow {
+        height: parent.height
+        width: childrenRect.width
+        anchors.right: parent.right
         layoutDirection: Qt.RightToLeft
         Item { width: 10; height: 10 }
         Label {
