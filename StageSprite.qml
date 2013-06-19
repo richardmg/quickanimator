@@ -5,7 +5,7 @@ Item {
     width: childrenRect.width
     height: childrenRect.height
 
-    property Item stage: parent 
+    property QtObject model: parent 
     property var timeline: new Array()
 
     property var spriteIndex: 0
@@ -30,7 +30,7 @@ Item {
             return;
 
         _tickTime++;
-        var t = Math.floor(_tickTime / stage.ticksPerFrame);
+        var t = Math.floor(_tickTime / model.ticksPerFrame);
         if (spriteTime != t)
             spriteTime = t;
 
@@ -101,7 +101,7 @@ Item {
     {
         _updateToAndFromState(time);
         spriteTime = time;
-        _tickTime = (time * stage.ticksPerFrame);
+        _tickTime = (time * model.ticksPerFrame);
         updateSprite(tween);
         finished = false;
     }
@@ -115,8 +115,8 @@ Item {
             rotation = _fromState.rotation;
             opacity = _fromState.opacity;
         } else {
-            var advance = _tickTime - (_fromState.time * stage.ticksPerFrame);
-            var tickRange = (_toState.time - _fromState.time) * stage.ticksPerFrame;
+            var advance = _tickTime - (_fromState.time * model.ticksPerFrame);
+            var tickRange = (_toState.time - _fromState.time) * model.ticksPerFrame;
             x = _getValue(_fromState.x, _toState.x, tickRange, advance, "linear");
             y = _getValue(_fromState.y, _toState.y, tickRange, advance, "linear");
             z = _getValue(_fromState.z, _toState.z, tickRange, advance, "linear");

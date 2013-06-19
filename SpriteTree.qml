@@ -24,14 +24,14 @@ Item {
         model: 50
         delegate: Rectangle {
             width: parent.width
-            height: myApp.cellHeight
-            //color: myApp.accent
+            height: myApp.style.cellHeight
+            //color: myApp.style.accent
             color: "transparent"
             Rectangle {
                 width: parent.width
                 height: 1
                 anchors.bottom: parent.bottom
-                color: Qt.lighter(myApp.accent, 1.2)
+                color: Qt.lighter(myApp.style.accent, 1.2)
             }
         }
     }

@@ -7,13 +7,12 @@ ApplicationWindow {
     width: 1024
     height: 768
 
-    property color accent: Qt.rgba(0.4, 0.4, 0.4, 1.0)
-    property color text: Qt.darker(myApp.accent, 1.5)
-    property int cellHeight: 30
-
     property alias timeline: timeline
     property alias stage: stage
     property MainToolbar mainToolbar
+
+    property Style style: Style {}
+    property Model model: Model {}
 
     SplitView {
         orientation: Qt.Vertical
@@ -58,6 +57,7 @@ ApplicationWindow {
     Component {
         id: stageSpriteComponent
         StageSprite {
+            model: myApp.model
             Image {
                 source: "dummy.jpeg"
             }
@@ -71,6 +71,6 @@ ApplicationWindow {
         var layer = {}
         layer.sprite = stageSpriteComponent.createObject(stage.sprites)
         layer.sprite.name =  "sprite_" + nextSpriteNr++;
-        timeline.addLayer(layer);
+        model.addLayer(layer);
     }
 }

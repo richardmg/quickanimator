@@ -27,8 +27,6 @@ Item {
                 color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
             }
         }
-
-        property int ticksPerFrame: myApp.mainToolbar.ticksPerFrame
     }
 
     Item {
@@ -51,8 +49,8 @@ Item {
 
         function overlapsHandle(pos)
         {
-            for (var i in myApp.timeline.selectedLayers) {
-                var layer = myApp.timeline.selectedLayers[i]
+            for (var i in myApp.model.selectedLayers) {
+                var layer = myApp.model.selectedLayers[i]
                 var sprite = layer.sprite
                 var cx = sprite.x + (sprite.width / 2)
                 var cy = sprite.y + (sprite.height / 2)
@@ -71,7 +69,7 @@ Item {
             pressStartTime = new Date().getTime();
             pressStartPos = pos;
 
-            if (myApp.timeline.selectedLayers.length !== 0) {
+            if (myApp.model.selectedLayers.length !== 0) {
                 var layer = overlapsHandle(pos);
                 if (layer) {
                     // start drag
@@ -83,7 +81,7 @@ Item {
                     };
                 } else {
                     // Start rotation
-                    var layer = myApp.timeline.selectedLayers[0];
+                    var layer = myApp.model.selectedLayers[0];
                     var center = { x: layer.sprite.x + (layer.sprite.width / 2), y: layer.sprite.y  + (layer.sprite.height / 2)};
                     currentAction = getAngleAndRadius(center, pos);
                     currentAction.rotating = true
@@ -95,21 +93,16 @@ Item {
             // drag or rotate current layer:
             var pos = {x:mouseX, y:mouseY}
             if (currentAction.selecting) {
-                var layer = myApp.timeline.getLayerAt(pos, myApp.timeline.currentTime);
+                var layer = myApp.model.getLayerAt(pos);
                 if (layer && !layer.selected)
-                    myApp.timeline.selectLayer(layer, true);
-            } else if (myApp.timeline.selectedLayers.length !== 0) {
+                    myApp.model.selectLayer(layer, true);
+            } else if (myApp.model.selectedLayers.length !== 0) {
                 if (currentAction.dragging) {
                     // continue drag
-                    for (var i in myApp.timeline.selectedLayers) {
-                        var layer = myApp.timeline.selectedLayers[i];
+                    for (var i in myApp.model.selectedLayers) {
+                        var layer = myApp.model.selectedLayers[i];
+                        var state = myApp.model.getState(layer, myApp.model.time);
                         var sprite = layer.sprite
-                        var state = sprite.getCurrentState();
-                        var time = myApp.timeline.selectedX;
-                        if (myApp.timeline.tweenMode && state.time !== time) {
-                            state = sprite.createState(time);
-                            myApp.timeline.timelineList.repaint();
-                        }
                         if (xBox.checked)
                             sprite.x += pos.x - currentAction.x;
                         if (yBox.checked)
@@ -121,18 +114,13 @@ Item {
                     currentAction.y = pos.y;
                 } else if (currentAction.rotating) {
                     // continue rotate
-                    var layer = myApp.timeline.selectedLayers[0];
+                    var layer = myApp.model.selectedLayers[0];
                     var center = { x: layer.sprite.x + (layer.sprite.width / 2), y: layer.sprite.y  + (layer.sprite.height / 2)};
                     var aar = getAngleAndRadius(center, pos);
-                    for (var i in myApp.timeline.selectedLayers) {
-                        var layer = myApp.timeline.selectedLayers[i];
+                    for (var i in myApp.model.selectedLayers) {
+                        var layer = myApp.model.selectedLayers[i];
+                        var state = myApp.model.getState(layer, myApp.model.time);
                         var sprite = layer.sprite
-                        var state = sprite.getCurrentState();
-                        var time = myApp.timeline.selectedX;
-                        if (myApp.timeline.tweenMode && state.time !== time) {
-                            state = sprite.createState(time);
-                            myApp.timeline.timelineList.repaint();
-                        }
                         if (rotateBox.checked)
                             sprite.rotation += aar.angle - currentAction.angle;
                         if (scaleBox.checked)
@@ -158,12 +146,12 @@ Item {
 
             if (click) {
                 currentAction = {};
-                var layer = myApp.timeline.getLayerAt(pos, myApp.timeline.currentTime);
+                var layer = myApp.model.getLayerAt(pos);
                 var select = layer && !layer.selected
-                for (var i = myApp.timeline.selectedLayers.length - 1; i >= 0; --i)
-                    myApp.timeline.selectLayer(myApp.timeline.selectedLayers[i], false)
+                for (var i = myApp.model.selectedLayers.length - 1; i >= 0; --i)
+                    myApp.model.selectLayer(myApp.model.selectedLayers[i], false)
                 if (select)
-                    myApp.timeline.selectLayer(layer, select)
+                    myApp.model.selectLayer(layer, select)
             }
         }
     }
@@ -213,18 +201,27 @@ Item {
         }
     }
 
-    function layerAdded(layer)
-    {
-    }
+    Connections {
+        target: myApp.model
 
-    function layerSelected(layer, select)
-    {
-        if (select) {
-            layer.focus = layerFocus.createObject(0)
-            layer.focus.parent = focusFrames
-            layer.focus.target = layer.sprite
-        } else {
-            layer.focus.destroy()
+        onSelectedLayersUpdated: {
+            for (var i in unselectedLayers) {
+                print("unselectx:", unselectedLayers[i].focus);
+                unselectedLayers[i].focus.destroy();
+            }
+            for (var i in selectedLayers) {
+                var layer = selectedLayers[i];
+                for (var j in myApp.model.layers) {
+                    print("layer: ", myApp.model.layers[j])
+                    if (myApp.model.layers[j] == layer)
+                        print("YES")
+                }
+                if (myApp.model.selectedLayers != selectedLayers)
+                    print("OOOPPPS");
+                layer.focus = layerFocus.createObject(0);
+                layer.focus.parent = focusFrames;
+                layer.focus.target = layer.sprite;
+            }
         }
     }
 
