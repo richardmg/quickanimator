@@ -47,8 +47,9 @@ Item {
             if (_currentIndex >= timeline.length - 1) {
                 finished = true;
             } else {
+                _currentIndex++;
                 _fromState = _toState;
-                _toState = timeline[++_currentIndex];
+                _toState = (_currentIndex === timeline.length - 1) ? _fromState : timeline[_currentIndex + 1];
             }
         }
     }
