@@ -11,9 +11,9 @@ QtObject {
     property var focusState: null
     property int ticksPerFrame: 1
 
-    signal layersUpdated(var removedLayers, var addedLayers)
-    signal selectedLayersUpdated(var unselectedLayers, var selectedLayers)
-    signal statesUpdated(var layer, var removedStates, var addedStates)
+    signal layersUpdated(var removedLayer, var addedLayer)
+    signal selectedLayersUpdated(var unselectedLayer, var selectedLayer)
+    signal statesUpdated(var layer)
 
     property bool tweenMode: true
 
@@ -55,7 +55,7 @@ QtObject {
         layer.sprite.createState(0);
         layer.sprite.setTime(0, false);
         selectLayer(layer, true);
-        layersUpdated(new Array(), [layer]);
+        layersUpdated(-1, layers.length);
     }
 
     function getState(layer, time)
@@ -75,7 +75,7 @@ QtObject {
 
 
 
-            statesUpdated(layer, new Array(), [state]);
+            statesUpdated(layers.indexOf(layer));
         }
         return state;
     }
@@ -88,7 +88,8 @@ QtObject {
         }
         var unselectedLayers = selectedLayers;
         selectedLayers = new Array();
-        selectedLayersUpdated(unselectedLayers, selectedLayers);
+        for (var i = 0; i < unselectedLayers.length; ++i)
+            selectedLayersUpdated(layers.indexOf(unselectedLayers[i]), -1);
     }
 
     function selectLayer(layer, select)
@@ -98,22 +99,22 @@ QtObject {
         layer.selected = select;
         if (select) {
             selectedLayers.push(layer)
-            selectedLayersUpdated(new Array(), selectedLayers);
+            selectedLayersUpdated(-1, layers.indexOf(layer));
         } else {
-            var i = selectedLayers.indexOf(layer);
-            selectedLayers.splice(i, 1);
-            selectedLayersUpdated([layer], selectedLayers);
+            selectedLayers.splice(selectedLayers.indexOf(layer), 1);
+            selectedLayersUpdated(layers.indexOf(layer), -1);
         }
     }
     
     function removeLayer(layer)
     {
-        layers.splice(layer.indexOf(layer), 1);
+        var index = layer.indexOf(layer);
+        layers.splice(index, 1);
         if (layer.selected) {
             selectedLayers.splice(selectedLayers.indexOf(layer), 1);
-            selectedLayersUpdated([layer], selectedLayers);
+            selectedLayersUpdated(layer.indexOf(layer), -1);
         }
-        layersUpdated([layer], new Array());
+        layersUpdated(index, -1); 
     }
 
     function removeCurrentState()

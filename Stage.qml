@@ -205,11 +205,10 @@ Item {
         target: myApp.model
 
         onSelectedLayersUpdated: {
-            for (var i in unselectedLayers) {
-                unselectedLayers[i].focus.destroy();
-            }
-            for (var i in selectedLayers) {
-                var layer = selectedLayers[i];
+            if (unselectedLayer != -1)
+                myApp.model.layers[unselectedLayer].focus.destroy();
+            if (selectedLayer != -1) {
+                var layer = myApp.model.layers[selectedLayer];
                 layer.focus = layerFocus.createObject(0);
                 layer.focus.parent = focusFrames;
                 layer.focus.target = layer.sprite;
