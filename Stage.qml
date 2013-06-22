@@ -206,18 +206,10 @@ Item {
 
         onSelectedLayersUpdated: {
             for (var i in unselectedLayers) {
-                print("unselectx:", unselectedLayers[i].focus);
                 unselectedLayers[i].focus.destroy();
             }
             for (var i in selectedLayers) {
                 var layer = selectedLayers[i];
-                for (var j in myApp.model.layers) {
-                    print("layer: ", myApp.model.layers[j])
-                    if (myApp.model.layers[j] == layer)
-                        print("YES")
-                }
-                if (myApp.model.selectedLayers != selectedLayers)
-                    print("OOOPPPS");
                 layer.focus = layerFocus.createObject(0);
                 layer.focus.parent = focusFrames;
                 layer.focus.target = layer.sprite;

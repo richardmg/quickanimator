@@ -82,11 +82,9 @@ QtObject {
 
     function unselectAllLayers()
     {
-        print("selectedLayers :", selectedLayers, selectedLayers.length)
         for (var i in selectedLayers) {
             var layer = selectedLayers[i];
             layer.selected = false;
-            print("layer.focus:", layer.focus)
         }
         var unselectedLayers = selectedLayers;
         selectedLayers = new Array();
