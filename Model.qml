@@ -68,14 +68,9 @@ QtObject {
         if (!state || state.time != time) {
             // Add the new state at given time:
             var state = layer.sprite.createState(time);
-
-
-
-//            setFocusLayer(layerIndex);
-
-
-
-            statesUpdated(layers.indexOf(layer));
+            var index = layers.indexOf(layer);
+            setFocusLayer(index);
+            statesUpdated(index);
         }
         return state;
     }
