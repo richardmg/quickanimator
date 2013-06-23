@@ -30,6 +30,7 @@ Item {
             return;
 
         updateSprite(ms, true);
+        return;
 
         var t = Math.floor(ms / model.msPerFrame);
         if (spriteTime != t)
@@ -132,6 +133,16 @@ Item {
     {
         // Ignore curve for now:
         return from + (((to - from) / _totalTimeBetweenStatesMs) * advanceMs);
+    }
+
+    property var lastx: 0
+    function _getValueX(from, to, advanceMs, curve)
+    {
+        // Ignore curve for now:
+        var newx = from + (((to - from) / _totalTimeBetweenStatesMs) * advanceMs);
+        print("xdiff:", newx - lastx)
+        lastx = newx;
+        return newx;
     }
 
     function _updateToAndFromState(time)

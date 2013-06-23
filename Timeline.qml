@@ -26,12 +26,25 @@ TimelineGrid {
     function togglePlay(play)
     {
         if (play) {
+            fps.fps2 = 0;
             playTimer.startTimeMs = (selectedX * myApp.model.msPerFrame) - (new Date()).getTime();
         } else {
             myApp.model.setTime(selectedX);
             myApp.model.setFocusLayer(selectedY);
         }
         playTimer.running = play
+    }
+
+    Timer {
+        id: fps
+        interval: 1000
+        repeat: true
+        running: playTimer.running
+        property int fps2: 0
+        onTriggered: {
+            print("fps:", fps2);
+            fps2 = 0;
+        }
     }
 
     Timer {
@@ -42,7 +55,9 @@ TimelineGrid {
         property var startTimeMs: 0
 
         onTriggered: {
+            fps.fps2++;
             var ms = startTimeMs + (new Date()).getTime();
+
             for (var i = 0; i < layers.length; ++i)
                 layers[i].sprite.tick(ms);
 
