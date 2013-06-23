@@ -9,7 +9,6 @@ QtObject {
     property var layers: new Array()
     property var selectedLayers: new Array()
     property var focusState: null
-    property int ticksPerFrame: 1
     property int msPerFrame: 500
 
     signal layersUpdated(var removedLayer, var addedLayer)
