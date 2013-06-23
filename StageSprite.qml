@@ -18,23 +18,22 @@ Item {
 
     property var _fromState
     property var _toState
+    property int _fromStateMs
+    property int _totalTimeBetweenStatesMs
     property var _currentIndex: 0
-
-    property var _tickTime: 0
 
     property bool _invalidCache: true
 
-    function tick()
+    function tick(ms)
     {
         if (paused || finished)
             return;
 
-        _tickTime++;
-        var t = Math.floor(_tickTime / model.ticksPerFrame);
+        updateSprite(ms, true);
+
+        var t = Math.floor(ms / model.msPerFrame);
         if (spriteTime != t)
             spriteTime = t;
-
-        updateSprite(true);
 
         if (spriteTime === _toState.time) {
             var after = _toState.after;
@@ -50,6 +49,8 @@ Item {
                 _currentIndex++;
                 _fromState = _toState;
                 _toState = (_currentIndex === timeline.length - 1) ? _fromState : timeline[_currentIndex + 1];
+                _fromStateMs = _fromState.time * model.msPerFrame
+                _totalTimeBetweenStatesMs = (_toState.time * model.msPerFrame) - _fromStateMs;
             }
         }
     }
@@ -102,12 +103,13 @@ Item {
     {
         _updateToAndFromState(time);
         spriteTime = time;
-        _tickTime = (time * model.ticksPerFrame);
-        updateSprite(tween);
+        _fromStateMs = _fromState.time * model.msPerFrame
+        _totalTimeBetweenStatesMs = (_toState.time * model.msPerFrame) - _fromStateMs;
+        updateSprite(time * model.msPerFrame, tween);
         finished = false;
     }
 
-    function updateSprite(tween)
+    function updateSprite(ms, tween)
     {
         if (!tween || _toState.time === _fromState.time) {
             x = _fromState.x;
@@ -116,21 +118,20 @@ Item {
             rotation = _fromState.rotation;
             opacity = _fromState.opacity;
         } else {
-            var advance = _tickTime - (_fromState.time * model.ticksPerFrame);
-            var tickRange = (_toState.time - _fromState.time) * model.ticksPerFrame;
-            x = _getValue(_fromState.x, _toState.x, tickRange, advance, "linear");
-            y = _getValue(_fromState.y, _toState.y, tickRange, advance, "linear");
-            z = _getValue(_fromState.z, _toState.z, tickRange, advance, "linear");
-            scale = _getValue(_fromState.scale, _toState.scale, tickRange, advance, "linear");
-            rotation = _getValue(_fromState.rotation, _toState.rotation, tickRange, advance, "linear");
-            opacity = _getValue(_fromState.opacity, _toState.opacity, tickRange, advance, "linear");
+            var advanceMs = ms - _fromStateMs;
+            x = _getValue(_fromState.x, _toState.x, advanceMs, "linear");
+            y = _getValue(_fromState.y, _toState.y, advanceMs, "linear");
+            z = _getValue(_fromState.z, _toState.z, advanceMs, "linear");
+            scale = _getValue(_fromState.scale, _toState.scale, advanceMs, "linear");
+            rotation = _getValue(_fromState.rotation, _toState.rotation, advanceMs, "linear");
+            opacity = _getValue(_fromState.opacity, _toState.opacity, advanceMs, "linear");
         }
     }
 
-    function _getValue(from, to, tickdiff, advance, curve)
+    function _getValue(from, to, advanceMs, curve)
     {
         // Ignore curve for now:
-        return from + ((to - from) / tickdiff) * advance;
+        return from + (((to - from) / _totalTimeBetweenStatesMs) * advanceMs);
     }
 
     function _updateToAndFromState(time)

@@ -19,14 +19,14 @@ TimelineGrid {
         onLayersUpdated: timelineList.repaint();
         onTimeChanged: if (!_block) {
             selectedX = myApp.model.time;
-            playTimer.tickTime = selectedX * myApp.model.ticksPerFrame;
+            playTimer.startTimeMs = (selectedX * myApp.model.msPerFrame) - (new Date()).getTime();
         }
     }
 
     function togglePlay(play)
     {
         if (play) {
-            playTimer.tickTime = selectedX * myApp.model.ticksPerFrame;
+            playTimer.startTimeMs = (selectedX * myApp.model.msPerFrame) - (new Date()).getTime();
         } else {
             myApp.model.setTime(selectedX);
             myApp.model.setFocusLayer(selectedY);
@@ -38,15 +38,16 @@ TimelineGrid {
         id: playTimer
         interval: 1000 / 60
         repeat: true
-        property int tickTime: 0
         property var layers: myApp.model.layers
+        property var startTimeMs: 0
 
         onTriggered: {
+            var ms = startTimeMs + (new Date()).getTime();
             for (var i = 0; i < layers.length; ++i)
-                layers[i].sprite.tick();
+                layers[i].sprite.tick(ms);
 
             _block = true;
-            var t = Math.floor(tickTime++ / myApp.model.ticksPerFrame);
+            var t = Math.floor(ms / myApp.model.msPerFrame);
             if (t != selectedX) {
                 selectedX = t;
                 myApp.model.time = t;
