@@ -20,7 +20,7 @@ QtObject {
     onTweenModeChanged: {
         for (var l in layers) {
             var layer = layers[l];
-            layer.sprite.updateSprite(tweenMode);
+            layer.sprite.setTime(layer.sprite.spriteTime, tweenMode);
         }
     }
 

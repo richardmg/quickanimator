@@ -32,7 +32,10 @@ Item {
     onPlayingChanged:
     {
         if (playing) {
+            _updateProperties(true);
             var duration = (_toState.time - spriteTime) * model.msPerFrame;
+            if (duration <= 0)
+                return;
             for (var i in props) {
                 var prop = props[i];
                 sprite["animation_" + prop].to = _toState[prop];
@@ -49,6 +52,8 @@ Item {
     {
         if (!playing)
             return;
+
+        //fixme: enable stopping sprites individually (change how ms is used)
 
         var t = Math.floor(ms / model.msPerFrame);
         if (spriteTime != t)
@@ -68,8 +73,8 @@ Item {
                 _currentIndex++;
                 _fromState = _toState;
                 _toState = (_currentIndex === timeline.length - 1) ? _fromState : timeline[_currentIndex + 1];
-                playing = true;
             }
+            playing = true;
         }
     }
 
@@ -124,7 +129,14 @@ Item {
 
         _updateToAndFromState(time);
         spriteTime = time;
+        _updateProperties(tween);
 
+        if (isPlaying)
+            playing = true;
+    }
+
+    function _updateProperties(tween)
+    {
         if (!tween || _toState.time === _fromState.time) {
             x = _fromState.x;
             y = _fromState.y;
@@ -141,9 +153,6 @@ Item {
             rotation = _interpolate(_fromState.rotation, _toState.rotation, advanceMs, "linear");
             opacity = _interpolate(_fromState.opacity, _toState.opacity, advanceMs, "linear");
         }
-
-        if (isPlaying)
-            playing = true;
     }
 
     function _interpolate(from, to, advanceMs, curve)
