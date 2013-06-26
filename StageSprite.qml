@@ -161,16 +161,6 @@ Item {
         return from + (((to - from) / _totalTimeBetweenStatesMs) * advanceMs);
     }
 
-    property var lastx: 0
-    function _getValueX(from, to, advanceMs, curve)
-    {
-        // Ignore curve for now:
-        var newx = from + (((to - from) / _totalTimeBetweenStatesMs) * advanceMs);
-        print("xdiff:", newx - lastx)
-        lastx = newx;
-        return newx;
-    }
-
     function _updateToAndFromState(time)
     {
         _invalidCache = _invalidCache || !_fromState || !_toState || time < _fromState.time || time >= _toState.time;
