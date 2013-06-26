@@ -28,38 +28,18 @@ Item {
     property NumberAnimation animation_scale: NumberAnimation{ target: sprite; property: "scale" }
     property NumberAnimation animation_opacity: NumberAnimation{ target: sprite; property: "opacity" }
 
-    property bool playing: false
-    onPlayingChanged:
-    {
-        if (playing) {
-            _updateProperties(true);
-            var duration = (_toState.time - spriteTime) * model.msPerFrame;
-            if (duration <= 0)
+    NumberAnimation {
+        id: nextStateAnimation
+        target: nextStateAnimation;
+        property int goToNextState
+        property: "goToNextState"
+        from: 0; to: 1
+        onRunningChanged: {
+            if (!goToNextState)
                 return;
-            for (var i in props) {
-                var prop = props[i];
-                sprite["animation_" + prop].to = _toState[prop];
-                sprite["animation_" + prop].duration = duration;
-                sprite["animation_" + prop].start();
-            }
-        } else {
-            for (var i in props)
-                sprite["animation_" + props[i]].stop();
-        }
-    }
 
-    function tick(ms)
-    {
-        if (!playing)
-            return;
+            spriteTime = _toState.time;
 
-        //fixme: enable stopping sprites individually (change how ms is used)
-
-        var t = Math.floor(ms / model.msPerFrame);
-        if (spriteTime != t)
-            spriteTime = t;
-
-        if (spriteTime === _toState.time) {
             var after = _toState.after;
             if (after) {
                 var tmpIndex = _currentIndex
@@ -68,14 +48,39 @@ Item {
                     return;
             }
 
-            playing = false;
             if (_currentIndex < timeline.length - 1) {
                 _currentIndex++;
                 _fromState = _toState;
                 _toState = (_currentIndex === timeline.length - 1) ? _fromState : timeline[_currentIndex + 1];
             }
-            playing = true;
+            _play();
         }
+    }
+
+    property bool playing: false
+    onPlayingChanged: if (playing) _play(); else _stop();
+
+    function _play()
+    {
+        _updateProperties(true);
+        var duration = (_toState.time - spriteTime) * model.msPerFrame;
+        if (duration <= 0)
+            return;
+        for (var i in props) {
+            var prop = props[i];
+            sprite["animation_" + prop].to = _toState[prop];
+            sprite["animation_" + prop].duration = duration;
+            sprite["animation_" + prop].restart();
+        }
+        nextStateAnimation.duration = duration;
+        nextStateAnimation.restart();
+    }
+
+    function _stop()
+    {
+        for (var i in props)
+            sprite["animation_" + props[i]].stop();
+        nextStateAnimation.stop();
     }
 
     function createState(time)
@@ -124,15 +129,11 @@ Item {
 
     function setTime(time, tween)
     {
-        var isPlaying = playing;
-        playing = false;
-
         _updateToAndFromState(time);
         spriteTime = time;
         _updateProperties(tween);
-
-        if (isPlaying)
-            playing = true;
+        if (playing)
+            _play();
     }
 
     function _updateProperties(tween)

@@ -65,9 +65,6 @@ TimelineGrid {
             fps.fps2++;
             var ms = startTimeMs + (new Date()).getTime();
 
-            for (var i = 0; i < layers.length; ++i)
-                layers[i].sprite.tick(ms);
-
             _block = true;
             var t = Math.floor(ms / myApp.model.msPerFrame);
             if (t != selectedX) {
