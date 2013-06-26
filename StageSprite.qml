@@ -11,9 +11,6 @@ Item {
     property var spriteIndex: 0
     property var spriteTime: 0
 
-    property bool paused: false
-    property bool finished: false
-
     property string name: "unknown"
 
     property var _fromState
@@ -23,6 +20,13 @@ Item {
     property bool _invalidCache: true
 
     property var props: ["x", "y", "z", "rotation", "scale", "opacity"];
+
+    property NumberAnimation animation_x: NumberAnimation{ target: sprite; property: "x" }
+    property NumberAnimation animation_y: NumberAnimation{ target: sprite; property: "y" }
+    property NumberAnimation animation_z: NumberAnimation{ target: sprite; property: "z" }
+    property NumberAnimation animation_rotation: NumberAnimation{ target: sprite; property: "rotation" }
+    property NumberAnimation animation_scale: NumberAnimation{ target: sprite; property: "scale" }
+    property NumberAnimation animation_opacity: NumberAnimation{ target: sprite; property: "opacity" }
 
     property bool playing: false
     onPlayingChanged:
@@ -41,16 +45,9 @@ Item {
         }
     }
 
-    property NumberAnimation animation_x: NumberAnimation{ target: sprite; property: "x" }
-    property NumberAnimation animation_y: NumberAnimation{ target: sprite; property: "y" }
-    property NumberAnimation animation_z: NumberAnimation{ target: sprite; property: "z" }
-    property NumberAnimation animation_rotation: NumberAnimation{ target: sprite; property: "rotation" }
-    property NumberAnimation animation_scale: NumberAnimation{ target: sprite; property: "scale" }
-    property NumberAnimation animation_opacity: NumberAnimation{ target: sprite; property: "opacity" }
-
     function tick(ms)
     {
-        if (paused || finished)
+        if (!playing)
             return;
 
         var t = Math.floor(ms / model.msPerFrame);
@@ -67,9 +64,7 @@ Item {
             }
 
             playing = false;
-            if (_currentIndex >= timeline.length - 1) {
-                finished = true;
-            } else {
+            if (_currentIndex < timeline.length - 1) {
                 _currentIndex++;
                 _fromState = _toState;
                 _toState = (_currentIndex === timeline.length - 1) ? _fromState : timeline[_currentIndex + 1];
@@ -124,18 +119,13 @@ Item {
 
     function setTime(time, tween)
     {
+        var isPlaying = playing;
+        playing = false;
+
         _updateToAndFromState(time);
         spriteTime = time;
-        updateSprite(tween);
-        finished = false;
-    }
 
-    function updateSprite(tween)
-    {
-        if (playing) {
-            playing = false;
-            playing = true;
-        } else if (!tween || _toState.time === _fromState.time) {
+        if (!tween || _toState.time === _fromState.time) {
             x = _fromState.x;
             y = _fromState.y;
             scale = _fromState.scale;
@@ -151,6 +141,9 @@ Item {
             rotation = _interpolate(_fromState.rotation, _toState.rotation, advanceMs, "linear");
             opacity = _interpolate(_fromState.opacity, _toState.opacity, advanceMs, "linear");
         }
+
+        if (isPlaying)
+            playing = true;
     }
 
     function _interpolate(from, to, advanceMs, curve)

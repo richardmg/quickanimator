@@ -20,6 +20,9 @@ TimelineGrid {
         onTimeChanged: if (!_block) {
             selectedX = myApp.model.time;
             playTimer.startTimeMs = (selectedX * myApp.model.msPerFrame) - (new Date()).getTime();
+            var layers = myApp.model.layers;
+            for (var i = 0; i < layers.length; ++i)
+                layers[i].sprite.setTime(myApp.model.time);
         }
     }
 
