@@ -25,6 +25,10 @@ TimelineGrid {
 
     function togglePlay(play)
     {
+        var layers = myApp.model.layers;
+        for (var i = 0; i < layers.length; ++i)
+            layers[i].sprite.play(play);
+
         if (play) {
             fps.fps2 = 0;
             playTimer.startTimeMs = (selectedX * myApp.model.msPerFrame) - (new Date()).getTime();
@@ -39,7 +43,7 @@ TimelineGrid {
         id: fps
         interval: 1000
         repeat: true
-        running: playTimer.running
+        running: false//playTimer.running
         property int fps2: 0
         onTriggered: {
             print("fps:", fps2);

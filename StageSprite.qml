@@ -24,18 +24,43 @@ Item {
 
     property bool _invalidCache: true
 
+    property var props: ["x", "y", "z", "rotation", "scale", "opacity"];
+
+    function play(play)
+    {
+        if (play) {
+            var duration = (_toState.time - spriteTime) * model.msPerFrame;
+            for (var i in props) {
+                var prop = props[i];
+                sprite["animation_" + prop].to = _toState[prop];
+                sprite["animation_" + prop].duration = duration;
+                sprite["animation_" + prop].start();
+            }
+        } else {
+            for (var i in props)
+                sprite["animation_" + props[i]].stop();
+        }
+    }
+
+    property NumberAnimation animation_x: NumberAnimation{ target: sprite; property: "x" }
+    property NumberAnimation animation_y: NumberAnimation{ target: sprite; property: "y" }
+    property NumberAnimation animation_z: NumberAnimation{ target: sprite; property: "z" }
+    property NumberAnimation animation_rotation: NumberAnimation{ target: sprite; property: "rotation" }
+    property NumberAnimation animation_scale: NumberAnimation{ target: sprite; property: "scale" }
+    property NumberAnimation animation_opacity: NumberAnimation{ target: sprite; property: "opacity" }
+
     function tick(ms)
     {
         if (paused || finished)
             return;
 
-        updateSprite(ms, true);
-        return;
+//        updateSprite(ms, true);
 
         var t = Math.floor(ms / model.msPerFrame);
         if (spriteTime != t)
             spriteTime = t;
 
+/*
         if (spriteTime === _toState.time) {
             var after = _toState.after;
             if (after) {
@@ -54,6 +79,7 @@ Item {
                 _totalTimeBetweenStatesMs = (_toState.time * model.msPerFrame) - _fromStateMs;
             }
         }
+ */
     }
 
     function createState(time)
