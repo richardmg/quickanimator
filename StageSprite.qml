@@ -18,17 +18,16 @@ Item {
 
     property var _fromState
     property var _toState
-    property int _fromStateMs
-    property int _totalTimeBetweenStatesMs
     property var _currentIndex: 0
 
     property bool _invalidCache: true
 
     property var props: ["x", "y", "z", "rotation", "scale", "opacity"];
 
-    function play(play)
+    property bool playing: false
+    onPlayingChanged:
     {
-        if (play) {
+        if (playing) {
             var duration = (_toState.time - spriteTime) * model.msPerFrame;
             for (var i in props) {
                 var prop = props[i];
@@ -54,13 +53,10 @@ Item {
         if (paused || finished)
             return;
 
-//        updateSprite(ms, true);
-
         var t = Math.floor(ms / model.msPerFrame);
         if (spriteTime != t)
             spriteTime = t;
 
-/*
         if (spriteTime === _toState.time) {
             var after = _toState.after;
             if (after) {
@@ -69,17 +65,17 @@ Item {
                 if (tmpIndex !== _currentIndex)
                     return;
             }
+
+            playing = false;
             if (_currentIndex >= timeline.length - 1) {
                 finished = true;
             } else {
                 _currentIndex++;
                 _fromState = _toState;
                 _toState = (_currentIndex === timeline.length - 1) ? _fromState : timeline[_currentIndex + 1];
-                _fromStateMs = _fromState.time * model.msPerFrame
-                _totalTimeBetweenStatesMs = (_toState.time * model.msPerFrame) - _fromStateMs;
+                playing = true;
             }
         }
- */
     }
 
     function createState(time)
@@ -130,35 +126,39 @@ Item {
     {
         _updateToAndFromState(time);
         spriteTime = time;
-        _fromStateMs = _fromState.time * model.msPerFrame
-        _totalTimeBetweenStatesMs = (_toState.time * model.msPerFrame) - _fromStateMs;
-        updateSprite(time * model.msPerFrame, tween);
+        updateSprite(tween);
         finished = false;
     }
 
-    function updateSprite(ms, tween)
+    function updateSprite(tween)
     {
-        if (!tween || _toState.time === _fromState.time) {
+        if (playing) {
+            playing = false;
+            playing = true;
+        } else if (!tween || _toState.time === _fromState.time) {
             x = _fromState.x;
             y = _fromState.y;
             scale = _fromState.scale;
             rotation = _fromState.rotation;
             opacity = _fromState.opacity;
         } else {
-            var advanceMs = ms - _fromStateMs;
-            x = _getValue(_fromState.x, _toState.x, advanceMs, "linear");
-            y = _getValue(_fromState.y, _toState.y, advanceMs, "linear");
-            z = _getValue(_fromState.z, _toState.z, advanceMs, "linear");
-            scale = _getValue(_fromState.scale, _toState.scale, advanceMs, "linear");
-            rotation = _getValue(_fromState.rotation, _toState.rotation, advanceMs, "linear");
-            opacity = _getValue(_fromState.opacity, _toState.opacity, advanceMs, "linear");
+            var fromStateMs = _fromState.time * model.msPerFrame
+            var advanceMs = (spriteTime * model.msPerFrame) - fromStateMs;
+            x = _interpolate(_fromState.x, _toState.x, advanceMs, "linear");
+            y = _interpolate(_fromState.y, _toState.y, advanceMs, "linear");
+            z = _interpolate(_fromState.z, _toState.z, advanceMs, "linear");
+            scale = _interpolate(_fromState.scale, _toState.scale, advanceMs, "linear");
+            rotation = _interpolate(_fromState.rotation, _toState.rotation, advanceMs, "linear");
+            opacity = _interpolate(_fromState.opacity, _toState.opacity, advanceMs, "linear");
         }
     }
 
-    function _getValue(from, to, advanceMs, curve)
+    function _interpolate(from, to, advanceMs, curve)
     {
         // Ignore curve for now:
-        return from + (((to - from) / _totalTimeBetweenStatesMs) * advanceMs);
+        var fromStateMs = _fromState.time * model.msPerFrame
+        var totalTimeBetweenStatesMs = (_toState.time * model.msPerFrame) - fromStateMs;
+        return from + (((to - from) / totalTimeBetweenStatesMs) * advanceMs);
     }
 
     function _updateToAndFromState(time)

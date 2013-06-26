@@ -27,7 +27,7 @@ TimelineGrid {
     {
         var layers = myApp.model.layers;
         for (var i = 0; i < layers.length; ++i)
-            layers[i].sprite.play(play);
+            layers[i].sprite.playing = play;
 
         if (play) {
             fps.fps2 = 0;
