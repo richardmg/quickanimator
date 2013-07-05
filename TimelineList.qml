@@ -61,8 +61,8 @@ Rectangle {
                         grd.addColorStop(0, '#8ED6FF');   
                         grd.addColorStop(1, '#206CD3');
                         ctx.fillStyle = grd;
-                        for (var c in sprite.timeline) {
-                            var state = sprite.timeline[c];
+                        for (var c in sprite.keyframes) {
+                            var state = sprite.keyframes[c];
                             ctx.fillRect((state.time * cellWidth), (row * myApp.style.cellHeight), cellWidth, myApp.style.cellHeight - 1);
                         }
                     }

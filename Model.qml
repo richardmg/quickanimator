@@ -147,9 +147,9 @@ QtObject {
 
         for (var i = 0; i < layers.length; ++i) {
             var layer = layers[i];
-            var timeline = layer.sprite.timeline;
-            for (var j = 0; j < timeline.length; ++j) {
-                var s = timeline[j];
+            var keyframes = layer.sprite.keyframes;
+            for (var j = 0; j < keyframes.length; ++j) {
+                var s = keyframes[j];
                 f += "   { time: " + s.time
                 + ", x: " + s.x.toFixed(2)
                 + ", y: " + s.y.toFixed(2)
@@ -159,7 +159,7 @@ QtObject {
                 + ", opacity: " + s.opacity.toFixed(2)
                 + ", name: '" + s.name + "'"
                 + " }"
-                if (j < timeline.length - 1)
+                if (j < keyframes.length - 1)
                     f += ",\n"
             }
             f += (i < layers.length - 1) ? "\n]},{ image: 'dummy.jpeg', states: [\n" : "\n]}\n";

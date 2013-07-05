@@ -6,7 +6,7 @@ Item {
     height: childrenRect.height
 
     property QtObject model: parent 
-    property var timeline: new Array()
+    property var keyframes: new Array()
 
     property var spriteTime: 0
     property string name: "unknown"
@@ -42,10 +42,10 @@ Item {
                     return;
             }
 
-            if (_currentIndex < timeline.length - 1) {
+            if (_currentIndex < keyframes.length - 1) {
                 _currentIndex++;
                 _fromState = _toState;
-                _toState = (_currentIndex === timeline.length - 1) ? _fromState : timeline[_currentIndex + 1];
+                _toState = (_currentIndex === keyframes.length - 1) ? _fromState : keyframes[_currentIndex + 1];
             }
             _play();
         }
@@ -79,7 +79,7 @@ Item {
 
     function createState(time)
     {
-        var index = timeline.length === 0 ? 0 : getState(time).lastSearchIndex + 1;
+        var index = keyframes.length === 0 ? 0 : getState(time).lastSearchIndex + 1;
         var state = {
             x:sprite.x,
             y:sprite.y,
@@ -93,14 +93,14 @@ Item {
             time:time,
             sprite:sprite,
         };
-        timeline.splice(index, 0, state);
+        keyframes.splice(index, 0, state);
         _invalidCache = true;
         return state;
     }
 
     function removeState(state, tween)
     {
-        timeline.splice(timeline.indexOf(state), 1);
+        keyframes.splice(keyframes.indexOf(state), 1);
         _invalidCache = true;
         setTime(spriteTime, tween);
     }
@@ -164,29 +164,29 @@ Item {
         if (_invalidCache) {
             _fromState = _getStateBinarySearch(time);
             _currentIndex = _fromState.lastSearchIndex;
-            _toState = (_currentIndex === timeline.length - 1) ? _fromState : timeline[_currentIndex + 1];
+            _toState = (_currentIndex === keyframes.length - 1) ? _fromState : keyframes[_currentIndex + 1];
             _invalidCache = false;
         }
     }
 
     function _getStateBinarySearch(time)
     {
-        // Binary search timeline:
-        var low = 0, high = timeline.length - 1;
+        // Binary search keyframes:
+        var low = 0, high = keyframes.length - 1;
         var t, i;
 
         while (low <= high) {
             i = Math.floor((low + high) / 2);
-            t = timeline[i].time;
+            t = keyframes[i].time;
             if (time < t) {
                 high = i - 1;
                 continue;
             }
-            if (i == high || time < timeline[i + 1].time)
+            if (i == high || time < keyframes[i + 1].time)
                 break;
             low = i + 1
         }
-        var state = timeline[i];
+        var state = keyframes[i];
         state.lastSearchIndex = i;
         return state;
     }
