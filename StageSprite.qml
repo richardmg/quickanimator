@@ -24,15 +24,13 @@ Item {
     property NumberAnimation _animation_rotation: NumberAnimation{ target: sprite; property: "rotation" }
     property NumberAnimation _animation_scale: NumberAnimation{ target: sprite; property: "scale" }
     property NumberAnimation _animation_opacity: NumberAnimation{ target: sprite; property: "opacity" }
-
-    NumberAnimation {
-        id: nextStateAnimation
-        target: nextStateAnimation;
+    property NumberAnimation _nextStateAnimation: NumberAnimation {
+        target: _nextStateAnimation;
         property int goToNextState
         property: "goToNextState"
         from: 0; to: 1
         onRunningChanged: {
-            if (!goToNextState)
+            if (!goToNextState || !playing)
                 return;
 
             spriteTime = _toState.time;
@@ -69,15 +67,15 @@ Item {
             sprite["_animation_" + prop].duration = duration;
             sprite["_animation_" + prop].restart();
         }
-        nextStateAnimation.duration = duration;
-        nextStateAnimation.restart();
+        _nextStateAnimation.duration = duration;
+        _nextStateAnimation.restart();
     }
 
     function _stop()
     {
         for (var i in _props)
             sprite["_animation_" + _props[i]].stop();
-        nextStateAnimation.stop();
+        _nextStateAnimation.stop();
     }
 
     function createState(time)
