@@ -10,23 +10,20 @@ Item {
 
     property var spriteIndex: 0
     property var spriteTime: 0
-
     property string name: "unknown"
 
     property var _fromState
     property var _toState
     property var _currentIndex: 0
-
     property bool _invalidCache: true
+    property var _props: ["x", "y", "z", "rotation", "scale", "opacity"];
 
-    property var props: ["x", "y", "z", "rotation", "scale", "opacity"];
-
-    property NumberAnimation animation_x: NumberAnimation{ target: sprite; property: "x" }
-    property NumberAnimation animation_y: NumberAnimation{ target: sprite; property: "y" }
-    property NumberAnimation animation_z: NumberAnimation{ target: sprite; property: "z" }
-    property NumberAnimation animation_rotation: NumberAnimation{ target: sprite; property: "rotation" }
-    property NumberAnimation animation_scale: NumberAnimation{ target: sprite; property: "scale" }
-    property NumberAnimation animation_opacity: NumberAnimation{ target: sprite; property: "opacity" }
+    property NumberAnimation _animation_x: NumberAnimation{ target: sprite; property: "x" }
+    property NumberAnimation _animation_y: NumberAnimation{ target: sprite; property: "y" }
+    property NumberAnimation _animation_z: NumberAnimation{ target: sprite; property: "z" }
+    property NumberAnimation _animation_rotation: NumberAnimation{ target: sprite; property: "rotation" }
+    property NumberAnimation _animation_scale: NumberAnimation{ target: sprite; property: "scale" }
+    property NumberAnimation _animation_opacity: NumberAnimation{ target: sprite; property: "opacity" }
 
     NumberAnimation {
         id: nextStateAnimation
@@ -66,11 +63,11 @@ Item {
         var duration = (_toState.time - spriteTime) * model.msPerFrame;
         if (duration <= 0)
             return;
-        for (var i in props) {
-            var prop = props[i];
-            sprite["animation_" + prop].to = _toState[prop];
-            sprite["animation_" + prop].duration = duration;
-            sprite["animation_" + prop].restart();
+        for (var i in _props) {
+            var prop = _props[i];
+            sprite["_animation_" + prop].to = _toState[prop];
+            sprite["_animation_" + prop].duration = duration;
+            sprite["_animation_" + prop].restart();
         }
         nextStateAnimation.duration = duration;
         nextStateAnimation.restart();
@@ -78,8 +75,8 @@ Item {
 
     function _stop()
     {
-        for (var i in props)
-            sprite["animation_" + props[i]].stop();
+        for (var i in _props)
+            sprite["_animation_" + _props[i]].stop();
         nextStateAnimation.stop();
     }
 
