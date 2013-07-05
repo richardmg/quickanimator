@@ -8,15 +8,14 @@ Item {
     property QtObject model: parent 
     property var timeline: new Array()
 
-    property var spriteIndex: 0
     property var spriteTime: 0
     property string name: "unknown"
+    property bool playing: false
 
     property var _fromState
     property var _toState
     property var _currentIndex: 0
     property bool _invalidCache: true
-    property var _props: ["x", "y", "z", "rotation", "scale", "opacity"];
 
     property NumberAnimation _animation_x: NumberAnimation{ target: sprite; property: "x" }
     property NumberAnimation _animation_y: NumberAnimation{ target: sprite; property: "y" }
@@ -52,7 +51,7 @@ Item {
         }
     }
 
-    property bool playing: false
+    property var _props: ["x", "y", "z", "rotation", "scale", "opacity"];
     onPlayingChanged: if (playing) _play(); else _stop();
 
     function _play()
