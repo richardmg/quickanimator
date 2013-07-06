@@ -22,16 +22,16 @@ Column {
             enabled: false
 
             onTextChanged: {
-                if (timeline.selectedState)
-                    timeline.selectedState.name = text;
+                if (timeline.selectedKeyframe)
+                    timeline.selectedKeyframe.name = text;
             }
 
             Connections {
                 target: timeline
                 onSelectedStateChanged: {
-                    if (timeline.selectedState) {
+                    if (timeline.selectedKeyframe) {
                         stateName.enabled = true;
-                        stateName.text = timeline.selectedState.name;
+                        stateName.text = timeline.selectedKeyframe.name;
                     } else {
                         stateName.enabled = false;
                         stateName.text = "";

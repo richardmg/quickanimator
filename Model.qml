@@ -52,7 +52,7 @@ QtObject {
         unselectAllLayers();
         layers.push(layer);
         layer.selected = false;
-        layer.sprite.createState(0);
+        layer.sprite.createKeyframe(0);
         layer.sprite.setTime(0, false);
         selectLayer(layer, true);
         layersUpdated(-1, layers.length);
@@ -67,7 +67,7 @@ QtObject {
         var state = layer.sprite.getState(time);
         if (!state || state.time != time) {
             // Add the new state at given time:
-            var state = layer.sprite.createState(time);
+            var state = layer.sprite.createKeyframe(time);
             var index = layers.indexOf(layer);
             setFocusLayer(index);
             statesUpdated(index);

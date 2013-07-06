@@ -77,7 +77,7 @@ Item {
         _nextStateAnimation.stop();
     }
 
-    function createState(time)
+    function createKeyframe(time)
     {
         var index = keyframes.length === 0 ? 0 : getState(time).lastSearchIndex + 1;
         var state = {

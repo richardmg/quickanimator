@@ -25,16 +25,16 @@ SpinBox {
         if (_guard)
             return;
 
-        var state = myApp.timeline.selectedState;
+        var keyframe = myApp.timeline.selectedKeyframe;
         var time = myApp.timeline.timelineGrid.selectedX;
 
-        if (state.time !== time) {
-            state = state.sprite.createState(time);
+        if (keyframe.time !== time) {
+            keyframe = keyframe.sprite.createKeyframe(time);
             myApp.timeline.timelineGrid.timelineList.repaint();
         }
 
-        state[property] = spinbox.value; 
-        state.sprite[property] = spinbox.value;
+        keyframe[property] = spinbox.value; 
+        keyframe.sprite[property] = spinbox.value;
     }
 
     function _updateState()
@@ -46,9 +46,9 @@ SpinBox {
             _boundTarget = null;
         }
 
-        var state = myApp.timeline.selectedState;
+        var keyframe = myApp.timeline.selectedKeyframe;
 
-        if (property === "" || !state) {
+        if (property === "" || !keyframe) {
             _guard = true;
             spinbox.value = 0;
             spinbox.enabled = false;
@@ -57,17 +57,17 @@ SpinBox {
         }
 
         spinbox.enabled = true;
-        _boundTarget = state.sprite;
+        _boundTarget = keyframe.sprite;
         _boundProperty = spinbox.property + "Changed";
         spinbox._boundTarget[_boundProperty].connect(targetListener)
         _guard = true;
-        spinbox.value = state.sprite[property];
+        spinbox.value = keyframe.sprite[property];
         _guard = false;
     }
 
     function targetListener() {
         _guard = true;
-        spinbox.value = myApp.timeline.selectedState.sprite[property];
+        spinbox.value = myApp.timeline.selectedKeyframe.sprite[property];
         _guard = false;
     }
 }
