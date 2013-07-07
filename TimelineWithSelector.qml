@@ -29,15 +29,15 @@ Item {
     Rectangle {
         id: selectorLine
         color: Qt.darker(myApp.style.accent, 1.3);
-        x: (selectedX * timelineCanvas.cellWidth) + (timelineCanvas.cellWidth / 2) - 1
+        x: selectorHandle.x + (myApp.style.cellWidth / 2) - 1;
         width: 1
         height: parent.height - y
     }
 
     Rectangle {
         id: selectorHandle
-        x: 1 + (selectedX * timelineCanvas.cellWidth)
-        y: -timelineCanvas.flickable.contentY + (selectedY * myApp.style.cellHeight)
+        x: 1 + (selectedX * myApp.style.cellWidth) - timelineCanvas.flickable.contentX
+        y: (selectedY * myApp.style.cellHeight) - timelineCanvas.flickable.contentY
         z: 10
         width: timelineCanvas.cellWidth - 2
         height: myApp.style.cellHeight - 1
