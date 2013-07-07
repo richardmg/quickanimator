@@ -115,7 +115,7 @@ QtObject {
     function removeCurrentState()
     {
         selectedLayers[0].sprite.removeCurrentState(tweenMode);
-        myApp.timeline.timelineGrid.timelineCanvas.repaint();
+        myApp.timeline.timelineCanvas.repaint();
     }
 
     function setLayerIndex(oldIndex, newIndex)

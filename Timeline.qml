@@ -3,7 +3,7 @@ import QtQuick.Controls 1.0
 
 import FileIO 1.0
 
-TimelineGrid {
+TimelineWithSelector {
     id: root
     clip: true
     model: myApp.model.layers

@@ -26,11 +26,11 @@ SpinBox {
             return;
 
         var keyframe = myApp.timeline.selectedKeyframe;
-        var time = myApp.timeline.timelineGrid.selectedX;
+        var time = myApp.timeline.selectedX;
 
         if (keyframe.time !== time) {
             keyframe = keyframe.sprite.createKeyframe(time);
-            myApp.timeline.timelineGrid.timelineCanvas.repaint();
+            myApp.timeline.timelineCanvas.repaint();
         }
 
         keyframe[property] = spinbox.value; 
