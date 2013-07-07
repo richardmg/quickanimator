@@ -15,8 +15,8 @@ TimelineGrid {
 
     Connections {
         target: myApp.model
-        onStatesUpdated: timelineList.repaint();
-        onLayersUpdated: timelineList.repaint();
+        onStatesUpdated: timelineCanvas.repaint();
+        onLayersUpdated: timelineCanvas.repaint();
         onTimeChanged: if (!_block) {
             selectedX = myApp.model.time;
             playTimer.startTimeMs = (selectedX * myApp.model.msPerFrame) - (new Date()).getTime();

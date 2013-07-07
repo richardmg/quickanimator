@@ -4,9 +4,9 @@ import QtQuick.Controls 1.0
 Item {
     id: root
 
-    property alias timelineList: timelineList
-    property alias selectedX: timelineList.selectedX
-    property alias selectedY: timelineList.selectedY
+    property alias timelineCanvas: timelineCanvas
+    property alias selectedX: timelineCanvas.selectedX
+    property alias selectedY: timelineCanvas.selectedY
     property var model
     
     signal clicked
@@ -14,8 +14,8 @@ Item {
 
     clip: true
 
-    TimelineList {
-        id: timelineList
+    TimelineCanvas {
+        id: timelineCanvas
         anchors.fill: parent
         model: root.model
         onClicked: root.clicked()
@@ -25,17 +25,17 @@ Item {
     Rectangle {
         id: selectorLine
         color: Qt.darker(myApp.style.accent, 1.3);
-        x: (timelineList.selectedX * timelineList.cellWidth) + (timelineList.cellWidth / 2) - 1
+        x: (timelineCanvas.selectedX * timelineCanvas.cellWidth) + (timelineCanvas.cellWidth / 2) - 1
         width: 1
         height: parent.height - y
     }
 
     Rectangle {
         id: selectorHandle
-        x: 1 + (timelineList.selectedX * timelineList.cellWidth)
-        y: -timelineList.flickable.contentY + (timelineList.selectedY * myApp.style.cellHeight)
+        x: 1 + (timelineCanvas.selectedX * timelineCanvas.cellWidth)
+        y: -timelineCanvas.flickable.contentY + (timelineCanvas.selectedY * myApp.style.cellHeight)
         z: 10
-        width: timelineList.cellWidth - 2
+        width: timelineCanvas.cellWidth - 2
         height: myApp.style.cellHeight - 1
         gradient: Gradient {
             GradientStop {

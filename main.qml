@@ -45,10 +45,10 @@ ApplicationWindow {
                 width: 2 * parent.width / 3
                 height: parent.height
                 Binding {
-                    property Item t: timeline.timelineList.flickable
+                    property Item t: timeline.timelineCanvas.flickable
                     target: t.moving ? null : t
                     property: "contentY"
-                    value: timelineSprites.timelineList.flickable.contentY
+                    value: timelineSprites.timelineCanvas.flickable.contentY
                 }
             }
         }

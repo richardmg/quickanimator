@@ -30,7 +30,7 @@ SpinBox {
 
         if (keyframe.time !== time) {
             keyframe = keyframe.sprite.createKeyframe(time);
-            myApp.timeline.timelineGrid.timelineList.repaint();
+            myApp.timeline.timelineGrid.timelineCanvas.repaint();
         }
 
         keyframe[property] = spinbox.value; 
