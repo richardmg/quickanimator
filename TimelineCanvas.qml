@@ -2,9 +2,9 @@ import QtQuick 2.1
 
 Rectangle {
     id: root
-    property int cellWidth: 10
-    property int selectedX: 0
-    property int selectedY: 0
+    property int cellWidth: myApp.style.cellWidth
+    property int mouseX: 0
+    property int mouseY: 0
     property var model: null
 
     property alias flickable: flickable
@@ -31,7 +31,7 @@ Rectangle {
     Flickable {
         id: flickable
         anchors.fill: parent
-        contentWidth: width
+        contentWidth: width * 2
         contentHeight: 20 * myApp.style.cellHeight
         pixelAligned: true
 
@@ -72,28 +72,15 @@ Rectangle {
 
             MouseArea {
                 anchors.fill: parent
-                property int supressFlickable:0
-                property int startY:0
-                onPressed: { 
-                    supressFlickable = 2
-                    startY = Math.max(0, Math.floor(mouseY / myApp.style.cellHeight))
+                onClicked: {
+                    var newX = Math.max(0, Math.floor(mouseX / myApp.style.cellWidth))
+                    if (newX != root.mouseX)
+                        root.mouseX = newX
+                    var newY = Math.max(0, Math.floor(mouseY / myApp.style.cellHeight))
+                    if (newY != root.mouseY)
+                        root.mouseY = newY
+                    root.clicked();
                 }
-                onReleased: flickable.interactive = true
-                onMouseXChanged: {
-                    var newSelectedX = Math.max(0, Math.floor(mouseX / cellWidth))
-                    if (newSelectedX != selectedX) {
-                        selectedX = newSelectedX
-                        if (--supressFlickable === 0)
-                            flickable.interactive = false
-                    }
-                    var newSelectedY = Math.max(0, Math.floor(mouseY / myApp.style.cellHeight))
-                    if (newSelectedY != selectedY) {
-                        if (supressFlickable > 0 && Math.abs(newSelectedY - startY) === 1)
-                            supressFlickable = 100;
-                        selectedY = newSelectedY
-                    }
-                }
-                onClicked: root.clicked();
                 onDoubleClicked: root.doubleClicked();
             }
         }

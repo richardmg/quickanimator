@@ -5,8 +5,8 @@ Item {
     id: root
 
     property alias timelineCanvas: timelineCanvas
-    property alias selectedX: timelineCanvas.selectedX
-    property alias selectedY: timelineCanvas.selectedY
+    property int selectedX: 0
+    property int selectedY: 0
     property var model
     
     signal clicked
@@ -18,22 +18,26 @@ Item {
         id: timelineCanvas
         anchors.fill: parent
         model: root.model
-        onClicked: root.clicked()
+        onClicked: {
+            root.selectedX = mouseX;
+            root.selectedY = mouseY;
+            root.clicked()
+        }
         onDoubleClicked: root.doubleClicked()
     }
 
     Rectangle {
         id: selectorLine
         color: Qt.darker(myApp.style.accent, 1.3);
-        x: (timelineCanvas.selectedX * timelineCanvas.cellWidth) + (timelineCanvas.cellWidth / 2) - 1
+        x: (selectedX * timelineCanvas.cellWidth) + (timelineCanvas.cellWidth / 2) - 1
         width: 1
         height: parent.height - y
     }
 
     Rectangle {
         id: selectorHandle
-        x: 1 + (timelineCanvas.selectedX * timelineCanvas.cellWidth)
-        y: -timelineCanvas.flickable.contentY + (timelineCanvas.selectedY * myApp.style.cellHeight)
+        x: 1 + (selectedX * timelineCanvas.cellWidth)
+        y: -timelineCanvas.flickable.contentY + (selectedY * myApp.style.cellHeight)
         z: 10
         width: timelineCanvas.cellWidth - 2
         height: myApp.style.cellHeight - 1
@@ -46,6 +50,40 @@ Item {
                 position: 1.0;
                 color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
             }
+        }
+    }
+
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        property bool acceptEvents: true
+
+        onPressed: {
+            var pos = mouseArea.mapToItem(selectorHandle, mouseX, mouseY)
+            acceptEvents = (pos.x > 0 && pos.y > 0 && pos.x < selectorHandle.width && pos.y < selectorHandle.height)
+            mouse.accepted = acceptEvents;
+        }
+
+        onMouseXChanged: {
+            if (!acceptEvents) {
+                mouse.accepted = false;
+                return;
+            }
+
+            var newX = Math.max(0, Math.floor(mouseX / myApp.style.cellWidth))
+            if (newX != root.mouseX)
+                selectedX = newX
+        }
+
+        onMouseYChanged: {
+            if (!acceptEvents) {
+                mouse.accepted = false;
+                return;
+            }
+
+            var newY = Math.max(0, Math.floor(mouseY / myApp.style.cellHeight))
+            if (newY != root.mouseY)
+                selectedY = newY
         }
     }
 }

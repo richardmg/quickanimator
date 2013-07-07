@@ -49,7 +49,7 @@ TitleBar {
             height: parent.height
             anchors.verticalCenter: parent.verticalCenter
             text: "Save"
-            onClicked: myApp.timeline.saveJSON();
+            onClicked: myApp.model.saveJSON();
         }
         SpinBox {
             id: msPerFrameBox
