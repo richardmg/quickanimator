@@ -70,9 +70,10 @@ Item {
                 return;
             }
 
-            var newX = Math.max(0, Math.floor(mouseX / myApp.style.cellWidth))
-            if (newX != root.mouseX)
-                selectedX = newX
+            var pos = mouseArea.mapToItem(timelineCanvas.flickable.contentItem, mouseX, mouseY)
+            var newX = Math.max(0, Math.floor(pos.x / myApp.style.cellWidth));
+            if (newX != selectedX)
+                selectedX = newX;
         }
 
         onMouseYChanged: {
@@ -81,9 +82,10 @@ Item {
                 return;
             }
 
-            var newY = Math.max(0, Math.floor(mouseY / myApp.style.cellHeight))
-            if (newY != root.mouseY)
-                selectedY = newY
+            var pos = mouseArea.mapToItem(timelineCanvas.flickable.contentItem, mouseX, mouseY)
+            var newY = Math.max(0, Math.floor(pos.y / myApp.style.cellHeight));
+            if (newY != selectedY)
+                selectedY = newY;
         }
     }
 }

@@ -18,7 +18,7 @@ Rectangle {
             color: Qt.lighter(myApp.style.accent, 1.5)
         }
         GradientStop {
-            position: 1.0;
+            position: 200.0 / height;
             color: Qt.lighter(myApp.style.accent, 1.1)
         }
     }
