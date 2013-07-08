@@ -37,6 +37,8 @@ Rectangle {
 
         Canvas {
             id: canvas
+            x: -1
+            y: -1
             width: flickable.contentWidth
             height: flickable.contentHeight
             renderTarget: Canvas.Image
@@ -48,9 +50,14 @@ Rectangle {
                 ctx.strokeStyle = Qt.darker(myApp.style.accent, 1.3);
                 ctx.lineWidth = 1
                 ctx.beginPath();
+
+                // Close table on left side:
+                ctx.moveTo(0, 0);
+                ctx.lineTo(0, 20 * myApp.style.cellHeight)
+
                 for (var row=0; row<20; ++row) {
-                    ctx.moveTo(0, (row * myApp.style.cellHeight) - 1);
-                    ctx.lineTo(width, (row * myApp.style.cellHeight) - 1)
+                    ctx.moveTo(0, row * myApp.style.cellHeight);
+                    ctx.lineTo(width, row * myApp.style.cellHeight)
 
                     var rowData = root.model[row];
                     if (rowData) {
@@ -63,7 +70,7 @@ Rectangle {
                         ctx.fillStyle = grd;
                         for (var c in sprite.keyframes) {
                             var state = sprite.keyframes[c];
-                            ctx.fillRect((state.time * cellWidth), (row * myApp.style.cellHeight), cellWidth, myApp.style.cellHeight - 1);
+                            ctx.fillRect((state.time * cellWidth) + 1, (row * myApp.style.cellHeight), cellWidth, myApp.style.cellHeight - 1);
                         }
                     }
                 }
