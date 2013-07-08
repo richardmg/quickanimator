@@ -15,7 +15,7 @@ Rectangle {
     gradient: Gradient {
         GradientStop {
             position: 0.0;
-            color: Qt.lighter(myApp.style.accent, 1.3)
+            color: Qt.lighter(myApp.style.accent, 1.5)
         }
         GradientStop {
             position: 1.0;
