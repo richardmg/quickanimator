@@ -14,6 +14,13 @@ TitleBar {
             anchors.verticalCenter: parent.verticalCenter
             onClicked: myApp.addImage("dummy.jpeg") 
         }
+        ToolButton {
+            text: " Keyframe"
+            height: parent.height
+            anchors.verticalCenter: parent.verticalCenter
+            checkable: true
+            onClicked: myApp.keyframeInfo.visible = checked
+        }
     }
 
     TitleBarRow {

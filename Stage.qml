@@ -16,17 +16,7 @@ Item {
         anchors.right: parent.right
         anchors.top: title.bottom
         anchors.bottom: parent.bottom
-
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0;
-                color: Qt.rgba(0.9, 0.9, 0.9, 1.0)
-            }
-            GradientStop {
-                position: 1.0;
-                color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
-            }
-        }
+        gradient: myApp.style.stageGradient
     }
 
     Item {

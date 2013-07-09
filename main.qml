@@ -10,6 +10,7 @@ ApplicationWindow {
     property alias timeline: timeline
     property alias stage: stage
     property MainToolbar mainToolbar
+    property alias keyframeInfo: keyframeInfo
 
     property Style style: Style {}
     property Model model: Model {}
@@ -22,11 +23,24 @@ ApplicationWindow {
             Component.onCompleted: myApp.mainToolbar = mainToolbar
         }
 
-        Stage {
-            id: stage
-            width: parent.width
+        SplitView {
             height: 2 * parent.height / 3
-            clip: true
+            width: parent.width
+            Rectangle {
+                id: keyframeInfo
+                width: parent.width / 3
+                gradient: myApp.style.stageGradient
+                visible: false
+                TitleBar {
+                    id: title
+                    title: "Keyframe"
+                }
+                onWidthChanged: timelineSprites.width = width
+            }
+            Stage {
+                id: stage
+                clip: true
+            }
         }
 
         SplitView {
@@ -38,6 +52,7 @@ ApplicationWindow {
                 id: timelineSprites
                 width: parent.width / 3
                 height: parent.height
+                onWidthChanged: keyframeInfo.width = width
             }
 
             Timeline {

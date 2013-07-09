@@ -5,4 +5,15 @@ QtObject {
     property color text: Qt.darker(myApp.style.accent, 1.5)
     property int cellWidth: 10
     property int cellHeight: 30
+
+    property Gradient stageGradient: Gradient {
+        GradientStop {
+            position: 0.0;
+            color: Qt.rgba(0.9, 0.9, 0.9, 1.0)
+        }
+        GradientStop {
+            position: 1.0;
+            color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
+        }
+    }
 }
