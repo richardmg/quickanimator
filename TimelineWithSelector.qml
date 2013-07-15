@@ -13,6 +13,32 @@ Item {
     signal doubleClicked
 
     clip: true
+    focus: true
+
+    Keys.onPressed: {
+        event.accepted = true;
+        switch (event.key) {
+            case Qt.Key_Backspace:
+                break;
+            case Qt.Key_Left:
+                if (selectedX > 0)
+                    selectedX--;
+                break;
+            case Qt.Key_Right:
+                selectedX++;
+                break;
+            case Qt.Key_Up:
+                if (selectedY > 0)
+                    selectedY--;
+                break;
+            case Qt.Key_Down:
+                selectedY++;
+                break;
+            default:
+                event.accepted = false;
+        }
+    }
+
 
     TimelineCanvas {
         id: timelineCanvas
