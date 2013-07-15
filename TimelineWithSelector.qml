@@ -21,13 +21,34 @@ Item {
             case Qt.Key_Backspace:
                 break;
             case Qt.Key_Left:
-                if (event.modifiers & Qt.ShiftModifier)
+                if (event.modifiers & Qt.ControlModifier) {
                     selectedX = 0;
-                else if (selectedX > 0)
+                } else if (event.modifiers & Qt.ShiftModifier) {
+                    var layer = myApp.model.layers[selectedY];
+                    if (layer) {
+                        var sprite = layer.sprite;
+                        var keyframe = sprite.keyframes[sprite.keyframeIndex - 1];
+                        if (keyframe)
+                            selectedX = keyframe.time
+                    }
+                } else if (selectedX > 0) {
                     selectedX--;
+                }
                 break;
             case Qt.Key_Right:
-                selectedX++;
+                if (event.modifiers & Qt.ControlModifier) {
+                    selectedX = 50;
+                } else if (event.modifiers & Qt.ShiftModifier) {
+                    var layer = myApp.model.layers[selectedY];
+                    if (layer) {
+                        var sprite = layer.sprite;
+                        var keyframe = sprite.keyframes[sprite.keyframeIndex + 1];
+                        if (keyframe)
+                            selectedX = keyframe.time
+                    }
+                } else {
+                    selectedX++;
+                }
                 break;
             case Qt.Key_Up:
                 if (event.modifiers & Qt.ShiftModifier)

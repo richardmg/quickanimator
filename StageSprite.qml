@@ -7,6 +7,7 @@ Item {
 
     property QtObject model: parent 
     property var keyframes: new Array()
+    property var keyframeIndex: 0
 
     property var spriteTime: 0
     property string name: "unknown"
@@ -14,7 +15,6 @@ Item {
 
     property var _fromState
     property var _toState
-    property var _currentIndex: 0
     property bool _invalidCache: true
 
     property NumberAnimation _animation_x: NumberAnimation{ target: sprite; property: "x" }
@@ -36,16 +36,16 @@ Item {
 
             var after = _toState.after;
             if (after) {
-                var tmpIndex = _currentIndex
+                var tmpIndex = keyframeIndex
                 after(sprite);
-                if (tmpIndex !== _currentIndex)
+                if (tmpIndex !== keyframeIndex)
                     return;
             }
 
-            if (_currentIndex < keyframes.length - 1) {
-                _currentIndex++;
+            if (keyframeIndex < keyframes.length - 1) {
+                keyframeIndex++;
                 _fromState = _toState;
-                _toState = (_currentIndex === keyframes.length - 1) ? _fromState : keyframes[_currentIndex + 1];
+                _toState = (keyframeIndex === keyframes.length - 1) ? _fromState : keyframes[keyframeIndex + 1];
             }
             _play();
         }
@@ -163,8 +163,8 @@ Item {
         _invalidCache = _invalidCache || !_fromState || !_toState || time < _fromState.time || time >= _toState.time;
         if (_invalidCache) {
             _fromState = _getStateBinarySearch(time);
-            _currentIndex = _fromState.lastSearchIndex;
-            _toState = (_currentIndex === keyframes.length - 1) ? _fromState : keyframes[_currentIndex + 1];
+            keyframeIndex = _fromState.lastSearchIndex;
+            _toState = (keyframeIndex === keyframes.length - 1) ? _fromState : keyframes[keyframeIndex + 1];
             _invalidCache = false;
         }
     }
