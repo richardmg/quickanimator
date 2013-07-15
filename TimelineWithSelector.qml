@@ -21,14 +21,18 @@ Item {
             case Qt.Key_Backspace:
                 break;
             case Qt.Key_Left:
-                if (selectedX > 0)
+                if (event.modifiers & Qt.ShiftModifier)
+                    selectedX = 0;
+                else if (selectedX > 0)
                     selectedX--;
                 break;
             case Qt.Key_Right:
                 selectedX++;
                 break;
             case Qt.Key_Up:
-                if (selectedY > 0)
+                if (event.modifiers & Qt.ShiftModifier)
+                    selectedY = 0;
+                 else if (selectedY > 0)
                     selectedY--;
                 break;
             case Qt.Key_Down:
