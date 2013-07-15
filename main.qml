@@ -26,15 +26,11 @@ ApplicationWindow {
         SplitView {
             height: 2 * parent.height / 3
             width: parent.width
-            Rectangle {
+            handleDelegate: SplitHandle {}
+            KeyframeInfo {
                 id: keyframeInfo
                 width: parent.width / 3
-                gradient: myApp.style.stageGradient
                 visible: false
-                TitleBar {
-                    id: title
-                    title: "Keyframe"
-                }
                 onWidthChanged: timelineSprites.width = width
             }
             Stage {
