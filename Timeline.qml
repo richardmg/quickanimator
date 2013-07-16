@@ -35,6 +35,7 @@ TimelineWithSelector {
         if (play) {
             fps.fps2 = 0;
             playTimer.startTimeMs = (selectedX * myApp.model.msPerFrame) - (new Date()).getTime();
+            myApp.model.setFocusLayer(-1);
         } else {
             myApp.model.setTime(selectedX);
             myApp.model.setFocusLayer(selectedY);
