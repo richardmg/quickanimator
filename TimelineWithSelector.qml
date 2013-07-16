@@ -27,9 +27,13 @@ Item {
                     var layer = myApp.model.layers[selectedY];
                     if (layer) {
                         var sprite = layer.sprite;
-                        var keyframe = sprite.keyframes[sprite.keyframeIndex - 1];
-                        if (keyframe)
-                            selectedX = keyframe.time
+                        var keyframe = sprite.keyframes[sprite.keyframeIndex];
+                        if (keyframe) {
+                            if (keyframe.time == selectedX)
+                                keyframe = sprite.keyframes[sprite.keyframeIndex - 1];
+                            if (keyframe)
+                                selectedX = keyframe.time
+                        }
                     }
                 } else if (selectedX > 0) {
                     selectedX--;
