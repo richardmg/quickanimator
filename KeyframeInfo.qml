@@ -84,7 +84,7 @@ Rectangle {
             }
             ItemSpinBox {
                 property: "rotation"
-                stepSize: 45
+                stepSize: 1
             }
             ItemComboBox { }
             Label {

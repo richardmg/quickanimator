@@ -15,23 +15,17 @@ SpinBox {
     property bool _guard: false
 
     Connections {
-        target: myApp.timeline
-        onSelectedStateChanged: _updateState();
+        target: myApp.model
+        onFocusStateChanged: _updateState();
     }
-
     onPropertyChanged: _updateState();
 
     onValueChanged: {
         if (_guard)
             return;
 
-        var keyframe = myApp.timeline.selectedKeyframe;
-        var time = myApp.timeline.selectedX;
-
-        if (keyframe.time !== time) {
-            keyframe = keyframe.sprite.createKeyframe(time);
-            myApp.timeline.timelineCanvas.repaint();
-        }
+        var keyframe = myApp.model.focusState
+        var time = myApp.model.time;
 
         keyframe[property] = spinbox.value; 
         keyframe.sprite[property] = spinbox.value;
@@ -39,14 +33,12 @@ SpinBox {
 
     function _updateState()
     {
-        if (!myApp.timeline)
-            return;
         if (_boundTarget)  {
             spinbox._boundTarget[_boundProperty].disconnect(targetListener)
             _boundTarget = null;
         }
 
-        var keyframe = myApp.timeline.selectedKeyframe;
+        var keyframe = myApp.model.focusState;
 
         if (property === "" || !keyframe) {
             _guard = true;
@@ -67,7 +59,7 @@ SpinBox {
 
     function targetListener() {
         _guard = true;
-        spinbox.value = myApp.timeline.selectedKeyframe.sprite[property];
+        spinbox.value = myApp.model.focusState.sprite[property];
         _guard = false;
     }
 }
