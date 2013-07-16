@@ -8,7 +8,7 @@ QtObject {
     property int layerCount: 0
     property var layers: new Array()
     property var selectedLayers: new Array()
-    property var focusLayer: null
+    property var focusLayerIndex: 0
     property var focusState: null
     property int msPerFrame: 500
 
@@ -32,8 +32,9 @@ QtObject {
             var layer = layers[l];
             layer.sprite.setTime(time, tweenMode);
         }
-        if (root.focusLayer) {
-            var state = root.focusLayer.sprite.getCurrentState();
+        var layer = layers[focusLayerIndex];
+        if (layer) {
+            var state = layer.sprite.getCurrentState();
             root.focusState =  (state && state.time === state.sprite.spriteTime) ? state : null;
         }
     }
@@ -41,10 +42,11 @@ QtObject {
     function setFocusLayer(layerIndex)
     {
         // Get the state that should be shown for the user to edit:
+        focusLayerIndex = layerIndex;
         var foundState = null;
-        root.focusLayer = layers[layerIndex];
-        if (root.focusLayer) {
-            var state = root.focusLayer.sprite.getCurrentState();
+        var layer = layers[focusLayerIndex];
+        if (layer) {
+            var state = layer.sprite.getCurrentState();
             root.focusState =  (state && state.time === state.sprite.spriteTime) ? state : null;
         } else {
             root.focusState = null;
@@ -60,6 +62,7 @@ QtObject {
         layer.sprite.setTime(0, false);
         selectLayer(layer, true);
         layersUpdated(-1, layers.length);
+        setFocusLayer(focusLayerIndex);
     }
 
     function getState(layer, time)
