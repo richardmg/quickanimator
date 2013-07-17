@@ -111,7 +111,7 @@ Rectangle {
             Button {
                 Layout.columnSpan: 3
                 text: "Remove state"
-                onClicked: timeline.removeCurrentState();
+                onClicked: myApp.model.removeCurrentState();
             }
         }
     }

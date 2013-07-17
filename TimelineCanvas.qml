@@ -50,6 +50,7 @@ Rectangle {
                 ctx.strokeStyle = Qt.darker(myApp.style.accent, 1.3);
                 ctx.lineWidth = 1
                 ctx.beginPath();
+                ctx.clearRect(0, 0, width, height);
 
                 // Close table on left side:
                 ctx.moveTo(0, 0);
