@@ -114,6 +114,7 @@ Item {
         property bool acceptEvents: true
 
         onPressed: {
+            root.focus = true
             var pos = mouseArea.mapToItem(selectorHandle, mouseX, mouseY)
             acceptEvents = (pos.x > 0 && pos.y > 0 && pos.x < selectorHandle.width && pos.y < selectorHandle.height)
             mouse.accepted = acceptEvents;
