@@ -19,6 +19,7 @@ Item {
         event.accepted = true;
         switch (event.key) {
             case Qt.Key_Backspace:
+                myApp.model.removeCurrentState();
                 break;
             case Qt.Key_Left:
                 if (event.modifiers & Qt.ControlModifier) {

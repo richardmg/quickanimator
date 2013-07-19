@@ -121,6 +121,8 @@ QtObject {
 
     function removeCurrentState()
     {
+        if (selectedLayers.length == 0)
+            return;
         selectedLayers[0].sprite.removeCurrentState(tweenMode);
         statesUpdated(layers.indexOf(selectedLayers[0]));
     }
