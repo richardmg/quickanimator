@@ -83,6 +83,10 @@ Item {
             case Qt.Key_Down:
                 selectedY++;
                 break;
+            case Qt.Key_R:
+                if (event.modifiers & Qt.ControlModifier)
+                    togglePlay(!playTimer.running);
+                break;
             default:
                 event.accepted = false;
         }
