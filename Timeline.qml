@@ -45,31 +45,33 @@ Item {
                     selectedX = 0;
                 } else if (event.modifiers & Qt.ShiftModifier) {
                     var layer = myApp.model.layers[selectedY];
-                    if (layer) {
-                        var sprite = layer.sprite;
-                        var keyframe = sprite.keyframes[sprite.keyframeIndex];
-                        if (keyframe) {
-                            if (keyframe.time == selectedX)
-                                keyframe = sprite.keyframes[sprite.keyframeIndex - 1];
-                            if (keyframe)
-                                selectedX = keyframe.time
-                        }
+                    if (!layer)
+                        return;
+                    var sprite = layer.sprite;
+                    var keyframe = sprite.keyframes[sprite.keyframeIndex];
+                    if (keyframe) {
+                        if (keyframe.time == selectedX)
+                            keyframe = sprite.keyframes[sprite.keyframeIndex - 1];
+                        if (keyframe)
+                            selectedX = keyframe.time
                     }
                 } else if (selectedX > 0) {
                     selectedX--;
                 }
                 break;
             case Qt.Key_Right:
+                var layer = myApp.model.layers[selectedY];
+                if (!layer)
+                    return;
+                var sprite = layer.sprite;
                 if (event.modifiers & Qt.ControlModifier) {
-                    selectedX = 50;
+                    var keyframe = sprite.keyframes[sprite.keyframes.length-1];
+                    if (keyframe)
+                        selectedX = keyframe.time
                 } else if (event.modifiers & Qt.ShiftModifier) {
-                    var layer = myApp.model.layers[selectedY];
-                    if (layer) {
-                        var sprite = layer.sprite;
-                        var keyframe = sprite.keyframes[sprite.keyframeIndex + 1];
-                        if (keyframe)
-                            selectedX = keyframe.time
-                    }
+                    var keyframe = sprite.keyframes[sprite.keyframeIndex + 1];
+                    if (keyframe)
+                        selectedX = keyframe.time
                 } else {
                     selectedX++;
                 }
