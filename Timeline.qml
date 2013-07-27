@@ -77,13 +77,18 @@ Item {
                 }
                 break;
             case Qt.Key_Up:
-                if (event.modifiers & Qt.ShiftModifier)
+                if (event.modifiers & Qt.ControlModifier) {
                     selectedY = 0;
+                } else if (event.modifiers & Qt.ShiftModifier)
+                    selectedY = Math.max(0, selectedY - 3);
                  else if (selectedY > 0)
                     selectedY--;
                 break;
             case Qt.Key_Down:
-                selectedY++;
+                if (event.modifiers & Qt.ShiftModifier)
+                    selectedY = selectedY + 3;
+                else
+                    selectedY++;
                 break;
             case Qt.Key_R:
                 if (event.modifiers & Qt.ControlModifier)
