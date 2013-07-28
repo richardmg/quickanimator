@@ -76,9 +76,18 @@ Rectangle {
                 drag.axis: Drag.XAndYAxis
                 property var currentDelegate
 
+                function insideLabel(mouseX, mouseY)
+                {
+                    var l = currentDelegate.treeLabel; 
+                    var mapped = area.mapToItem(l, mouseX, mouseY)
+                    return (mapped.x >= 0 && mapped.x <= l.width
+                            && mapped.y >= -margin && mapped.y <= l.height + margin);
+                }
+
                 onPositionChanged: {
                     if (!drag.active)
                         return;
+                    delegate.z = 10;
                     if (currentDelegate) {
                         currentDelegate.highlight = false;
                         currentDelegate.treeLabel.highlight = false;
@@ -88,38 +97,39 @@ Rectangle {
                     currentDelegate = listView.itemAt(mapped.x, mapped.y);
 
                     if (currentDelegate && currentDelegate != delegate) {
-                        var label = currentDelegate.treeLabel;
-                        mapped = area.mapToItem(label, mouseX, mouseY)
-
-                        if (mapped.x >= 0 && mapped.x <= label.width
-                            && mapped.y >= -margin && mapped.y <= label.height + margin) {
-                            label.highlight = true;
-                        } else {
+                        if (insideLabel(mouseX, mouseY))
+                            currentDelegate.treeLabel.highlight = true;
+                        else
                             currentDelegate.highlight = true;
-                        }
                     }
                 }
 
                 onReleased: {
+                    delegate.z = 0;
                     if (currentDelegate) {
                         currentDelegate.highlight = false;
                         currentDelegate.treeLabel.highlight = false;
 
                         if (currentDelegate != delegate) {
-                            // reparent
-                            var mapped = area.mapToItem(listView, mouseX, mouseY)
-                            var newIndex = listView.indexAt(mapped.x, mapped.y);
-                            var layers = myApp.model.layers;
-                            var removed = layers.splice(index2, 1)[0];
-                            if (newIndex < index2)
-                                layers.splice(newIndex, 0, removed)
-                            else
-                                layers.splice(newIndex - 1, 0, removed)
+                            if (insideLabel(mouseX, mouseY)) {
+                                // reparent
+                                var mapped = area.mapToItem(listView, mouseX, mouseY)
+                                var newIndex = listView.indexAt(mapped.x, mapped.y);
+                                var layers = myApp.model.layers;
+                                var removed = layers.splice(index2, 1)[0];
+                                if (newIndex < index2)
+                                    layers.splice(newIndex, 0, removed)
+                                else
+                                    layers.splice(newIndex - 1, 0, removed)
+                            } else {
+                                // make sibling
+                                print("sibling")
+                            }
                         }
 
                         currentDelegate = null;
-                        listModel.syncWithModel();
                     }
+                    listModel.syncWithModel();
                 }
             }
         }
