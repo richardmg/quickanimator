@@ -57,6 +57,7 @@ QtObject {
         unselectAllLayers();
         layers.push(layer);
         layer.selected = false;
+        layer.parentLayer = null;
         layer.sprite.createKeyframe(0);
         layer.sprite.setTime(0, false);
         selectLayer(layer, true);

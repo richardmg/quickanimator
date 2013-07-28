@@ -109,21 +109,32 @@ Rectangle {
                     if (currentDelegate) {
                         currentDelegate.highlight = false;
                         currentDelegate.treeLabel.highlight = false;
+                        var layers = myApp.model.layers;
 
                         if (currentDelegate != delegate) {
                             if (insideLabel(mouseX, mouseY)) {
                                 // reparent
                                 var mapped = area.mapToItem(listView, mouseX, mouseY)
                                 var newIndex = listView.indexAt(mapped.x, mapped.y);
-                                var layers = myApp.model.layers;
-                                var removed = layers.splice(index2, 1)[0];
+                                var draggedLayer = layers.splice(index2, 1)[0];
                                 if (newIndex < index2)
-                                    layers.splice(newIndex, 0, removed)
+                                    layers.splice(newIndex + 1, 0, draggedLayer)
                                 else
-                                    layers.splice(newIndex - 1, 0, removed)
+                                    layers.splice(newIndex, 0, draggedLayer)
+                                draggedLayer.parentLayer = layers[newIndex];
+                                draggedLayer.sprite.parent = draggedLayer.parentLayer.sprite;
                             } else {
                                 // make sibling
                                 print("sibling")
+                                mapped = area.mapToItem(listView, mouseX, mouseY)
+                                newIndex = listView.indexAt(mapped.x, mapped.y);
+                                draggedLayer = layers.splice(index2, 1)[0];
+                                if (newIndex < index2)
+                                    layers.splice(newIndex, 0, draggedLayer)
+                                else
+                                    layers.splice(newIndex - 1, 0, draggedLayer)
+//                                draggedLayer.parentLayer = layers[index2];
+//                                draggedLayer.sprite.parent = draggedLayer.parentLayer.sprite;
                             }
                         }
 
