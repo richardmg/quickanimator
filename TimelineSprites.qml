@@ -32,24 +32,31 @@ Rectangle {
         anchors.fill: parent
         flickableDirection: Flickable.HorizontalAndVerticalFlick
         model: listModel
+
         delegate: Rectangle {
             id: delegate
             width: parent.width
             height: myApp.style.cellHeight
-            color: "transparent"
+            color: highlight ? "red" : "transparent"
+
+            property int margin: 2
+            property alias treeLabel: treeLabel
             property bool highlight: false
             property int index2: index
+
             Rectangle {
                 height: 1
                 width: parent.width
                 color: myApp.style.timelineline
                 anchors.bottom: parent.bottom
             }
+
             Rectangle {
                 id: treeLabel
-                color: delegate.highlight ? "red" : myApp.style.timelineline
+                property bool highlight: false
+                color: highlight ? "red" : myApp.style.timelineline
                 x: 10
-                y: 2
+                y: margin
                 height: parent.height - 5
                 width: label.width + 20
                 radius: 3
@@ -60,44 +67,58 @@ Rectangle {
                     property var modelLayer: myApp.model.layers[index]
                     text: modelLayer ? modelLayer.name : ""
                 }
-                MouseArea {
-                    id: area
-                    anchors.fill: parent
-                    drag.target: treeLabel
-                    drag.axis: Drag.XAndYAxis
-                    property var currentHighlight
+            }
 
-                    onPositionChanged: {
-                        if (!drag.active)
-                            return;
-                        var mapped = area.mapToItem(listView, mouseX, mouseY)
-                        var treeDelegate = listView.itemAt(mapped.x, mapped.y);
-                        if (treeDelegate != currentHighlight) {
-                            if (currentHighlight)
-                                currentHighlight.highlight = false;
-                            currentHighlight = treeDelegate;
-                            if (currentHighlight)
-                                currentHighlight.highlight = true
-                        }
+            MouseArea {
+                id: area
+                anchors.fill: delegate
+                drag.target: treeLabel
+                drag.axis: Drag.XAndYAxis
+                property var currentDelegate
+
+                onPositionChanged: {
+                    if (!drag.active)
+                        return;
+                    if (currentDelegate) {
+                        currentDelegate.highlight = false;
+                        currentDelegate.treeLabel.highlight = false;
                     }
 
-                    onReleased: {
-                        if (currentHighlight) {
-                            currentHighlight.highlight = false;
-                            if (currentHighlight != delegate) {
-                                // reparent
-                                var mapped = area.mapToItem(listView, mouseX, mouseY)
-                                var newIndex = listView.indexAt(mapped.x, mapped.y);
-                                var layers = myApp.model.layers;
-                                var removed = layers.splice(index2, 1)[0];
-                                if (newIndex < index2)
-                                    layers.splice(newIndex, 0, removed)
-                                else
-                                    layers.splice(newIndex - 1, 0, removed)
-                            }
-                            currentHighlight = null;
-                            listModel.syncWithModel();
+                    var mapped = area.mapToItem(listView, mouseX, mouseY)
+                    currentDelegate = listView.itemAt(mapped.x, mapped.y);
+
+                    if (currentDelegate != delegate) {
+                        var label = currentDelegate.treeLabel;
+                        mapped = area.mapToItem(label, mouseX, mouseY)
+
+                        if (mapped.x >= 0 && mapped.x <= label.width
+                            && mapped.y >= -margin && mapped.y <= label.height + margin) {
+                            label.highlight = true;
+                        } else {
+                            currentDelegate.highlight = true;
                         }
+                    }
+                }
+
+                onReleased: {
+                    if (currentDelegate) {
+                        currentDelegate.highlight = false;
+                        currentDelegate.treeLabel.highlight = false;
+
+                        if (currentDelegate != delegate) {
+                            // reparent
+                            var mapped = area.mapToItem(listView, mouseX, mouseY)
+                            var newIndex = listView.indexAt(mapped.x, mapped.y);
+                            var layers = myApp.model.layers;
+                            var removed = layers.splice(index2, 1)[0];
+                            if (newIndex < index2)
+                                layers.splice(newIndex, 0, removed)
+                            else
+                                layers.splice(newIndex - 1, 0, removed)
+                        }
+
+                        currentDelegate = null;
+                        listModel.syncWithModel();
                     }
                 }
             }
