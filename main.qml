@@ -55,12 +55,21 @@ ApplicationWindow {
                 id: timeline
                 width: 2 * parent.width / 3
                 height: parent.height
-                Binding {
-                    property Item t: timeline.timelineCanvas.flickable
-                    target: t.moving ? null : t
-                    property: "contentY"
-                    value: timelineSprites.timelineCanvas.flickable.contentY
-                }
+            }
+
+            // Sync the two timeline flickables:
+            Binding {
+                property Item t: timelineSprites.flickable
+                target: t.moving ? null : t
+                property: "contentY"
+                value: myApp.timeline.timelineCanvas.flickable.contentY
+            }
+
+            Binding {
+                property Item t: timeline.timelineCanvas.flickable
+                target: t.moving ? null : t
+                property: "contentY"
+                value: timelineSprites.flickable.contentY
             }
         }
     }
@@ -81,7 +90,8 @@ ApplicationWindow {
     {
         var layer = {}
         layer.sprite = stageSpriteComponent.createObject(stage.sprites)
-        layer.sprite.name =  "sprite_" + nextSpriteNr++;
+        layer.name =  "sprite_" + nextSpriteNr++;
         model.addLayer(layer);
+        timelineSprites.model.append({});
     }
 }

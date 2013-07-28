@@ -47,7 +47,7 @@ Rectangle {
 
             onPaint: {
                 var ctx = getContext('2d');        
-                ctx.strokeStyle = Qt.darker(myApp.style.accent, 1.3);
+                ctx.strokeStyle = myApp.style.timelineline;
                 ctx.lineWidth = 1
                 ctx.beginPath();
                 ctx.clearRect(0, 0, width, height);
@@ -56,7 +56,7 @@ Rectangle {
                 ctx.moveTo(0, 0);
                 ctx.lineTo(0, 20 * myApp.style.cellHeight)
 
-                for (var row=0; row<20; ++row) {
+                for (var row=0; row<myApp.model.layers.length + 1; ++row) {
                     ctx.moveTo(0, row * myApp.style.cellHeight);
                     ctx.lineTo(width, row * myApp.style.cellHeight)
 
@@ -77,7 +77,7 @@ Rectangle {
                 }
                 ctx.stroke();
             }
-
+        
             MouseArea {
                 anchors.fill: parent
                 onClicked: {

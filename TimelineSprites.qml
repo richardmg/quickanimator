@@ -1,20 +1,53 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.0
 
-Item {
-    property alias timelineCanvas: timelineCanvas
+Rectangle {
+    property alias flickable: listView
+    property alias model: listModel
 
-    TimelineCanvas {
-        id: timelineCanvas
-        model: 50
-        width: parent.width
-        height: parent.height
-        
-        Binding {
-            property Item t: timelineCanvas.flickable
-            target: t.moving ? null : t
-            property: "contentY"
-            value: myApp.timeline.timelineCanvas.flickable.contentY
+    gradient: Gradient {
+        GradientStop {
+            position: 0.0;
+            color: Qt.lighter(myApp.style.accent, 1.5)
+        }
+        GradientStop {
+            position: 200.0 / height;
+            color: Qt.lighter(myApp.style.accent, 1.1)
         }
     }
+
+    ListModel {
+        id: listModel
+    }
+
+    ListView {
+        id: listView
+        anchors.fill: parent
+        flickableDirection: Flickable.HorizontalAndVerticalFlick
+        model: listModel
+        delegate: Rectangle {
+            width: parent.width
+            height: myApp.style.cellHeight
+            color: "transparent"
+            Rectangle {
+                height: 1
+                width: parent.width
+                color: myApp.style.timelineline
+                anchors.bottom: parent.bottom
+            }
+            Rectangle {
+                color: myApp.style.timelineline
+                height: parent.height - 4
+                width: childrenRect.width + 20
+                anchors.verticalCenter: parent.verticalCenter
+                radius: 3
+                Label {
+                    x: 10
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: myApp.model.layers[index].name
+                }
+            }
+        }
+    }
+
 }

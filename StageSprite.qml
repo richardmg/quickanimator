@@ -10,7 +10,7 @@ Item {
     property var keyframeIndex: 0
 
     property var spriteTime: 0
-    property string name: "unknown"
+    property string name: "keyframe"
     property bool playing: false
 
     property var _fromState
@@ -84,7 +84,7 @@ Item {
             x:sprite.x,
             y:sprite.y,
             z:sprite.z,
-            name:name + "_" + time,
+            name:name + time,
             width:sprite.width,
             height:sprite.height,
             rotation:sprite.rotation,
