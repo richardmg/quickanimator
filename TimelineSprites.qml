@@ -87,7 +87,7 @@ Rectangle {
                     var mapped = area.mapToItem(listView, mouseX, mouseY)
                     currentDelegate = listView.itemAt(mapped.x, mapped.y);
 
-                    if (currentDelegate != delegate) {
+                    if (currentDelegate && currentDelegate != delegate) {
                         var label = currentDelegate.treeLabel;
                         mapped = area.mapToItem(label, mouseX, mouseY)
 
