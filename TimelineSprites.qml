@@ -18,6 +18,13 @@ Rectangle {
 
     ListModel {
         id: listModel
+        function syncWithModel()
+        {
+            clear();
+            var layers = myApp.model.layers;
+            for (var i=0; i<layers.length; ++i)
+                append({})
+        }
     }
 
     ListView {
@@ -31,6 +38,7 @@ Rectangle {
             height: myApp.style.cellHeight
             color: "transparent"
             property bool highlight: false
+            property int index2: index
             Rectangle {
                 height: 1
                 width: parent.width
@@ -49,7 +57,8 @@ Rectangle {
                     id: label
                     x: 10
                     anchors.verticalCenter: parent.verticalCenter
-                    text: myApp.model.layers[index].name
+                    property var modelLayer: myApp.model.layers[index]
+                    text: modelLayer ? modelLayer.name : ""
                 }
                 MouseArea {
                     id: area
@@ -59,6 +68,8 @@ Rectangle {
                     property var currentHighlight
 
                     onPositionChanged: {
+                        if (!drag.active)
+                            return;
                         var mapped = area.mapToItem(listView, mouseX, mouseY)
                         var treeDelegate = listView.itemAt(mapped.x, mapped.y);
                         if (treeDelegate != currentHighlight) {
@@ -73,7 +84,19 @@ Rectangle {
                     onReleased: {
                         if (currentHighlight) {
                             currentHighlight.highlight = false;
+                            if (currentHighlight != delegate) {
+                                // reparent
+                                var mapped = area.mapToItem(listView, mouseX, mouseY)
+                                var newIndex = listView.indexAt(mapped.x, mapped.y);
+                                var layers = myApp.model.layers;
+                                var removed = layers.splice(index2, 1)[0];
+                                if (newIndex < index2)
+                                    layers.splice(newIndex, 0, removed)
+                                else
+                                    layers.splice(newIndex - 1, 0, removed)
+                            }
                             currentHighlight = null;
+                            listModel.syncWithModel();
                         }
                     }
                 }
