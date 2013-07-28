@@ -26,9 +26,11 @@ Rectangle {
         flickableDirection: Flickable.HorizontalAndVerticalFlick
         model: listModel
         delegate: Rectangle {
+            id: delegate
             width: parent.width
             height: myApp.style.cellHeight
             color: "transparent"
+            property bool highlight: false
             Rectangle {
                 height: 1
                 width: parent.width
@@ -36,15 +38,44 @@ Rectangle {
                 anchors.bottom: parent.bottom
             }
             Rectangle {
-                color: myApp.style.timelineline
-                height: parent.height - 4
-                width: childrenRect.width + 20
-                anchors.verticalCenter: parent.verticalCenter
+                id: treeLabel
+                color: delegate.highlight ? "red" : myApp.style.timelineline
+                x: 10
+                y: 2
+                height: parent.height - 5
+                width: label.width + 20
                 radius: 3
                 Label {
+                    id: label
                     x: 10
                     anchors.verticalCenter: parent.verticalCenter
                     text: myApp.model.layers[index].name
+                }
+                MouseArea {
+                    id: area
+                    anchors.fill: parent
+                    drag.target: treeLabel
+                    drag.axis: Drag.XAndYAxis
+                    property var currentHighlight
+
+                    onPositionChanged: {
+                        var mapped = area.mapToItem(listView, mouseX, mouseY)
+                        var treeDelegate = listView.itemAt(mapped.x, mapped.y);
+                        if (treeDelegate != currentHighlight) {
+                            if (currentHighlight)
+                                currentHighlight.highlight = false;
+                            currentHighlight = treeDelegate;
+                            if (currentHighlight)
+                                currentHighlight.highlight = true
+                        }
+                    }
+
+                    onReleased: {
+                        if (currentHighlight) {
+                            currentHighlight.highlight = false;
+                            currentHighlight = null;
+                        }
+                    }
                 }
             }
         }
