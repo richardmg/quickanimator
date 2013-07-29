@@ -39,13 +39,16 @@ Item {
 
         function overlapsHandle(pos)
         {
-            for (var i in myApp.model.selectedLayers) {
-                var layer = myApp.model.selectedLayers[i]
-                var sprite = layer.sprite
-                var cx = sprite.x + (sprite.width / 2)
-                var cy = sprite.y + (sprite.height / 2)
-                var dx = pos.x - cx
-                var dy = pos.y - cy
+            var layers = myApp.model.layers;
+            for (var i=layers.length - 1; i>=0; --i) {
+                var sprite = layers[i].sprite
+                var m = sprite.mapFromItem(sprites, pos.x, pos.y);
+
+                if (m.x < 0 || m.x > sprite.width || m.y < 0 && m.y > sprite.height)
+                    continue;
+
+                var dx = m.x - (sprite.width / 2);
+                var dy = m.y - (sprite.height / 2);
                 var len = Math.sqrt((dx * dx) + (dy * dy))
                 if (len < focusSize)
                     return layer
