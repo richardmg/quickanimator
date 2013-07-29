@@ -141,10 +141,9 @@ QtObject {
     {
         for (var i=layers.length - 1; i>=0; --i) {
             var sprite = layers[i].sprite
-            if (p.x >= sprite.x && p.x <= sprite.x + sprite.width
-                && p.y >= sprite.y && p.y <= sprite.y + sprite.height) {
+            var m = sprite.mapFromItem(myApp.stage.sprites, p.x, p.y);
+            if (m.x >= 0 && m.x <= sprite.width && m.y >= 0 && m.y <= sprite.height)
                 return layers[i]
-            }
         }
     }
 
