@@ -2,8 +2,6 @@ import QtQuick 2.1
 
 Item {
     id: sprite
-    width: childrenRect.width
-    height: childrenRect.height
 
     property QtObject model: parent 
     property var keyframes: new Array()

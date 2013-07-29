@@ -78,7 +78,10 @@ ApplicationWindow {
         id: stageSpriteComponent
         StageSprite {
             model: myApp.model
+            width: image.width
+            height: image.height
             Image {
+                id: image
                 source: "dummy.jpeg"
             }
         }
