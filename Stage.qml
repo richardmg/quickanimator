@@ -180,8 +180,8 @@ Item {
         Rectangle {
             id: layerFocusItem
             property Item target: root
-            x: focusFrames.mapFromItem(target, (target.width / 2) - focusSize, (target.height / 2) - focusSize).x
-            y: focusFrames.mapFromItem(target, (target.width / 2) - focusSize, (target.height / 2) - focusSize).y
+            x: focusFrames.mapFromItem(target, (target.width / 2), (target.height / 2)).x - focusSize
+            y: focusFrames.mapFromItem(target, (target.width / 2), (target.height / 2)).y - focusSize
             width: focusSize * 2
             height: focusSize * 2
             color: "transparent"
@@ -193,9 +193,9 @@ Item {
             Connections {
                 target: layerFocusItem.target
                 onXChanged: layerFocusItem.x = focusFrames.mapFromItem(target,
-                            (target.width / 2) - focusSize, (target.height / 2) - focusSize).x;
+                            (target.width / 2), (target.height / 2)).x - focusSize;
                 onYChanged: layerFocusItem.y = focusFrames.mapFromItem(target,
-                            (target.width / 2) - focusSize, (target.height / 2) - focusSize).y;
+                            (target.width / 2), (target.height / 2)).y - focusSize;
             }
         }
     }
