@@ -178,9 +178,10 @@ Item {
     Component {
         id: layerFocus
         Rectangle {
+            id: layerFocusItem
             property Item target: root
-            x: target.x + (target.width / 2) - focusSize
-            y: target.y + (target.height / 2) - focusSize
+            x: focusFrames.mapFromItem(target, (target.width / 2) - focusSize, (target.height / 2) - focusSize).x
+            y: focusFrames.mapFromItem(target, (target.width / 2) - focusSize, (target.height / 2) - focusSize).y
             width: focusSize * 2
             height: focusSize * 2
             color: "transparent"
@@ -188,6 +189,14 @@ Item {
             border.width: 3
             border.color: Qt.rgba(255, 0, 0, 0.7)
             smooth: true
+
+            Connections {
+                target: layerFocusItem.target
+                onXChanged: layerFocusItem.x = focusFrames.mapFromItem(target,
+                            (target.width / 2) - focusSize, (target.height / 2) - focusSize).x;
+                onYChanged: layerFocusItem.y = focusFrames.mapFromItem(target,
+                            (target.width / 2) - focusSize, (target.height / 2) - focusSize).y;
+            }
         }
     }
 
