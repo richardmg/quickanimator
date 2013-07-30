@@ -203,12 +203,18 @@ Item {
             border.color: Qt.rgba(255, 0, 0, 0.7)
             smooth: true
 
+            function syncFocusPosition()
+            {
+                var mapped = focusFrames.mapFromItem(target, (target.width / 2), (target.height / 2));
+                layerFocusItem.x = mapped.x - focusSize;
+                layerFocusItem.y = mapped.y - focusSize;
+            }
+
             Connections {
                 target: layerFocusItem.target
-                onXChanged: layerFocusItem.x = focusFrames.mapFromItem(target,
-                            (target.width / 2), (target.height / 2)).x - focusSize;
-                onYChanged: layerFocusItem.y = focusFrames.mapFromItem(target,
-                            (target.width / 2), (target.height / 2)).y - focusSize;
+                onXChanged: syncFocusPosition();
+                onYChanged: syncFocusPosition();
+                onParentChanged: syncFocusPosition();
             }
         }
     }
