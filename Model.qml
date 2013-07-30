@@ -119,6 +119,24 @@ QtObject {
         layersUpdated(index, -1); 
     }
 
+    function changeLayerIndex(fromIndex, toIndex)
+    {
+        var layer = layers.splice(fromIndex, 1)[0];
+        if (toIndex < fromIndex)
+            layers.splice(toIndex + 1, 0, layer);
+        else
+            layers.splice(toIndex, 0, layer);
+    }
+
+    function changeLayerParent(childIndex, parentIndex)
+    {
+        var childLayer = layers[childIndex];
+        var parentLayer = layers[parentIndex];
+        changeLayerIndex(childIndex, parentIndex + 1);
+        childLayer.parentLayer = parentLayer;
+        childLayer.sprite.parent = childLayer.parentLayer.sprite;
+    }
+
     function removeFocusState()
     {
         if (!focusState)

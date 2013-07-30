@@ -115,14 +115,8 @@ Rectangle {
                             if (insideLabel(mouseX, mouseY)) {
                                 // reparent
                                 var mapped = area.mapToItem(listView, mouseX, mouseY)
-                                var newIndex = listView.indexAt(mapped.x, mapped.y);
-                                var draggedLayer = layers.splice(index2, 1)[0];
-                                if (newIndex < index2)
-                                    layers.splice(newIndex + 1, 0, draggedLayer)
-                                else
-                                    layers.splice(newIndex, 0, draggedLayer)
-                                draggedLayer.parentLayer = layers[newIndex];
-                                draggedLayer.sprite.parent = draggedLayer.parentLayer.sprite;
+                                var parentIndex = listView.indexAt(mapped.x, mapped.y);
+                                myApp.model.changeLayerParent(index2, parentIndex);
                             } else {
                                 // make sibling
                                 print("sibling")
