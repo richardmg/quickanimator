@@ -109,26 +109,17 @@ Rectangle {
                     if (currentDelegate) {
                         currentDelegate.highlight = false;
                         currentDelegate.treeLabel.highlight = false;
-                        var layers = myApp.model.layers;
 
                         if (currentDelegate != delegate) {
+                            var mapped = area.mapToItem(listView, mouseX, mouseY)
+                            var targetIndex = listView.indexAt(mapped.x, mapped.y);
                             if (insideLabel(mouseX, mouseY)) {
-                                // reparent
-                                var mapped = area.mapToItem(listView, mouseX, mouseY)
-                                var parentIndex = listView.indexAt(mapped.x, mapped.y);
-                                myApp.model.changeLayerParent(index2, parentIndex);
+                                // make child:
+                                myApp.model.changeLayerParent(index2, targetIndex);
                             } else {
-                                // make sibling
-                                print("sibling")
-                                mapped = area.mapToItem(listView, mouseX, mouseY)
-                                newIndex = listView.indexAt(mapped.x, mapped.y);
-                                draggedLayer = layers.splice(index2, 1)[0];
-                                if (newIndex < index2)
-                                    layers.splice(newIndex, 0, draggedLayer)
-                                else
-                                    layers.splice(newIndex - 1, 0, draggedLayer)
-//                                draggedLayer.parentLayer = layers[index2];
-//                                draggedLayer.sprite.parent = draggedLayer.parentLayer.sprite;
+                                // make sibling:
+                                var parentIndex = myApp.model.layers[targetIndex].parentIndex;
+                                myApp.model.changeLayerParent(index2, parentIndex);
                             }
                         }
 

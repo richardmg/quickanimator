@@ -132,9 +132,16 @@ QtObject {
     {
         var childLayer = layers[childIndex];
         var parentLayer = layers[parentIndex];
-        changeLayerIndex(childIndex, parentIndex + 1);
-        childLayer.parentLayer = parentLayer;
-        childLayer.sprite.parent = childLayer.parentLayer.sprite;
+        if (!parentLayer) {
+            // reparent to root:
+            changeLayerIndex(childIndex, layers.length);
+            childLayer.parentLayer = null;
+            childLayer.sprite.parent = myApp.stage.sprites;
+        } else {
+            changeLayerIndex(childIndex, parentIndex + 1);
+            childLayer.parentLayer = parentLayer;
+            childLayer.sprite.parent = childLayer.parentLayer.sprite;
+        }
     }
 
     function removeFocusState()
