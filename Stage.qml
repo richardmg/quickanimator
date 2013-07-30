@@ -92,17 +92,23 @@ Item {
             } else if (myApp.model.selectedLayers.length !== 0) {
                 if (currentAction.dragging) {
                     // continue drag
+                    var dx = pos.x - currentAction.x;
+                    var dy = pos.y - currentAction.y;
+
                     for (var i in myApp.model.selectedLayers) {
                         var layer = myApp.model.selectedLayers[i];
                         var state = myApp.model.getState(layer, myApp.model.time);
                         var sprite = layer.sprite
+                        var globalPos = sprites.mapFromItem(sprite.parent, sprite.x, sprite.y);
+                        var newSpritePos = sprites.mapToItem(sprite.parent, globalPos.x + dx, globalPos.y + dy);
                         if (xBox.checked)
-                            sprite.x += pos.x - currentAction.x;
+                            sprite.x = newSpritePos.x
                         if (yBox.checked)
-                            sprite.y += pos.y - currentAction.y;
+                            sprite.y = newSpritePos.y
                         state.x = sprite.x;
                         state.y = sprite.y;
                     }
+
                     currentAction.x = pos.x;
                     currentAction.y = pos.y;
                 } else if (currentAction.rotating) {
