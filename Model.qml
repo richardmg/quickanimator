@@ -46,7 +46,7 @@ QtObject {
         var layer = layers[focusLayerIndex];
         if (layer) {
             var state = layer.sprite.getCurrentState();
-            root.focusState =  (state && state.time === state.sprite.spriteTime) ? state : null;
+            root.focusState = (state && state.time === state.sprite.spriteTime) ? state : null;
         } else {
             root.focusState = null;
         }
@@ -119,12 +119,12 @@ QtObject {
         layersUpdated(index, -1); 
     }
 
-    function removeCurrentState()
+    function removeFocusState()
     {
-        if (selectedLayers.length == 0)
+        if (!focusState)
             return;
-        selectedLayers[0].sprite.removeCurrentState(tweenMode);
-        statesUpdated(layers.indexOf(selectedLayers[0]));
+        layers[focusLayerIndex].sprite.removeCurrentState(tweenMode);
+        statesUpdated(focusLayerIndex);
     }
 
     function setLayerIndex(oldIndex, newIndex)

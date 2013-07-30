@@ -111,7 +111,7 @@ Rectangle {
             Button {
                 Layout.columnSpan: 3
                 text: "Remove state"
-                onClicked: myApp.model.removeCurrentState();
+                onClicked: myApp.model.removeFocusState();
             }
         }
     }
