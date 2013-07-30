@@ -75,7 +75,9 @@ Item {
                 } else {
                     // Start rotation
                     var layer = myApp.model.selectedLayers[0];
-                    var center = { x: layer.sprite.x + (layer.sprite.width / 2), y: layer.sprite.y  + (layer.sprite.height / 2)};
+                    var sprite = layer.sprite
+                    var globalPos = sprites.mapFromItem(sprite.parent, sprite.x + (sprite.width / 2), sprite.y + (sprite.height / 2));
+                    var center = {x: globalPos.x, y: globalPos.y};
                     currentAction = getAngleAndRadius(center, pos);
                     currentAction.rotating = true
                 }
@@ -114,12 +116,14 @@ Item {
                 } else if (currentAction.rotating) {
                     // continue rotate
                     var layer = myApp.model.selectedLayers[0];
-                    var center = { x: layer.sprite.x + (layer.sprite.width / 2), y: layer.sprite.y  + (layer.sprite.height / 2)};
+                    var sprite = layer.sprite
+                    var globalPos = sprites.mapFromItem(sprite.parent, sprite.x + (sprite.width / 2), sprite.y + (sprite.height / 2));
+                    var center = {x: globalPos.x, y: globalPos.y};
                     var aar = getAngleAndRadius(center, pos);
                     for (var i in myApp.model.selectedLayers) {
-                        var layer = myApp.model.selectedLayers[i];
+                        layer = myApp.model.selectedLayers[i];
                         var state = myApp.model.getState(layer, myApp.model.time);
-                        var sprite = layer.sprite
+                        sprite = layer.sprite
                         if (rotateBox.checked)
                             sprite.rotation += aar.angle - currentAction.angle;
                         if (scaleBox.checked)
