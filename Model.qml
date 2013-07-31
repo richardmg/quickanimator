@@ -141,6 +141,7 @@ QtObject {
         } else {
             changeLayerIndex(childIndex, parentIndex + 1);
             childLayer.parentLayer = parentLayer;
+            childLayer.sprite.parent = null;
             childLayer.sprite.parent = childLayer.parentLayer.sprite;
         }
     }
