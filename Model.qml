@@ -134,8 +134,9 @@ QtObject {
         var parentLayer = layers[parentIndex];
         if (!parentLayer) {
             // reparent to root:
-            changeLayerIndex(childIndex, layers.length);
+            changeLayerIndex(childIndex, layers.length - 1);
             childLayer.parentLayer = null;
+            childLayer.sprite.parent = null;
             childLayer.sprite.parent = myApp.stage.sprites;
         } else {
             changeLayerIndex(childIndex, parentIndex + 1);
