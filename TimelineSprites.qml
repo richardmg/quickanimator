@@ -43,6 +43,7 @@ Rectangle {
             property alias treeLabel: treeLabel
             property bool highlight: false
             property int index2: index
+            property var modelLayer: myApp.model.layers[index]
 
             Rectangle {
                 height: 1
@@ -55,7 +56,7 @@ Rectangle {
                 id: treeLabel
                 property bool highlight: false
                 color: highlight ? "red" : myApp.style.timelineline
-                x: 10
+                x: margin + (modelLayer ? modelLayer.hierarchyLevel * 15 : 0)
                 y: margin
                 height: parent.height - 5
                 width: label.width + 20
@@ -64,7 +65,6 @@ Rectangle {
                     id: label
                     x: 10
                     anchors.verticalCenter: parent.verticalCenter
-                    property var modelLayer: myApp.model.layers[index]
                     text: modelLayer ? modelLayer.name : ""
                 }
             }
