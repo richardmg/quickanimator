@@ -118,8 +118,8 @@ Rectangle {
                                 myApp.model.changeLayerParent(index2, targetIndex);
                             } else {
                                 // make sibling:
-                                var siblingParentIndex = myApp.model.layers[targetIndex].parentIndex;
-                                myApp.model.changeLayerParent(index2, siblingParentIndex);
+                                var siblingParentLayer = myApp.model.layers[targetIndex].parentLayer;
+                                myApp.model.changeLayerParent(index2, myApp.model.layers.indexOf(siblingParentLayer));
                             }
                         }
 
