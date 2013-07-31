@@ -138,8 +138,6 @@ QtObject {
             changeLayerIndex(childIndex, layers.length);
             childLayer.parentLayer = null;
             childLayer.hierarchyLevel = 0;
-            childLayer.sprite.parent = null;
-            childLayer.sprite.parent = myApp.stage.sprites;
         } else {
             var parentHierarchyLevel = layers[parentIndex].hierarchyLevel;
             for (var targetIndex = parentIndex + 1; targetIndex < layers.length; ++targetIndex) {
@@ -150,9 +148,28 @@ QtObject {
             changeLayerIndex(childIndex, targetIndex);
             childLayer.parentLayer = parentLayer;
             childLayer.hierarchyLevel = parentLayer.hierarchyLevel + 1;
-            childLayer.sprite.parent = null;
-            childLayer.sprite.parent = childLayer.parentLayer.sprite;
         }
+        childLayer.sprite.parent = null;
+        childLayer.sprite.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
+    }
+
+    function changeLayerSibling(childIndex, siblingIndex)
+    {
+        var siblingLayer = layers[siblingIndex];
+        var parentLayer = siblingLayer.parentLayer;
+        var childLayer = layers[childIndex];
+
+        var l = siblingLayer.hierarchyLevel;
+        for (var targetIndex = siblingIndex + 1; targetIndex < layers.length; ++targetIndex) {
+            if (layers[targetIndex].hierarchyLevel <= l)
+                break;
+        }
+
+        changeLayerIndex(childIndex, targetIndex);
+        childLayer.parentLayer = parentLayer;
+        childLayer.hierarchyLevel = siblingLayer.hierarchyLevel;
+        childLayer.sprite.parent = null;
+        childLayer.sprite.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
     }
 
     function removeFocusState()
