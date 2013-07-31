@@ -126,7 +126,7 @@ QtObject {
         if (toIndex <= fromIndex)
             layers.splice(toIndex, 0, layer);
         else
-            layers.splice(toIndex + 1, 0, layer);
+            layers.splice(toIndex - 1, 0, layer);
     }
 
     function changeLayerParent(childIndex, parentIndex)
@@ -135,7 +135,7 @@ QtObject {
         var parentLayer = layers[parentIndex];
         if (!parentLayer) {
             // reparent to root:
-            changeLayerIndex(childIndex, layers.length - 1);
+            changeLayerIndex(childIndex, layers.length);
             childLayer.parentLayer = null;
             childLayer.hierarchyLevel = 0;
             childLayer.sprite.parent = null;
