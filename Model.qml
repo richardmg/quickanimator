@@ -58,6 +58,7 @@ QtObject {
         layers.push(layer);
         layer.selected = false;
         layer.parentLayer = null;
+        layer.hierarchyLevel = 0;
         layer.sprite.createKeyframe(0);
         layer.sprite.setTime(0, false);
         selectLayer(layer, true);
@@ -122,10 +123,10 @@ QtObject {
     function changeLayerIndex(fromIndex, toIndex)
     {
         var layer = layers.splice(fromIndex, 1)[0];
-        if (toIndex < fromIndex)
-            layers.splice(toIndex + 1, 0, layer);
-        else
+        if (toIndex <= fromIndex)
             layers.splice(toIndex, 0, layer);
+        else
+            layers.splice(toIndex + 1, 0, layer);
     }
 
     function changeLayerParent(childIndex, parentIndex)
@@ -136,11 +137,19 @@ QtObject {
             // reparent to root:
             changeLayerIndex(childIndex, layers.length - 1);
             childLayer.parentLayer = null;
+            childLayer.hierarchyLevel = 0;
             childLayer.sprite.parent = null;
             childLayer.sprite.parent = myApp.stage.sprites;
         } else {
-            changeLayerIndex(childIndex, parentIndex + 1);
+            var parentHierarchyLevel = layers[parentIndex].hierarchyLevel;
+            for (var targetIndex = parentIndex + 1; targetIndex < layers.length; ++targetIndex) {
+                if (layers[targetIndex].hierarchyLevel <= parentHierarchyLevel)
+                    break;
+            }
+
+            changeLayerIndex(childIndex, targetIndex);
             childLayer.parentLayer = parentLayer;
+            childLayer.hierarchyLevel = parentLayer.hierarchyLevel + 1;
             childLayer.sprite.parent = null;
             childLayer.sprite.parent = childLayer.parentLayer.sprite;
         }
