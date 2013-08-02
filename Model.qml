@@ -153,23 +153,25 @@ QtObject {
         childLayer.sprite.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
     }
 
-    function changeLayerSibling(childIndex, siblingIndex)
+    function changeLayerSibling(changingIndex, siblingIndex)
     {
         var siblingLayer = layers[siblingIndex];
         var parentLayer = siblingLayer.parentLayer;
-        var childLayer = layers[childIndex];
+        var changingLayer = layers[changingIndex];
 
+        // Find the first spot underneath siblingLayer that is
+        // not a decendent of siblingLayer itself:
         var l = siblingLayer.hierarchyLevel;
         for (var targetIndex = siblingIndex + 1; targetIndex < layers.length; ++targetIndex) {
             if (layers[targetIndex].hierarchyLevel <= l)
                 break;
         }
 
-        changeLayerIndex(childIndex, targetIndex);
-        childLayer.parentLayer = parentLayer;
-        childLayer.hierarchyLevel = siblingLayer.hierarchyLevel;
-        childLayer.sprite.parent = null;
-        childLayer.sprite.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
+        changeLayerIndex(changingIndex, targetIndex);
+        changingLayer.parentLayer = parentLayer;
+        changingLayer.hierarchyLevel = siblingLayer.hierarchyLevel;
+        changingLayer.sprite.parent = null;
+        changingLayer.sprite.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
     }
 
     function removeFocusState()
