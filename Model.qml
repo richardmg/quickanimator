@@ -122,11 +122,20 @@ QtObject {
 
     function changeLayerParent(index, targetIndex, targetIsSibling)
     {
-        // First, remove the layer to be moved out of
+        // Count layers to move (index + decendants):
+        var layer = layers[index];
+        var level = layer.hierarchyLevel;
+        for (var lastDecendantIndex = index + 1; lastDecendantIndex < layers.length; ++lastDecendantIndex) {
+            if (layers[lastDecendantIndex].hierarchyLevel <= level)
+                break;
+        }
+        var layerCount = lastDecendantIndex - index;
+
+        // Remove the layer to be moved out of
         // layers and resolve key information:
-        var layer = layers.splice(index, 1)[0];
+        var layerTree = layers.splice(index, layerCount);
         if (targetIndex > index)
-            targetIndex--;
+            targetIndex -= layerCount;
 
         var parentLayer = targetIsSibling ? layers[targetIndex].parentLayer : layers[targetIndex];
         var newLevel = parentLayer ? parentLayer.hierarchyLevel + 1 : 0;
@@ -137,20 +146,16 @@ QtObject {
                 break;
         }
 
-        // Keep current layer at insertIndex around for updating hierarchyLevel below:
-        var endLayer = layers[insertIndex];
-
-        layers.splice(insertIndex, 0, layer);
+        for (var i = layerTree.length - 1; i >= 0; --i)
+            layers.splice(insertIndex, 0, layerTree[i]);
         layer.parentLayer = parentLayer;
         layer.sprite.parent = null;
         layer.sprite.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
 
         // Update hierarchyLevel of all descendants to match the new parent:
-        for (var decendantIndex = insertIndex; decendantIndex < layers.length; ++decendantIndex) {
-            var decendant = layers[decendantIndex];
-            if (decendant == endLayer)
-                break;
-            layer.hierarchyLevel += (newLevel - layer.hierarchyLevel); 
+        var levelDiff = newLevel - layer.hierarchyLevel; 
+        for (i = 0; i < layerCount; ++i) {
+            layers[insertIndex + i].hierarchyLevel += levelDiff;
         }
     }
 
