@@ -122,21 +122,21 @@ QtObject {
 
     function descendantCount(index)
     {
-        // Return number of levels (including index) that the sub
+        // Return number of levels that the sub
         // tree pointed to by index contains:
         var level = layers[index].hierarchyLevel;
         for (var lastDescendantIndex = index + 1; lastDescendantIndex < layers.length; ++lastDescendantIndex) {
             if (layers[lastDescendantIndex].hierarchyLevel <= level)
                 break;
         }
-        return lastDescendantIndex - index;
+        return lastDescendantIndex - index - 1;
     }
 
     function changeLayerParent(index, targetIndex, targetIsSibling)
     {
         // Remove the layer to be moved out of
         // layers and resolve key information:
-        var layerCount = descendantCount(index);
+        var layerCount = descendantCount(index) + 1;
         var layerTree = layers.splice(index, layerCount);
         if (targetIndex > index)
             targetIndex -= layerCount;

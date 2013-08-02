@@ -75,6 +75,7 @@ Rectangle {
                 drag.target: treeLabel
                 drag.axis: Drag.XAndYAxis
                 property var currentDelegate
+                property var index3: 0
 
                 function insideLabel(mouseX, mouseY)
                 {
@@ -83,6 +84,8 @@ Rectangle {
                     return (mapped.x >= 0 && mapped.x <= l.width
                             && mapped.y >= -margin && mapped.y <= l.height + margin);
                 }
+
+                onPressed: index3 = index + myApp.model.descendantCount(index2);
 
                 onPositionChanged: {
                     if (!drag.active)
@@ -96,7 +99,9 @@ Rectangle {
                     var mapped = area.mapToItem(listView, mouseX, mouseY)
                     currentDelegate = listView.itemAt(mapped.x, mapped.y);
 
-                    if (currentDelegate && currentDelegate != delegate) {
+                    if (currentDelegate
+                            && currentDelegate != delegate
+                            && (currentDelegate.index2 < index2 || currentDelegate.index2 > index3 )) {
                         if (insideLabel(mouseX, mouseY))
                             currentDelegate.treeLabel.highlight = true;
                         else
@@ -110,7 +115,7 @@ Rectangle {
                         currentDelegate.highlight = false;
                         currentDelegate.treeLabel.highlight = false;
 
-                        if (currentDelegate != delegate) {
+                        if (currentDelegate != delegate && (currentDelegate.index2 < index2 || currentDelegate.index2 > index3 )) {
                             var mapped = area.mapToItem(listView, mouseX, mouseY)
                             var targetIndex = listView.indexAt(mapped.x, mapped.y);
                             var targetIsSibling = !insideLabel(mouseX, mouseY);
