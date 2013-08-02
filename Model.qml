@@ -155,13 +155,17 @@ QtObject {
         childLayer.sprite.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
     }
 
-    function changeLayerSibling(changingIndex, siblingIndex)
+    function changeLayerSibling(index, siblingIndex)
     {
+        // First, remove the layer to be moved out of
+        // layers and resolve key layers:
+        var layer = layers.splice(index, 1)[0];
+        if (siblingIndex > index)
+            siblingIndex--;
         var siblingLayer = layers[siblingIndex];
         var parentLayer = siblingLayer.parentLayer;
-        var changingLayer = layers[changingIndex];
 
-        // Place changingLayer as the first sibling underneath siblingLayer, but
+        // Place layer as the first sibling underneath siblingLayer, but
         // after all decendants of siblingLayer:
         var l = siblingLayer.hierarchyLevel;
         for (var targetIndex = siblingIndex + 1; targetIndex < layers.length; ++targetIndex) {
@@ -169,11 +173,23 @@ QtObject {
                 break;
         }
 
-        changeLayerIndex(changingIndex, targetIndex);
-        changingLayer.parentLayer = parentLayer;
-        changingLayer.hierarchyLevel = siblingLayer.hierarchyLevel;
-        changingLayer.sprite.parent = null;
-        changingLayer.sprite.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
+        // Keep current layer at targetIndex around for updating hierarchyLevel below:
+        var endLayer = layers[targetIndex];
+
+        // Add layer back in at correct position:
+        layers.splice(targetIndex, 0, layer);
+        layer.parentLayer = parentLayer;
+        layer.sprite.parent = null;
+        layer.sprite.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
+
+        // Update hierarchyLevel of all descendants to match the new parent:
+        var levelDiff = siblingLayer.hierarchyLevel - layer.hierarchyLevel;
+        for (var decendantIndex = targetIndex; decendantIndex < layers.length; ++decendantIndex) {
+            var decendant = layers[decendantIndex];
+            if (decendant == endLayer)
+                break;
+            layer.hierarchyLevel += levelDiff; 
+        }
     }
 
     function removeFocusState()
