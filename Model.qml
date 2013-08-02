@@ -120,75 +120,37 @@ QtObject {
         layersUpdated(index, -1); 
     }
 
-    function changeLayerIndex(fromIndex, toIndex)
-    {
-        var layer = layers.splice(fromIndex, 1)[0];
-        if (toIndex <= fromIndex)
-            layers.splice(toIndex, 0, layer);
-        else
-            layers.splice(toIndex - 1, 0, layer);
-    }
-
-    function changeLayerParent(childIndex, parentIndex)
-    {
-        var childLayer = layers[childIndex];
-        var parentLayer = layers[parentIndex];
-
-        if (!parentLayer) {
-            // Reparent to root:
-            changeLayerIndex(childIndex, layers.length);
-            childLayer.parentLayer = null;
-            childLayer.hierarchyLevel = 0;
-        } else {
-            // Place childLayer as the last child of parentLayer:
-            var parentHierarchyLevel = layers[parentIndex].hierarchyLevel;
-            for (var targetIndex = parentIndex + 1; targetIndex < layers.length; ++targetIndex) {
-                if (layers[targetIndex].hierarchyLevel <= parentHierarchyLevel)
-                    break;
-            }
-
-            changeLayerIndex(childIndex, targetIndex);
-            childLayer.parentLayer = parentLayer;
-            childLayer.hierarchyLevel = parentLayer.hierarchyLevel + 1;
-        }
-        childLayer.sprite.parent = null;
-        childLayer.sprite.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
-    }
-
-    function changeLayerSibling(index, siblingIndex)
+    function changeLayerParent(index, targetIndex, targetIsSibling)
     {
         // First, remove the layer to be moved out of
-        // layers and resolve key layers:
+        // layers and resolve key information:
         var layer = layers.splice(index, 1)[0];
-        if (siblingIndex > index)
-            siblingIndex--;
-        var siblingLayer = layers[siblingIndex];
-        var parentLayer = siblingLayer.parentLayer;
+        if (targetIndex > index)
+            targetIndex--;
 
-        // Place layer as the first sibling underneath siblingLayer, but
-        // after all decendants of siblingLayer:
-        var l = siblingLayer.hierarchyLevel;
-        for (var targetIndex = siblingIndex + 1; targetIndex < layers.length; ++targetIndex) {
-            if (layers[targetIndex].hierarchyLevel <= l)
+        var parentLayer = targetIsSibling ? layers[targetIndex].parentLayer : layers[targetIndex];
+        var newLevel = parentLayer ? parentLayer.hierarchyLevel + 1 : 0;
+        var insertLevel = targetIsSibling ? newLevel + 1 : newLevel;
+
+        for (var insertIndex = targetIndex + 1; insertIndex < layers.length; ++insertIndex) {
+            if (layers[insertIndex].hierarchyLevel < insertLevel)
                 break;
         }
 
-        // Keep current layer at targetIndex around for updating hierarchyLevel below:
-        var endLayer = layers[targetIndex];
+        // Keep current layer at insertIndex around for updating hierarchyLevel below:
+        var endLayer = layers[insertIndex];
 
-        // Add layer back in at correct position:
-        layers.splice(targetIndex, 0, layer);
+        layers.splice(insertIndex, 0, layer);
         layer.parentLayer = parentLayer;
         layer.sprite.parent = null;
         layer.sprite.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
 
         // Update hierarchyLevel of all descendants to match the new parent:
-        var levelDiff = siblingLayer.hierarchyLevel - layer.hierarchyLevel;
-        for (var decendantIndex = targetIndex; decendantIndex < layers.length; ++decendantIndex) {
+        for (var decendantIndex = insertIndex; decendantIndex < layers.length; ++decendantIndex) {
             var decendant = layers[decendantIndex];
             if (decendant == endLayer)
                 break;
-            layer.hierarchyLevel += levelDiff; 
+            layer.hierarchyLevel += (newLevel - layer.hierarchyLevel); 
         }
     }
 

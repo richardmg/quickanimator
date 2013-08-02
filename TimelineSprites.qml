@@ -113,10 +113,8 @@ Rectangle {
                         if (currentDelegate != delegate) {
                             var mapped = area.mapToItem(listView, mouseX, mouseY)
                             var targetIndex = listView.indexAt(mapped.x, mapped.y);
-                            if (insideLabel(mouseX, mouseY))
-                                myApp.model.changeLayerParent(index2, targetIndex);
-                            else
-                                myApp.model.changeLayerSibling(index2, targetIndex);
+                            var targetIsSibling = !insideLabel(mouseX, mouseY);
+                            myApp.model.changeLayerParent(index2, targetIndex, targetIsSibling);
                         }
 
                         currentDelegate = null;
