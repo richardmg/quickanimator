@@ -133,12 +133,14 @@ QtObject {
     {
         var childLayer = layers[childIndex];
         var parentLayer = layers[parentIndex];
+
         if (!parentLayer) {
-            // reparent to root:
+            // Reparent to root:
             changeLayerIndex(childIndex, layers.length);
             childLayer.parentLayer = null;
             childLayer.hierarchyLevel = 0;
         } else {
+            // Place childLayer as the last child of parentLayer:
             var parentHierarchyLevel = layers[parentIndex].hierarchyLevel;
             for (var targetIndex = parentIndex + 1; targetIndex < layers.length; ++targetIndex) {
                 if (layers[targetIndex].hierarchyLevel <= parentHierarchyLevel)
@@ -159,8 +161,8 @@ QtObject {
         var parentLayer = siblingLayer.parentLayer;
         var changingLayer = layers[changingIndex];
 
-        // Find the first spot underneath siblingLayer that is
-        // not a decendent of siblingLayer itself:
+        // Place changingLayer as the first sibling underneath siblingLayer, but
+        // after all decendants of siblingLayer:
         var l = siblingLayer.hierarchyLevel;
         for (var targetIndex = siblingIndex + 1; targetIndex < layers.length; ++targetIndex) {
             if (layers[targetIndex].hierarchyLevel <= l)
