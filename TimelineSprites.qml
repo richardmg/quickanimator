@@ -5,6 +5,8 @@ Rectangle {
     property alias flickable: listView
     property alias model: listModel
 
+    property var _delegates: new Array()
+
     gradient: Gradient {
         GradientStop {
             position: 0.0;
@@ -16,14 +18,30 @@ Rectangle {
         }
     }
 
+    Connections {
+        target: myApp.model
+        onSelectedLayersUpdated: {
+            var selected = _delegates[selectedLayer];
+            if (selected)
+                selected.treeLabel.highlight = true;
+
+            var unselected = _delegates[unselectedLayer];
+            if (unselected)
+                unselected.treeLabel.highlight = false;
+        }
+    }
+
     ListModel {
         id: listModel
         function syncWithModel()
         {
+            listView.model = null;
+            _delegates = new Array()
             clear();
             var layers = myApp.model.layers;
             for (var i=0; i<layers.length; ++i)
                 append({})
+            listView.model = listModel;
         }
     }
 
@@ -38,6 +56,11 @@ Rectangle {
             width: parent.width
             height: myApp.style.cellHeight
             color: highlight ? "red" : "transparent"
+            Component.onCompleted: {
+                _delegates.push(delegate);
+                if (myApp.model.selectedLayers.indexOf(modelLayer) != -1)
+                    treeLabel.highlight = true;
+            }
 
             property int margin: 2
             property alias treeLabel: treeLabel
@@ -55,7 +78,7 @@ Rectangle {
             Rectangle {
                 id: treeLabel
                 property bool highlight: false
-                color: highlight ? "red" : myApp.style.timelineline
+                color: highlight ? Qt.rgba(0.8, 0.8, 0.8, 1.0) : myApp.style.timelineline
                 x: margin + (modelLayer ? modelLayer.hierarchyLevel * 15 : 0)
                 y: margin
                 height: parent.height - 5
