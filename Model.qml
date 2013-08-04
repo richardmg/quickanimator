@@ -154,8 +154,15 @@ QtObject {
         for (var i = layerTree.length - 1; i >= 0; --i)
             layers.splice(insertIndex, 0, layerTree[i]);
         layer.parentLayer = parentLayer;
-        layer.sprite.parent = null;
-        layer.sprite.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
+
+        // Change parent of sprite, but keep same global geometry:
+        var sprite = layer.sprite;
+        var hotspot = sprite.parent.mapToItem(myApp.stage.sprites, sprite.x + (sprite.width / 2), sprite.y + (sprite.height / 2));
+        sprite.parent = null;
+        sprite.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
+        var newHotspot = sprite.parent.mapFromItem(myApp.stage.sprites, hotspot.x, hotspot.y);
+        sprite.x = newHotspot.x - (sprite.width / 2);
+        sprite.y = newHotspot.y - (sprite.height / 2);
 
         // Update hierarchyLevel of all descendants to match the new parent:
         var levelDiff = newLevel - layer.hierarchyLevel; 
