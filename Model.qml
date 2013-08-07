@@ -175,7 +175,7 @@ QtObject {
         sprite.x = newHotspot.x - (sprite.width / 2);
         sprite.y = newHotspot.y - (sprite.height / 2);
         sprite.rotation = gRotation - sprite.parent.rotation;
-        sprite.scale = gScale - sprite.parent.scale + 1;
+        sprite.scale = gScale / sprite.parent.scale;
 
         // Update hierarchyLevel of all descendants to match the new parent:
         var levelDiff = newLevel - layer.hierarchyLevel; 
