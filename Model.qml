@@ -161,7 +161,10 @@ QtObject {
         var hotspotY = (sprite.height / 2);
         var gHotspot = sprite.mapToItem(myApp.stage.sprites, hotspotX, hotspotY);
         var gRefPoint = sprite.mapToItem(myApp.stage.sprites, hotspotX + 1, hotspotY);
-        var gRotation = (Math.atan2((gHotspot.y - gRefPoint.y), (gHotspot.x - gRefPoint.x)) * 180 / Math.PI) - 180;
+        var dx = gRefPoint.x - gHotspot.x;
+        var dy = gRefPoint.y - gHotspot.y;
+        var gRotation = (Math.atan2(dy, dx) * 180 / Math.PI);
+        var gScale = Math.sqrt((dx * dx) + (dy * dy));
 
         // Reparent sprite:
         sprite.parent = null;
@@ -172,6 +175,7 @@ QtObject {
         sprite.x = newHotspot.x - (sprite.width / 2);
         sprite.y = newHotspot.y - (sprite.height / 2);
         sprite.rotation = gRotation - sprite.parent.rotation;
+        sprite.scale = gScale - sprite.parent.scale + 1;
 
         // Update hierarchyLevel of all descendants to match the new parent:
         var levelDiff = newLevel - layer.hierarchyLevel; 
