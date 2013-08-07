@@ -155,14 +155,23 @@ QtObject {
             layers.splice(insertIndex, 0, layerTree[i]);
         layer.parentLayer = parentLayer;
 
-        // Change parent of sprite, but keep same global geometry:
+        // Get current geometry in scene/global coordinates:
         var sprite = layer.sprite;
-        var hotspot = sprite.parent.mapToItem(myApp.stage.sprites, sprite.x + (sprite.width / 2), sprite.y + (sprite.height / 2));
+        var hotspotX = (sprite.width / 2);
+        var hotspotY = (sprite.height / 2);
+        var gHotspot = sprite.mapToItem(myApp.stage.sprites, hotspotX, hotspotY);
+        var gRefPoint = sprite.mapToItem(myApp.stage.sprites, hotspotX + 1, hotspotY);
+        var gRotation = (Math.atan2((gHotspot.y - gRefPoint.y), (gHotspot.x - gRefPoint.x)) * 180 / Math.PI) - 180;
+
+        // Reparent sprite:
         sprite.parent = null;
         sprite.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
-        var newHotspot = sprite.parent.mapFromItem(myApp.stage.sprites, hotspot.x, hotspot.y);
+        var newHotspot = sprite.parent.mapFromItem(myApp.stage.sprites, gHotspot.x, gHotspot.y);
+
+        // Move sprite to the same stage geometry as before reparenting:
         sprite.x = newHotspot.x - (sprite.width / 2);
         sprite.y = newHotspot.y - (sprite.height / 2);
+        sprite.rotation = gRotation - sprite.parent.rotation;
 
         // Update hierarchyLevel of all descendants to match the new parent:
         var levelDiff = newLevel - layer.hierarchyLevel; 
