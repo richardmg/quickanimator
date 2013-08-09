@@ -155,7 +155,7 @@ QtObject {
             layers.splice(insertIndex, 0, layerTree[i]);
         layer.parentLayer = parentLayer;
 
-        // Get current geometry in scene/global coordinates:
+        // Get current sprite geometry in scene/global coordinates:
         var sprite = layer.sprite;
         var hotspotX = (sprite.width / 2);
         var hotspotY = (sprite.height / 2);
@@ -166,6 +166,22 @@ QtObject {
         var gRotation = (Math.atan2(dy, dx) * 180 / Math.PI);
         var gScale = Math.sqrt((dx * dx) + (dy * dy));
 
+        // Get current parent geometry in scene/global coordinates:
+        if (!parentLayer) {
+            var gParentRotation = 0;
+            var gParentScale = 1;
+        } else {
+            var parentSprite = parentLayer.sprite;
+            var parentHotspotX = (parentSprite.width / 2);
+            var parentHotspotY = (parentSprite.height / 2);
+            var gParentHotspot = parentSprite.mapToItem(myApp.stage.sprites, parentHotspotX, parentHotspotY);
+            var gParentRefPoint = parentSprite.mapToItem(myApp.stage.sprites, parentHotspotX + 1, parentHotspotY);
+            var parentDx = gParentRefPoint.x - gParentHotspot.x;
+            var parentDy = gParentRefPoint.y - gParentHotspot.y;
+            gParentRotation = (Math.atan2(parentDy, parentDx) * 180 / Math.PI);
+            gParentScale = Math.sqrt((parentDx * parentDx) + (parentDy * parentDy));
+        }
+
         // Reparent sprite:
         sprite.parent = null;
         sprite.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
@@ -174,8 +190,8 @@ QtObject {
         // Move sprite to the same stage geometry as before reparenting:
         sprite.x = newHotspot.x - (sprite.width / 2);
         sprite.y = newHotspot.y - (sprite.height / 2);
-        sprite.rotation = gRotation - sprite.parent.rotation;
-        sprite.scale = gScale / sprite.parent.scale;
+        sprite.rotation = gRotation - gParentRotation;
+        sprite.scale = gScale / gParentScale;
 
         // Update hierarchyLevel of all descendants to match the new parent:
         var levelDiff = newLevel - layer.hierarchyLevel; 
