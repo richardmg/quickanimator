@@ -3,9 +3,12 @@ import QtQuick 2.1
 Item {
     id: sprite
 
+    property alias transRotation: tRotation
+    property alias transScale: tScale
+
     transform: [
-        Scale { id: tScale },
-        Rotation { id: tRotation }
+        Scale { id: tScale; xScale: 1; yScale: 1 },
+        Rotation { id: tRotation; angle: 0}
     ]
 
     property QtObject model: parent 
@@ -23,8 +26,8 @@ Item {
     property NumberAnimation _animation_x: NumberAnimation{ target: sprite; property: "x" }
     property NumberAnimation _animation_y: NumberAnimation{ target: sprite; property: "y" }
     property NumberAnimation _animation_z: NumberAnimation{ target: sprite; property: "z" }
-    property NumberAnimation _animation_rotation: NumberAnimation{ target: sprite; property: "rotation" }
-    property NumberAnimation _animation_scale: NumberAnimation{ target: sprite; property: "scale" }
+    property NumberAnimation _animation_rotation: NumberAnimation{ target: tRotation; property: "angle" }
+    property NumberAnimation _animation_scale: NumberAnimation{ target: tScale; properties: "xScale, yScale" }
     property NumberAnimation _animation_opacity: NumberAnimation{ target: sprite; property: "opacity" }
     property NumberAnimation _nextStateAnimation: NumberAnimation {
         target: _nextStateAnimation;
@@ -92,8 +95,8 @@ Item {
             name:name + time,
             width:sprite.width,
             height:sprite.height,
-            rotation:sprite.rotation,
-            scale:sprite.scale,
+            rotation:transRotation.angle,
+            scale:transScale.xScale,
             opacity:sprite.opacity,
             time:time,
             sprite:sprite,
@@ -148,8 +151,8 @@ Item {
         if (!tween || _toState.time === _fromState.time) {
             x = _fromState.x;
             y = _fromState.y;
-            scale = _fromState.scale;
-            rotation = _fromState.rotation;
+            transScale.xScale = transScale.yScale = _fromState.scale;
+            tRotation.angle = _fromState.rotation;
             opacity = _fromState.opacity;
         } else {
             var fromStateMs = _fromState.time * model.msPerFrame
@@ -157,8 +160,8 @@ Item {
             x = _interpolate(_fromState.x, _toState.x, advanceMs, "linear");
             y = _interpolate(_fromState.y, _toState.y, advanceMs, "linear");
             z = _interpolate(_fromState.z, _toState.z, advanceMs, "linear");
-            scale = _interpolate(_fromState.scale, _toState.scale, advanceMs, "linear");
-            rotation = _interpolate(_fromState.rotation, _toState.rotation, advanceMs, "linear");
+            tScale.xScale = tScale.yScale = _interpolate(_fromState.scale, _toState.scale, advanceMs, "linear");
+            tRotation.angle = _interpolate(_fromState.rotation, _toState.rotation, advanceMs, "linear");
             opacity = _interpolate(_fromState.opacity, _toState.opacity, advanceMs, "linear");
         }
     }
