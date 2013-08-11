@@ -3,6 +3,11 @@ import QtQuick 2.1
 Item {
     id: sprite
 
+    transform: [
+        Scale { id: tScale },
+        Rotation { id: tRotation }
+    ]
+
     property QtObject model: parent 
     property var keyframes: new Array()
     property var keyframeIndex: 0
@@ -82,6 +87,8 @@ Item {
             x:sprite.x,
             y:sprite.y,
             z:sprite.z,
+            anchorX: 0,
+            anchorY: 0,
             name:name + time,
             width:sprite.width,
             height:sprite.height,
@@ -94,6 +101,14 @@ Item {
         keyframes.splice(index, 0, state);
         _invalidCache = true;
         return state;
+    }
+
+    function synchSpriteWithKeyframe(keyframe)
+    {
+        tRotation.origin.x = tScale.origin.x = keyframe.anchorX;
+        tRotation.origin.y = tScale.origin.y = keyframe.anchorY;
+        tRotation.angle = keyframe.rotation;
+        tScale.xScale = tScale.yScale = keyframe.scale;
     }
 
     function removeState(state, tween)
