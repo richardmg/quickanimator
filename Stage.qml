@@ -97,18 +97,40 @@ Item {
                     var dx = pos.x - currentAction.x;
                     var dy = pos.y - currentAction.y;
 
-                    for (var i in myApp.model.selectedLayers) {
-                        var layer = myApp.model.selectedLayers[i];
-                        var state = myApp.model.getState(layer, myApp.model.time);
+                    if (mouse.modifiers & Qt.ControlModifier) {
+                        // Move anchor
+                        var layer = myApp.model.selectedLayers[0];
                         var sprite = layer.sprite
-                        var globalPos = sprites.mapFromItem(sprite.parent, sprite.x, sprite.y);
-                        var newSpritePos = sprites.mapToItem(sprite.parent, globalPos.x + dx, globalPos.y + dy);
-                        if (xBox.checked)
-                            sprite.x = newSpritePos.x
-                        if (yBox.checked)
-                            sprite.y = newSpritePos.y
-                        state.x = sprite.x;
-                        state.y = sprite.y;
+                        var keyframe = sprite.getCurrentState();
+                        var globalPos = focusFrames.mapFromItem(sprite, keyframe.anchorX, keyframe.anchorY);
+                        var localDelta = focusFrames.mapToItem(sprite, globalPos.x + dx, globalPos.y + dy);
+                        keyframe.anchorX = localDelta.x;
+                        keyframe.anchorY = localDelta.y;
+                        sprite.synchSpriteWithKeyframe(keyframe);
+
+                        // When changing origin of rotation, the focus rotate with it. But we want the focus
+                        // to follow the mouse, so move the sprite back so the focus ends up under the mouse again:
+                        var newGlobalPos = focusFrames.mapFromItem(sprite, keyframe.anchorX, keyframe.anchorY);
+                        sprite.x -= (newGlobalPos.x - globalPos.x) - dx;
+                        sprite.y -= (newGlobalPos.y - globalPos.y) - dy;
+                        keyframe.x = sprite.x;
+                        keyframe.y = sprite.y;
+                        layer.focus.syncFocusPosition();
+                    } else {
+                        // Move selected sprites
+                        for (var i in myApp.model.selectedLayers) {
+                            var layer = myApp.model.selectedLayers[i];
+                            var state = myApp.model.getState(layer, myApp.model.time);
+                            var sprite = layer.sprite
+                            var globalPos = sprites.mapFromItem(sprite.parent, sprite.x, sprite.y);
+                            var newSpritePos = sprites.mapToItem(sprite.parent, globalPos.x + dx, globalPos.y + dy);
+                            if (xBox.checked)
+                                sprite.x = newSpritePos.x
+                            if (yBox.checked)
+                                sprite.y = newSpritePos.y
+                            state.x = sprite.x;
+                            state.y = sprite.y;
+                        }
                     }
 
                     currentAction.x = pos.x;
