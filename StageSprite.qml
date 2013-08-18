@@ -26,8 +26,8 @@ Item {
     property NumberAnimation _animation_x: NumberAnimation{ target: sprite; property: "x" }
     property NumberAnimation _animation_y: NumberAnimation{ target: sprite; property: "y" }
     property NumberAnimation _animation_z: NumberAnimation{ target: sprite; property: "z" }
-    property NumberAnimation _animation_rotation: NumberAnimation{ target: tRotation; property: "angle" }
-    property NumberAnimation _animation_scale: NumberAnimation{ target: tScale; properties: "xScale, yScale" }
+    property NumberAnimation _animation_rotation: NumberAnimation{ target: tRotation; properties: "angle, origin.x, origin.y" }
+    property NumberAnimation _animation_scale: NumberAnimation{ target: tScale; properties: "xScale, yScale, origin.x, origin.y" }
     property NumberAnimation _animation_opacity: NumberAnimation{ target: sprite; property: "opacity" }
     property NumberAnimation _nextStateAnimation: NumberAnimation {
         target: _nextStateAnimation;
@@ -90,13 +90,13 @@ Item {
             x:sprite.x,
             y:sprite.y,
             z:sprite.z,
-            anchorX: 0,
-            anchorY: 0,
+            anchorX: tScale.origin.x,
+            anchorY: tScale.origin.y,
             name:name + time,
             width:sprite.width,
             height:sprite.height,
-            rotation:transRotation.angle,
-            scale:transScale.xScale,
+            rotation:tRotation.angle,
+            scale:tScale.xScale,
             opacity:sprite.opacity,
             time:time,
             sprite:sprite,
@@ -151,7 +151,9 @@ Item {
         if (!tween || _toState.time === _fromState.time) {
             x = _fromState.x;
             y = _fromState.y;
-            transScale.xScale = transScale.yScale = _fromState.scale;
+            tRotation.origin.x = tScale.origin.x = _fromState.anchorX;
+            tRotation.origin.y = tScale.origin.y = _fromState.anchorY;
+            tScale.xScale = tScale.yScale = _fromState.scale;
             tRotation.angle = _fromState.rotation;
             opacity = _fromState.opacity;
         } else {
@@ -160,6 +162,8 @@ Item {
             x = _interpolate(_fromState.x, _toState.x, advanceMs, "linear");
             y = _interpolate(_fromState.y, _toState.y, advanceMs, "linear");
             z = _interpolate(_fromState.z, _toState.z, advanceMs, "linear");
+            tRotation.origin.x = tScale.origin.x = _interpolate(_fromState.anchorX, _toState.anchorX, advanceMs, "linear");
+            tRotation.origin.y = tScale.origin.y = _interpolate(_fromState.anchorY, _toState.anchorY, advanceMs, "linear");
             tScale.xScale = tScale.yScale = _interpolate(_fromState.scale, _toState.scale, advanceMs, "linear");
             tRotation.angle = _interpolate(_fromState.rotation, _toState.rotation, advanceMs, "linear");
             opacity = _interpolate(_fromState.opacity, _toState.opacity, advanceMs, "linear");
