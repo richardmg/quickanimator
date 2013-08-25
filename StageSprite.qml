@@ -3,12 +3,14 @@ import QtQuick 2.1
 Item {
     id: sprite
 
+    property real anchorX: 0
+    property real anchorY: 0
     property alias transRotation: tRotation
     property alias transScale: tScale
 
     transform: [
-        Scale { id: tScale; xScale: 1; yScale: 1 },
-        Rotation { id: tRotation; angle: 0}
+        Scale { id: tScale; xScale: 1; yScale: 1; origin.x: anchorX; origin.y: anchorY },
+        Rotation { id: tRotation; angle: 0; origin.x: anchorX; origin.y: anchorY }
     ]
 
     property QtObject model: parent 
@@ -26,9 +28,11 @@ Item {
     property NumberAnimation _animation_x: NumberAnimation{ target: sprite; property: "x" }
     property NumberAnimation _animation_y: NumberAnimation{ target: sprite; property: "y" }
     property NumberAnimation _animation_z: NumberAnimation{ target: sprite; property: "z" }
-    property NumberAnimation _animation_rotation: NumberAnimation{ target: tRotation; properties: "angle, origin.x, origin.y" }
-    property NumberAnimation _animation_scale: NumberAnimation{ target: tScale; properties: "xScale, yScale, origin.x, origin.y" }
+    property NumberAnimation _animation_anchorX: NumberAnimation{ target: sprite; property: "anchorX" }
+    property NumberAnimation _animation_anchorY: NumberAnimation{ target: sprite; property: "anchorY" }
     property NumberAnimation _animation_opacity: NumberAnimation{ target: sprite; property: "opacity" }
+    property NumberAnimation _animation_rotation: NumberAnimation{ target: tRotation; property: "angle" }
+    property NumberAnimation _animation_scale: NumberAnimation{ target: tScale; properties: "xScale, yScale" }
     property NumberAnimation _nextStateAnimation: NumberAnimation {
         target: _nextStateAnimation;
         property int goToNextState
@@ -57,7 +61,7 @@ Item {
         }
     }
 
-    property var _props: ["x", "y", "z", "rotation", "scale", "opacity"];
+    property var _props: ["x", "y", "z", "rotation", "scale", "opacity", "anchorX", "anchorY"];
     onPlayingChanged: if (playing) _play(); else _stop();
 
     function _play()
