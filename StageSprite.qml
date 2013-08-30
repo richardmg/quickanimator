@@ -101,8 +101,8 @@ Item {
             name:name + time,
             width:sprite.width,
             height:sprite.height,
-            rotation:tRotation.angle,
-            scale:tScale.xScale,
+            rotation:transRotation,
+            scale:transScaleX,
             opacity:sprite.opacity,
             time:time,
             sprite:sprite,
@@ -116,8 +116,8 @@ Item {
     {
         anchorX = keyframe.anchorX;
         anchorY = keyframe.anchorY;
-        tRotation.angle = keyframe.rotation;
-        tScale.xScale = tScale.yScale = keyframe.scale;
+        transRotation = keyframe.rotation;
+        transScaleX = transScaleY = keyframe.scale;
     }
 
     function removeState(state, tween)
@@ -159,8 +159,8 @@ Item {
             y = _fromState.y;
             anchorX = _fromState.anchorX;
             anchorY = _fromState.anchorY;
-            tScale.xScale = tScale.yScale = _fromState.scale;
-            tRotation.angle = _fromState.rotation;
+            transScaleX = transScaleY = _fromState.scale;
+            transRotation = _fromState.rotation;
             opacity = _fromState.opacity;
         } else {
             var fromStateMs = _fromState.time * model.msPerFrame
@@ -170,8 +170,8 @@ Item {
             z = _interpolate(_fromState.z, _toState.z, advanceMs, "linear");
             anchorX = _interpolate(_fromState.anchorX, _toState.anchorX, advanceMs, "linear");
             anchorY = _interpolate(_fromState.anchorY, _toState.anchorY, advanceMs, "linear");
-            tScale.xScale = tScale.yScale = _interpolate(_fromState.scale, _toState.scale, advanceMs, "linear");
-            tRotation.angle = _interpolate(_fromState.rotation, _toState.rotation, advanceMs, "linear");
+            transScaleX = transScaleY = _interpolate(_fromState.scale, _toState.scale, advanceMs, "linear");
+            transRotation = _interpolate(_fromState.rotation, _toState.rotation, advanceMs, "linear");
             opacity = _interpolate(_fromState.opacity, _toState.opacity, advanceMs, "linear");
         }
     }
