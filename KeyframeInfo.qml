@@ -83,7 +83,7 @@ Rectangle {
                 Layout.alignment: Qt.AlignRight
             }
             ItemSpinBox {
-                property: "rotation"
+                property: "transRotation"
                 stepSize: 1
             }
             ItemComboBox { }
@@ -92,7 +92,7 @@ Rectangle {
                 Layout.alignment: Qt.AlignRight
             }
             ItemSpinBox {
-                property: "scale"
+                property: "transScaleX"
                 stepSize: 0.1
                 minimumValue: 0
             }

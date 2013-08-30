@@ -5,8 +5,10 @@ Item {
 
     property real anchorX: 0
     property real anchorY: 0
-    property alias transRotation: tRotation
-    property alias transScale: tScale
+    property alias transRotation: tRotation.angle
+    property alias transScaleX: tScale.xScale
+    property alias transScaleY: tScale.yScale
+    property alias rot: tRotation.angle
 
     transform: [
         Scale { id: tScale; xScale: 1; yScale: 1; origin.x: anchorX; origin.y: anchorY },
