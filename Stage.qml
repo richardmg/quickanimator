@@ -42,10 +42,7 @@ Item {
             var layers = myApp.model.layers;
             for (var i=layers.length - 1; i>=0; --i) {
                 var sprite = layers[i].sprite
-                var keyframe = sprite.getCurrentState();
-                var ax = keyframe.anchorX;
-                var ay = keyframe.anchorY;
-                var mapped = sprites.mapFromItem(sprite, ax, ay);
+                var mapped = sprites.mapFromItem(sprite, sprite.anchorX, sprite.anchorY);
                 var dx = pos.x - mapped.x;
                 var dy = pos.y - mapped.y;
                 var len = Math.sqrt((dx * dx) + (dy * dy))
@@ -75,8 +72,7 @@ Item {
                     // Start rotation
                     var layer = myApp.model.selectedLayers[0];
                     var sprite = layer.sprite
-                    var keyframe = sprite.getCurrentState();
-                    var globalPos = sprites.mapFromItem(sprite.parent, sprite.x + keyframe.anchorX, sprite.y + keyframe.anchorY);
+                    var globalPos = sprites.mapFromItem(sprite.parent, sprite.x + sprite.anchorX, sprite.y + sprite.anchorY);
                     var center = {x: globalPos.x, y: globalPos.y};
                     currentAction = getAngleAndRadius(center, pos);
                     currentAction.rotating = true
@@ -140,7 +136,7 @@ Item {
                     var layer = myApp.model.selectedLayers[0];
                     var sprite = layer.sprite
                     var keyframe = sprite.getCurrentState();
-                    var globalPos = sprites.mapFromItem(sprite.parent, sprite.x + keyframe.anchorX, sprite.y + keyframe.anchorY);
+                    var globalPos = sprites.mapFromItem(sprite.parent, sprite.x + sprite.anchorX, sprite.y + sprite.anchorY);
                     var center = {x: globalPos.x, y: globalPos.y};
                     var aar = getAngleAndRadius(center, pos);
                     for (var i in myApp.model.selectedLayers) {
@@ -213,7 +209,7 @@ Item {
         id: layerFocus
         Rectangle {
             id: layerFocusItem
-            property Item target: root
+            property Item target: null
             width: focusSize * 2
             height: focusSize * 2
             color: "transparent"
@@ -224,8 +220,7 @@ Item {
 
             function syncFocusPosition()
             {
-                var keyframe = target.getCurrentState();
-                var mapped = focusFrames.mapFromItem(target, keyframe.anchorX, keyframe.anchorY);
+                var mapped = focusFrames.mapFromItem(target, target.anchorX, target.anchorY);
                 layerFocusItem.x = mapped.x - focusSize;
                 layerFocusItem.y = mapped.y - focusSize;
             }
@@ -234,6 +229,8 @@ Item {
                 target: layerFocusItem.target
                 onXChanged: syncFocusPosition();
                 onYChanged: syncFocusPosition();
+                onAnchorXChanged: syncFocusPosition();
+                onAnchorYChanged: syncFocusPosition();
                 onParentChanged: syncFocusPosition();
             }
         }

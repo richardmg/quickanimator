@@ -112,8 +112,8 @@ Item {
 
     function synchSpriteWithKeyframe(keyframe)
     {
-        tRotation.origin.x = tScale.origin.x = keyframe.anchorX;
-        tRotation.origin.y = tScale.origin.y = keyframe.anchorY;
+        anchorX = keyframe.anchorX;
+        anchorY = keyframe.anchorY;
         tRotation.angle = keyframe.rotation;
         tScale.xScale = tScale.yScale = keyframe.scale;
     }
@@ -155,8 +155,8 @@ Item {
         if (!tween || _toState.time === _fromState.time) {
             x = _fromState.x;
             y = _fromState.y;
-            tRotation.origin.x = tScale.origin.x = _fromState.anchorX;
-            tRotation.origin.y = tScale.origin.y = _fromState.anchorY;
+            anchorX = _fromState.anchorX;
+            anchorY = _fromState.anchorY;
             tScale.xScale = tScale.yScale = _fromState.scale;
             tRotation.angle = _fromState.rotation;
             opacity = _fromState.opacity;
@@ -166,8 +166,8 @@ Item {
             x = _interpolate(_fromState.x, _toState.x, advanceMs, "linear");
             y = _interpolate(_fromState.y, _toState.y, advanceMs, "linear");
             z = _interpolate(_fromState.z, _toState.z, advanceMs, "linear");
-            tRotation.origin.x = tScale.origin.x = _interpolate(_fromState.anchorX, _toState.anchorX, advanceMs, "linear");
-            tRotation.origin.y = tScale.origin.y = _interpolate(_fromState.anchorY, _toState.anchorY, advanceMs, "linear");
+            anchorX = _interpolate(_fromState.anchorX, _toState.anchorX, advanceMs, "linear");
+            anchorY = _interpolate(_fromState.anchorY, _toState.anchorY, advanceMs, "linear");
             tScale.xScale = tScale.yScale = _interpolate(_fromState.scale, _toState.scale, advanceMs, "linear");
             tRotation.angle = _interpolate(_fromState.rotation, _toState.rotation, advanceMs, "linear");
             opacity = _interpolate(_fromState.opacity, _toState.opacity, advanceMs, "linear");
@@ -214,6 +214,5 @@ Item {
         state.lastSearchIndex = i;
         return state;
     }
-
 
 }
