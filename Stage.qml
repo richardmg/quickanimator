@@ -97,7 +97,7 @@ Item {
                         // Move anchor
                         var layer = myApp.model.selectedLayers[0];
                         var sprite = layer.sprite
-                        var keyframe = sprite.getCurrentState();
+                        var keyframe = myApp.model.getState(layer, myApp.model.time);
                         var globalPos = focusFrames.mapFromItem(sprite, keyframe.anchorX, keyframe.anchorY);
                         var localDelta = focusFrames.mapToItem(sprite, globalPos.x + dx, globalPos.y + dy);
                         keyframe.anchorX = localDelta.x;
