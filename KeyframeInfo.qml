@@ -84,6 +84,7 @@ Rectangle {
             }
             ItemSpinBox {
                 property: "transRotation"
+                keyframeProperty: "rotation"
                 stepSize: 1
             }
             ItemComboBox { }
@@ -93,6 +94,7 @@ Rectangle {
             }
             ItemSpinBox {
                 property: "transScaleX"
+                keyframeProperty: "scale"
                 stepSize: 0.1
                 minimumValue: 0
             }

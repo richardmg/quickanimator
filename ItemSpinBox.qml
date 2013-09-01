@@ -5,6 +5,7 @@ SpinBox {
     id: spinbox
     implicitWidth: 100
     property string property: ""
+    property string keyframeProperty: ""
     enabled: false
     decimals: 3
     minimumValue: -9999
@@ -25,9 +26,8 @@ SpinBox {
             return;
 
         var keyframe = myApp.model.focusState
-        var time = myApp.model.time;
 
-        keyframe[property] = spinbox.value; 
+        keyframe[keyframeProperty != "" ? keyframeProperty : property] = spinbox.value; 
         keyframe.sprite[property] = spinbox.value;
     }
 
