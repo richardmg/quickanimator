@@ -112,8 +112,13 @@ Rectangle {
             ItemComboBox { }
             Button {
                 Layout.columnSpan: 3
-                text: "Remove state"
-                onClicked: myApp.model.removeFocusState();
+                text: stateName.enabled ? "Delete keyframe" : "New keyframe"
+                onClicked: {
+                    if (stateName.enabled)
+                        myApp.model.removeFocusState();
+                    else
+                        myApp.model.getState(myApp.model.layers[myApp.model.focusLayerIndex], myApp.model.time);
+                }
             }
         }
     }

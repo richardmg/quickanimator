@@ -205,6 +205,7 @@ QtObject {
         if (!focusState)
             return;
         layers[focusLayerIndex].sprite.removeCurrentState(tweenMode);
+        focusState = null;
         statesUpdated(focusLayerIndex);
     }
 
