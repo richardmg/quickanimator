@@ -59,7 +59,7 @@ QtObject {
         layer.selected = false;
         layer.parentLayer = null;
         layer.hierarchyLevel = 0;
-        layer.sprite.createKeyframe(0);
+        layer.sprite.createKeyframe(0, true);
         layer.sprite.setTime(0, false);
         selectLayer(layer, true);
         layersUpdated(-1, layers.length);
@@ -75,7 +75,7 @@ QtObject {
         var state = layer.sprite.getState(time);
         if (!state || state.time != time) {
             // Add the new state at given time:
-            var state = layer.sprite.createKeyframe(time);
+            var state = layer.sprite.createKeyframe(time, true);
             var index = layers.indexOf(layer);
             setFocusLayer(index);
             statesUpdated(index);
@@ -155,43 +155,11 @@ QtObject {
             layers.splice(insertIndex, 0, layerTree[i]);
         layer.parentLayer = parentLayer;
 
-        // Get current sprite geometry in scene/global coordinates:
-        var sprite = layer.sprite;
-        var hotspotX = (sprite.width / 2);
-        var hotspotY = (sprite.height / 2);
-        var gHotspot = sprite.mapToItem(myApp.stage.sprites, hotspotX, hotspotY);
-        var gRefPoint = sprite.mapToItem(myApp.stage.sprites, hotspotX + 1, hotspotY);
-        var dx = gRefPoint.x - gHotspot.x;
-        var dy = gRefPoint.y - gHotspot.y;
-        var gRotation = (Math.atan2(dy, dx) * 180 / Math.PI);
-        var gScale = Math.sqrt((dx * dx) + (dy * dy));
-
-        // Get current parent geometry in scene/global coordinates:
-        if (!parentLayer) {
-            var gParentRotation = 0;
-            var gParentScale = 1;
-        } else {
-            var parentSprite = parentLayer.sprite;
-            var parentHotspotX = (parentSprite.width / 2);
-            var parentHotspotY = (parentSprite.height / 2);
-            var gParentHotspot = parentSprite.mapToItem(myApp.stage.sprites, parentHotspotX, parentHotspotY);
-            var gParentRefPoint = parentSprite.mapToItem(myApp.stage.sprites, parentHotspotX + 1, parentHotspotY);
-            var parentDx = gParentRefPoint.x - gParentHotspot.x;
-            var parentDy = gParentRefPoint.y - gParentHotspot.y;
-            gParentRotation = (Math.atan2(parentDy, parentDx) * 180 / Math.PI);
-            gParentScale = Math.sqrt((parentDx * parentDx) + (parentDy * parentDy));
-        }
-
+        // Store the parent change (but not the geometry changes that will occur):
+        var keyframe = myApp.model.getState(layer, myApp.model.time);
+        keyframe.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
         // Reparent sprite:
-        sprite.parent = null;
-        sprite.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
-        var newHotspot = sprite.parent.mapFromItem(myApp.stage.sprites, gHotspot.x, gHotspot.y);
-
-        // Move sprite to the same stage geometry as before reparenting:
-        sprite.x = newHotspot.x - (sprite.width / 2);
-        sprite.y = newHotspot.y - (sprite.height / 2);
-        sprite.rotation = gRotation - gParentRotation;
-        sprite.scale = gScale / gParentScale;
+        layer.sprite.changeParent(keyframe.parent);
 
         // Update hierarchyLevel of all descendants to match the new parent:
         var levelDiff = newLevel - layer.hierarchyLevel; 

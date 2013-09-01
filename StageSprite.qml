@@ -68,7 +68,9 @@ Item {
 
     function _play()
     {
+        // Move sprite to fromState:
         _updateProperties(true);
+        // Animate to toState:
         var duration = (_toState.time - spriteTime) * model.msPerFrame;
         if (duration <= 0)
             return;
@@ -89,10 +91,10 @@ Item {
         _nextStateAnimation.stop();
     }
 
-    function createKeyframe(time)
+    function createKeyframe(time, store)
     {
-        var index = keyframes.length === 0 ? 0 : getState(time).lastSearchIndex + 1;
-        var state = {
+        var keyframe = {
+            parent:parent,
             x:sprite.x,
             y:sprite.y,
             z:sprite.z,
@@ -105,19 +107,29 @@ Item {
             scale:transScaleX,
             opacity:sprite.opacity,
             time:time,
-            sprite:sprite,
+            sprite:sprite
         };
-        keyframes.splice(index, 0, state);
+        // For parent change, a keyframe can carry a different
+        // keyframe when acting in a "from state" role:
+        if (store) {
+            var index = keyframes.length === 0 ? 0 : getState(time).lastSearchIndex + 1;
+            keyframes.splice(index, 0, keyframe);
+        }
         _invalidCache = true;
-        return state;
+        return keyframe;
     }
 
     function synchSpriteWithKeyframe(keyframe)
     {
+        changeParent(keyframe.parent);
+        x = keyframe.x;
+        y = keyframe.y;
+        z = keyframe.z;
         anchorX = keyframe.anchorX;
         anchorY = keyframe.anchorY;
         transRotation = keyframe.rotation;
         transScaleX = transScaleY = keyframe.scale;
+        opacity = keyframe.opacity;
     }
 
     function removeState(state, tween)
@@ -154,26 +166,28 @@ Item {
 
     function _updateProperties(tween)
     {
-        if (!tween || _toState.time === _fromState.time) {
-            x = _fromState.x;
-            y = _fromState.y;
-            anchorX = _fromState.anchorX;
-            anchorY = _fromState.anchorY;
-            transScaleX = transScaleY = _fromState.scale;
-            transRotation = _fromState.rotation;
-            opacity = _fromState.opacity;
+        var effectiveFromState = _fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState;
+        if (!tween || _toState.time === effectiveFromState.time) {
+            x = effectiveFromState.x;
+            y = effectiveFromState.y;
+            anchorX = effectiveFromState.anchorX;
+            anchorY = effectiveFromState.anchorY;
+            transScaleX = transScaleY = effectiveFromState.scale;
+            transRotation = effectiveFromState.rotation;
+            opacity = effectiveFromState.opacity;
         } else {
-            var fromStateMs = _fromState.time * model.msPerFrame
-            var advanceMs = (spriteTime * model.msPerFrame) - fromStateMs;
-            x = _interpolate(_fromState.x, _toState.x, advanceMs, "linear");
-            y = _interpolate(_fromState.y, _toState.y, advanceMs, "linear");
-            z = _interpolate(_fromState.z, _toState.z, advanceMs, "linear");
-            anchorX = _interpolate(_fromState.anchorX, _toState.anchorX, advanceMs, "linear");
-            anchorY = _interpolate(_fromState.anchorY, _toState.anchorY, advanceMs, "linear");
-            transScaleX = transScaleY = _interpolate(_fromState.scale, _toState.scale, advanceMs, "linear");
-            transRotation = _interpolate(_fromState.rotation, _toState.rotation, advanceMs, "linear");
-            opacity = _interpolate(_fromState.opacity, _toState.opacity, advanceMs, "linear");
+            var effectiveFromStateMs = effectiveFromState.time * model.msPerFrame
+            var advanceMs = (spriteTime * model.msPerFrame) - effectiveFromStateMs;
+            x = _interpolate(effectiveFromState.x, _toState.x, advanceMs, "linear");
+            y = _interpolate(effectiveFromState.y, _toState.y, advanceMs, "linear");
+            z = _interpolate(effectiveFromState.z, _toState.z, advanceMs, "linear");
+            anchorX = _interpolate(effectiveFromState.anchorX, _toState.anchorX, advanceMs, "linear");
+            anchorY = _interpolate(effectiveFromState.anchorY, _toState.anchorY, advanceMs, "linear");
+            transScaleX = transScaleY = _interpolate(effectiveFromState.scale, _toState.scale, advanceMs, "linear");
+            transRotation = _interpolate(effectiveFromState.rotation, _toState.rotation, advanceMs, "linear");
+            opacity = _interpolate(effectiveFromState.opacity, _toState.opacity, advanceMs, "linear");
         }
+        parent = _fromState.parent;
     }
 
     function _interpolate(from, to, advanceMs, curve)
@@ -215,6 +229,47 @@ Item {
         var state = keyframes[i];
         state.lastSearchIndex = i;
         return state;
+    }
+
+    function changeParent(newParent)
+    {
+        if (parent == newParent)
+            return;
+
+        // Get current sprite geometry in scene/global coordinates:
+        var hotspotX = (width / 2);
+        var hotspotY = (height / 2);
+        var gHotspot = mapToItem(myApp.stage.sprites, hotspotX, hotspotY);
+        var gRefPoint = mapToItem(myApp.stage.sprites, hotspotX + 1, hotspotY);
+        var dx = gRefPoint.x - gHotspot.x;
+        var dy = gRefPoint.y - gHotspot.y;
+        var gRotation = (Math.atan2(dy, dx) * 180 / Math.PI);
+        var gScale = Math.sqrt((dx * dx) + (dy * dy));
+
+        // Get current parent geometry in scene/global coordinates:
+        var parentHotspotX = (newParent.width / 2);
+        var parentHotspotY = (newParent.height / 2);
+        var gParentHotspot = newParent.mapToItem(myApp.stage.sprites, parentHotspotX, parentHotspotY);
+        var gParentRefPoint = newParent.mapToItem(myApp.stage.sprites, parentHotspotX + 1, parentHotspotY);
+        var parentDx = gParentRefPoint.x - gParentHotspot.x;
+        var parentDy = gParentRefPoint.y - gParentHotspot.y;
+        var gParentRotation = (Math.atan2(parentDy, parentDx) * 180 / Math.PI);
+        var gParentScale = Math.sqrt((parentDx * parentDx) + (parentDy * parentDy));
+
+        // Reparent sprite:
+        parent = null;
+        parent = newParent
+
+        // Move sprite to the same stage geometry as before reparenting:
+        var newHotspot = parent.mapFromItem(myApp.stage.sprites, gHotspot.x, gHotspot.y);
+        x = newHotspot.x - (sprite.width / 2);
+        y = newHotspot.y - (sprite.height / 2);
+        transRotation = gRotation - gParentRotation;
+        transScaleX = transScaleY = gScale / gParentScale;
+
+        // Store the geometry conversion in the fromKeyframe:
+        getCurrentState().effectiveKeyframe = createKeyframe(spriteTime, false);
+        _updateProperties(false);
     }
 
 }
