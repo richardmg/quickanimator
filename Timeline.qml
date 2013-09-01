@@ -40,6 +40,9 @@ Item {
             case Qt.Key_Backspace:
                 myApp.model.removeFocusState();
                 break;
+            case Qt.Key_Return:
+                myApp.model.getState(myApp.model.layers[myApp.model.focusLayerIndex], myApp.model.time);
+                break;
             case Qt.Key_Left:
                 if (event.modifiers & Qt.ControlModifier) {
                     selectedX = 0;
