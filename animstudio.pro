@@ -10,3 +10,7 @@ QT += quick qml widgets
 # Input
 HEADERS += fileio.h
 SOURCES += fileio.cpp main.cpp
+
+
+qml.files = qml
+QMAKE_BUNDLE_DATA += qml
