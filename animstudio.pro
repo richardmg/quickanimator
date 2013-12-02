@@ -11,6 +11,8 @@ QT += quick qml widgets
 HEADERS += fileio.h
 SOURCES += fileio.cpp main.cpp
 
-
 qml.files = qml
-QMAKE_BUNDLE_DATA += qml
+dummy.files = dummy.jpeg
+QMAKE_BUNDLE_DATA += qml dummy
+
+OTHER_FILES += qml/*.qml

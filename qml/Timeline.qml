@@ -117,39 +117,32 @@ Item {
     Rectangle {
         id: selectorLine
         color: Qt.darker(myApp.style.accent, 1.3);
-        x: selectorHandle.x + (myApp.style.cellWidth / 2) - 1;
+        x: (selectedX * myApp.style.cellWidth) - timelineCanvas.flickable.contentX + (myApp.style.cellWidth / 2)
         width: 1
         height: parent.height - y
     }
 
     Rectangle {
         id: selectorHandle
-        x: 1 + (selectedX * myApp.style.cellWidth) - timelineCanvas.flickable.contentX
-        y: (selectedY * myApp.style.cellHeight) - timelineCanvas.flickable.contentY
+        x: selectorLine.x - (width / 2)
+        y: (selectedY * myApp.style.cellHeight) - timelineCanvas.flickable.contentY - ((height - myApp.style.cellHeight) / 2)
         z: 10
-        width: timelineCanvas.cellWidth - 2
-        height: myApp.style.cellHeight - 1
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0;
-                color: Qt.rgba(0.9, 0.9, 0.9, 1.0)
-            }
-            GradientStop {
-                position: 1.0;
-                color: Qt.rgba(0.8, 0.8, 0.8, 1.0)
-            }
-        }
+        border.color: selectorLine.color
+        gradient: style.stageGradient
+        width: myApp.style.cellWidth
+        height: myApp.style.cellHeight
     }
 
     MouseArea {
         id: mouseArea
         anchors.fill: parent
         property bool acceptEvents: true
+        property int margin: 20
 
         onPressed: {
             root.focus = true
-            var pos = mouseArea.mapToItem(selectorHandle, mouseX, mouseY)
-            acceptEvents = (pos.x > 0 && pos.y > 0 && pos.x < selectorHandle.width && pos.y < selectorHandle.height)
+            var pos = mouseArea.mapToItem(selectorLine, mouseX, mouseY)
+            acceptEvents = (pos.x > -margin && pos.y > 0 && pos.x < selectorLine.width  + margin && pos.y < selectorLine.height)
             mouse.accepted = acceptEvents;
         }
 

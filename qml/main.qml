@@ -82,7 +82,7 @@ ApplicationWindow {
             height: image.height
             Image {
                 id: image
-                source: "dummy.jpeg"
+                source: "../dummy.jpeg"
             }
         }
     }
