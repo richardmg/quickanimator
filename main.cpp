@@ -28,7 +28,7 @@ int main(int argc, char* argv[])
 
     QObject *topLevel = component.create();
     QQuickWindow *window = qobject_cast<QQuickWindow *>(topLevel);
-    window->showFullScreen();
+    window->show();
 
     return app.exec();
 }

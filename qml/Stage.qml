@@ -127,6 +127,9 @@ Item {
                             state.x = sprite.x;
                             state.y = sprite.y;
                         }
+
+                        if (myApp.model.recordMode)
+                            myApp.model.setTime(myApp.model.time + 1);
                     }
 
                     currentAction.x = pos.x;

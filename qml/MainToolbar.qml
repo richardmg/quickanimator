@@ -37,6 +37,14 @@ TitleBar {
             onClicked: myApp.model.setTime(0);
         }
         ToolButton {
+            id: record
+            height: parent.height
+            anchors.verticalCenter: parent.verticalCenter
+            text: checked ? "Stop" : "Record"
+            checkable: true
+            onCheckedChanged: myApp.model.recordMode = checked
+        }
+        ToolButton {
             id: play
             height: parent.height
             anchors.verticalCenter: parent.verticalCenter
