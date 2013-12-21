@@ -7,7 +7,7 @@ Item {
     property Flickable flickable: flickable
     property var model: myApp.model.layers
     property var playStartTime: new Date()
-    property real flickSpeed: 0.2
+    property real flickSpeed: 0.05
 
     property bool _playing: false
 
@@ -16,7 +16,7 @@ Item {
     TextArea {
         id: text
         anchors.fill: parent
-        text: myApp.model.time + " : " + flickable.contentX
+        text: flickable.contentX * flickSpeed
     }
 
     Connections {
