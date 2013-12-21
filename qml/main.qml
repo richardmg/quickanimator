@@ -62,11 +62,11 @@ ApplicationWindow {
                 property Item t: timelineSprites.flickable
                 target: t.moving ? null : t
                 property: "contentY"
-                value: myApp.timeline.timelineCanvas.flickable.contentY
+                value: myApp.timeline.flickable.contentY
             }
 
             Binding {
-                property Item t: timeline.timelineCanvas.flickable
+                property Item t: timeline.flickable
                 target: t.moving ? null : t
                 property: "contentY"
                 value: timelineSprites.flickable.contentY
