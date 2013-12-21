@@ -45,7 +45,7 @@ Rectangle {
                     onFocusStateChanged: {
                         if (myApp.model.focusState) {
                             stateName.enabled = true;
-                            stateName.text = myApp.model.focusState.name;
+                            //stateName.text = myApp.model.focusState.name;
                         } else {
                             stateName.enabled = false;
                             stateName.text = "";

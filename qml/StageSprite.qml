@@ -63,13 +63,14 @@ Item {
         }
     }
 
-    property var _props: ["x", "y", "z", "rotation", "scale", "opacity", "anchorX", "anchorY"];
+//    property var _props: ["x", "y", "z", "rotation", "scale", "opacity", "anchorX", "anchorY"];
+    property var _props: ["x", "y"];
     onPlayingChanged: if (playing) _play(); else _stop();
 
     function _play()
     {
         // Move sprite to fromState:
-        _updateProperties(true);
+        _interpolatePosition(spriteTime);
         // Animate to toState:
         var duration = (_toState.time - spriteTime) * model.msPerFrame;
         if (duration <= 0)
@@ -91,12 +92,41 @@ Item {
         _nextStateAnimation.stop();
     }
 
-    function createKeyframe(time, store)
+    function getPositionKeyframe(time)
     {
-        var keyframe = {
+        return (time >= _fromState.time && time < _toState.time)
+                ? getCurrentPositionKeyframe() : _getPositionKeyframeBinarySearch(time);
+    }
+
+    function getCurrentPositionKeyframe()
+    {
+        _updateToAndFromState(spriteTime);
+        return _fromState;
+    }
+
+    function addPositionKeyframe(keyframe)
+    {
+        var index = keyframes.length === 0 ? 0 : getPositionKeyframe(keyframe.time).lastSearchIndex + 1;
+        keyframes.splice(index, 0, keyframe);
+        _invalidCache = true;
+    }
+
+    function createPositionKeyframe(time)
+    {
+        return {
+            time:time,
             parent:parent,
             x:sprite.x,
             y:sprite.y,
+            sprite:sprite
+        };
+    }
+
+    function create_changeme_Keyframe(time)
+    {
+        return {
+            time:time,
+            sprite:sprite,
             z:sprite.z,
             anchorX: tScale.origin.x,
             anchorY: tScale.origin.y,
@@ -105,21 +135,17 @@ Item {
             height:sprite.height,
             rotation:transRotation,
             scale:transScaleX,
-            opacity:sprite.opacity,
-            time:time,
-            sprite:sprite
+            opacity:sprite.opacity
         };
-        // For parent change, a keyframe can carry a different
-        // keyframe when acting in a "from state" role:
-        if (store) {
-            var index = keyframes.length === 0 ? 0 : getState(time).lastSearchIndex + 1;
-            keyframes.splice(index, 0, keyframe);
-        }
-        _invalidCache = true;
-        return keyframe;
     }
 
-    function synchSpriteWithKeyframe(keyframe)
+    function synchSpriteWithPostitionKeyframe(keyframe)
+    {
+        x = keyframe.x;
+        y = keyframe.y;
+    }
+
+    function synchSpriteWith_changeme_Keyframe(keyframe)
     {
         changeParent(keyframe.parent);
         x = keyframe.x;
@@ -132,39 +158,38 @@ Item {
         opacity = keyframe.opacity;
     }
 
-    function removeState(state, tween)
+    function removePositionKeyframe(keyframe)
     {
-        keyframes.splice(keyframes.indexOf(state), 1);
+        keyframes.splice(keyframes.indexOf(keyframe), 1);
         _invalidCache = true;
-        setTime(spriteTime, tween);
+        setTime(spriteTime);
     }
 
-    function removeCurrentState(tween)
-    {
-        removeState(getCurrentState(), tween);
-    }
-
-    function getCurrentState()
-    {
-        _updateToAndFromState(spriteTime);
-        return _fromState;
-    }
-
-    function getState(time)
-    {
-        return (time >= _fromState.time && time < _toState.time) ? getCurrentState() : _getStateBinarySearch(time);
-    }
-
-    function setTime(time, tween)
+    function setTime(time)
     {
         _updateToAndFromState(time);
         spriteTime = time;
-        _updateProperties(tween);
+        _interpolatePosition(spriteTime);
         if (playing)
             _play();
     }
 
-    function _updateProperties(tween)
+    function _interpolatePosition(time)
+    {
+        var effectiveFromState = _fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState;
+        if (_toState.time === effectiveFromState.time) {
+            x = effectiveFromState.x;
+            y = effectiveFromState.y;
+        } else {
+            var effectiveFromStateMs = effectiveFromState.time * model.msPerFrame;
+            var advanceMs = (time * model.msPerFrame) - effectiveFromStateMs;
+            x = _interpolate(effectiveFromState.x, _toState.x, advanceMs, "linear");
+            y = _interpolate(effectiveFromState.y, _toState.y, advanceMs, "linear");
+        }
+        parent = _fromState.parent;
+    }
+
+    function _update_changeme_Properties(tween)
     {
         var effectiveFromState = _fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState;
         if (!tween || _toState.time === effectiveFromState.time) {
@@ -202,14 +227,14 @@ Item {
     {
         _invalidCache = _invalidCache || !_fromState || !_toState || time < _fromState.time || time >= _toState.time;
         if (_invalidCache) {
-            _fromState = _getStateBinarySearch(time);
+            _fromState = _getPositionKeyframeBinarySearch(time);
             keyframeIndex = _fromState.lastSearchIndex;
             _toState = (keyframeIndex === keyframes.length - 1) ? _fromState : keyframes[keyframeIndex + 1];
             _invalidCache = false;
         }
     }
 
-    function _getStateBinarySearch(time)
+    function _getPositionKeyframeBinarySearch(time)
     {
         // Binary search keyframes:
         var low = 0, high = keyframes.length - 1;
@@ -268,8 +293,8 @@ Item {
         transScaleX = transScaleY = gScale / gParentScale;
 
         // Store the geometry conversion in the fromKeyframe:
-        getCurrentState().effectiveKeyframe = createKeyframe(spriteTime, false);
-        _updateProperties(false);
+        getCurrentPositionKeyframe().effectiveKeyframe = createPositionKeyframe(spriteTime);
+        _interpolatePosition(spriteTime);
     }
 
 }

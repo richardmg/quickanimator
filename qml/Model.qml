@@ -16,26 +16,49 @@ QtObject {
     signal selectedLayersUpdated(var unselectedLayer, var selectedLayer)
     signal statesUpdated(var layer)
 
-    property bool tweenMode: true
+    function syncLayerPosition(layer)
+    {
+       if (!recordMode)
+           return;
 
-    onTweenModeChanged: {
-        for (var l in layers) {
-            var layer = layers[l];
-            layer.sprite.setTime(layer.sprite.spriteTime, tweenMode);
-        }
+       var sprite = layer.sprite;
+       var keyframe = sprite.getPositionKeyframe(time);
+       if (!keyframe || keyframe.time !== time) {
+           keyframe = sprite.createPositionKeyframe(time);
+           sprite.addPositionKeyframe(keyframe);
+       }
+       keyframe.x = sprite.x;
+       keyframe.y = sprite.y;
     }
+
+//    function getState(layer, time)
+//    {
+//        // get state at time, or add a new
+//        // one if non existing:
+//        if (!layer)
+//            return;
+//        var state = layer.sprite.getState(time);
+//        if (!state || state.time != time) {
+//            // Add the new state at given time:
+//            var state = layer.sprite.createKeyframe(time, true);
+//            var index = layers.indexOf(layer);
+//            setFocusLayer(index);
+//            statesUpdated(index);
+//        }
+//        return state;
+//    }
 
     function setTime(time)
     {
         root.time = time;
         for (var l in layers) {
             var layer = layers[l];
-            layer.sprite.setTime(time, tweenMode);
+            layer.sprite.setTime(time);
         }
-        var layer = layers[focusLayerIndex];
+        layer = layers[focusLayerIndex];
         if (layer) {
-            var state = layer.sprite.getCurrentState();
-            root.focusState =  (state && state.time === state.sprite.spriteTime) ? state : null;
+            var keyframe = layer.sprite.getCurrentPositionKeyframe();
+            root.focusState = (keyframe && keyframe.time === keyframe.sprite.spriteTime) ? keyframe : null;
         }
     }
 
@@ -46,8 +69,8 @@ QtObject {
         var foundState = null;
         var layer = layers[focusLayerIndex];
         if (layer) {
-            var state = layer.sprite.getCurrentState();
-            root.focusState = (state && state.time === state.sprite.spriteTime) ? state : null;
+            var keyframe = layer.sprite.getCurrentPositionKeyframe();
+            root.focusState = (keyframe && keyframe.time === keyframe.sprite.spriteTime) ? keyframe : null;
         } else {
             root.focusState = null;
         }
@@ -60,28 +83,11 @@ QtObject {
         layer.selected = false;
         layer.parentLayer = null;
         layer.hierarchyLevel = 0;
-        layer.sprite.createKeyframe(0, true);
-        layer.sprite.setTime(0, false);
+        layer.sprite.addPositionKeyframe(layer.sprite.createPositionKeyframe(0));
+        layer.sprite.setTime(0);
         selectLayer(layer, true);
         layersUpdated(-1, layers.length);
         setFocusLayer(focusLayerIndex);
-    }
-
-    function getState(layer, time)
-    {
-        // get state at time, or add a new
-        // one if non existing:
-        if (!layer)
-            return;
-        var state = layer.sprite.getState(time);
-        if (!state || state.time != time) {
-            // Add the new state at given time:
-            var state = layer.sprite.createKeyframe(time, true);
-            var index = layers.indexOf(layer);
-            setFocusLayer(index);
-            statesUpdated(index);
-        }
-        return state;
     }
 
     function unselectAllLayers()
@@ -173,7 +179,8 @@ QtObject {
     {
         if (!focusState)
             return;
-        layers[focusLayerIndex].sprite.removeCurrentState(tweenMode);
+        var sprite = layers[focusLayerIndex].sprite;
+        sprite.removePositionKeyframe(sprite.getCurrentPositionKeyframe());
         focusState = null;
         statesUpdated(focusLayerIndex);
     }

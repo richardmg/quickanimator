@@ -63,7 +63,6 @@ Rectangle {
                     var rowData = root.model[row];
                     if (rowData) {
                         var sprite = rowData.sprite;
-                        var currentState = sprite.getCurrentState();
                         ctx.fillStyle = Qt.rgba(0.9, 0.5, 0.3, 1);
                         var grd = ctx.createLinearGradient(0, 0, 0, myApp.style.cellHeight * 4);
                         grd.addColorStop(0, '#8ED6FF');   

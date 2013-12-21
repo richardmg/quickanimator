@@ -55,14 +55,6 @@ TitleBar {
         ToolButton {
             height: parent.height
             anchors.verticalCenter: parent.verticalCenter
-            text: "Tween"
-            checkable: true
-            checked: true
-            onCheckedChanged: myApp.model.tweenMode = checked
-        }
-        ToolButton {
-            height: parent.height
-            anchors.verticalCenter: parent.verticalCenter
             text: "Save"
             onClicked: myApp.model.saveJSON();
         }
