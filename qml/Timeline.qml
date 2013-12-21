@@ -22,7 +22,7 @@ Item {
     Connections {
         target: myApp.model
         onTimeChanged: {
-            if (flickable.moving)
+            if (mouseArea.pressed)
                 return;
             flickable.contentX = myApp.model.time * flickSpeed;
         }
@@ -33,16 +33,25 @@ Item {
         anchors.fill: parent
         contentWidth: 5000
 
-        onMovingChanged: {
-            if (_playing) {
+        onContentXChanged: {
+            if (mouseArea.pressed)
                 myApp.model.setTime(contentX * flickSpeed);
-                _play(!moving)
+        }
+    }
+
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        onPressed: {
+            if (_playing) {
+                myApp.model.setTime(flickable.contentX * flickSpeed);
+                _play(false)
             }
         }
 
-        onContentXChanged: {
-            if (moving)
-                myApp.model.setTime(contentX * flickSpeed);
+        onReleased: {
+            if (_playing)
+                _play(true)
         }
     }
 

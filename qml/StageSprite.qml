@@ -94,7 +94,7 @@ Item {
 
     function getPositionKeyframe(time)
     {
-        var intTime = Math.round(time);
+        var intTime = Math.floor(time);
         return (intTime >= _fromState.time && intTime < _toState.time)
                 ? getCurrentPositionKeyframe() : _getPositionKeyframeBinarySearch(intTime);
     }
@@ -177,6 +177,7 @@ Item {
 
     function _interpolatePosition(time)
     {
+        print("inter:", time)
         var effectiveFromState = _fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState;
         if (_toState.time === effectiveFromState.time) {
             x = effectiveFromState.x;
@@ -226,7 +227,7 @@ Item {
 
     function _updateToAndFromState(time)
     {
-        var intTime = Math.round(time);
+        var intTime = Math.floor(time);
         _invalidCache = _invalidCache || !_fromState || !_toState || intTime < _fromState.time || intTime >= _toState.time;
         if (_invalidCache) {
             _fromState = _getPositionKeyframeBinarySearch(intTime);
