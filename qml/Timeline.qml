@@ -35,14 +35,14 @@ Item {
 
         onMovingChanged: {
             if (_playing) {
-                myApp.model.setTime(Math.floor(contentX * flickSpeed));
+                myApp.model.setTime(contentX * flickSpeed);
                 _play(!moving)
             }
         }
 
         onContentXChanged: {
             if (moving)
-                myApp.model.setTime(Math.floor(contentX * flickSpeed));
+                myApp.model.setTime(contentX * flickSpeed);
         }
     }
 
@@ -79,7 +79,7 @@ Item {
 
         onTickChanged: {
             var ms = playStartTime + (new Date()).getTime();
-            flickable.contentX = Math.floor(ms / (myApp.model.msPerFrame * flickSpeed));
+            flickable.contentX = ms / (myApp.model.msPerFrame * flickSpeed);
         }
     }
 }

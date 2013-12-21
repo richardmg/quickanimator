@@ -94,8 +94,9 @@ Item {
 
     function getPositionKeyframe(time)
     {
-        return (time >= _fromState.time && time < _toState.time)
-                ? getCurrentPositionKeyframe() : _getPositionKeyframeBinarySearch(time);
+        var intTime = Math.round(time);
+        return (intTime >= _fromState.time && intTime < _toState.time)
+                ? getCurrentPositionKeyframe() : _getPositionKeyframeBinarySearch(intTime);
     }
 
     function getCurrentPositionKeyframe()
@@ -225,9 +226,10 @@ Item {
 
     function _updateToAndFromState(time)
     {
-        _invalidCache = _invalidCache || !_fromState || !_toState || time < _fromState.time || time >= _toState.time;
+        var intTime = Math.round(time);
+        _invalidCache = _invalidCache || !_fromState || !_toState || intTime < _fromState.time || intTime >= _toState.time;
         if (_invalidCache) {
-            _fromState = _getPositionKeyframeBinarySearch(time);
+            _fromState = _getPositionKeyframeBinarySearch(intTime);
             keyframeIndex = _fromState.lastSearchIndex;
             _toState = (keyframeIndex === keyframes.length - 1) ? _fromState : keyframes[keyframeIndex + 1];
             _invalidCache = false;
