@@ -17,9 +17,9 @@ Item {
 
     property QtObject model: parent 
     property var keyframes: new Array()
-    property var keyframeIndex: 0
+    property int keyframeIndex: 0
 
-    property var spriteTime: 0
+    property real spriteTime: 0
     property string name: "keyframe"
     property bool playing: false
 
