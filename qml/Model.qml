@@ -4,7 +4,7 @@ import FileIO 1.0
 
 QtObject {
     id: root
-    property int time: 0
+    property real time: 0
     property var layers: new Array()
     property var selectedLayers: new Array()
     property var focusLayerIndex: 0

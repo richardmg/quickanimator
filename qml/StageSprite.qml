@@ -177,7 +177,6 @@ Item {
 
     function _interpolatePosition(time)
     {
-        print("inter:", time)
         var effectiveFromState = _fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState;
         if (_toState.time === effectiveFromState.time) {
             x = effectiveFromState.x;
