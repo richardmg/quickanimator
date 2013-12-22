@@ -10,7 +10,7 @@ QtObject {
     property var selectedLayers: new Array()
     property var focusLayerIndex: 0
     property var focusState: null
-    property int msPerFrame: 500
+    property int msPerFrame: 1000 / 60
 
     signal layersUpdated(var removedLayer, var addedLayer)
     signal selectedLayersUpdated(var unselectedLayer, var selectedLayer)
@@ -23,10 +23,11 @@ QtObject {
        if (!recordsPosition)
            return;
 
+       var intTime = Math.floor(time);
        var sprite = layer.sprite;
-       var keyframe = sprite.getPositionKeyframe(time);
-       if (!keyframe || keyframe.time !== time) {
-           keyframe = sprite.createPositionKeyframe(time);
+       var keyframe = sprite.getPositionKeyframe(intTime);
+       if (!keyframe || keyframe.time !== intTime) {
+           keyframe = sprite.createPositionKeyframe(intTime);
            sprite.addPositionKeyframe(keyframe);
        }
        keyframe.x = sprite.x;
