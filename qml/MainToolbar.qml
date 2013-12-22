@@ -9,6 +9,14 @@ TitleBar {
         height: parent.height - (y * 2)
 
         ToolButton {
+            id: record
+            height: parent.height
+            anchors.verticalCenter: parent.verticalCenter
+            text: checked ? "Recording" : "Record"
+            checkable: true
+            onCheckedChanged: myApp.model.recordMode = checked
+        }
+        ToolButton {
             text: " + "
             height: parent.height
             anchors.verticalCenter: parent.verticalCenter
@@ -37,22 +45,6 @@ TitleBar {
             onClicked: myApp.model.setTime(0);
         }
         ToolButton {
-            id: record
-            height: parent.height
-            anchors.verticalCenter: parent.verticalCenter
-            text: checked ? "Stop" : "Record"
-            checkable: true
-            onCheckedChanged: myApp.model.recordMode = checked
-        }
-        ToolButton {
-            id: play
-            height: parent.height
-            anchors.verticalCenter: parent.verticalCenter
-            text: checked ? "Stop" : "Play"
-            checkable: true
-            onCheckedChanged: myApp.timeline.togglePlay(checked);
-        }
-        ToolButton {
             height: parent.height
             anchors.verticalCenter: parent.verticalCenter
             text: "Save"
@@ -74,11 +66,9 @@ TitleBar {
         anchors.right: parent.right
         layoutDirection: Qt.RightToLeft
         Item { width: 10; height: 10 }
-        Label {
-            id: label
-            anchors.verticalCenter: parent.verticalCenter
-            text: "Time: " + myApp.timeline.selectedX
-            color: myApp.style.text
+        Timeline {
+            width: 300
+            height: parent.height
         }
     }
 }
