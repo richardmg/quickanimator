@@ -34,9 +34,14 @@ Item {
         MouseArea {
             id: mouseArea
             anchors.fill: parent
-            onPressed: animation.running = false;
+            onPressed: {
+                dragged = false;
+                animation.running = false;
+            }
             onReleased: if (_playing) togglePlay(true);
-            onClicked: togglePlay(!_playing);
+            onPressAndHold: dragged = true;
+            onClicked: if (!dragged) togglePlay(!_playing);
+            property bool dragged: false
         }
     }
 

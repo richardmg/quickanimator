@@ -55,7 +55,7 @@ TitleBar {
             height: parent.height
             anchors.verticalCenter: parent.verticalCenter
             text: ">>"
-            onClicked: myApp.model.setTime(10);
+            onClicked: myApp.model.setTime(myApp.model.endTime);
         }
         Timeline {
             id: timeline
