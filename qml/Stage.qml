@@ -124,10 +124,7 @@ Item {
                             if (yBox.checked)
                                 sprite.y = newSpritePos.y
 
-                            if (myApp.model.recordMode) {
-                                myApp.model.syncLayerPosition(layer);
-                                myApp.model.setTime(myApp.model.time + 1);
-                            }
+                            myApp.model.syncLayerPosition(layer);
                         }
                     }
 
