@@ -178,6 +178,9 @@ Item {
 
     function _interpolatePosition(time)
     {
+        if (myApp.model.recordsPosition)
+            return;
+
         var effectiveFromState = _fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState;
         if (_toState.time === effectiveFromState.time) {
             x = effectiveFromState.x;

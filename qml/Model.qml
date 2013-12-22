@@ -11,15 +11,16 @@ QtObject {
     property var focusLayerIndex: 0
     property var focusState: null
     property int msPerFrame: 500
-    property bool recordMode: false
 
     signal layersUpdated(var removedLayer, var addedLayer)
     signal selectedLayersUpdated(var unselectedLayer, var selectedLayer)
     signal statesUpdated(var layer)
 
+    property bool recordsPosition: false
+
     function syncLayerPosition(layer)
     {
-       if (!recordMode)
+       if (!recordsPosition)
            return;
 
        var sprite = layer.sprite;

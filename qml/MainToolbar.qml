@@ -10,7 +10,7 @@ TitleBar {
             anchors.verticalCenter: parent.verticalCenter
             text: checked ? "Recording" : "Record"
             checkable: true
-            onCheckedChanged: myApp.model.recordMode = checked
+            onCheckedChanged: myApp.model.recordsPosition = checked
         }
         ToolButton {
             text: " + "
