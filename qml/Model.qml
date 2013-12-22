@@ -32,23 +32,6 @@ QtObject {
        keyframe.y = sprite.y;
     }
 
-//    function getState(layer, time)
-//    {
-//        // get state at time, or add a new
-//        // one if non existing:
-//        if (!layer)
-//            return;
-//        var state = layer.sprite.getState(time);
-//        if (!state || state.time != time) {
-//            // Add the new state at given time:
-//            var state = layer.sprite.createKeyframe(time, true);
-//            var index = layers.indexOf(layer);
-//            setFocusLayer(index);
-//            statesUpdated(index);
-//        }
-//        return state;
-//    }
-
     function testAndSetEndTime(time)
     {
         if (time <= endTime)
