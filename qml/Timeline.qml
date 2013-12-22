@@ -42,7 +42,7 @@ Item {
     function togglePlay(play)
     {
         _playing = play;
-        animation.playStartTime = (myApp.model.time * myApp.model.msPerFrame) - (new Date()).getTime();
+        animation.lastTickTime = new Date();
         animation.running = play;
     }
 
@@ -56,11 +56,13 @@ Item {
         to: 1
 
         property real tick: 0
-        property var playStartTime: new Date()
+        property var lastTickTime: new Date()
 
         onTickChanged: {
-            var ms = playStartTime + (new Date()).getTime();
-            myApp.model.setTime(ms / myApp.model.msPerFrame);
+            var tickTime = (new Date()).getTime();
+            var timeIncrement = (tickTime - lastTickTime) / myApp.model.msPerFrame;
+            myApp.model.setTime(myApp.model.time + timeIncrement);
+            lastTickTime = tickTime;
         }
     }
 }

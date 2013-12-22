@@ -4,10 +4,6 @@ import QtQuick.Controls 1.0
 TitleBar {
 
     TitleBarRow {
-        x: 2; y: 2
-        width: childrenRect.width
-        height: parent.height - (y * 2)
-
         ToolButton {
             id: record
             height: parent.height
@@ -33,17 +29,7 @@ TitleBar {
 
     TitleBarRow {
         anchors.horizontalCenter: parent.horizontalCenter
-        x: 2; y: 2
-        width: childrenRect.width
-        height: parent.height - (y * 2)
 
-        ToolButton {
-            id: rewind
-            height: parent.height
-            anchors.verticalCenter: parent.verticalCenter
-            text: "<<"
-            onClicked: myApp.model.setTime(0);
-        }
         ToolButton {
             height: parent.height
             anchors.verticalCenter: parent.verticalCenter
@@ -61,14 +47,28 @@ TitleBar {
     }
 
     TitleBarRow {
-        height: parent.height
-        width: childrenRect.width
         anchors.right: parent.right
         layoutDirection: Qt.RightToLeft
-        Item { width: 10; height: 10 }
+
+        ToolButton {
+            id: forward
+            height: parent.height
+            anchors.verticalCenter: parent.verticalCenter
+            text: ">>"
+            onClicked: myApp.model.setTime(10);
+        }
         Timeline {
+            id: timeline
             width: 300
             height: parent.height
+            Component.onCompleted: myApp.timeline = timeline;
+        }
+        ToolButton {
+            id: rewind
+            height: parent.height
+            anchors.verticalCenter: parent.verticalCenter
+            text: "<<"
+            onClicked: myApp.model.setTime(0);
         }
     }
 }

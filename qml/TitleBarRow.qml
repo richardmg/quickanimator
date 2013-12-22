@@ -1,9 +1,14 @@
 import QtQuick 2.1
 
 Row {
-    anchors.leftMargin: 2
-    anchors.rightMargin: 2
-    anchors.topMargin: 2
-    anchors.bottomMargin: 2
     spacing: 2
+    anchors.leftMargin: spacing
+    anchors.rightMargin: spacing
+    anchors.topMargin: spacing
+    anchors.bottomMargin: spacing
+
+    x: spacing;
+    y: spacing
+    width: childrenRect.width
+    height: parent.height - spacing - spacing
 }
