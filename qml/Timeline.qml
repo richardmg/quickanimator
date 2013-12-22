@@ -21,12 +21,13 @@ Item {
     Connections {
         target: myApp.model
         onTimeChanged: flickable.contentX = myApp.model.time / flickSpeed;
+        onEndTimeChanged: flickable.contentWidth = flickable.width + (myApp.model.endTime / flickSpeed);
     }
 
     Flickable {
         id: flickable
         anchors.fill: parent
-        contentWidth: Number.MAX_VALUE
+        contentWidth: width
         onContentXChanged: if (!animation.running) myApp.model.setTime(contentX * flickSpeed);
         onMovingChanged: if (!moving && _playing) togglePlay(true);
 

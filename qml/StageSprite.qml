@@ -109,6 +109,7 @@ Item {
     {
         var index = keyframes.length === 0 ? 0 : getPositionKeyframe(keyframe.time).lastSearchIndex + 1;
         keyframes.splice(index, 0, keyframe);
+        myApp.model.testAndSetEndTime(keyframe.time);
         _invalidCache = true;
     }
 

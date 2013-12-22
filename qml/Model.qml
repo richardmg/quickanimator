@@ -5,6 +5,7 @@ import FileIO 1.0
 QtObject {
     id: root
     property real time: 0
+    property int endTime: 0
     property var layers: new Array()
     property var selectedLayers: new Array()
     property var focusLayerIndex: 0
@@ -47,6 +48,13 @@ QtObject {
 //        }
 //        return state;
 //    }
+
+    function testAndSetEndTime(time)
+    {
+        if (time <= endTime)
+            return;
+        root.endTime = time;
+    }
 
     function setTime(time)
     {
