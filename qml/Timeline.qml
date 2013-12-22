@@ -33,7 +33,9 @@ Item {
 
         MouseArea {
             id: mouseArea
-            anchors.fill: parent
+            height: parent.height
+            x: flickable.contentX
+            width: flickable.width
             onPressed: animation.running = false;
             onReleased: if (_playing) togglePlay(true);
             onClicked: togglePlay(!_playing);
