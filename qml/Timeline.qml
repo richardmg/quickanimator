@@ -20,7 +20,7 @@ Item {
 
     Connections {
         target: myApp.model
-        onTimeChanged: flickable.contentX = myApp.model.time / flickSpeed;
+        onTimeChanged: if (!flickable.moving) flickable.contentX = myApp.model.time / flickSpeed;
         onEndTimeChanged: flickable.contentWidth = flickable.width + (myApp.model.endTime / flickSpeed);
     }
 
@@ -34,14 +34,9 @@ Item {
         MouseArea {
             id: mouseArea
             anchors.fill: parent
-            onPressed: {
-                dragged = false;
-                animation.running = false;
-            }
+            onPressed: animation.running = false;
             onReleased: if (_playing) togglePlay(true);
-            onPressAndHold: dragged = true;
-            onClicked: if (!dragged) togglePlay(!_playing);
-            property bool dragged: false
+            onClicked: togglePlay(!_playing);
         }
     }
 
