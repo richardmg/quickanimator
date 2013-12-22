@@ -20,34 +20,21 @@ Item {
 
     Connections {
         target: myApp.model
-        onTimeChanged: {
-            if (mouseArea.pressed)
-                return;
-            flickable.contentX = myApp.model.time / flickSpeed;
-        }
+        onTimeChanged: flickable.contentX = myApp.model.time / flickSpeed;
     }
 
     Flickable {
         id: flickable
         anchors.fill: parent
-        contentWidth: 5000
+        contentWidth: Number.MAX_VALUE
+        onContentXChanged: if (!animation.running) myApp.model.setTime(contentX * flickSpeed);
+        onMovingChanged: if (!moving && _playing) togglePlay(true);
 
-        onContentXChanged: {
-            if (mouseArea.pressed)
-                myApp.model.setTime(contentX * flickSpeed);
-        }
-    }
-
-    MouseArea {
-        id: mouseArea
-        anchors.fill: parent
-        onPressed: {
-            animation.running = false;
-        }
-
-        onReleased: {
-            if (_playing)
-                togglePlay(true);
+        MouseArea {
+            id: mouseArea
+            anchors.fill: parent
+            onPressed: animation.running = false;
+            onReleased: if (_playing) togglePlay(true);
         }
     }
 
