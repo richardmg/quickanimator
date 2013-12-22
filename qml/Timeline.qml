@@ -35,6 +35,7 @@ Item {
             anchors.fill: parent
             onPressed: animation.running = false;
             onReleased: if (_playing) togglePlay(true);
+            onClicked: togglePlay(!_playing);
         }
     }
 
