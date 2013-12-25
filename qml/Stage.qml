@@ -98,7 +98,7 @@ Item {
                         // Move anchor
                         var layer = myApp.model.selectedLayers[0];
                         var sprite = layer.sprite
-                        var keyframe = myApp.model.getState(layer, myApp.model.time);
+                        var keyframe = sprite.getKeyframe(myApp.model.time);
                         var globalPos = focusFrames.mapFromItem(sprite, keyframe.anchorX, keyframe.anchorY);
                         var localDelta = focusFrames.mapToItem(sprite, globalPos.x + dx, globalPos.y + dy);
                         keyframe.anchorX = localDelta.x;
@@ -124,8 +124,7 @@ Item {
                                 sprite.x = newSpritePos.x
                             if (yBox.checked)
                                 sprite.y = newSpritePos.y
-
-                            myApp.model.syncLayerPosition(layer);
+                            myApp.model.syncLayer(layer);
                         }
                     }
 
@@ -135,18 +134,20 @@ Item {
                     // continue rotate
                     layer = myApp.model.selectedLayers[0];
                     sprite = layer.sprite
-                    keyframe = sprite.getCurrentState();
+                    keyframe = sprite.getCurrentKeyframe();
                     globalPos = sprites.mapFromItem(sprite.parent, sprite.x + sprite.anchorX, sprite.y + sprite.anchorY);
                     var center = {x: globalPos.x, y: globalPos.y};
                     var aar = getAngleAndRadius(center, pos);
                     for (var i in myApp.model.selectedLayers) {
                         layer = myApp.model.selectedLayers[i];
-                        var state = myApp.model.getState(layer, myApp.model.time);
+                        keyframe = layer.sprite.getKeyframe(myApp.model.time);
                         if (rotateBox.checked)
-                            state.rotation += aar.angle - currentAction.angle;
-                        if (scaleBox.checked)
-                            state.scale *= aar.radius / currentAction.radius;
-                        layer.sprite.synchSpriteWithRotationKeyframe(keyframe);
+                            layer.sprite.transRotation += aar.angle - currentAction.angle;
+                        if (scaleBox.checked) {
+                            layer.sprite.transScaleX *= aar.radius / currentAction.radius;
+                            layer.sprite.transScaleY = layer.sprite.transScaleX;
+                        }
+                        myApp.model.syncLayer(layer);
                     }
                     currentAction.angle = aar.angle;
                     currentAction.radius = aar.radius;

@@ -66,17 +66,17 @@ Item {
         };
     }
 
-    function synchSpriteWithKeyframe(keyframe)
+    function synch()
     {
-        changeParent(keyframe.parent);
-        x = keyframe.x;
-        y = keyframe.y;
-        z = keyframe.z;
-        anchorX = keyframe.anchorX;
-        anchorY = keyframe.anchorY;
-        transRotation = keyframe.rotation;
-        transScaleX = transScaleY = keyframe.scale;
-        opacity = keyframe.opacity;
+//        changeParent(keyframe.parent);
+        _fromState.x = x;
+        _fromState.y = y;
+        _fromState.z = z;
+        _fromState.anchorX = anchorX;
+        _fromState.anchorY = anchorY;
+        _fromState.rotation = transRotation;
+        _fromState.scale = transScaleX;
+        _fromState.opacity = opacity;
     }
 
     function removeKeyframe(keyframe)
@@ -91,51 +91,36 @@ Item {
         _updateToAndFromState(time);
         spriteTime = time;
         if (!myApp.model.inLiveDrag)
-            _interpolatePosition(spriteTime);
+            _interpolate(spriteTime);
     }
 
-    function _interpolatePosition(time)
+    function _interpolate(time)
     {
-        var effectiveFromState = _fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState;
-        if (_toState.time === effectiveFromState.time) {
-            x = effectiveFromState.x;
-            y = effectiveFromState.y;
+        var effectiveKeyframe = _fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState;
+        if (_toState.time === effectiveKeyframe.time) {
+            x = effectiveKeyframe.x;
+            y = effectiveKeyframe.y;
+            anchorX = effectiveKeyframe.anchorX;
+            anchorY = effectiveKeyframe.anchorY;
+            transScaleX = transScaleY = effectiveKeyframe.scale;
+            transRotation = effectiveKeyframe.rotation;
+            opacity = effectiveKeyframe.opacity;
         } else {
-            var effectiveFromStateMs = effectiveFromState.time * model.msPerFrame;
-            var advanceMs = (time * model.msPerFrame) - effectiveFromStateMs;
-            x = _interpolate(effectiveFromState.x, _toState.x, advanceMs, "linear");
-            y = _interpolate(effectiveFromState.y, _toState.y, advanceMs, "linear");
+            var effectiveKeyframeMs = effectiveKeyframe.time * model.msPerFrame
+            var advanceMs = (spriteTime * model.msPerFrame) - effectiveKeyframeMs;
+            x = _interpolated(effectiveKeyframe.x, _toState.x, advanceMs, "linear");
+            y = _interpolated(effectiveKeyframe.y, _toState.y, advanceMs, "linear");
+            z = _interpolated(effectiveKeyframe.z, _toState.z, advanceMs, "linear");
+            anchorX = _interpolated(effectiveKeyframe.anchorX, _toState.anchorX, advanceMs, "linear");
+            anchorY = _interpolated(effectiveKeyframe.anchorY, _toState.anchorY, advanceMs, "linear");
+            transScaleX = transScaleY = _interpolated(effectiveKeyframe.scale, _toState.scale, advanceMs, "linear");
+            transRotation = _interpolated(effectiveKeyframe.rotation, _toState.rotation, advanceMs, "linear");
+            opacity = _interpolated(effectiveKeyframe.opacity, _toState.opacity, advanceMs, "linear");
         }
         parent = _fromState.parent;
     }
 
-    function _update_changeme_Properties(tween)
-    {
-        var effectiveFromState = _fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState;
-        if (!tween || _toState.time === effectiveFromState.time) {
-            x = effectiveFromState.x;
-            y = effectiveFromState.y;
-            anchorX = effectiveFromState.anchorX;
-            anchorY = effectiveFromState.anchorY;
-            transScaleX = transScaleY = effectiveFromState.scale;
-            transRotation = effectiveFromState.rotation;
-            opacity = effectiveFromState.opacity;
-        } else {
-            var effectiveFromStateMs = effectiveFromState.time * model.msPerFrame
-            var advanceMs = (spriteTime * model.msPerFrame) - effectiveFromStateMs;
-            x = _interpolate(effectiveFromState.x, _toState.x, advanceMs, "linear");
-            y = _interpolate(effectiveFromState.y, _toState.y, advanceMs, "linear");
-            z = _interpolate(effectiveFromState.z, _toState.z, advanceMs, "linear");
-            anchorX = _interpolate(effectiveFromState.anchorX, _toState.anchorX, advanceMs, "linear");
-            anchorY = _interpolate(effectiveFromState.anchorY, _toState.anchorY, advanceMs, "linear");
-            transScaleX = transScaleY = _interpolate(effectiveFromState.scale, _toState.scale, advanceMs, "linear");
-            transRotation = _interpolate(effectiveFromState.rotation, _toState.rotation, advanceMs, "linear");
-            opacity = _interpolate(effectiveFromState.opacity, _toState.opacity, advanceMs, "linear");
-        }
-        parent = _fromState.parent;
-    }
-
-    function _interpolate(from, to, advanceMs, curve)
+    function _interpolated(from, to, advanceMs, curve)
     {
         // Ignore curve for now:
         var fromStateMs = _fromState.time * model.msPerFrame
@@ -216,7 +201,7 @@ Item {
         // Store the geometry conversion in the fromKeyframe:
         getCurrentKeyframe().effectiveKeyframe = createKeyframe(spriteTime);
         if (!myApp.model.inLiveDrag)
-            _interpolatePosition(spriteTime);
+            _interpolate(spriteTime);
     }
 
 }

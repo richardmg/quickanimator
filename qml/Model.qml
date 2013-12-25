@@ -19,7 +19,7 @@ QtObject {
     property bool inLiveDrag: false
     property bool recordsPosition: false
 
-    function syncLayerPosition(layer)
+    function syncLayer(layer)
     {
        var intTime = Math.floor(time);
        var sprite = layer.sprite;
@@ -30,8 +30,7 @@ QtObject {
            statesUpdated(layer);
            updateFocusedKeyframe();
        }
-       keyframe.x = sprite.x;
-       keyframe.y = sprite.y;
+       sprite.synch();
     }
 
     function testAndSetEndTime(time)

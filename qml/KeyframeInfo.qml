@@ -115,7 +115,7 @@ Rectangle {
                     if (stateName.enabled)
                         myApp.model.removeFocusedKeyframe();
                     else
-                        myApp.model.syncLayerPosition(myApp.model.layers[myApp.model.focusedLayerIndex]);
+                        myApp.model.syncLayer(myApp.model.layers[myApp.model.focusedLayerIndex]);
                 }
             }
         }
