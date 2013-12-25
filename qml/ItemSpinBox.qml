@@ -53,13 +53,13 @@ SpinBox {
         _boundProperty = spinbox.property + "Changed";
         spinbox._boundTarget[_boundProperty].connect(targetListener)
         _guard = true;
-        spinbox.value = keyframe.sprite[property];
+        spinbox.value = keyframe[property];
         _guard = false;
     }
 
     function targetListener() {
         _guard = true;
-        spinbox.value = myApp.model.focusedKeyframe.sprite[property];
+        spinbox.value = myApp.model.focusedKeyframe[property];
         _guard = false;
     }
 }
