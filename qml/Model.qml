@@ -8,7 +8,7 @@ QtObject {
     property int endTime: 0
     property var layers: new Array()
     property var selectedLayers: new Array()
-    property var focusLayerIndex: 0
+    property var focusedLayerIndex: 0
     property var focusedKeyframe: null
     property int msPerFrame: 1000 / 60
 
@@ -54,13 +54,13 @@ QtObject {
     function setFocusLayer(layerIndex)
     {
         // Get the state that should be shown for the user to edit:
-        focusLayerIndex = layerIndex;
+        focusedLayerIndex = layerIndex;
         updateFocusedKeyframe();
     }
 
     function updateFocusedKeyframe()
     {
-        var layer = layers[focusLayerIndex];
+        var layer = layers[focusedLayerIndex];
         if (layer) {
             var keyframe = layer.sprite.getCurrentPositionKeyframe();
             root.focusedKeyframe = (keyframe && keyframe.time === Math.floor(time)) ? keyframe : null;
@@ -82,7 +82,7 @@ QtObject {
         selectLayer(layer, true);
         layersUpdated(-1, layers.length);
         statesUpdated(layer);
-        setFocusLayer(focusLayerIndex);
+        setFocusLayer(focusedLayerIndex);
     }
 
     function unselectAllLayers()
@@ -170,14 +170,14 @@ QtObject {
         }
     }
 
-    function removefocusedKeyframe()
+    function removeFocusedKeyframe()
     {
         if (!focusedKeyframe)
             return;
-        var sprite = layers[focusLayerIndex].sprite;
+        var sprite = layers[focusedLayerIndex].sprite;
         sprite.removePositionKeyframe(sprite.getCurrentPositionKeyframe());
         focusedKeyframe = null;
-        statesUpdated(focusLayerIndex);
+        statesUpdated(focusedLayerIndex);
     }
 
     function setLayerIndex(oldIndex, newIndex)

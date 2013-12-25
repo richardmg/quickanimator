@@ -115,9 +115,9 @@ Rectangle {
                 text: stateName.enabled ? "Delete keyframe" : "New keyframe"
                 onClicked: {
                     if (stateName.enabled)
-                        myApp.model.removefocusedKeyframe();
+                        myApp.model.removeFocusedKeyframe();
                     else
-                        myApp.model.getState(myApp.model.layers[myApp.model.focusLayerIndex], myApp.model.time);
+                        myApp.model.syncLayerPosition(myApp.model.layers[myApp.model.focusedLayerIndex]);
                 }
             }
         }
