@@ -9,7 +9,7 @@ QtObject {
     property var layers: new Array()
     property var selectedLayers: new Array()
     property var focusLayerIndex: 0
-    property var focusState: null
+    property var focusedKeyframe: null
     property int msPerFrame: 1000 / 60
 
     signal layersUpdated(var removedLayer, var addedLayer)
@@ -28,6 +28,7 @@ QtObject {
            keyframe = sprite.createPositionKeyframe(intTime);
            sprite.addPositionKeyframe(keyframe);
            statesUpdated(layer);
+           updateFocusedKeyframe();
        }
        keyframe.x = sprite.x;
        keyframe.y = sprite.y;
@@ -47,24 +48,24 @@ QtObject {
             var layer = layers[l];
             layer.sprite.setTime(time);
         }
-        layer = layers[focusLayerIndex];
-        if (layer) {
-            var keyframe = layer.sprite.getCurrentPositionKeyframe();
-            root.focusState = (keyframe && keyframe.time === keyframe.sprite.spriteTime) ? keyframe : null;
-        }
+        updateFocusedKeyframe();
     }
 
     function setFocusLayer(layerIndex)
     {
         // Get the state that should be shown for the user to edit:
         focusLayerIndex = layerIndex;
-        var foundState = null;
+        updateFocusedKeyframe();
+    }
+
+    function updateFocusedKeyframe()
+    {
         var layer = layers[focusLayerIndex];
         if (layer) {
             var keyframe = layer.sprite.getCurrentPositionKeyframe();
-            root.focusState = (keyframe && keyframe.time === keyframe.sprite.spriteTime) ? keyframe : null;
+            root.focusedKeyframe = (keyframe && keyframe.time === Math.floor(time)) ? keyframe : null;
         } else {
-            root.focusState = null;
+            root.focusedKeyframe = null;
         }
     }
 
@@ -169,13 +170,13 @@ QtObject {
         }
     }
 
-    function removeFocusState()
+    function removefocusedKeyframe()
     {
-        if (!focusState)
+        if (!focusedKeyframe)
             return;
         var sprite = layers[focusLayerIndex].sprite;
         sprite.removePositionKeyframe(sprite.getCurrentPositionKeyframe());
-        focusState = null;
+        focusedKeyframe = null;
         statesUpdated(focusLayerIndex);
     }
 

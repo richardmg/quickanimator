@@ -42,10 +42,10 @@ Rectangle {
 
                 Connections {
                     target: myApp.model
-                    onFocusStateChanged: {
-                        if (myApp.model.focusState) {
+                    onFocusedKeyframeChanged: {
+                        if (myApp.model.focusedKeyframe) {
                             stateName.enabled = true;
-                            //stateName.text = myApp.model.focusState.name;
+                            //stateName.text = myApp.model.focusedKeyframe.name;
                         } else {
                             stateName.enabled = false;
                             stateName.text = "";
@@ -115,7 +115,7 @@ Rectangle {
                 text: stateName.enabled ? "Delete keyframe" : "New keyframe"
                 onClicked: {
                     if (stateName.enabled)
-                        myApp.model.removeFocusState();
+                        myApp.model.removefocusedKeyframe();
                     else
                         myApp.model.getState(myApp.model.layers[myApp.model.focusLayerIndex], myApp.model.time);
                 }

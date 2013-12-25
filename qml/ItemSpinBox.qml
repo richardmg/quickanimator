@@ -17,7 +17,7 @@ SpinBox {
 
     Connections {
         target: myApp.model
-        onFocusStateChanged: _updateState();
+        onFocusedKeyframeChanged: _updateState();
     }
     onPropertyChanged: _updateState();
 
@@ -25,7 +25,7 @@ SpinBox {
         if (_guard)
             return;
 
-        var keyframe = myApp.model.focusState
+        var keyframe = myApp.model.focusedKeyframe
 
         keyframe[keyframeProperty != "" ? keyframeProperty : property] = spinbox.value; 
         keyframe.sprite[property] = spinbox.value;
@@ -38,7 +38,7 @@ SpinBox {
             _boundTarget = null;
         }
 
-        var keyframe = myApp.model.focusState;
+        var keyframe = myApp.model.focusedKeyframe;
 
         if (property === "" || !keyframe) {
             _guard = true;
@@ -59,7 +59,7 @@ SpinBox {
 
     function targetListener() {
         _guard = true;
-        spinbox.value = myApp.model.focusState.sprite[property];
+        spinbox.value = myApp.model.focusedKeyframe.sprite[property];
         _guard = false;
     }
 }
