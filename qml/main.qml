@@ -58,7 +58,6 @@ ApplicationWindow {
                 id: timeline
                 width: 2 * parent.width / 3
                 height: parent.height
-                Component.onCompleted: myApp.timeline = timeline
             }
 
             // Sync the two timeline flickables:

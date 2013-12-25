@@ -44,6 +44,7 @@ QtObject {
 
     function setTime(time)
     {
+        print("time:", time)
         root.time = time;
         for (var l in layers) {
             var layer = layers[l];

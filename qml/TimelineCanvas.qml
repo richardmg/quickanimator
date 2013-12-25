@@ -29,6 +29,7 @@ Rectangle {
         height: flickable.contentHeight
         renderTarget: Canvas.Image
         property real lineWidth: 1.0
+        property real startX: 1 + myApp.timelineFlickable.width / 2
         antialiasing: false
 
         onPaint: {
@@ -39,7 +40,6 @@ Rectangle {
             ctx.clearRect(0, 0, width, height);
 
             // Close table on left side:
-            ctx.moveTo(0, 0);
             ctx.lineTo(0, 20 * myApp.style.cellHeight)
 
             for (var row=0; row<myApp.model.layers.length + 1; ++row) {
@@ -55,8 +55,8 @@ Rectangle {
                     grd.addColorStop(1, '#206CD3');
                     ctx.fillStyle = grd;
                     for (var c in sprite.keyframes) {
-                        var state = sprite.keyframes[c];
-                        ctx.fillRect((state.time * cellWidth) + 1, (row * myApp.style.cellHeight), cellWidth, myApp.style.cellHeight - 1);
+                        var keyframe = sprite.keyframes[c];
+                        ctx.fillRect(startX + (keyframe.time * cellWidth), (row * myApp.style.cellHeight), cellWidth, myApp.style.cellHeight - 1);
                     }
                 }
             }

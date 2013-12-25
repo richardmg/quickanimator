@@ -5,21 +5,8 @@ Rectangle {
     property alias title: label.text
     width: parent.width
     height: 40
+    gradient: myApp.style.toolBarGradient
 
-    gradient: Gradient {
-        GradientStop {
-            position: 0.0;
-            color: Qt.darker(myApp.style.accent, 1.4)
-        }
-        GradientStop {
-            position: 0.1;
-            color: Qt.darker(myApp.style.accent, 1.2);
-        }
-        GradientStop {
-            position: 1.0;
-            color: Qt.darker(myApp.style.accent, 1.5);
-        }
-    }
     Rectangle {
         width: parent.width
         height: 1

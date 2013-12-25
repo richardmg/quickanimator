@@ -4,32 +4,32 @@ import QtQuick.Controls 1.0
 Item {
     id: root
 
-    property Flickable flickable: flickable
     property real flickSpeed: 0.05
-
     property bool _playing: false
-
     clip: true
+    Component.onCompleted: myApp.timeline = root
 
     Connections {
         target: myApp.model
         onTimeChanged: if (!flickable.moving) flickable.contentX = myApp.model.time / flickSpeed;
-        onEndTimeChanged: flickable.contentWidth = flickable.width + (myApp.model.endTime / flickSpeed);
+        onEndTimeChanged: flickable.contentWidth = (flickable.width * 2) + (myApp.model.endTime / flickSpeed);
+    }
+
+    TimelineCanvas {
+        width: parent.width
+        height: parent.height
+        x: -myApp.model.time * myApp.style.cellWidth
     }
 
     Flickable {
         id: flickable
         anchors.fill: parent
-        contentWidth: width
+        contentWidth: width * 2
         contentHeight: 20 * myApp.style.cellHeight
         onContentXChanged: if (!animation.running) myApp.model.setTime(contentX * flickSpeed);
         onMovingChanged: if (!moving && _playing) togglePlay(true);
         pixelAligned: true
         Component.onCompleted: myApp.timelineFlickable = flickable
-
-        TimelineCanvas {
-            anchors.fill: parent
-        }
 
         MouseArea {
             id: mouseArea
@@ -40,6 +40,13 @@ Item {
             onReleased: if (_playing) togglePlay(true);
             onClicked: togglePlay(!_playing);
         }
+    }
+
+    Rectangle {
+        anchors.horizontalCenter: parent.horizontalCenter
+        width: 1
+        height: parent.height
+        color: myApp.style.dark
     }
 
     function togglePlay(play)

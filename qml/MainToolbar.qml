@@ -57,12 +57,6 @@ TitleBar {
             text: ">>"
             onClicked: myApp.model.setTime(myApp.model.endTime);
         }
-        Timeline {
-            id: timeline
-            width: 300
-            height: parent.height
-//            Component.onCompleted: myApp.timeline = timeline;
-        }
         ToolButton {
             id: rewind
             height: parent.height
