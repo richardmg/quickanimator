@@ -68,6 +68,7 @@ Item {
                         x: pos.x,
                         y: pos.y
                     };
+                    myApp.model.inLiveDrag = true;
                 } else {
                     // Start rotation
                     var layer = myApp.model.selectedLayers[0];
@@ -172,6 +173,8 @@ Item {
                 if (select)
                     myApp.model.selectLayer(layer, select)
             }
+
+            myApp.model.inLiveDrag = false;
         }
     }
 

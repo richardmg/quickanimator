@@ -16,13 +16,11 @@ QtObject {
     signal selectedLayersUpdated(var unselectedLayer, var selectedLayer)
     signal statesUpdated(var layer)
 
+    property bool inLiveDrag: false
     property bool recordsPosition: false
 
     function syncLayerPosition(layer)
     {
-       if (!recordsPosition)
-           return;
-
        var intTime = Math.floor(time);
        var sprite = layer.sprite;
        var keyframe = sprite.getPositionKeyframe(intTime);

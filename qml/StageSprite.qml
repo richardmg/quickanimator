@@ -70,7 +70,8 @@ Item {
     function _play()
     {
         // Move sprite to fromState:
-        _interpolatePosition(spriteTime);
+        if (!myApp.model.inLiveDrag)
+            _interpolatePosition(spriteTime);
         // Animate to toState:
         var duration = (_toState.time - spriteTime) * model.msPerFrame;
         if (duration <= 0)
@@ -171,14 +172,12 @@ Item {
     {
         _updateToAndFromState(time);
         spriteTime = time;
-        _interpolatePosition(spriteTime);
+        if (!myApp.model.inLiveDrag)
+            _interpolatePosition(spriteTime);
     }
 
     function _interpolatePosition(time)
     {
-        if (myApp.model.recordsPosition)
-            return;
-
         var effectiveFromState = _fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState;
         if (_toState.time === effectiveFromState.time) {
             x = effectiveFromState.x;
@@ -298,7 +297,8 @@ Item {
 
         // Store the geometry conversion in the fromKeyframe:
         getCurrentPositionKeyframe().effectiveKeyframe = createPositionKeyframe(spriteTime);
-        _interpolatePosition(spriteTime);
+        if (!myApp.model.inLiveDrag)
+            _interpolatePosition(spriteTime);
     }
 
 }
