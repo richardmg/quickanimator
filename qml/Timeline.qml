@@ -19,6 +19,7 @@ Item {
         width: parent.width
         height: parent.height
         x: -myApp.model.time * myApp.style.cellWidth
+        y: -flickable.contentY
     }
 
     Flickable {
