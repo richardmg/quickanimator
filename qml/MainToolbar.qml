@@ -37,12 +37,12 @@ TitleBar {
             onClicked: myApp.model.saveJSON();
         }
         SpinBox {
-            id: msPerFrameBox
+            id: timeMultiplierBox
             value: 100
             minimumValue: 0
             maximumValue: 99999
             anchors.verticalCenter: parent.verticalCenter
-            onValueChanged: myApp.model.msPerFrame = value;
+            onValueChanged: myApp.model.timeMultiplier = value;
         }
     }
 
@@ -61,7 +61,7 @@ TitleBar {
             id: timeline
             width: 300
             height: parent.height
-            Component.onCompleted: myApp.timeline = timeline;
+//            Component.onCompleted: myApp.timeline = timeline;
         }
         ToolButton {
             id: rewind

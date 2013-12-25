@@ -5,18 +5,11 @@ Item {
     id: root
 
     property Flickable flickable: flickable
-    property var model: myApp.model.layers
     property real flickSpeed: 0.05
 
     property bool _playing: false
 
     clip: true
-
-    TextArea {
-        id: text
-        anchors.fill: parent
-        text: myApp.model.time + " : " + flickable.contentX * flickSpeed
-    }
 
     Connections {
         target: myApp.model
@@ -28,8 +21,15 @@ Item {
         id: flickable
         anchors.fill: parent
         contentWidth: width
+        contentHeight: 20 * myApp.style.cellHeight
         onContentXChanged: if (!animation.running) myApp.model.setTime(contentX * flickSpeed);
         onMovingChanged: if (!moving && _playing) togglePlay(true);
+        pixelAligned: true
+        Component.onCompleted: myApp.timelineFlickable = flickable
+
+        TimelineCanvas {
+            anchors.fill: parent
+        }
 
         MouseArea {
             id: mouseArea

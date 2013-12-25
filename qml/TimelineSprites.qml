@@ -50,6 +50,7 @@ Rectangle {
         anchors.fill: parent
         flickableDirection: Flickable.HorizontalAndVerticalFlick
         model: listModel
+        Component.onCompleted: myApp.layerTreeFlickable = listView
 
         delegate: Rectangle {
             id: delegate

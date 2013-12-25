@@ -29,6 +29,7 @@ QtObject {
        if (!keyframe || keyframe.time !== intTime) {
            keyframe = sprite.createPositionKeyframe(intTime);
            sprite.addPositionKeyframe(keyframe);
+           statesUpdated(layer);
        }
        keyframe.x = sprite.x;
        keyframe.y = sprite.y;
@@ -78,8 +79,10 @@ QtObject {
         layer.hierarchyLevel = 0;
         layer.sprite.addPositionKeyframe(layer.sprite.createPositionKeyframe(0));
         layer.sprite.setTime(0);
+
         selectLayer(layer, true);
         layersUpdated(-1, layers.length);
+        statesUpdated(layer);
         setFocusLayer(focusLayerIndex);
     }
 

@@ -9,25 +9,73 @@ ApplicationWindow {
 
     property alias stage: stage
     property MainToolbar mainToolbar
-    property Item timeline
+    property alias keyframeInfo: keyframeInfo
+
+    property Timeline timeline
+    property Flickable timelineFlickable
+    property Flickable layerTreeFlickable
 
     property Style style: Style {}
     property Model model: Model {}
 
-    Stage {
-        id: stage
-        clip: true
-        width: parent.width
-        anchors.top: parent.top
-        anchors.bottom: mainToolbar.top
-    }
+    SplitView {
+        orientation: Qt.Vertical
+        anchors.fill: parent
+        handleDelegate: MainToolbar {
+            id: mainToolbar
+            Component.onCompleted: myApp.mainToolbar = mainToolbar
+        }
 
-    MainToolbar {
-        id: mainToolbar
-        Component.onCompleted: myApp.mainToolbar = mainToolbar
-        anchors.bottom: parent.bottom
-        width: parent.width
-        height: 100
+        SplitView {
+            height: 2 * parent.height / 3
+            width: parent.width
+            handleDelegate: SplitHandle {}
+            KeyframeInfo {
+                id: keyframeInfo
+                width: parent.width / 3
+                visible: false
+                onWidthChanged: timelineSprites.width = width
+            }
+            Stage {
+                id: stage
+                clip: true
+            }
+        }
+
+        SplitView {
+            // Bottom left and bottom right
+            width: parent.width
+            handleDelegate: SplitHandle {}
+
+            TimelineSprites {
+                id: timelineSprites
+                width: parent.width / 3
+                height: parent.height
+                onWidthChanged: keyframeInfo.width = width
+            }
+
+            Timeline {
+                id: timeline
+                width: 2 * parent.width / 3
+                height: parent.height
+                Component.onCompleted: myApp.timeline = timeline
+            }
+
+            // Sync the two timeline flickables:
+            Binding {
+                property Item t: layerTreeFlickable
+                target: t.moving ? null : t
+                property: "contentY"
+                value: timelineFlickable.contentY
+            }
+
+            Binding {
+                property Item t: timelineFlickable
+                target: t.moving ? null : t
+                property: "contentY"
+                value: layerTreeFlickable.contentY
+            }
+        }
     }
 
     Component {
@@ -51,7 +99,6 @@ ApplicationWindow {
         layer.sprite = stageSpriteComponent.createObject(stage.sprites)
         layer.name =  "sprite_" + nextSpriteNr++;
         model.addLayer(layer);
-
-        //timelineSprites.model.append({});
+        timelineSprites.model.append({});
     }
 }
