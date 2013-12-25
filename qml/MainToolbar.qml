@@ -37,12 +37,12 @@ TitleBar {
             onClicked: myApp.model.saveJSON();
         }
         SpinBox {
-            id: timeMultiplierBox
+            id: msPerFrameBox
             value: 100
             minimumValue: 0
             maximumValue: 99999
             anchors.verticalCenter: parent.verticalCenter
-            onValueChanged: myApp.model.timeMultiplier = value;
+            onValueChanged: myApp.model.msPerFrame = value;
         }
     }
 

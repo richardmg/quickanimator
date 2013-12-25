@@ -72,7 +72,7 @@ Item {
         // Move sprite to fromState:
         _interpolatePosition(spriteTime);
         // Animate to toState:
-        var duration = (_toState.time - spriteTime) * model.timeMultiplier;
+        var duration = (_toState.time - spriteTime) * model.msPerFrame;
         if (duration <= 0)
             return;
         for (var i in _props) {
@@ -172,8 +172,6 @@ Item {
         _updateToAndFromState(time);
         spriteTime = time;
         _interpolatePosition(spriteTime);
-        if (playing)
-            _play();
     }
 
     function _interpolatePosition(time)
@@ -186,8 +184,8 @@ Item {
             x = effectiveFromState.x;
             y = effectiveFromState.y;
         } else {
-            var effectiveFromStateMs = effectiveFromState.time * model.timeMultiplier;
-            var advanceMs = (time * model.timeMultiplier) - effectiveFromStateMs;
+            var effectiveFromStateMs = effectiveFromState.time * model.msPerFrame;
+            var advanceMs = (time * model.msPerFrame) - effectiveFromStateMs;
             x = _interpolate(effectiveFromState.x, _toState.x, advanceMs, "linear");
             y = _interpolate(effectiveFromState.y, _toState.y, advanceMs, "linear");
         }
@@ -206,8 +204,8 @@ Item {
             transRotation = effectiveFromState.rotation;
             opacity = effectiveFromState.opacity;
         } else {
-            var effectiveFromStateMs = effectiveFromState.time * model.timeMultiplier
-            var advanceMs = (spriteTime * model.timeMultiplier) - effectiveFromStateMs;
+            var effectiveFromStateMs = effectiveFromState.time * model.msPerFrame
+            var advanceMs = (spriteTime * model.msPerFrame) - effectiveFromStateMs;
             x = _interpolate(effectiveFromState.x, _toState.x, advanceMs, "linear");
             y = _interpolate(effectiveFromState.y, _toState.y, advanceMs, "linear");
             z = _interpolate(effectiveFromState.z, _toState.z, advanceMs, "linear");
@@ -223,8 +221,8 @@ Item {
     function _interpolate(from, to, advanceMs, curve)
     {
         // Ignore curve for now:
-        var fromStateMs = _fromState.time * model.timeMultiplier
-        var totalTimeBetweenStatesMs = (_toState.time * model.timeMultiplier) - fromStateMs;
+        var fromStateMs = _fromState.time * model.msPerFrame
+        var totalTimeBetweenStatesMs = (_toState.time * model.msPerFrame) - fromStateMs;
         return from + (((to - from) / totalTimeBetweenStatesMs) * advanceMs);
     }
 
