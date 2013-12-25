@@ -5,7 +5,6 @@ SpinBox {
     id: spinbox
     implicitWidth: 100
     property string property: ""
-    property string keyframeProperty: ""
     enabled: false
     decimals: 3
     minimumValue: -9999
@@ -27,7 +26,7 @@ SpinBox {
 
         var keyframe = myApp.model.focusedKeyframe
 
-        keyframe[keyframeProperty != "" ? keyframeProperty : property] = spinbox.value; 
+        keyframe[property] = spinbox.value;
         keyframe.sprite[property] = spinbox.value;
     }
 
@@ -53,6 +52,8 @@ SpinBox {
         _boundProperty = spinbox.property + "Changed";
         spinbox._boundTarget[_boundProperty].connect(targetListener)
         _guard = true;
+        if (!keyframe.hasOwnProperty(property))
+            print("fails:", property)
         spinbox.value = keyframe[property];
         _guard = false;
     }

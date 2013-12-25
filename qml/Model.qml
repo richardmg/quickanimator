@@ -23,10 +23,10 @@ QtObject {
     {
        var intTime = Math.floor(time);
        var sprite = layer.sprite;
-       var keyframe = sprite.getPositionKeyframe(intTime);
+       var keyframe = sprite.getKeyframe(intTime);
        if (!keyframe || keyframe.time !== intTime) {
-           keyframe = sprite.createPositionKeyframe(intTime);
-           sprite.addPositionKeyframe(keyframe);
+           keyframe = sprite.createKeyframe(intTime);
+           sprite.addKeyframe(keyframe);
            statesUpdated(layer);
            updateFocusedKeyframe();
        }
@@ -62,7 +62,7 @@ QtObject {
     {
         var layer = layers[focusedLayerIndex];
         if (layer) {
-            var keyframe = layer.sprite.getCurrentPositionKeyframe();
+            var keyframe = layer.sprite.getCurrentKeyframe();
             root.focusedKeyframe = (keyframe && keyframe.time === Math.floor(time)) ? keyframe : null;
         } else {
             root.focusedKeyframe = null;
@@ -76,7 +76,7 @@ QtObject {
         layer.selected = false;
         layer.parentLayer = null;
         layer.hierarchyLevel = 0;
-        layer.sprite.addPositionKeyframe(layer.sprite.createPositionKeyframe(0));
+        layer.sprite.addKeyframe(layer.sprite.createKeyframe(0));
         layer.sprite.setTime(0);
 
         selectLayer(layer, true);
@@ -175,7 +175,7 @@ QtObject {
         if (!focusedKeyframe)
             return;
         var sprite = layers[focusedLayerIndex].sprite;
-        sprite.removePositionKeyframe(sprite.getCurrentPositionKeyframe());
+        sprite.removeKeyframe(sprite.getCurrentKeyframe());
         focusedKeyframe = null;
         statesUpdated(focusedLayerIndex);
     }

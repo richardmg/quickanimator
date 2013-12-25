@@ -8,7 +8,6 @@ Item {
     property alias transRotation: tRotation.angle
     property alias transScaleX: tScale.xScale
     property alias transScaleY: tScale.yScale
-    property alias rot: tRotation.angle
 
     transform: [
         Scale { id: tScale; xScale: 1; yScale: 1; origin.x: anchorX; origin.y: anchorY },
@@ -21,115 +20,40 @@ Item {
 
     property real spriteTime: 0
     property string name: "keyframe"
-    property bool playing: false
 
     property var _fromState
     property var _toState
     property bool _invalidCache: true
 
-    property NumberAnimation _animation_x: NumberAnimation{ target: sprite; property: "x" }
-    property NumberAnimation _animation_y: NumberAnimation{ target: sprite; property: "y" }
-    property NumberAnimation _animation_z: NumberAnimation{ target: sprite; property: "z" }
-    property NumberAnimation _animation_anchorX: NumberAnimation{ target: sprite; property: "anchorX" }
-    property NumberAnimation _animation_anchorY: NumberAnimation{ target: sprite; property: "anchorY" }
-    property NumberAnimation _animation_opacity: NumberAnimation{ target: sprite; property: "opacity" }
-    property NumberAnimation _animation_rotation: NumberAnimation{ target: tRotation; property: "angle" }
-    property NumberAnimation _animation_scale: NumberAnimation{ target: tScale; properties: "xScale, yScale" }
-    property NumberAnimation _nextStateAnimation: NumberAnimation {
-        target: _nextStateAnimation;
-        property int goToNextState
-        property: "goToNextState"
-        from: 0; to: 1
-        onRunningChanged: {
-            if (!goToNextState || !playing)
-                return;
-
-            spriteTime = _toState.time;
-
-            var after = _toState.after;
-            if (after) {
-                var tmpIndex = keyframeIndex
-                after(sprite);
-                if (tmpIndex !== keyframeIndex)
-                    return;
-            }
-
-            if (keyframeIndex < keyframes.length - 1) {
-                keyframeIndex++;
-                _fromState = _toState;
-                _toState = (keyframeIndex === keyframes.length - 1) ? _fromState : keyframes[keyframeIndex + 1];
-            }
-            _play();
-        }
-    }
-
-//    property var _props: ["x", "y", "z", "rotation", "scale", "opacity", "anchorX", "anchorY"];
-    property var _props: ["x", "y"];
-    onPlayingChanged: if (playing) _play(); else _stop();
-
-    function _play()
-    {
-        // Move sprite to fromState:
-        if (!myApp.model.inLiveDrag)
-            _interpolatePosition(spriteTime);
-        // Animate to toState:
-        var duration = (_toState.time - spriteTime) * model.msPerFrame;
-        if (duration <= 0)
-            return;
-        for (var i in _props) {
-            var prop = _props[i];
-            sprite["_animation_" + prop].to = _toState[prop];
-            sprite["_animation_" + prop].duration = duration;
-            sprite["_animation_" + prop].restart();
-        }
-        _nextStateAnimation.duration = duration;
-        _nextStateAnimation.restart();
-    }
-
-    function _stop()
-    {
-        for (var i in _props)
-            sprite["_animation_" + _props[i]].stop();
-        _nextStateAnimation.stop();
-    }
-
-    function getPositionKeyframe(time)
+    function getKeyframe(time)
     {
         var intTime = Math.floor(time);
         return (intTime >= _fromState.time && intTime < _toState.time)
-                ? getCurrentPositionKeyframe() : _getPositionKeyframeBinarySearch(intTime);
+                ? getCurrentKeyframe() : _getKeyframeBinarySearch(intTime);
     }
 
-    function getCurrentPositionKeyframe()
+    function getCurrentKeyframe()
     {
         _updateToAndFromState(spriteTime);
         return _fromState;
     }
 
-    function addPositionKeyframe(keyframe)
+    function addKeyframe(keyframe)
     {
-        var index = keyframes.length === 0 ? 0 : getPositionKeyframe(keyframe.time).lastSearchIndex + 1;
+        var index = keyframes.length === 0 ? 0 : getKeyframe(keyframe.time).lastSearchIndex + 1;
         keyframes.splice(index, 0, keyframe);
         myApp.model.testAndSetEndTime(keyframe.time);
         _invalidCache = true;
     }
 
-    function createPositionKeyframe(time)
+    function createKeyframe(time)
     {
         return {
             time:time,
             parent:parent,
+            sprite:sprite,
             x:sprite.x,
             y:sprite.y,
-            sprite:sprite
-        };
-    }
-
-    function create_changeme_Keyframe(time)
-    {
-        return {
-            time:time,
-            sprite:sprite,
             z:sprite.z,
             anchorX: tScale.origin.x,
             anchorY: tScale.origin.y,
@@ -142,13 +66,7 @@ Item {
         };
     }
 
-    function synchSpriteWithPostitionKeyframe(keyframe)
-    {
-        x = keyframe.x;
-        y = keyframe.y;
-    }
-
-    function synchSpriteWith_changeme_Keyframe(keyframe)
+    function synchSpriteWithKeyframe(keyframe)
     {
         changeParent(keyframe.parent);
         x = keyframe.x;
@@ -161,7 +79,7 @@ Item {
         opacity = keyframe.opacity;
     }
 
-    function removePositionKeyframe(keyframe)
+    function removeKeyframe(keyframe)
     {
         keyframes.splice(keyframes.indexOf(keyframe), 1);
         _invalidCache = true;
@@ -230,14 +148,14 @@ Item {
         var intTime = Math.floor(time);
         _invalidCache = _invalidCache || !_fromState || !_toState || intTime < _fromState.time || intTime >= _toState.time;
         if (_invalidCache) {
-            _fromState = _getPositionKeyframeBinarySearch(intTime);
+            _fromState = _getKeyframeBinarySearch(intTime);
             keyframeIndex = _fromState.lastSearchIndex;
             _toState = (keyframeIndex === keyframes.length - 1) ? _fromState : keyframes[keyframeIndex + 1];
             _invalidCache = false;
         }
     }
 
-    function _getPositionKeyframeBinarySearch(time)
+    function _getKeyframeBinarySearch(time)
     {
         // Binary search keyframes:
         var low = 0, high = keyframes.length - 1;
@@ -296,7 +214,7 @@ Item {
         transScaleX = transScaleY = gScale / gParentScale;
 
         // Store the geometry conversion in the fromKeyframe:
-        getCurrentPositionKeyframe().effectiveKeyframe = createPositionKeyframe(spriteTime);
+        getCurrentKeyframe().effectiveKeyframe = createKeyframe(spriteTime);
         if (!myApp.model.inLiveDrag)
             _interpolatePosition(spriteTime);
     }
