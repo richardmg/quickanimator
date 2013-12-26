@@ -54,12 +54,14 @@ Rectangle {
                     grd.addColorStop(1, '#206CD3');
                     ctx.fillStyle = grd;
 
-                    var startIndex = sprite.getKeyframe(time).volatileIndex;
-                    var endIndex = sprite.getKeyframe(time + 20).volatileIndex;
+                    var timeShift = (width / (2 * cellWidth));
+                    var startIndex = sprite.getKeyframe(time - timeShift).volatileIndex;
+                    var endIndex = sprite.getKeyframe(time + timeShift).volatileIndex;
 
                     for (var t = startIndex; t <= endIndex; ++t) {
                         var keyframe = sprite.keyframes[t];
-                        ctx.fillRect((keyframe.time - time) * cellWidth, (row * myApp.style.cellHeight), cellWidth, myApp.style.cellHeight - 1);
+                        ctx.fillRect(((keyframe.time - time) * cellWidth) + (width / 2),
+                                     (row * myApp.style.cellHeight), cellWidth, myApp.style.cellHeight - 1);
                     }
                 }
             }
