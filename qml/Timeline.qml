@@ -12,20 +12,17 @@ Item {
     Connections {
         target: myApp.model
         onTimeChanged: if (!flickable.moving) flickable.contentX = myApp.model.time / flickSpeed;
-        onEndTimeChanged: flickable.contentWidth = (flickable.width * 2) + (myApp.model.endTime / flickSpeed);
     }
 
     TimelineCanvas {
-        width: parent.width
+        width: flickable.width
         height: parent.height
-        x: -myApp.model.time * myApp.style.cellWidth
-        y: -flickable.contentY
     }
 
     Flickable {
         id: flickable
         anchors.fill: parent
-        contentWidth: width * 2
+        contentWidth: 10000
         contentHeight: 20 * myApp.style.cellHeight
         onContentXChanged: if (!animation.running) myApp.model.setTime(contentX * flickSpeed);
         onMovingChanged: if (!moving && _playing) togglePlay(true);

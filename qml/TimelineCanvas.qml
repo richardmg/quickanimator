@@ -4,7 +4,9 @@ Rectangle {
     id: root
     property int cellWidth: myApp.style.cellWidth
     property var model: myApp.model.layers
+    property real time: myApp.model.time
 
+    onTimeChanged: canvas.requestPaint()
     Connections {
         target: myApp.model
         onStatesUpdated: canvas.requestPaint()
@@ -29,7 +31,7 @@ Rectangle {
         height: flickable.contentHeight
         renderTarget: Canvas.Image
         property real lineWidth: 1.0
-        property real startX: 1 + myApp.timelineFlickable.width / 2
+        property real startX: time + 1 + myApp.timelineFlickable.width / 2
         antialiasing: false
 
         onPaint: {
@@ -49,14 +51,20 @@ Rectangle {
                 var rowData = root.model[row];
                 if (rowData) {
                     var sprite = rowData.sprite;
+
                     ctx.fillStyle = Qt.rgba(0.9, 0.5, 0.3, 1);
                     var grd = ctx.createLinearGradient(0, 0, 0, myApp.style.cellHeight * 4);
                     grd.addColorStop(0, '#8ED6FF');
                     grd.addColorStop(1, '#206CD3');
                     ctx.fillStyle = grd;
-                    for (var c in sprite.keyframes) {
-                        var keyframe = sprite.keyframes[c];
-                        ctx.fillRect(startX + (keyframe.time * cellWidth), (row * myApp.style.cellHeight), cellWidth, myApp.style.cellHeight - 1);
+
+                    var startIndex = sprite.getKeyframe(time).volatileIndex;
+                    var endIndex = sprite.getKeyframe(time + 20).volatileIndex;
+                    print(time, startIndex, endIndex)
+
+                    for (var t = startIndex; t <= endIndex; ++t) {
+                        var keyframe = sprite.keyframes[t];
+                        ctx.fillRect((keyframe.time - time) * cellWidth, (row * myApp.style.cellHeight), cellWidth, myApp.style.cellHeight - 1);
                     }
                 }
             }

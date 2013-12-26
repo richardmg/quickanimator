@@ -40,7 +40,7 @@ Item {
 
     function addKeyframe(keyframe)
     {
-        var index = keyframes.length === 0 ? 0 : getKeyframe(keyframe.time).lastSearchIndex + 1;
+        var index = keyframes.length === 0 ? 0 : getKeyframe(keyframe.time).volatileIndex + 1;
         keyframes.splice(index, 0, keyframe);
         myApp.model.testAndSetEndTime(keyframe.time);
         _invalidCache = true;
@@ -134,7 +134,7 @@ Item {
         _invalidCache = _invalidCache || !_fromState || !_toState || intTime < _fromState.time || intTime >= _toState.time;
         if (_invalidCache) {
             _fromState = _getKeyframeBinarySearch(intTime);
-            keyframeIndex = _fromState.lastSearchIndex;
+            keyframeIndex = _fromState.volatileIndex;
             _toState = (keyframeIndex === keyframes.length - 1) ? _fromState : keyframes[keyframeIndex + 1];
             _invalidCache = false;
         }
@@ -158,7 +158,7 @@ Item {
             low = i + 1
         }
         var state = keyframes[i];
-        state.lastSearchIndex = i;
+        state.volatileIndex = i;
         return state;
     }
 
