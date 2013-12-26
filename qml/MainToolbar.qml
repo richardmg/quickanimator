@@ -38,7 +38,7 @@ TitleBar {
         }
         SpinBox {
             id: msPerFrameBox
-            value: 100
+            value: myApp.model.msPerFrame
             minimumValue: 0
             maximumValue: 99999
             anchors.verticalCenter: parent.verticalCenter
