@@ -42,7 +42,7 @@ QtObject {
 
     function setTime(time)
     {
-        root.time = time;
+        root.time = Math.max(0, time);
         for (var l in layers) {
             var layer = layers[l];
             layer.sprite.setTime(time);

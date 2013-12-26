@@ -41,6 +41,8 @@ Item {
                 togglePlay(!_playing);
             else if (Math.abs(momentum) > 2)
                 flick(momentum);
+            else if (_playing)
+                togglePlay(true);
         }
 
         onMouseXChanged: {
