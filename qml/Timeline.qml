@@ -49,7 +49,7 @@ Item {
                 flickAnimation.duration = 1000;
                 flickAnimation.restart();
             } else {
-                var click = (new Date().getTime() - pressStartTime) < 300 && dragged < 10;
+                var click = (new Date().getTime() - pressStartTime) < 300 && dragged < 20;
                 togglePlay(click ? !_playing : _playing);
             }
         }
