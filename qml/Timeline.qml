@@ -21,24 +21,44 @@ Item {
         property real prevMouseX: 0
         property real prevMouseY: 0
         property real dragged: 0
+        property real momentum: 0
+
+        property real flickTime: 0
+        NumberAnimation {
+            id: flickAnimation
+            target: mouseArea
+            property: "flickTime"
+            easing.type: Easing.OutExpo
+        }
+        onFlickTimeChanged: myApp.model.setTime(flickTime);
 
         onPressed: {
+            flickAnimation.stop();
             animation.running = false;
             prevMouseX = mouseX;
             prevMouseY = mouseY;
             pressStartTime = new Date();
-            dragged = 0
+            momentum = 0;
+            dragged = 0;
         }
 
         onReleased: {
-            var click = (new Date().getTime() - pressStartTime) < 300 && dragged < 10;
-            togglePlay(click ? !_playing : _playing);
+            if (Math.abs(momentum) > 1) {
+                flickAnimation.from = myApp.model.time;
+                flickAnimation.to = myApp.model.time + (momentum / 2);
+                flickAnimation.duration = 1000;
+                flickAnimation.restart();
+            } else {
+                var click = (new Date().getTime() - pressStartTime) < 300 && dragged < 10;
+                togglePlay(click ? !_playing : _playing);
+            }
         }
 
         onMouseXChanged: {
             var xDiff = prevMouseX - mouseX;
             var yDiff = prevMouseY - mouseY;
             dragged += Math.abs(xDiff) + Math.abs(yDiff)
+            momentum = xDiff;
             prevMouseX = mouseX;
             prevMouseY = mouseY;
 
