@@ -157,7 +157,7 @@ QtObject {
         layer.parentLayer = parentLayer;
 
         // Store the parent change (but not the geometry changes that will occur):
-        var keyframe = myApp.model.getState(layer, myApp.model.time);
+        var keyframe = layer.sprite.getKeyframe(myApp.model.time);
         keyframe.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
         // Reparent sprite:
         layer.sprite.changeParent(keyframe.parent);
