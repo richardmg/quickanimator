@@ -9,34 +9,40 @@ Item {
     clip: true
     Component.onCompleted: myApp.timeline = root
 
-    Connections {
-        target: myApp.model
-        onTimeChanged: if (!flickable.moving) flickable.contentX = myApp.model.time / flickSpeed;
-    }
-
     TimelineCanvas {
-        width: flickable.width
+        width: root.width
         height: parent.height
     }
 
-    Flickable {
-        id: flickable
+    MouseArea {
+        id: mouseArea
         anchors.fill: parent
-        contentWidth: 10000
-        contentHeight: 20 * myApp.style.cellHeight
-        onContentXChanged: if (!animation.running) myApp.model.setTime(contentX * flickSpeed);
-        onMovingChanged: if (!moving && _playing) togglePlay(true);
-        pixelAligned: true
-        Component.onCompleted: myApp.timelineFlickable = flickable
+        property var pressStartTime: new Date()
+        property real prevMouseX: 0
+        property real prevMouseY: 0
+        property real dragged: 0
 
-        MouseArea {
-            id: mouseArea
-            height: parent.height
-            x: flickable.contentX
-            width: flickable.width
-            onPressed: animation.running = false;
-            onReleased: if (_playing) togglePlay(true);
-            onClicked: togglePlay(!_playing);
+        onPressed: {
+            animation.running = false;
+            prevMouseX = mouseX;
+            prevMouseY = mouseY;
+            pressStartTime = new Date();
+            dragged = 0
+        }
+
+        onReleased: {
+            var click = (new Date().getTime() - pressStartTime) < 300 && dragged < 10;
+            togglePlay(click ? !_playing : _playing);
+        }
+
+        onMouseXChanged: {
+            var xDiff = prevMouseX - mouseX;
+            var yDiff = prevMouseY - mouseY;
+            dragged += Math.abs(xDiff) + Math.abs(yDiff)
+            prevMouseX = mouseX;
+            prevMouseY = mouseY;
+
+            myApp.model.setTime(myApp.model.time + (xDiff * flickSpeed));
         }
     }
 

@@ -25,13 +25,9 @@ Rectangle {
 
     Canvas {
         id: canvas
-        x: -1
-        y: -1
-        width: flickable.contentWidth
-        height: flickable.contentHeight
+        anchors.fill: parent
         renderTarget: Canvas.Image
         property real lineWidth: 1.0
-        property real startX: time + 1 + myApp.timelineFlickable.width / 2
         antialiasing: false
 
         onPaint: {
@@ -60,7 +56,6 @@ Rectangle {
 
                     var startIndex = sprite.getKeyframe(time).volatileIndex;
                     var endIndex = sprite.getKeyframe(time + 20).volatileIndex;
-                    print(time, startIndex, endIndex)
 
                     for (var t = startIndex; t <= endIndex; ++t) {
                         var keyframe = sprite.keyframes[t];
