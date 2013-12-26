@@ -6,6 +6,7 @@ Item {
 
     property real flickSpeed: 0.05
     property bool _playing: false
+
     clip: true
     Component.onCompleted: myApp.timeline = root
 
@@ -23,18 +24,10 @@ Item {
         property real dragged: 0
         property real momentum: 0
 
-        property real flickTime: 0
-        NumberAnimation {
-            id: flickAnimation
-            target: mouseArea
-            property: "flickTime"
-            easing.type: Easing.OutExpo
-        }
-        onFlickTimeChanged: myApp.model.setTime(flickTime);
-
         onPressed: {
-            flickAnimation.stop();
+            flickAnimation.running = false;
             animation.running = false;
+
             prevMouseX = mouseX;
             prevMouseY = mouseY;
             pressStartTime = new Date();
@@ -43,15 +36,11 @@ Item {
         }
 
         onReleased: {
-            if (Math.abs(momentum) > 1) {
-                flickAnimation.from = myApp.model.time;
-                flickAnimation.to = myApp.model.time + (momentum / 2);
-                flickAnimation.duration = 1000;
-                flickAnimation.restart();
-            } else {
-                var click = (new Date().getTime() - pressStartTime) < 300 && dragged < 20;
-                togglePlay(click ? !_playing : _playing);
-            }
+            var click = (new Date().getTime() - pressStartTime) < 300 && dragged < 20;
+            if (click)
+                togglePlay(!_playing);
+            else if (Math.abs(momentum) > 2)
+                flick(momentum);
         }
 
         onMouseXChanged: {
@@ -80,6 +69,29 @@ Item {
         animation.running = play;
     }
 
+    function flick(momentum)
+    {
+        flickAnimation.from = momentum
+        flickAnimation.to = _playing ? 1 : 0
+        flickAnimation.duration = 1000;
+        flickAnimation.restart();
+        animation.lastTickTime = new Date();
+        animation.running = true;
+    }
+
+    NumberAnimation {
+        id: flickAnimation
+        target: flickAnimation
+        property: "flickMultiplier"
+        easing.type: Easing.OutExpo
+        property real flickMultiplier: 1
+        onStopped: {
+            flickMultiplier = 1;
+            if (!_playing)
+                animation.stop();
+        }
+    }
+
     NumberAnimation {
         id: animation
         target: animation
@@ -94,7 +106,7 @@ Item {
 
         onTickChanged: {
             var tickTime = (new Date()).getTime();
-            var timeIncrement = (tickTime - lastTickTime) / myApp.model.msPerFrame;
+            var timeIncrement = ((tickTime - lastTickTime) / myApp.model.msPerFrame) * flickAnimation.flickMultiplier;
             myApp.model.setTime(myApp.model.time + timeIncrement);
             lastTickTime = tickTime;
         }
