@@ -17,4 +17,4 @@ QMAKE_BUNDLE_DATA += qml dummy
 
 OTHER_FILES += qml/*.qml \
     qml/TimeSlider.qml \
-    qml/FlickView.qml
+    qml/FlickableMouseArea.qml

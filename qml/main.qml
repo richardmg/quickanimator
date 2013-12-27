@@ -14,7 +14,7 @@ ApplicationWindow {
     property Timeline timeline
     property Flickable timelineFlickable
     property Flickable layerTreeFlickable
-    property FlickView msPerFrameFlickable
+    property FlickableMouseArea msPerFrameFlickable
 
     property Style style: Style {}
     property Model model: Model {}
@@ -60,11 +60,11 @@ ApplicationWindow {
                 width: 2 * parent.width / 3
                 height: parent.height
 
-                FlickView {
+                FlickableMouseArea {
                     id: msPerFrameFlickView
                     anchors.fill: parent
                     enabled: false
-                    onFlickChanged: myApp.model.msPerFrame = Math.max(16, myApp.model.msPerFrame - flick);
+                    onMomentumChanged: myApp.model.msPerFrame = Math.max(16, myApp.model.msPerFrame - momentum);
                     Component.onCompleted: myApp.msPerFrameFlickable = msPerFrameFlickView
                 }
             }
