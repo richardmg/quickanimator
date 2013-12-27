@@ -12,6 +12,10 @@ TitleBar {
             checkable: true
             onCheckedChanged: myApp.model.recordsPosition = checked
         }
+        TimeSlider {
+
+        }
+
         ToolButton {
             text: " + "
             height: parent.height

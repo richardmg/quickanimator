@@ -28,7 +28,7 @@ Rectangle {
         anchors.fill: parent
         renderTarget: Canvas.Image
         property real lineWidth: 1.0
-        antialiasing: false
+//        antialiasing: false
 
         onPaint: {
             var ctx = getContext('2d');

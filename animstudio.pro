@@ -15,4 +15,6 @@ qml.files = $$PWD/qml
 dummy.files = $$PWD/dummy.jpeg
 QMAKE_BUNDLE_DATA += qml dummy
 
-OTHER_FILES += qml/*.qml
+OTHER_FILES += qml/*.qml \
+    qml/TimeSlider.qml \
+    qml/FlickView.qml
