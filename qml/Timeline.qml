@@ -15,45 +15,35 @@ Item {
         height: parent.height
     }
 
-    MouseArea {
-        id: mouseArea
+    FlickableMouseArea {
+        id: flickable
         anchors.fill: parent
         property var pressStartTime: new Date()
         property real prevMouseX: 0
         property real prevMouseY: 0
         property real dragged: 0
-        property real momentum: 0
+
+        momentumRestX: _playing ? 1 : 0
 
         onPressed: {
-            flickAnimation.running = false;
             animation.running = false;
-
-            prevMouseX = mouseX;
-            prevMouseY = mouseY;
             pressStartTime = new Date();
-            momentum = 0;
             dragged = 0;
         }
 
         onReleased: {
-            var click = (new Date().getTime() - pressStartTime) < 300 && dragged < 20;
-            if (click)
-                togglePlay(!_playing);
-            else if (Math.abs(momentum) > 2)
-                flick(momentum);
-            else if (_playing)
-                togglePlay(true);
+            if (flicking()) {
+                animation.lastTickTime = new Date();
+                animation.running = true;
+            } else {
+                var click = (new Date().getTime() - pressStartTime) < 300 && dragged < 20;
+                togglePlay(click ? !_playing : _playing);
+            }
         }
 
-        onMouseXChanged: {
-            var xDiff = prevMouseX - mouseX;
-            var yDiff = prevMouseY - mouseY;
-            dragged += Math.abs(xDiff) + Math.abs(yDiff)
-            momentum = xDiff;
-            prevMouseX = mouseX;
-            prevMouseY = mouseY;
-
-            myApp.model.setTime(myApp.model.time + (xDiff * flickSpeed));
+        onMomentumXChanged: {
+            dragged += Math.abs(momentumX)
+            myApp.model.setTime(myApp.model.time + (momentumX * flickSpeed));
         }
     }
 
@@ -71,29 +61,6 @@ Item {
         animation.running = play;
     }
 
-    function flick(momentum)
-    {
-        flickAnimation.from = momentum
-        flickAnimation.to = _playing ? 1 : 0
-        flickAnimation.duration = 1000;
-        flickAnimation.restart();
-        animation.lastTickTime = new Date();
-        animation.running = true;
-    }
-
-    NumberAnimation {
-        id: flickAnimation
-        target: flickAnimation
-        property: "flickMultiplier"
-        easing.type: Easing.OutExpo
-        property real flickMultiplier: 1
-        onStopped: {
-            flickMultiplier = 1;
-            if (!_playing)
-                animation.stop();
-        }
-    }
-
     NumberAnimation {
         id: animation
         target: animation
@@ -108,7 +75,7 @@ Item {
 
         onTickChanged: {
             var tickTime = (new Date()).getTime();
-            var timeIncrement = ((tickTime - lastTickTime) / myApp.model.msPerFrame) * flickAnimation.flickMultiplier;
+            var timeIncrement = ((tickTime - lastTickTime) / myApp.model.msPerFrame) * flickable.momentumX;
             myApp.model.setTime(myApp.model.time + timeIncrement);
             lastTickTime = tickTime;
         }

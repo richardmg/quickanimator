@@ -64,7 +64,7 @@ ApplicationWindow {
                     id: msPerFrameFlickView
                     anchors.fill: parent
                     enabled: false
-                    onMomentumChanged: myApp.model.msPerFrame = Math.max(16, myApp.model.msPerFrame - momentum);
+                    onMomentumXChanged: myApp.model.msPerFrame = Math.max(16, myApp.model.msPerFrame - momentumX);
                     Component.onCompleted: myApp.msPerFrameFlickable = msPerFrameFlickView
                 }
             }
