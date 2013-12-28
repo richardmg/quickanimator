@@ -33,11 +33,16 @@ MouseArea {
             momentumXAnimation.from = momentumX
             momentumXAnimation.duration = 1000
             momentumXAnimation.restart();
+        } else {
+            momentumX = momentumRestX;
         }
+
         if (Math.abs(momentumY) > 2) {
             momentumYAnimation.from = momentumY
             momentumYAnimation.duration = 1000
             momentumYAnimation.restart();
+        } else {
+            momentumY = momentumRestY;
         }
     }
 

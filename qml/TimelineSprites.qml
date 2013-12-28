@@ -109,7 +109,11 @@ Rectangle {
                             && mapped.y >= -margin && mapped.y <= l.height + margin);
                 }
 
-                onPressed: index3 = index + myApp.model.descendantCount(index2);
+                onPressed: {
+                    myApp.model.unselectAllLayers();
+                    myApp.model.selectLayer(myApp.model.layers[index], true);
+                    index3 = index + myApp.model.descendantCount(index2);
+                }
 
                 onPositionChanged: {
                     if (!drag.active)
