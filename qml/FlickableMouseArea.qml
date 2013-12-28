@@ -30,10 +30,12 @@ MouseArea {
     onReleased: {
         if (Math.abs(momentumX) > 2) {
             momentumXAnimation.from = momentumX
+            momentumXAnimation.duration = Math.max(500, Math.abs(momentumRestX - momentumX) * 50)
             momentumXAnimation.restart();
         }
         if (Math.abs(momentumY) > 2) {
             momentumYAnimation.from = momentumY
+            momentumYAnimation.duration = Math.max(500, Math.abs(momentumRestY - momentumY) * 50)
             momentumYAnimation.restart();
         }
     }
@@ -62,7 +64,6 @@ MouseArea {
         id: momentumYAnimation
         target: root
         property: "momentumY"
-        duration: 1000
         to: 0
         easing.type: Easing.OutExpo
         onToChanged: if (!running) root.momentumY = to
