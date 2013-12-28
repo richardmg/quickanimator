@@ -7,6 +7,7 @@ MouseArea {
     property real momentumY: 0
     property alias momentumRestX: momentumXAnimation.to
     property alias momentumRestY: momentumYAnimation.to
+    property real dampning: 0.5
 
     function flicking()
     {
@@ -41,12 +42,12 @@ MouseArea {
     }
 
     onMouseXChanged: {
-        momentumX = mouseX - _prevMouseX;
+        momentumX = (mouseX - _prevMouseX) * dampning;
         _prevMouseX = mouseX;
     }
 
     onMouseYChanged: {
-        momentumY = mouseY - _prevMouseY;
+        momentumY = (mouseY - _prevMouseY) * dampning;
         _prevMouseY = mouseY;
     }
 
@@ -56,7 +57,7 @@ MouseArea {
         property: "momentumX"
         duration: 1000
         to: 0
-        easing.type: Easing.OutExpo
+        easing.type: Easing.OutQuad
         onToChanged: if (!running) root.momentumX = to
     }
 
@@ -65,7 +66,7 @@ MouseArea {
         target: root
         property: "momentumY"
         to: 0
-        easing.type: Easing.OutExpo
+        easing.type: Easing.OutQuad
         onToChanged: if (!running) root.momentumY = to
     }
 }

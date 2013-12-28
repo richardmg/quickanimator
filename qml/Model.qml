@@ -17,7 +17,10 @@ QtObject {
     signal statesUpdated(var layer)
 
     property bool inLiveDrag: false
-    property bool recordsPosition: false
+    property bool recordsPositionX: false
+    property bool recordsPositionY: false
+    property bool recordsRotation: false
+    property bool recordsScale: false
 
     function syncLayer(layer)
     {

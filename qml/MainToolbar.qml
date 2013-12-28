@@ -10,7 +10,10 @@ TitleBar {
             anchors.verticalCenter: parent.verticalCenter
             text: checked ? "Recording" : "Record"
             checkable: true
-            onCheckedChanged: myApp.model.recordsPosition = checked
+            onCheckedChanged: {
+                myApp.model.recordsPositionX = checked
+                myApp.model.recordsPositionY = checked
+            }
         }
         TimeSlider {
 

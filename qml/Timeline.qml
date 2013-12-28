@@ -23,7 +23,7 @@ Item {
         property real prevMouseY: 0
         property real dragged: 0
 
-        momentumRestX: _playing ? 1 : 0
+        momentumRestX: _playing ? -1 : 0
 
         onPressed: {
             animation.running = false;
@@ -43,7 +43,7 @@ Item {
 
         onMomentumXChanged: {
             dragged += Math.abs(momentumX)
-            myApp.model.setTime(myApp.model.time + (momentumX * flickSpeed));
+            myApp.model.setTime(myApp.model.time + (-momentumX * flickSpeed));
         }
     }
 
@@ -75,7 +75,7 @@ Item {
 
         onTickChanged: {
             var tickTime = (new Date()).getTime();
-            var timeIncrement = ((tickTime - lastTickTime) / myApp.model.msPerFrame) * flickable.momentumX;
+            var timeIncrement = ((tickTime - lastTickTime) / myApp.model.msPerFrame) * -flickable.momentumX;
             myApp.model.setTime(myApp.model.time + timeIncrement);
             lastTickTime = tickTime;
         }

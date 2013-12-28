@@ -48,6 +48,12 @@ ApplicationWindow {
             width: parent.width
             handleDelegate: SplitHandle {}
 
+            Rectangle {
+                width: parent.width / 3
+                height: parent.height
+                color: myApp.style.dark
+            }
+
             TimelineSprites {
                 id: timelineSprites
                 width: parent.width / 3
@@ -57,7 +63,7 @@ ApplicationWindow {
 
             Timeline {
                 id: timeline
-                width: 2 * parent.width / 3
+                width: parent.width / 3
                 height: parent.height
 
                 FlickableMouseArea {

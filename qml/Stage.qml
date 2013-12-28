@@ -12,10 +12,7 @@ Item {
 
     Rectangle {
         id: sprites
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.top: title.bottom
-        anchors.bottom: parent.bottom
+        anchors.fill: parent
         gradient: myApp.style.stageGradient
     }
 
@@ -120,9 +117,9 @@ Item {
                             sprite = layer.sprite
                             globalPos = sprites.mapFromItem(sprite.parent, sprite.x, sprite.y);
                             var newSpritePos = sprites.mapToItem(sprite.parent, globalPos.x + dx, globalPos.y + dy);
-                            if (xBox.checked)
+                            if (model.recordsPositionX)
                                 sprite.x = newSpritePos.x
-                            if (yBox.checked)
+                            if (model.recordsPositionY)
                                 sprite.y = newSpritePos.y
                             myApp.model.syncLayer(layer);
                         }
@@ -141,9 +138,9 @@ Item {
                     for (var i in myApp.model.selectedLayers) {
                         layer = myApp.model.selectedLayers[i];
                         keyframe = layer.sprite.getKeyframe(myApp.model.time);
-                        if (rotateBox.checked)
+                        if (myApp.model.recordsRotation)
                             layer.sprite.transRotation += aar.angle - currentAction.angle;
-                        if (scaleBox.checked) {
+                        if (myApp.model.recordsScale) {
                             layer.sprite.transScaleX *= aar.radius / currentAction.radius;
                             layer.sprite.transScaleY = layer.sprite.transScaleX;
                         }
@@ -176,35 +173,6 @@ Item {
             }
 
             myApp.model.inLiveDrag = false;
-        }
-    }
-
-    TitleBar {
-        id: title
-        title: "Stage"
-        Row {
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            CheckBox {
-                id: xBox
-                text: "X"
-                checked: true
-            }
-            CheckBox {
-                id: yBox
-                text: "Y"
-                checked: true
-            }
-            CheckBox {
-                id: rotateBox
-                text: "Rotate"
-                checked: true
-            }
-            CheckBox {
-                id: scaleBox
-                text: "Scale"
-                checked: false
-            }
         }
     }
 

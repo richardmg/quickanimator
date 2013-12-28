@@ -6,13 +6,13 @@ Rectangle {
     height: 50
     color: "red"
 
-    MultiPointTouchArea {
-        id: mouseArea
-        anchors.fill: parent
+//    MultiPointTouchArea {
+//        id: mouseArea
+//        anchors.fill: parent
 
-        touchPoints: [
-            TouchPoint { onPressedChanged: myApp.msPerFrameFlickable.enabled = pressed },
-            TouchPoint { onPressedChanged: myApp.msPerFrameFlickable.enabled = pressed }
-        ]
-    }
+//        touchPoints: [
+//            TouchPoint { onPressedChanged: myApp.msPerFrameFlickable.enabled = pressed },
+//            TouchPoint { onPressedChanged: myApp.msPerFrameFlickable.enabled = pressed }
+//        ]
+//    }
 }
