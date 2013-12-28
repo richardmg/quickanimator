@@ -68,6 +68,7 @@ Item {
 
     function synch()
     {
+        _updateToAndFromState()
 //        changeParent(keyframe.parent);
         _fromState.x = x;
         _fromState.y = y;

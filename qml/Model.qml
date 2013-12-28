@@ -24,16 +24,16 @@ QtObject {
 
     function syncLayer(layer)
     {
-       var intTime = Math.floor(time);
-       var sprite = layer.sprite;
-       var keyframe = sprite.getKeyframe(intTime);
-       if (!keyframe || keyframe.time !== intTime) {
-           keyframe = sprite.createKeyframe(intTime);
-           sprite.addKeyframe(keyframe);
-           statesUpdated(layer);
-           updateFocusedKeyframe();
-       }
-       sprite.synch();
+        var intTime = Math.floor(time);
+        var sprite = layer.sprite;
+        var keyframe = sprite.getKeyframe(intTime);
+        if (!keyframe || keyframe.time !== intTime) {
+            keyframe = sprite.createKeyframe(intTime);
+            sprite.addKeyframe(keyframe);
+            statesUpdated(layer);
+            updateFocusedKeyframe();
+        }
+        sprite.synch();
     }
 
     function testAndSetEndTime(time)
