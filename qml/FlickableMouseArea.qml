@@ -7,7 +7,7 @@ MouseArea {
     property real momentumY: 0
     property alias momentumRestX: momentumXAnimation.to
     property alias momentumRestY: momentumYAnimation.to
-    property real dampning: 0.5
+    property real friction: 0.3
 
     function flicking()
     {
@@ -31,23 +31,23 @@ MouseArea {
     onReleased: {
         if (Math.abs(momentumX) > 2) {
             momentumXAnimation.from = momentumX
-            momentumXAnimation.duration = Math.max(500, Math.abs(momentumRestX - momentumX) * 50)
+            momentumXAnimation.duration = 1000
             momentumXAnimation.restart();
         }
         if (Math.abs(momentumY) > 2) {
             momentumYAnimation.from = momentumY
-            momentumYAnimation.duration = Math.max(500, Math.abs(momentumRestY - momentumY) * 50)
+            momentumYAnimation.duration = 1000
             momentumYAnimation.restart();
         }
     }
 
     onMouseXChanged: {
-        momentumX = (mouseX - _prevMouseX) * dampning;
+        momentumX = (mouseX - _prevMouseX) * friction
         _prevMouseX = mouseX;
     }
 
     onMouseYChanged: {
-        momentumY = (mouseY - _prevMouseY) * dampning;
+        momentumY = (mouseY - _prevMouseY) * friction
         _prevMouseY = mouseY;
     }
 

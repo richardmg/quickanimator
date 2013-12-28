@@ -4,7 +4,6 @@ import QtQuick.Controls 1.0
 Item {
     id: root
 
-    property real flickSpeed: 0.05
     property bool _playing: false
 
     clip: true
@@ -41,9 +40,9 @@ Item {
             }
         }
 
-        onMomentumXChanged: {
+        onMouseXChanged: {
             dragged += Math.abs(momentumX)
-            myApp.model.setTime(myApp.model.time + (-momentumX * flickSpeed));
+            myApp.model.setTime(myApp.model.time + (-momentumX * 20 / myApp.model.msPerFrame));
         }
     }
 
