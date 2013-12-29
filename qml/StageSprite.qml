@@ -50,7 +50,7 @@ Item {
     {
         return {
             time:time,
-            parent:parent,
+            parent:null,
             sprite:sprite,
             x:sprite.x,
             y:sprite.y,
@@ -118,7 +118,6 @@ Item {
             transRotation = _interpolated(effectiveKeyframe.rotation, _toState.rotation, advanceMs, "linear");
             opacity = _interpolated(effectiveKeyframe.opacity, _toState.opacity, advanceMs, "linear");
         }
-        parent = _fromState.parent;
     }
 
     function _interpolated(from, to, advanceMs, curve)
@@ -138,6 +137,14 @@ Item {
             keyframeIndex = _fromState.volatileIndex;
             _toState = (keyframeIndex === keyframes.length - 1) ? _fromState : keyframes[keyframeIndex + 1];
             _invalidCache = false;
+
+            // Set parent:
+            for (var i = _fromState.volatileIndex; i >= 0; i--) {
+                var p = keyframes[i].parent;
+                if (p)
+                    break;
+            }
+            parent = p ? p : parent.hasOwnProperty("spriteTime") ? parent.parent : parent;
         }
     }
 

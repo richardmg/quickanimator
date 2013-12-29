@@ -106,10 +106,18 @@ QtObject {
         layer.selected = select;
         if (select) {
             selectedLayers.push(layer)
-            selectedLayersUpdated(-1, layers.indexOf(layer));
+            var index = layers.indexOf(layer);
+            selectedLayersUpdated(-1, index);
+            setFocusLayer(index);
         } else {
             selectedLayers.splice(selectedLayers.indexOf(layer), 1);
-            selectedLayersUpdated(layers.indexOf(layer), -1);
+            index = layers.indexOf(layer);
+            selectedLayersUpdated(index, -1);
+            if (focusedLayerIndex === index) {
+                focusedLayerIndex = -1;
+                updateFocusedKeyframe();
+            }
+
         }
     }
     

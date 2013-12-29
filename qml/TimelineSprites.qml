@@ -7,16 +7,7 @@ Rectangle {
 
     property var _delegates: new Array()
 
-    gradient: Gradient {
-        GradientStop {
-            position: 0.0;
-            color: Qt.lighter(myApp.style.accent, 1.5)
-        }
-        GradientStop {
-            position: 200.0 / height;
-            color: Qt.lighter(myApp.style.accent, 1.1)
-        }
-    }
+    color: myApp.style.dark
 
     Connections {
         target: myApp.model
