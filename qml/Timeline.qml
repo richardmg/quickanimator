@@ -50,7 +50,7 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         width: 1
         height: parent.height
-        color: myApp.style.dark
+        color: "red"
     }
 
     function togglePlay(play)

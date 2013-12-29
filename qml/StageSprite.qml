@@ -141,8 +141,9 @@ Item {
             // Set parent:
             for (var i = _fromState.volatileIndex; i >= 0; i--) {
                 var p = keyframes[i].parent;
-                if (p)
+                if (p) {
                     break;
+                }
             }
             parent = p ? p : parent.hasOwnProperty("spriteTime") ? parent.parent : parent;
         }
@@ -161,7 +162,7 @@ Item {
                 high = i - 1;
                 continue;
             }
-            if (i == high || time < keyframes[i + 1].time)
+            if (i === high || time < keyframes[i + 1].time)
                 break;
             low = i + 1
         }
@@ -172,7 +173,7 @@ Item {
 
     function changeParent(newParent)
     {
-        if (parent == newParent)
+        if (parent === newParent)
             return;
 
         // Get current sprite geometry in scene/global coordinates:
@@ -207,7 +208,10 @@ Item {
         transScaleX = transScaleY = gScale / gParentScale;
 
         // Store the geometry conversion in the fromKeyframe:
-        getCurrentKeyframe().effectiveKeyframe = createKeyframe(spriteTime);
+        var currentKeyframe = getCurrentKeyframe();
+        var effectiveKeyframe = createKeyframe(currentKeyframe.time);
+        effectiveKeyframe.parent = newParent;
+        currentKeyframe.effectiveKeyframe = effectiveKeyframe;
         if (!myApp.model.inLiveDrag)
             _interpolate(spriteTime);
     }

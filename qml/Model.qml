@@ -24,6 +24,12 @@ QtObject {
 
     function syncLayer(layer)
     {
+        getOrCreateKeyframe(layer);
+        layer.sprite.synch();
+    }
+
+    function getOrCreateKeyframe(layer)
+    {
         var intTime = Math.floor(time);
         var sprite = layer.sprite;
         var keyframe = sprite.getKeyframe(intTime);
@@ -33,7 +39,7 @@ QtObject {
             statesUpdated(layer);
             updateFocusedKeyframe();
         }
-        sprite.synch();
+        return keyframe;
     }
 
     function testAndSetEndTime(time)
@@ -168,7 +174,7 @@ QtObject {
         layer.parentLayer = parentLayer;
 
         // Store the parent change (but not the geometry changes that will occur):
-        var keyframe = layer.sprite.getKeyframe(myApp.model.time);
+        var keyframe = getOrCreateKeyframe(layer);
         keyframe.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
         // Reparent sprite:
         layer.sprite.changeParent(keyframe.parent);
