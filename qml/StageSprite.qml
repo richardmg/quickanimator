@@ -66,22 +66,67 @@ Item {
         };
     }
 
+    function _createKeyframeRelativeToParent(time, keyframeParent)
+    {
+        // Create a keyframe from the current sprite geometry
+        // described relative to keyframeParent rather than actual parent:
+        var currentKeyframe = getCurrentKeyframe();
+
+        if (keyframeParent === parent)
+            return _fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState;
+
+        var commonParent = myApp.stage.sprites;
+
+        // Get current sprite geometry in commonParent coordinates:
+        var hotspotX = (width / 2);
+        var hotspotY = (height / 2);
+        var gHotspot = mapToItem(commonParent, hotspotX, hotspotY);
+        var gRefPoint = mapToItem(commonParent, hotspotX + 1, hotspotY);
+        var dx = gRefPoint.x - gHotspot.x;
+        var dy = gRefPoint.y - gHotspot.y;
+        var gRotation = (Math.atan2(dy, dx) * 180 / Math.PI);
+        var gScale = Math.sqrt((dx * dx) + (dy * dy));
+
+        // Get keyframeParent geometry in commonParent ordinates:
+        var itemHotspotX = (keyframeParent.width / 2);
+        var itemHotspotY = (keyframeParent.height / 2);
+        var gItemHotspot = keyframeParent.mapToItem(commonParent, itemHotspotX, itemHotspotY);
+        var gItemRefPoint = keyframeParent.mapToItem(commonParent, itemHotspotX + 1, itemHotspotY);
+        var itemDx = gItemRefPoint.x - gItemHotspot.x;
+        var itemDy = gItemRefPoint.y - gItemHotspot.y;
+        var gItemRotation = (Math.atan2(itemDy, itemDx) * 180 / Math.PI);
+        var gItemScale = Math.sqrt((itemDx * itemDx) + (itemDy * itemDy));
+
+        // Translate sprite to keyframeParent, preserving rotation and scale:
+        var translatedHotspot = keyframeParent.mapFromItem(commonParent, gHotspot.x, gHotspot.y);
+        var translatedKeyframe = createKeyframe(time);
+        translatedKeyframe.x = translatedHotspot.x - (sprite.width / 2);
+        translatedKeyframe.y = translatedHotspot.y - (sprite.height / 2);
+        translatedKeyframe.rotation = gRotation - gItemRotation;
+        translatedKeyframe.scale = gScale / gItemScale;
+
+        return translatedKeyframe;
+    }
+
     function synch()
     {
         _updateToAndFromState()
 
-        if (_fromState.effectiveKeyframe)
-            print("warning: both keyframe and effective keyframe needs to be synched....")
+        var effectiveKeyframe = _fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState;
+        effectiveKeyframe.x = x;
+        effectiveKeyframe.y = y;
+        effectiveKeyframe.z = z;
+        effectiveKeyframe.anchorX = anchorX;
+        effectiveKeyframe.anchorY = anchorY;
+        effectiveKeyframe.rotation = transRotation;
+        effectiveKeyframe.scale = transScaleX;
+        effectiveKeyframe.opacity = opacity;
 
-//        changeParent(keyframe.parent);
-        _fromState.x = x;
-        _fromState.y = y;
-        _fromState.z = z;
-        _fromState.anchorX = anchorX;
-        _fromState.anchorY = anchorY;
-        _fromState.rotation = transRotation;
-        _fromState.scale = transScaleX;
-        _fromState.opacity = opacity;
+        if (_fromState.effectiveKeyframe) {
+            // We need to mirror this synch on "both" sides of the keyframe:
+            var p  = _getEffectiveParent(_fromState.volatileIndex - 1);
+            _fromState = _createKeyframeRelativeToParent(_fromState.time, p);
+        }
     }
 
     function removeKeyframe(keyframe)
@@ -144,24 +189,26 @@ Item {
         _toState = (keyframeIndex === keyframes.length - 1) ? _fromState : keyframes[keyframeIndex + 1];
         _invalidCache = false;
 
-        // Set parent:
-        for (var i = _fromState.volatileIndex; i >= 0; --i) {
+        var p = _getEffectiveParent(_fromState.volatileIndex);
+        if (p.parent === sprite) {
+            // Sprites cannot be children of each other
+            p.parent = null;
+        }
+        parent = p;
+    }
+
+    function _getEffectiveParent(keyframeIndex)
+    {
+        for (var i = keyframeIndex; i >= 0; --i) {
             var effectiveKeyframe = keyframes[i].effectiveKeyframe;
             if (effectiveKeyframe) {
                 var p = effectiveKeyframe.parent;
                 break;
             }
         }
-        if (p) {
-            if (p.parent === sprite) {
-                // Sprites cannot be children of each other
-                p.parent = myApp.stage.sprites;
-            }
-            parent = p;
-        } else {
-            // fixme: find root parent by searching up, intead of relying on myApp
-            parent = myApp.stage.sprites;
-        }
+        // fixme: find root parent by searching
+        // up, instead of relying on myApp.stage.sprites
+        return p ? p : myApp.stage.sprites;
     }
 
     onParentChanged: {
