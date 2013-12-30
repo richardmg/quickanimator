@@ -100,6 +100,7 @@ Item {
         // Translate sprite to keyframeParent, preserving rotation and scale:
         var translatedHotspot = keyframeParent.mapFromItem(commonParent, gHotspot.x, gHotspot.y);
         var translatedKeyframe = createKeyframe(time);
+        translatedKeyframe.parent = keyframeParent;
         translatedKeyframe.x = translatedHotspot.x - (sprite.width / 2);
         translatedKeyframe.y = translatedHotspot.y - (sprite.height / 2);
         translatedKeyframe.rotation = gRotation - gItemRotation;
@@ -125,7 +126,11 @@ Item {
         if (_fromState.effectiveKeyframe) {
             // We need to mirror this synch on "both" sides of the keyframe:
             var p  = _getEffectiveParent(_fromState.volatileIndex - 1);
-            _fromState = _createKeyframeRelativeToParent(_fromState.time, p);
+            var translated = _createKeyframeRelativeToParent(_fromState.time, p);
+            _fromState.x = translated.x;
+            _fromState.y = translated.y;
+            _fromState.scale = translated.scale;
+            _fromState.rotation = translated.rotation;
         }
     }
 
@@ -184,10 +189,10 @@ Item {
         if (!_invalidCache)
             return;
 
+        _invalidCache = false;
         _fromState = _getKeyframeBinarySearch(intTime);
         keyframeIndex = _fromState.volatileIndex;
         _toState = (keyframeIndex === keyframes.length - 1) ? _fromState : keyframes[keyframeIndex + 1];
-        _invalidCache = false;
 
         var p = _getEffectiveParent(_fromState.volatileIndex);
         if (p.parent === sprite) {
@@ -211,14 +216,14 @@ Item {
         return p ? p : myApp.stage.sprites;
     }
 
-    onParentChanged: {
-        print("------");
-        if (parent)
-            print(objectName, "is child of", parent.objectName);
-        else
-            print(objectName, "is parented out!");
-        console.trace();
-    }
+//    onParentChanged: {
+//        print("------");
+//        if (parent)
+//            print(objectName, "is child of", parent.objectName);
+//        else
+//            print(objectName, "is parented out!");
+//        console.trace();
+//    }
 
     function _getKeyframeBinarySearch(time)
     {
@@ -247,44 +252,14 @@ Item {
         if (parent === newParent)
             return;
 
-        // Ensure that we work on correct fomr/to keyframes:
         var currentKeyframe = getCurrentKeyframe();
-
-        // Get current sprite geometry in scene/global coordinates:
-        var hotspotX = (width / 2);
-        var hotspotY = (height / 2);
-        var gHotspot = mapToItem(myApp.stage.sprites, hotspotX, hotspotY);
-        var gRefPoint = mapToItem(myApp.stage.sprites, hotspotX + 1, hotspotY);
-        var dx = gRefPoint.x - gHotspot.x;
-        var dy = gRefPoint.y - gHotspot.y;
-        var gRotation = (Math.atan2(dy, dx) * 180 / Math.PI);
-        var gScale = Math.sqrt((dx * dx) + (dy * dy));
-
-        // Get current parent geometry in scene/global coordinates:
-        var parentHotspotX = (newParent.width / 2);
-        var parentHotspotY = (newParent.height / 2);
-        var gParentHotspot = newParent.mapToItem(myApp.stage.sprites, parentHotspotX, parentHotspotY);
-        var gParentRefPoint = newParent.mapToItem(myApp.stage.sprites, parentHotspotX + 1, parentHotspotY);
-        var parentDx = gParentRefPoint.x - gParentHotspot.x;
-        var parentDy = gParentRefPoint.y - gParentHotspot.y;
-        var gParentRotation = (Math.atan2(parentDy, parentDx) * 180 / Math.PI);
-        var gParentScale = Math.sqrt((parentDx * parentDx) + (parentDy * parentDy));
+        var effectiveKeyframe = _createKeyframeRelativeToParent(currentKeyframe.time, newParent);
+        currentKeyframe.effectiveKeyframe = effectiveKeyframe;
 
         // Reparent sprite:
         parent = null;
         parent = newParent
 
-        // Move sprite to the same stage geometry as before reparenting:
-        var newHotspot = parent.mapFromItem(myApp.stage.sprites, gHotspot.x, gHotspot.y);
-        x = newHotspot.x - (sprite.width / 2);
-        y = newHotspot.y - (sprite.height / 2);
-        transRotation = gRotation - gParentRotation;
-        transScaleX = transScaleY = gScale / gParentScale;
-
-        // Store the geometry conversion in the fromKeyframe:
-        var effectiveKeyframe = createKeyframe(currentKeyframe.time);
-        effectiveKeyframe.parent = newParent;
-        currentKeyframe.effectiveKeyframe = effectiveKeyframe;
         if (!myApp.model.inLiveDrag)
             _interpolate(spriteTime);
     }
