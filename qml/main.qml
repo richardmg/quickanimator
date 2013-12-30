@@ -110,8 +110,7 @@ ApplicationWindow {
     function addImage(url)
     {
         var layer = {}
-        layer.sprite = stageSpriteComponent.createObject(stage.sprites)
-        layer.name =  "sprite_" + nextSpriteNr++;
+        layer.sprite = stageSpriteComponent.createObject(stage.sprites, {"objectName":"sprite " + nextSpriteNr++})
         model.addLayer(layer);
         timelineSprites.model.append({});
     }

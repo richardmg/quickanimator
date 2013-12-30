@@ -36,8 +36,8 @@ Rectangle {
                 enabled: false
 
                 onTextChanged: {
-                    if (timeline.selectedKeyframe)
-                        timeline.selectedKeyframe.name = text;
+                    if (myApp.timeline.focusedKeyframe)
+                        myApp.timeline.focusedKeyframe.name = text;
                 }
 
                 Connections {
@@ -45,7 +45,7 @@ Rectangle {
                     onFocusedKeyframeChanged: {
                         if (myApp.model.focusedKeyframe) {
                             stateName.enabled = true;
-                            //stateName.text = myApp.model.focusedKeyframe.name;
+                            stateName.text = myApp.model.focusedKeyframe.name;
                         } else {
                             stateName.enabled = false;
                             stateName.text = "";

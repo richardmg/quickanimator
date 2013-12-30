@@ -19,11 +19,12 @@ Item {
     property int keyframeIndex: 0
 
     property real spriteTime: 0
-    property string name: "keyframe"
 
     property var _fromState
     property var _toState
     property bool _invalidCache: true
+
+    objectName: "unknown sprite"
 
     function getKeyframe(time)
     {
@@ -50,14 +51,13 @@ Item {
     {
         return {
             time:time,
-            parent:null,
             sprite:sprite,
+            name:objectName + "," + time,
             x:sprite.x,
             y:sprite.y,
             z:sprite.z,
             anchorX: tScale.origin.x,
             anchorY: tScale.origin.y,
-            name:name + time,
             width:sprite.width,
             height:sprite.height,
             rotation:transRotation,
@@ -69,6 +69,10 @@ Item {
     function synch()
     {
         _updateToAndFromState()
+
+        if (_fromState.effectiveKeyframe)
+            print("warning: both keyframe and effective keyframe needs to be synched....")
+
 //        changeParent(keyframe.parent);
         _fromState.x = x;
         _fromState.y = y;
@@ -132,21 +136,41 @@ Item {
     {
         var intTime = Math.floor(time);
         _invalidCache = _invalidCache || !_fromState || !_toState || intTime < _fromState.time || intTime >= _toState.time;
-        if (_invalidCache) {
-            _fromState = _getKeyframeBinarySearch(intTime);
-            keyframeIndex = _fromState.volatileIndex;
-            _toState = (keyframeIndex === keyframes.length - 1) ? _fromState : keyframes[keyframeIndex + 1];
-            _invalidCache = false;
+        if (!_invalidCache)
+            return;
 
-            // Set parent:
-            for (var i = _fromState.volatileIndex; i >= 0; i--) {
-                var p = keyframes[i].parent;
-                if (p) {
-                    break;
-                }
+        _fromState = _getKeyframeBinarySearch(intTime);
+        keyframeIndex = _fromState.volatileIndex;
+        _toState = (keyframeIndex === keyframes.length - 1) ? _fromState : keyframes[keyframeIndex + 1];
+        _invalidCache = false;
+
+        // Set parent:
+        for (var i = _fromState.volatileIndex; i >= 0; --i) {
+            var effectiveKeyframe = keyframes[i].effectiveKeyframe;
+            if (effectiveKeyframe) {
+                var p = effectiveKeyframe.parent;
+                break;
             }
-            parent = p ? p : parent.hasOwnProperty("spriteTime") ? parent.parent : parent;
         }
+        if (p) {
+            if (p.parent === sprite) {
+                // Sprites cannot be children of each other
+                p.parent = myApp.stage.sprites;
+            }
+            parent = p;
+        } else {
+            // fixme: find root parent by searching up, intead of relying on myApp
+            parent = myApp.stage.sprites;
+        }
+    }
+
+    onParentChanged: {
+        print("------");
+        if (parent)
+            print(objectName, "is child of", parent.objectName);
+        else
+            print(objectName, "is parented out!");
+        console.trace();
     }
 
     function _getKeyframeBinarySearch(time)
@@ -175,6 +199,9 @@ Item {
     {
         if (parent === newParent)
             return;
+
+        // Ensure that we work on correct fomr/to keyframes:
+        var currentKeyframe = getCurrentKeyframe();
 
         // Get current sprite geometry in scene/global coordinates:
         var hotspotX = (width / 2);
@@ -208,7 +235,6 @@ Item {
         transScaleX = transScaleY = gScale / gParentScale;
 
         // Store the geometry conversion in the fromKeyframe:
-        var currentKeyframe = getCurrentKeyframe();
         var effectiveKeyframe = createKeyframe(currentKeyframe.time);
         effectiveKeyframe.parent = newParent;
         currentKeyframe.effectiveKeyframe = effectiveKeyframe;

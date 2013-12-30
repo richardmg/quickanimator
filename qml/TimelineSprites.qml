@@ -47,7 +47,7 @@ Rectangle {
             id: delegate
             width: parent.width
             height: myApp.style.cellHeight
-            color: highlight ? "red" : "transparent"
+            color: highlight ? Qt.rgba(0.8, 0.8, 0.8, 1.0) : "transparent"
             Component.onCompleted: {
                 _delegates.push(delegate);
                 if (myApp.model.selectedLayers.indexOf(modelLayer) != -1)
@@ -80,7 +80,7 @@ Rectangle {
                     id: label
                     x: 10
                     anchors.verticalCenter: parent.verticalCenter
-                    text: modelLayer ? modelLayer.name : ""
+                    text: modelLayer ? modelLayer.sprite.objectName : ""
                 }
             }
 

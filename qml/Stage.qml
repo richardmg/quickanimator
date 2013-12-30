@@ -14,6 +14,7 @@ Item {
         id: sprites
         anchors.fill: parent
         gradient: myApp.style.stageGradient
+        objectName: "stage"
     }
 
     Item {

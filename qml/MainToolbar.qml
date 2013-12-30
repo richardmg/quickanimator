@@ -14,6 +14,7 @@ TitleBar {
                 myApp.model.recordsPositionX = checked
                 myApp.model.recordsPositionY = checked
             }
+            Component.onCompleted: checked = true
         }
         TimeSlider {
 
