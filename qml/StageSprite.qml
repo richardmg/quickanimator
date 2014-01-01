@@ -124,37 +124,19 @@ Item {
         return translatedKeyframe;
     }
 
-    function synch(changedItem)
+    function synch(changedSprite)
     {
         _updateToAndFromState()
-        if (changedItem === sprite)
-            return _synch();
-
-        if (_fromState.volatileIndex === 0 || !_fromState.effectiveKeyframe)
+        if (changedSprite === sprite)
+            return _synchFromFrame();
+        if (!_toState.effectiveKeyframe)
             return false;
-
-        // fixme: we need to check if changedItem is also an anchestor of sprite
-        // in the previous keyframe, not only parent. Then we should cache synched
-        // layers in model so we only need to do this checking the first time
-        // the users modifies geometry of a layer for a given time.
-
-        if (changedItem === getKeyframeParent(_fromState.volatileIndex - 1))
-            return _synch();
-
-        return false;
+        return _synchToFrame();
     }
 
-    function _synch()
+    function _synchFromFrame()
     {
-        var effectiveKeyframe = _fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState;
-        effectiveKeyframe.x = x;
-        effectiveKeyframe.y = y;
-        effectiveKeyframe.z = z;
-        effectiveKeyframe.anchorX = anchorX;
-        effectiveKeyframe.anchorY = anchorY;
-        effectiveKeyframe.rotation = transRotation;
-        effectiveKeyframe.scale = transScaleX;
-        effectiveKeyframe.opacity = opacity;
+        _synchKeyframeWithSprite(_fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState);
 
         if (_fromState.volatileIndex > 0 && _fromState.effectiveKeyframe) {
             var p = getKeyframeParent(_fromState.volatileIndex - 1);
@@ -165,6 +147,33 @@ Item {
             _fromState.rotation = translated.rotation;
         }
         return true;
+    }
+
+    function _synchToFrame()
+    {
+        _synchKeyframeWithSprite(_toState);
+
+        if (_toState.volatileIndex > 0 && _toState.effectiveKeyframe) {
+            var keyframe = _toState.effectiveKeyframe;
+            var translated = _createKeyframeRelativeToParent(_toState.time, keyframe.parent);
+            keyframe.x = translated.x;
+            keyframe.y = translated.y;
+            keyframe.scale = translated.scale;
+            keyframe.rotation = translated.rotation;
+        }
+        return true;
+    }
+
+    function _synchKeyframeWithSprite(keyframe)
+    {
+        keyframe.x = x;
+        keyframe.y = y;
+        keyframe.z = z;
+        keyframe.anchorX = anchorX;
+        keyframe.anchorY = anchorY;
+        keyframe.rotation = transRotation;
+        keyframe.scale = transScaleX;
+        keyframe.opacity = opacity;
     }
 
     function _interpolate(time)
@@ -210,7 +219,12 @@ Item {
         _invalidCache = false;
         _fromState = _getKeyframeBinarySearch(intTime);
         keyframeIndex = _fromState.volatileIndex;
-        _toState = (keyframeIndex === keyframes.length - 1) ? _fromState : keyframes[keyframeIndex + 1];
+        if (keyframeIndex === keyframes.length - 1) {
+            _toState = _fromState;
+        } else {
+            _toState = keyframes[keyframeIndex + 1];
+            _toState.volatileIndex = keyframeIndex + 1;
+        }
 
         var p = getKeyframeParent(_fromState.volatileIndex);
         if (p.parent === sprite) {
