@@ -128,15 +128,25 @@ Item {
     {
         _updateToAndFromState()
         if (changedSprite === sprite)
-            return _synchFromFrame();
+            return _synch();
         if (!_toState.effectiveKeyframe)
             return false;
-        return _synchToFrame();
+        if (_fromState.time === _toState.time)
+            return _synch();
+        return false;
     }
 
-    function _synchFromFrame()
+    function _synch()
     {
-        _synchKeyframeWithSprite(_fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState);
+        var keyframe = _fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState;
+        keyframe.x = x;
+        keyframe.y = y;
+        keyframe.z = z;
+        keyframe.anchorX = anchorX;
+        keyframe.anchorY = anchorY;
+        keyframe.rotation = transRotation;
+        keyframe.scale = transScaleX;
+        keyframe.opacity = opacity;
 
         if (_fromState.volatileIndex > 0 && _fromState.effectiveKeyframe) {
             var p = getKeyframeParent(_fromState.volatileIndex - 1);
@@ -147,33 +157,6 @@ Item {
             _fromState.rotation = translated.rotation;
         }
         return true;
-    }
-
-    function _synchToFrame()
-    {
-        _synchKeyframeWithSprite(_toState);
-
-        if (_toState.volatileIndex > 0 && _toState.effectiveKeyframe) {
-            var keyframe = _toState.effectiveKeyframe;
-            var translated = _createKeyframeRelativeToParent(_toState.time, keyframe.parent);
-            keyframe.x = translated.x;
-            keyframe.y = translated.y;
-            keyframe.scale = translated.scale;
-            keyframe.rotation = translated.rotation;
-        }
-        return true;
-    }
-
-    function _synchKeyframeWithSprite(keyframe)
-    {
-        keyframe.x = x;
-        keyframe.y = y;
-        keyframe.z = z;
-        keyframe.anchorX = anchorX;
-        keyframe.anchorY = anchorY;
-        keyframe.rotation = transRotation;
-        keyframe.scale = transScaleX;
-        keyframe.opacity = opacity;
     }
 
     function _interpolate(time)
