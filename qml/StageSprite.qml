@@ -26,6 +26,14 @@ Item {
 
     objectName: "unknown sprite"
 
+    function setTime(time)
+    {
+        _updateToAndFromState(time);
+        spriteTime = time;
+        if (!myApp.model.inLiveDrag)
+            _interpolate(spriteTime);
+    }
+
     function getKeyframe(time)
     {
         var intTime = Math.floor(time);
@@ -45,6 +53,13 @@ Item {
         keyframes.splice(index, 0, keyframe);
         myApp.model.testAndSetEndTime(keyframe.time);
         _invalidCache = true;
+    }
+
+    function removeKeyframe(keyframe)
+    {
+        keyframes.splice(keyframes.indexOf(keyframe), 1);
+        _invalidCache = true;
+        setTime(spriteTime);
     }
 
     function createKeyframe(time)
@@ -132,21 +147,6 @@ Item {
             _fromState.scale = translated.scale;
             _fromState.rotation = translated.rotation;
         }
-    }
-
-    function removeKeyframe(keyframe)
-    {
-        keyframes.splice(keyframes.indexOf(keyframe), 1);
-        _invalidCache = true;
-        setTime(spriteTime);
-    }
-
-    function setTime(time)
-    {
-        _updateToAndFromState(time);
-        spriteTime = time;
-        if (!myApp.model.inLiveDrag)
-            _interpolate(spriteTime);
     }
 
     function _interpolate(time)
