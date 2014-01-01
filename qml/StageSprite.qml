@@ -252,8 +252,10 @@ Item {
             return;
 
         var currentKeyframe = getCurrentKeyframe();
-        var effectiveKeyframe = _createKeyframeRelativeToParent(currentKeyframe.time, newParent);
-        currentKeyframe.effectiveKeyframe = effectiveKeyframe;
+        if (getKeyframeParent(currentKeyframe.volatileIndex - 1) === newParent)
+            currentKeyframe.effectiveKeyframe = null;
+        else
+            currentKeyframe.effectiveKeyframe = _createKeyframeRelativeToParent(currentKeyframe.time, newParent);
 
         // Reparent sprite:
         parent = null;
