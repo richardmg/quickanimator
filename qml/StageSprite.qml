@@ -124,10 +124,28 @@ Item {
         return translatedKeyframe;
     }
 
-    function synch()
+    function synch(changedItem)
     {
         _updateToAndFromState()
+        if (changedItem === sprite)
+            return _synch();
 
+        if (_fromState.volatileIndex === 0 || !_fromState.effectiveKeyframe)
+            return false;
+
+        // fixme: we need to check if changedItem is also an anchestor of sprite
+        // in the previous keyframe, not only parent. Then we should cache synched
+        // layers in model so we only need to do this checking the first time
+        // the users modifies geometry of a layer for a given time.
+
+        if (changedItem === getKeyframeParent(_fromState.volatileIndex - 1))
+            return _synch();
+
+        return false;
+    }
+
+    function _synch()
+    {
         var effectiveKeyframe = _fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState;
         effectiveKeyframe.x = x;
         effectiveKeyframe.y = y;
@@ -146,6 +164,7 @@ Item {
             _fromState.scale = translated.scale;
             _fromState.rotation = translated.rotation;
         }
+        return true;
     }
 
     function _interpolate(time)

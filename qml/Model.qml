@@ -26,7 +26,7 @@ QtObject {
     {
         getOrCreateKeyframe(layer);
         for (var l in layers)
-            layers[l].sprite.synch();
+            layers[l].sprite.synch(layer.sprite);
     }
 
     function getOrCreateKeyframe(layer)
