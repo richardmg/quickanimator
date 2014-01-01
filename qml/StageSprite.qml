@@ -138,9 +138,8 @@ Item {
         effectiveKeyframe.scale = transScaleX;
         effectiveKeyframe.opacity = opacity;
 
-        if (_fromState.effectiveKeyframe) {
-            // We need to mirror this synch on "both" sides of the keyframe:
-            var p  = _getEffectiveParent(_fromState.volatileIndex - 1);
+        if (_fromState.volatileIndex > 0 && _fromState.effectiveKeyframe) {
+            var p = getKeyframeParent(_fromState.volatileIndex - 1);
             var translated = _createKeyframeRelativeToParent(_fromState.time, p);
             _fromState.x = translated.x;
             _fromState.y = translated.y;
@@ -194,7 +193,7 @@ Item {
         keyframeIndex = _fromState.volatileIndex;
         _toState = (keyframeIndex === keyframes.length - 1) ? _fromState : keyframes[keyframeIndex + 1];
 
-        var p = _getEffectiveParent(_fromState.volatileIndex);
+        var p = getKeyframeParent(_fromState.volatileIndex);
         if (p.parent === sprite) {
             // Sprites cannot be children of each other
             p.parent = null;
@@ -202,7 +201,7 @@ Item {
         parent = p;
     }
 
-    function _getEffectiveParent(keyframeIndex)
+    function getKeyframeParent(keyframeIndex)
     {
         for (var i = keyframeIndex; i >= 0; --i) {
             var effectiveKeyframe = keyframes[i].effectiveKeyframe;
