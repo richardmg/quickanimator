@@ -15,8 +15,4 @@ qml.files = $$PWD/qml
 dummy.files = $$PWD/dummy.jpeg
 QMAKE_BUNDLE_DATA += qml dummy
 
-OTHER_FILES += qml/*.qml \
-    qml/TimeSlider.qml \
-    qml/FlickableMouseArea.qml \
-    qml/ControlPanel.qml \
-    qml/ControlPanelButton.qml
+OTHER_FILES += qml/*.qml

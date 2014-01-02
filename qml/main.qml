@@ -8,7 +8,6 @@ ApplicationWindow {
     height: 768
 
     property alias stage: stage
-    property MainToolbar mainToolbar
     property alias keyframeInfo: keyframeInfo
 
     property Timeline timeline
