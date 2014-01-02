@@ -75,7 +75,7 @@ Rectangle {
             Rectangle {
                 id: treeLabel
                 property bool highlight: false
-                color: highlight ? Qt.rgba(0.8, 0.8, 0.8, 1.0) : myApp.style.timelineline
+                color: highlight ? myApp.style.labelHighlight : myApp.style.label
                 x: margin + (myApp.model.getLayerIndentLevel(modelLayer) * 15)
                 y: margin
                 height: parent.height - 5

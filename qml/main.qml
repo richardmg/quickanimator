@@ -22,21 +22,20 @@ ApplicationWindow {
     SplitView {
         orientation: Qt.Vertical
         anchors.fill: parent
-        handleDelegate: MainToolbar {
-            id: mainToolbar
-            Component.onCompleted: myApp.mainToolbar = mainToolbar
-        }
+        handleDelegate: SplitHandle {}
 
         SplitView {
             height: 2 * parent.height / 3
             width: parent.width
             handleDelegate: SplitHandle {}
+            Layout.fillHeight: true
+
             KeyframeInfo {
                 id: keyframeInfo
                 width: parent.width / 3
                 visible: false
-                onWidthChanged: timelineSprites.width = width
             }
+
             Stage {
                 id: stage
                 clip: true
@@ -48,17 +47,16 @@ ApplicationWindow {
             width: parent.width
             handleDelegate: SplitHandle {}
 
-            Rectangle {
-                width: parent.width / 3
-                height: parent.height
-                color: myApp.style.dark
+            ControlPanel {
+                id: controlPanel
+                width: childrenRect.width
+                height: childrenRect.height
             }
 
             TimelineSprites {
                 id: timelineSprites
-                width: parent.width / 3
                 height: parent.height
-                onWidthChanged: keyframeInfo.width = width
+                Component.onCompleted: width = controlPanel.width
             }
 
             Timeline {
@@ -76,19 +74,19 @@ ApplicationWindow {
             }
 
             // Sync the two timeline flickables:
-            Binding {
-                property Item t: layerTreeFlickable
-                target: t.moving ? null : t
-                property: "contentY"
-                value: timelineFlickable.contentY
-            }
+//            Binding {
+//                property Item t: layerTreeFlickable
+//                target: t.moving ? null : t
+//                property: "contentY"
+//                value: timelineFlickable.contentY
+//            }
 
-            Binding {
-                property Item t: timelineFlickable
-                target: t.moving ? null : t
-                property: "contentY"
-                value: layerTreeFlickable.contentY
-            }
+//            Binding {
+//                property Item t: timelineFlickable
+//                target: t.moving ? null : t
+//                property: "contentY"
+//                value: layerTreeFlickable.contentY
+//            }
         }
     }
 
