@@ -48,11 +48,10 @@ Rectangle {
         model: listModel
         Component.onCompleted: myApp.layerTreeFlickable = listView
 
-        delegate: Rectangle {
+        delegate: Item {
             id: delegate
             width: parent.width
             height: myApp.style.cellHeight
-            color: highlight ? Qt.rgba(0.8, 0.8, 0.8, 1.0) : "transparent"
             Component.onCompleted: {
                 _delegates.push(delegate);
                 if (myApp.model.selectedLayers.indexOf(modelLayer) != -1)
@@ -66,10 +65,11 @@ Rectangle {
             property var modelLayer: myApp.model.layers[index]
 
             Rectangle {
-                height: 1
+                height: highlight ? 3 : 1
                 width: parent.width
-                color: myApp.style.timelineline
+                color: highlight ? myApp.style.labelHighlight : myApp.style.timelineline
                 anchors.bottom: parent.bottom
+                anchors.bottomMargin: margin
             }
 
             Rectangle {
@@ -77,7 +77,6 @@ Rectangle {
                 property bool highlight: false
                 color: highlight ? myApp.style.labelHighlight : myApp.style.label
                 x: margin + (myApp.model.getLayerIndentLevel(modelLayer) * 15)
-                y: margin
                 height: parent.height - 5
                 width: label.width + 20
                 radius: 3

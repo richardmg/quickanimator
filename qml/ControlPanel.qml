@@ -5,10 +5,9 @@ Rectangle {
 
     Grid {
         spacing: 5
-        x: spacing * 2
-        y: spacing * 2
-        width: childrenRect.width + (x * 2)
-        height: childrenRect.height + (y * 2)
+        x: myApp.style.splitViewSpacing
+        width: childrenRect.width + myApp.style.splitViewSpacing
+        height: childrenRect.height + myApp.style.splitViewSpacing
         columns: 3
 
         ControlPanelButton {

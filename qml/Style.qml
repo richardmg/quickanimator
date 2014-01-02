@@ -7,6 +7,7 @@ QtObject {
     property color labelHighlight: Qt.rgba(0.8, 0.8, 0.8, 1.0);
     property color label: Qt.darker(myApp.style.accent, 1.0)
     property color dark: Qt.darker(myApp.style.accent, 1.4)
+    property int splitViewSpacing: 20
     property int cellWidth: 15
     property int cellHeight: 35
 
