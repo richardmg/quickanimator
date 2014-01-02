@@ -20,6 +20,11 @@ Rectangle {
             if (unselected)
                 unselected.treeLabel.highlight = false;
         }
+
+        onParentHierarchyChanged: {
+            if (layer.sprite.parent !== null)
+                listModel.syncWithModel();
+        }
     }
 
     ListModel {
@@ -71,7 +76,7 @@ Rectangle {
                 id: treeLabel
                 property bool highlight: false
                 color: highlight ? Qt.rgba(0.8, 0.8, 0.8, 1.0) : myApp.style.timelineline
-                x: margin + (modelLayer ? modelLayer.hierarchyLevel * 15 : 0)
+                x: margin + (myApp.model.getLayerIndentLevel(modelLayer) * 15)
                 y: margin
                 height: parent.height - 5
                 width: label.width + 20
@@ -143,7 +148,6 @@ Rectangle {
 
                         currentDelegate = null;
                     }
-                    listModel.syncWithModel();
                 }
             }
         }

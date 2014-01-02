@@ -15,6 +15,7 @@ QtObject {
     signal layersUpdated(var removedLayer, var addedLayer)
     signal selectedLayersUpdated(var unselectedLayer, var selectedLayer)
     signal statesUpdated(var layer)
+    signal parentHierarchyChanged(var layer)
 
     property bool inLiveDrag: false
     property bool recordsPositionX: false
@@ -84,9 +85,9 @@ QtObject {
         layers.push(layer);
         layer.selected = false;
         layer.parentLayer = null;
-        layer.hierarchyLevel = 0;
         layer.sprite.addKeyframe(layer.sprite.createKeyframe(0));
         layer.sprite.setTime(0);
+        layer.sprite.parentChanged.connect(function() { root.parentHierarchyChanged(layer); });
 
         selectLayer(layer, true);
         layersUpdated(-1, layers.length);
@@ -139,13 +140,24 @@ QtObject {
         layersUpdated(index, -1); 
     }
 
+    function getLayerIndentLevel(layer)
+    {
+        var indent = 0;
+        var sprite = layer.sprite;
+        while (sprite && sprite.parent !== myApp.stage.sprites) {
+            indent++;
+            sprite = sprite.parent;
+        }
+        return indent;
+    }
+
     function descendantCount(index)
     {
         // Return number of levels that the sub
         // tree pointed to by index contains:
-        var level = layers[index].hierarchyLevel;
+        var level = getLayerIndentLevel(layers[index]);
         for (var lastDescendantIndex = index + 1; lastDescendantIndex < layers.length; ++lastDescendantIndex) {
-            if (layers[lastDescendantIndex].hierarchyLevel <= level)
+            if (getLayerIndentLevel(layers[lastDescendantIndex]) <= level)
                 break;
         }
         return lastDescendantIndex - index - 1;
@@ -162,11 +174,11 @@ QtObject {
 
         var layer = layerTree[0];
         var parentLayer = targetIsSibling ? layers[targetIndex].parentLayer : layers[targetIndex];
-        var newLevel = parentLayer ? parentLayer.hierarchyLevel + 1 : 0;
+        var newLevel = parentLayer ? getLayerIndentLevel(parentLayer) + 1 : 0;
         var insertLevel = targetIsSibling ? newLevel + 1 : newLevel;
 
         for (var insertIndex = targetIndex + 1; insertIndex < layers.length; ++insertIndex) {
-            if (layers[insertIndex].hierarchyLevel < insertLevel)
+            if (getLayerIndentLevel(layers[insertIndex]) < insertLevel)
                 break;
         }
 
@@ -177,14 +189,9 @@ QtObject {
         // Store the parent change (but not the geometry changes that will occur):
         var keyframe = getOrCreateKeyframe(layer);
         keyframe.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
+
         // Reparent sprite:
         layer.sprite.changeParent(keyframe.parent);
-
-        // Update hierarchyLevel of all descendants to match the new parent:
-        var levelDiff = newLevel - layer.hierarchyLevel; 
-        for (i = 0; i < layerCount; ++i) {
-            layers[insertIndex + i].hierarchyLevel += levelDiff;
-        }
     }
 
     function removeFocusedKeyframe()
