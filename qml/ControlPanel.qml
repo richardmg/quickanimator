@@ -12,7 +12,7 @@ Rectangle {
 
         ControlPanelButton {
             id: recordOptionButton
-            text: "x/y"
+            text: xybutton.text
             menu: recordOption
         }
         ControlPanelButton {
@@ -42,23 +42,80 @@ Rectangle {
     ControlPanelSubMenu {
         id: recordOption
         ControlPanelButton {
-            text: "x/y"
-            onClicked: print("clicked:", text)
+            text: "Anchor y"
+            onClicked: {
+                myApp.model.clearRecordState();
+                myApp.model.recordsAnchorY = true;
+                recordOptionButton.text = text;
+            }
         }
         ControlPanelButton {
-            text: "x"
+            text: "Anchor x"
+            onClicked: {
+                myApp.model.clearRecordState();
+                myApp.model.recordsAnchorX = true;
+                recordOptionButton.text = text;
+            }
         }
         ControlPanelButton {
-            text: "y"
-        }
-        ControlPanelButton {
-            text: "r / s"
-        }
-        ControlPanelButton {
-            text: "r"
+            text: "Anchor\nx & y"
+            onClicked: {
+                myApp.model.clearRecordState();
+                myApp.model.recordsAnchorX = true;
+                myApp.model.recordsAnchorY = true;
+                recordOptionButton.text = text;
+            }
         }
         ControlPanelButton {
             text: "s"
+            onClicked: {
+                myApp.model.clearRecordState();
+                myApp.model.recordsScale = true;
+                recordOptionButton.text = text;
+            }
+        }
+        ControlPanelButton {
+            text: "r"
+            onClicked: {
+                myApp.model.clearRecordState();
+                myApp.model.recordsRotation = true;
+                recordOptionButton.text = text;
+            }
+        }
+        ControlPanelButton {
+            text: "r & s"
+            onClicked: {
+                myApp.model.clearRecordState();
+                myApp.model.recordsScale = true;
+                myApp.model.recordsRotation = true;
+                recordOptionButton.text = text;
+            }
+        }
+        ControlPanelButton {
+            text: "y"
+            onClicked: {
+                myApp.model.clearRecordState();
+                myApp.model.recordsPositionY = true;
+                recordOptionButton.text = text;
+            }
+        }
+        ControlPanelButton {
+            text: "x"
+            onClicked: {
+                myApp.model.clearRecordState();
+                myApp.model.recordsPositionX = true;
+                recordOptionButton.text = text;
+            }
+        }
+        ControlPanelButton {
+            id: xybutton
+            text: "x & y"
+            onClicked: {
+                myApp.model.clearRecordState();
+                myApp.model.recordsPositionX = true;
+                myApp.model.recordsPositionY = true;
+                recordOptionButton.text = text;
+            }
         }
     }
 }

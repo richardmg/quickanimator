@@ -18,10 +18,22 @@ QtObject {
     signal parentHierarchyChanged(var layer)
 
     property bool inLiveDrag: false
-    property bool recordsPositionX: false
-    property bool recordsPositionY: false
+    property bool recordsPositionX: true
+    property bool recordsPositionY: true
     property bool recordsRotation: false
     property bool recordsScale: false
+    property bool recordsAnchorX: false
+    property bool recordsAnchorY: false
+
+    function clearRecordState()
+    {
+        recordsPositionX = false;
+        recordsPositionY = false;
+        recordsRotation = false;
+        recordsScale = false;
+        recordsAnchorX = false;
+        recordsAnchorY = false;
+    }
 
     function syncLayer(layer)
     {
