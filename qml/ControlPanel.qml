@@ -42,9 +42,10 @@ Rectangle {
     ControlPanelSubMenu {
         id: recordOption
         ControlPanelButton {
-            text: "Anchor y"
+            text: "Anchor\nx & y"
             onClicked: {
                 myApp.model.clearRecordState();
+                myApp.model.recordsAnchorX = true;
                 myApp.model.recordsAnchorY = true;
                 recordOptionButton.text = text;
             }
@@ -58,27 +59,10 @@ Rectangle {
             }
         }
         ControlPanelButton {
-            text: "Anchor\nx & y"
+            text: "Anchor y"
             onClicked: {
                 myApp.model.clearRecordState();
-                myApp.model.recordsAnchorX = true;
                 myApp.model.recordsAnchorY = true;
-                recordOptionButton.text = text;
-            }
-        }
-        ControlPanelButton {
-            text: "s"
-            onClicked: {
-                myApp.model.clearRecordState();
-                myApp.model.recordsScale = true;
-                recordOptionButton.text = text;
-            }
-        }
-        ControlPanelButton {
-            text: "r"
-            onClicked: {
-                myApp.model.clearRecordState();
-                myApp.model.recordsRotation = true;
                 recordOptionButton.text = text;
             }
         }
@@ -92,9 +76,27 @@ Rectangle {
             }
         }
         ControlPanelButton {
-            text: "y"
+            text: "r"
             onClicked: {
                 myApp.model.clearRecordState();
+                myApp.model.recordsRotation = true;
+                recordOptionButton.text = text;
+            }
+        }
+        ControlPanelButton {
+            text: "s"
+            onClicked: {
+                myApp.model.clearRecordState();
+                myApp.model.recordsScale = true;
+                recordOptionButton.text = text;
+            }
+        }
+        ControlPanelButton {
+            id: xybutton
+            text: "x & y"
+            onClicked: {
+                myApp.model.clearRecordState();
+                myApp.model.recordsPositionX = true;
                 myApp.model.recordsPositionY = true;
                 recordOptionButton.text = text;
             }
@@ -108,11 +110,9 @@ Rectangle {
             }
         }
         ControlPanelButton {
-            id: xybutton
-            text: "x & y"
+            text: "y"
             onClicked: {
                 myApp.model.clearRecordState();
-                myApp.model.recordsPositionX = true;
                 myApp.model.recordsPositionY = true;
                 recordOptionButton.text = text;
             }

@@ -69,6 +69,6 @@ Rectangle {
         y: spacing
         width: childrenRect.width + (x * 2)
         height: childrenRect.height + (y * 2)
-        columns: 1
+        columns: 3
     }
 }
