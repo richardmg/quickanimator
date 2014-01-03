@@ -11,12 +11,17 @@ Rectangle {
         columns: 3
 
         ControlPanelButton {
+            id: recordOptionButton
             text: "x/y"
+            menu: recordOption
         }
         ControlPanelButton {
             text: "Keyframe"
             checkable: true
-            onClicked: myApp.keyframeInfo.visible = checked
+            onClicked: {
+                enabled = false
+                myApp.keyframeInfo.visible = checked
+            }
         }
         ControlPanelButton {
             text: "[ ]"
@@ -31,6 +36,29 @@ Rectangle {
         ControlPanelButton {
             text: "Sprites"
             onClicked: myApp.addImage("dummy.jpeg")
+        }
+    }
+
+    ControlPanelSubMenu {
+        id: recordOption
+        ControlPanelButton {
+            text: "x/y"
+            onClicked: print("clicked:", text)
+        }
+        ControlPanelButton {
+            text: "x"
+        }
+        ControlPanelButton {
+            text: "y"
+        }
+        ControlPanelButton {
+            text: "r / s"
+        }
+        ControlPanelButton {
+            text: "r"
+        }
+        ControlPanelButton {
+            text: "s"
         }
     }
 }

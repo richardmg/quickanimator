@@ -6,22 +6,47 @@ Item {
     id: root
     width: 80
     height: 62
-    property alias text: button.text
-    property alias checked: button.checked
-    property alias checkable: button.checkable
+    property string text: "button"
+    property alias pressed: mouseArea.pressed
+    property bool checked: false
+    property bool checkable: false
+    property bool hovered: false
+    property Item menu
 
     signal clicked
 
-    Button {
-        id: button
+    Rectangle {
+        anchors.fill: parent
+        radius: 4
+        color: hovered || checked ? myApp.style.labelHighlight : myApp.style.label;
+        Text {
+            text: root.text
+            anchors.centerIn: parent
+        }
+    }
+
+    MouseArea {
+        id: mouseArea
         anchors.fill: parent
         onClicked: root.clicked()
-        style: ButtonStyle {
-            background: Rectangle {
-                anchors.fill: parent
-                radius: 4
-                color: button.pressed || button.checked ? myApp.style.labelHighlight : myApp.style.label;
-            }
+        hoverEnabled: true
+        onContainsMouseChanged: root.hovered = pressed || containsMouse
+        property Item subMenuButton
+
+        onPressed: {
+            if (menu)
+                menu.openMenu(root.mapToItem(null, 0, 0));
+        }
+
+        onReleased: {
+            root.hovered = containsMouse
+            if (menu)
+                menu.closeMenu();
+        }
+
+        onPositionChanged: {
+            if (menu && pressed)
+                menu.mouseMoved(mapToItem(null, mouseX, mouseY));
         }
     }
 }
