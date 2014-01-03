@@ -34,12 +34,13 @@ Item {
         property Item subMenuButton
 
         onPressed: {
+            root.hovered = true;
             if (menu)
                 menu.openMenu(root.mapToItem(null, 0, 0));
         }
 
         onReleased: {
-            root.hovered = containsMouse
+            root.hovered = false;
             if (menu)
                 menu.closeMenu();
         }

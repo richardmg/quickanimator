@@ -32,6 +32,7 @@ Rectangle {
         }
         ControlPanelButton {
             text: "kfps"
+            onPressedChanged: myApp.msPerFrameFlickable.enabled = pressed
         }
         ControlPanelButton {
             text: "Sprites"
