@@ -8,36 +8,45 @@ Rectangle {
         x: myApp.style.splitViewSpacing
         width: childrenRect.width + myApp.style.splitViewSpacing
         height: childrenRect.height + myApp.style.splitViewSpacing
-        columns: 3
+        columns: 1
 
         ControlPanelButton {
-            id: recordOptionButton
-            text: xybutton.text
-            menu: recordOption
-        }
-        ControlPanelButton {
-            text: "Keyframe"
+            text: ">"
             checkable: true
-            onClicked: {
-                enabled = false
-                myApp.keyframeInfo.visible = checked
-            }
+            onClicked: myApp.timeline.togglePlay(checked)
         }
-        ControlPanelButton {
-            text: "[ ]"
-        }
+//        ControlPanelButton {
+//            id: recordOptionButton
+//            text: xybutton.text
+//            menu: recordOption
+//        }
+//        ControlPanelButton {
+//            text: "Keyframe"
+//            checkable: true
+//            onClicked: {
+//                enabled = false
+//                myApp.keyframeInfo.visible = checked
+//            }
+//        }
+//        ControlPanelButton {
+//            text: "[ ]"
+//        }
         ControlPanelButton {
             text: "<<"
             onClicked: myApp.model.setTime(0);
         }
         ControlPanelButton {
-            text: "kfps"
-            onPressedChanged: myApp.msPerFrameFlickable.enabled = pressed
+            text: "..."
+//            onClicked: myApp.model.setTime(0);
         }
-        ControlPanelButton {
-            text: "Sprites"
-            onClicked: myApp.addImage("dummy.jpeg")
-        }
+//        ControlPanelButton {
+//            text: "kfps"
+//            onPressedChanged: myApp.msPerFrameFlickable.enabled = pressed
+//        }
+//        ControlPanelButton {
+//            text: "Sprites"
+//            onClicked: myApp.addImage("dummy.jpeg")
+//        }
     }
 
     ControlPanelSubMenu {

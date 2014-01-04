@@ -41,6 +41,8 @@ Item {
 
         onReleased: {
             root.hovered = false;
+            if (checkable && contains(Qt.point(mouseX, mouseY)))
+                checked = !checked
             if (menu)
                 menu.closeMenu();
         }
