@@ -24,19 +24,19 @@ Item {
 
         momentumRestX: _playing ? -1 : 0
 
-        onPressed: {
-            animation.running = false;
-            pressStartTime = new Date();
-            dragged = 0;
-        }
-
-        onReleased: {
-            if (flicking()) {
-                animation.lastTickTime = new Date();
-                animation.running = true;
+        onPressedChanged: {
+            if (pressed) {
+                animation.running = false;
+                pressStartTime = new Date();
+                dragged = 0;
             } else {
-                var click = (new Date().getTime() - pressStartTime) < 300 && dragged < 20;
-                togglePlay(click ? !_playing : _playing);
+                if (flicking()) {
+                    animation.lastTickTime = new Date();
+                    animation.running = true;
+                } else {
+                    var click = (new Date().getTime() - pressStartTime) < 300 && dragged < 20;
+                    togglePlay(click ? !_playing : _playing);
+                }
             }
         }
 
