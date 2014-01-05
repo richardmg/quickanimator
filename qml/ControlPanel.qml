@@ -16,11 +16,6 @@ Rectangle {
             onClicked: myApp.timeline.togglePlay(checked)
         }
 //        ControlPanelButton {
-//            id: recordOptionButton
-//            text: xybutton.text
-//            menu: recordOption
-//        }
-//        ControlPanelButton {
 //            text: "Keyframe"
 //            checkable: true
 //            onClicked: {
@@ -37,16 +32,34 @@ Rectangle {
         }
         ControlPanelButton {
             text: "..."
+            menu: moreOptions
 //            onClicked: myApp.model.setTime(0);
         }
 //        ControlPanelButton {
 //            text: "kfps"
 //            onPressedChanged: myApp.msPerFrameFlickable.enabled = pressed
 //        }
-//        ControlPanelButton {
-//            text: "Sprites"
-//            onClicked: myApp.addImage("dummy.jpeg")
-//        }
+    }
+
+    ControlPanelSubMenu {
+        id: moreOptions
+        ControlPanelButton {
+            id: recordOptionButton
+            text: xybutton.text
+            menu: recordOption
+        }
+        ControlPanelButton {
+            text: "Keyframe"
+            checkable: true
+            onCheckedChanged: myApp.keyframeInfo.visible = checked
+        }
+        ControlPanelButton {
+            text: "[ ]"
+        }
+        ControlPanelButton {
+            text: "Sprites"
+            onClicked: myApp.addImage("dummy.jpeg")
+        }
     }
 
     ControlPanelSubMenu {

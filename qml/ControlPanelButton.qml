@@ -9,11 +9,20 @@ Item {
     property string text: "button"
     property alias pressed: mouseArea.pressed
     property bool checked: false
-    property bool checkable: false
+    property bool checkable: false || menu
     property bool hovered: false
     property Item menu
 
     signal clicked
+
+    onCheckedChanged: {
+        if (menu) {
+            if (checked)
+                menu.openMenu(root.mapToItem(null, width + 5, 0));
+            else
+                menu.closeMenu()
+        }
+    }
 
     Rectangle {
         anchors.fill: parent
@@ -33,23 +42,14 @@ Item {
         onContainsMouseChanged: root.hovered = pressed || containsMouse
         property Item subMenuButton
 
-        onPressed: {
-            root.hovered = true;
-            if (menu)
-                menu.openMenu(root.mapToItem(null, 0, 0));
-        }
-
         onReleased: {
-            root.hovered = false;
             if (checkable && contains(Qt.point(mouseX, mouseY)))
                 checked = !checked
-            if (menu)
-                menu.closeMenu();
         }
 
-        onPositionChanged: {
-            if (menu && pressed)
-                menu.mouseMoved(mapToItem(null, mouseX, mouseY));
-        }
+//        onPositionChanged: {
+//            if (menu && menu.visible)
+//                menu.mouseMoved(mapToItem(null, mouseX, mouseY));
+//        }
     }
 }
