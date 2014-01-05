@@ -9,6 +9,7 @@ ApplicationWindow {
 
     property alias stage: stage
     property alias keyframeInfo: keyframeInfo
+    property alias controlPanel: controlPanel;
 
     property Timeline timeline
     property Flickable timelineFlickable
@@ -48,8 +49,8 @@ ApplicationWindow {
 
             ControlPanel {
                 id: controlPanel
-                width: childrenRect.width
-                height: childrenRect.height
+                width: 100
+                height: 208
             }
 
             TimelineSprites {

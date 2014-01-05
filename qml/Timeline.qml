@@ -33,9 +33,9 @@ Item {
                 if (flicking()) {
                     animation.lastTickTime = new Date();
                     animation.running = true;
-                } else {
-                    var click = (new Date().getTime() - pressStartTime) < 300 && dragged < 20;
-                    togglePlay(click ? !_playing : _playing);
+//                } else {
+//                    var click = (new Date().getTime() - pressStartTime) < 300 && dragged < 20;
+//                    togglePlay(click ? !_playing : _playing);
                 }
             }
         }
