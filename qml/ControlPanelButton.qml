@@ -29,7 +29,7 @@ Rectangle {
 
     onClicked: {
         _clicked = true;
-        if (!checkable)
+        if (!menu)
             myApp.controlPanel.closeAllMenus();
     }
 
