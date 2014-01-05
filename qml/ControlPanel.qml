@@ -68,7 +68,7 @@ Rectangle {
         ControlPanelButton {
             id: xybutton
             text: "x & y"
-            gridX: 1; gridY: 1
+            gridX: 2; gridY: 2
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsPositionX = true;
@@ -78,7 +78,7 @@ Rectangle {
         }
         ControlPanelButton {
             text: "x"
-            gridX: 2; gridY: 1
+            gridX: 3; gridY: 2
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsPositionX = true;
@@ -87,7 +87,7 @@ Rectangle {
         }
         ControlPanelButton {
             text: "y"
-            gridX: 3; gridY: 1
+            gridX: 4; gridY: 2
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsPositionY = true;
@@ -96,7 +96,7 @@ Rectangle {
         }
         ControlPanelButton {
             text: "r & s"
-            gridX: 1; gridY: 0
+            gridX: 2; gridY: 1
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsScale = true;
@@ -106,7 +106,7 @@ Rectangle {
         }
         ControlPanelButton {
             text: "r"
-            gridX: 2; gridY: 0
+            gridX: 3; gridY: 1
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsRotation = true;
@@ -115,7 +115,7 @@ Rectangle {
         }
         ControlPanelButton {
             text: "s"
-            gridX: 3; gridY: 0
+            gridX: 4; gridY: 1
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsScale = true;
@@ -124,7 +124,7 @@ Rectangle {
         }
         ControlPanelButton {
             text: "Anchor\nx & y"
-            gridX: 1; gridY: -1
+            gridX: 2; gridY: 0
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsAnchorX = true;
@@ -134,7 +134,7 @@ Rectangle {
         }
         ControlPanelButton {
             text: "Anchor x"
-            gridX: 2; gridY: -1
+            gridX: 3; gridY: 0
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsAnchorX = true;
@@ -143,7 +143,7 @@ Rectangle {
         }
         ControlPanelButton {
             text: "Anchor y"
-            gridX: 3; gridY: -1
+            gridX: 4; gridY: 0
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsAnchorY = true;

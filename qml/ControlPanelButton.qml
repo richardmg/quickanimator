@@ -2,12 +2,14 @@ import QtQuick 2.0
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.1
 
-Item {
+Rectangle {
     id: root
-    width: 80
-    height: 62
+    width: 90
+    height: 67
     opacity: 0
     visible: opacity != 0
+    color: myApp.style.dark
+    radius: 4
 
     property int gridX: 0
     property int gridY: 0
@@ -23,13 +25,17 @@ Item {
 
     signal clicked
 
+    property bool _clicked: false
+
     onClicked: {
+        _clicked = true;
         if (!checkable)
             myApp.controlPanel.closeAllMenus();
     }
 
     onCheckedChanged: {
         if (menu) {
+            _clicked = false;
             menu.openMenu(checked, 0)
             for (var i = 0; i< originalParent.originalChildren.length; ++i) {
                 var sibling = originalParent.originalChildren[i];
@@ -42,16 +48,17 @@ Item {
     function showButton(show, buttonIndex)
     {
         if (show) {
+            _clicked = false;
             var gridPos = menuGridRoot.mapToItem(null, 0, 0);
-            x = gridPos.x + (gridX * (width + 5));
-            y = gridPos.y + (gridY * (height + 5));
+            x = gridPos.x + (gridX * width);
+            y = gridPos.y + (gridY * height);
             opacityAnimation.duration = 1000 * Math.random()
             opacity = 1;
         } else {
-            opacityAnimation.duration = 1000 * Math.random()
-            opacity = alwaysVisible ? 1 : 0
             if (menu && checked)
                 checked = false;
+            opacityAnimation.duration = _clicked ? 1500 : (1000 * Math.random())
+            opacity = alwaysVisible ? 1 : 0
         }
     }
 
@@ -64,8 +71,9 @@ Item {
 
     Rectangle {
         anchors.fill: parent
+        anchors.margins: 2
         radius: 4
-        color: hovered || checked ? myApp.style.labelHighlight : myApp.style.label;
+        color: hovered || checked || _clicked ? myApp.style.labelHighlight : myApp.style.label;
         Text {
             text: root.text
             anchors.centerIn: parent
@@ -78,7 +86,6 @@ Item {
         onClicked: root.clicked()
         hoverEnabled: true
         onContainsMouseChanged: root.hovered = pressed || containsMouse
-        property Item subMenuButton
 
         onReleased: {
             if (checkable && contains(Qt.point(mouseX, mouseY)))
