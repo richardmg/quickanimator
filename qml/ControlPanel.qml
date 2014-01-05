@@ -41,8 +41,7 @@ Rectangle {
     ControlPanelSubMenu {
         id: moreOptions
         ControlPanelButton {
-            id: recordOptionButton
-            text: xybutton.text
+            text: "Record\noptions"
             menu: recordOption
             gridX: 1; gridY: 2
         }
@@ -66,88 +65,87 @@ Rectangle {
     ControlPanelSubMenu {
         id: recordOption
         ControlPanelButton {
-            id: xybutton
             text: "x & y"
-            gridX: 2; gridY: 2
+            gridX: 1; gridY: 1
+            checked: myApp.model.recordsPositionX && myApp.model.recordsPositionY
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsPositionX = true;
                 myApp.model.recordsPositionY = true;
-                recordOptionButton.text = text;
             }
         }
         ControlPanelButton {
             text: "x"
-            gridX: 3; gridY: 2
+            gridX: 1; gridY: 0
+            checked: myApp.model.recordsPositionX && !myApp.model.recordsPositionY
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsPositionX = true;
-                recordOptionButton.text = text;
             }
         }
         ControlPanelButton {
             text: "y"
-            gridX: 4; gridY: 2
+            gridX: 2; gridY: 0
+            checked: !myApp.model.recordsPositionX && myApp.model.recordsPositionY
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsPositionY = true;
-                recordOptionButton.text = text;
             }
         }
         ControlPanelButton {
             text: "r & s"
             gridX: 2; gridY: 1
+            checked: myApp.model.recordsRotation && myApp.model.recordsScale
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsScale = true;
                 myApp.model.recordsRotation = true;
-                recordOptionButton.text = text;
             }
         }
         ControlPanelButton {
             text: "r"
-            gridX: 3; gridY: 1
+            gridX: 3; gridY: 0
+            checked: myApp.model.recordsRotation && !myApp.model.recordsScale
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsRotation = true;
-                recordOptionButton.text = text;
             }
         }
         ControlPanelButton {
             text: "s"
-            gridX: 4; gridY: 1
+            gridX: 4; gridY: 0
+            checked: !myApp.model.recordsRotation && myApp.model.recordsScale
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsScale = true;
-                recordOptionButton.text = text;
             }
         }
         ControlPanelButton {
             text: "Anchor\nx & y"
-            gridX: 2; gridY: 0
+            gridX: 3; gridY: 1
+            checked: myApp.model.recordsAnchorX && myApp.model.recordsAnchorY
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsAnchorX = true;
                 myApp.model.recordsAnchorY = true;
-                recordOptionButton.text = text;
             }
         }
         ControlPanelButton {
             text: "Anchor x"
-            gridX: 3; gridY: 0
+            gridX: 5; gridY: 0
+            checked: myApp.model.recordsAnchorX && !myApp.model.recordsAnchorY
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsAnchorX = true;
-                recordOptionButton.text = text;
             }
         }
         ControlPanelButton {
             text: "Anchor y"
-            gridX: 4; gridY: 0
+            gridX: 6; gridY: 0
+            checked: !myApp.model.recordsAnchorX && myApp.model.recordsAnchorY
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsAnchorY = true;
-                recordOptionButton.text = text;
             }
         }
     }
