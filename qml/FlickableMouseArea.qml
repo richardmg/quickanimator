@@ -112,8 +112,15 @@ MultiPointTouchArea {
         duration: 1000
         to: 0
         easing.type: Easing.OutQuad
-        onToChanged: if (!running) root.momentumX = to
         onStopped: if (!momentumYAnimation.running) flicking = false
+        onToChanged: {
+            if (running) {
+                from = momentumX
+                restart();
+            } else {
+                root.momentumX = to;
+            }
+        }
     }
 
     NumberAnimation {
@@ -122,8 +129,15 @@ MultiPointTouchArea {
         property: "momentumY"
         to: 0
         easing.type: Easing.OutQuad
-        onToChanged: if (!running) root.momentumY = to
         onStopped: if (!momentumXAnimation.running) flicking = false
+        onToChanged: {
+            if (running) {
+                from = momentumY
+                restart();
+            } else {
+                root.momentumY = to;
+            }
+        }
     }
 }
 
