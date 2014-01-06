@@ -29,7 +29,7 @@ Item {
                 pressStartTime = new Date();
                 animation.running = false;
                 dragged = 0;
-            } else if (flicking() || _playing) {
+            } else if (flicking || _playing) {
                 animation.lastTickTime = new Date();
                 animation.running = true;
             }
@@ -38,6 +38,11 @@ Item {
         onMouseXChanged: {
             dragged += Math.abs(momentumX)
             myApp.model.setTime(myApp.model.time + (-momentumX * 20 / myApp.model.msPerFrame));
+        }
+
+        onFlickingChanged: {
+            if (!flicking && !_playing)
+                animation.stop()
         }
     }
 

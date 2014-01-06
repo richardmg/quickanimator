@@ -12,9 +12,11 @@ MultiPointTouchArea {
     property int mouseX: 0
     property int mouseY: 0
     property bool pressed: false
+    property bool flicking: false
 
     property TouchPoint activeTouchPoint: null
     touchPoints: [ TouchPoint { id: tp1; }, TouchPoint { id: tp2; } ]
+
 
     onPressed: {
         if (activeTouchPoint)
@@ -55,13 +57,6 @@ MultiPointTouchArea {
         }
     }
 
-    function flicking()
-    {
-        // Function instead of property since overridden onReleased
-        // might be called before flicking property is updated:
-        return pressed || momentumXAnimation.running || momentumYAnimation.running;
-    }
-
     property real _prevMouseX: 0
     property real _prevMouseY: 0
 
@@ -73,6 +68,7 @@ MultiPointTouchArea {
             _prevMouseY = mouseY;
             momentumX = momentumXAnimation.to;
             momentumY = momentumYAnimation.to;
+            flicking = true;
         } else {
             if (Math.abs(momentumX) > 2) {
                 momentumXAnimation.from = momentumX
@@ -88,6 +84,9 @@ MultiPointTouchArea {
             } else {
                 momentumY = momentumRestY;
             }
+
+            if (!momentumXAnimation.running && !momentumYAnimation.running)
+                flicking = false;
         }
     }
 
@@ -113,6 +112,7 @@ MultiPointTouchArea {
         to: 0
         easing.type: Easing.OutQuad
         onToChanged: if (!running) root.momentumX = to
+        onStopped: if (!momentumYAnimation.running) flicking = false
     }
 
     NumberAnimation {
@@ -122,6 +122,7 @@ MultiPointTouchArea {
         to: 0
         easing.type: Easing.OutQuad
         onToChanged: if (!running) root.momentumY = to
+        onStopped: if (!momentumXAnimation.running) flicking = false
     }
 }
 
