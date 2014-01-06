@@ -26,17 +26,12 @@ Item {
 
         onPressedChanged: {
             if (pressed) {
-                animation.running = false;
                 pressStartTime = new Date();
+                animation.running = false;
                 dragged = 0;
-            } else {
-                if (flicking()) {
-                    animation.lastTickTime = new Date();
-                    animation.running = true;
-//                } else {
-//                    var click = (new Date().getTime() - pressStartTime) < 300 && dragged < 20;
-//                    togglePlay(click ? !_playing : _playing);
-                }
+            } else if (flicking() || _playing) {
+                animation.lastTickTime = new Date();
+                animation.running = true;
             }
         }
 
