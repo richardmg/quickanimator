@@ -25,17 +25,21 @@ Rectangle {
 
     signal clicked
 
-    property bool _clicked: false
+    property bool closeDownHighlight: false
 
     onClicked: {
-        _clicked = true;
-        if (!menu)
+        if (checkable)
+            checked = !checked;
+
+        if (!menu) {
+            if (!alwaysVisible)
+                closeDownHighlight = Qt.binding(function() { return opacity > 0; });
             myApp.controlPanel.closeAllMenus();
+        }
     }
 
     onCheckedChanged: {
         if (menu) {
-            _clicked = false;
             menu.openMenu(checked, 0)
             for (var i = 0; i< originalParent.originalChildren.length; ++i) {
                 var sibling = originalParent.originalChildren[i];
@@ -48,7 +52,7 @@ Rectangle {
     function showButton(show, buttonIndex)
     {
         if (show) {
-            _clicked = false;
+            closeDownHighlight = false;
             var gridPos = menuGridRoot.mapToItem(null, 0, 0);
             x = gridPos.x + (gridX * width);
             y = gridPos.y + (gridY * height);
@@ -57,7 +61,7 @@ Rectangle {
         } else {
             if (menu && checked)
                 checked = false;
-            opacityAnimation.duration = _clicked ? 1500 : (1000 * Math.random())
+            opacityAnimation.duration = closeDownHighlight ? 1500 : (1000 * Math.random())
             opacity = alwaysVisible ? 1 : 0
         }
     }
@@ -73,7 +77,7 @@ Rectangle {
         anchors.fill: parent
         anchors.margins: 2
         radius: 4
-        color: hovered || checked || _clicked ? myApp.style.labelHighlight : myApp.style.label;
+        color: hovered || checked || closeDownHighlight ? myApp.style.labelHighlight : myApp.style.label;
         Text {
             text: root.text
             anchors.centerIn: parent
@@ -86,15 +90,6 @@ Rectangle {
         onClicked: root.clicked()
         hoverEnabled: true
         onContainsMouseChanged: root.hovered = pressed || containsMouse
-
-        onReleased: {
-            if (checkable && contains(Qt.point(mouseX, mouseY)))
-                checked = !checked
-        }
-
-//        onPositionChanged: {
-//            if (menu && menu.visible)
-//                menu.mouseMoved(mapToItem(null, mouseX, mouseY));
-//        }
+        onPressedChanged: root.hovered = pressed || containsMouse
     }
 }
