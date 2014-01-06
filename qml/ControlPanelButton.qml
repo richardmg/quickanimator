@@ -84,12 +84,38 @@ Rectangle {
         }
     }
 
-    MouseArea {
-        id: mouseArea
+    MultiPointTouchArea {
         anchors.fill: parent
-        onClicked: root.clicked()
-        hoverEnabled: true
-        onContainsMouseChanged: root.hovered = pressed || containsMouse
-        onPressedChanged: root.hovered = pressed || containsMouse
+        property TouchPoint activeTouchPoint: null
+        touchPoints: [ TouchPoint { id: tp1; }, TouchPoint { id: tp2; } ]
+        property TouchPoint tp: null
+
+        onPressed: {
+            if (tp1.pressed && contains(Qt.point(tp1.x, tp1.y)))
+                tp = tp1;
+            else if (tp2.pressed && contains(Qt.point(tp2.x, tp2.y)))
+                tp = tp2;
+            else
+                return;
+
+            mouseArea.enabled = false;
+            root.hovered = true
+        }
+
+        onReleased: {
+            mouseArea.enabled = true;
+            root.hovered = false
+            if (contains(Qt.point(tp.x, tp.y)))
+                root.clicked()
+        }
+
+        MouseArea {
+            id: mouseArea
+            anchors.fill: parent
+            onClicked: root.clicked()
+            hoverEnabled: true
+            onContainsMouseChanged: root.hovered = pressed || containsMouse
+            onPressedChanged: root.hovered = pressed || containsMouse
+        }
     }
 }
