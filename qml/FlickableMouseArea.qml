@@ -46,6 +46,7 @@ MultiPointTouchArea {
         anchors.fill: parent
 
         onPressedChanged: {
+            activeTouchPoint = null;
             root.mouseX = mouseX;
             root.mouseY = mouseY;
             root.pressed = pressed;
