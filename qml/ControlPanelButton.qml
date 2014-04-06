@@ -34,10 +34,10 @@ Rectangle {
         if (!alwaysVisible && !menu)
             closeDownHighlight = Qt.binding(function() { return opacity > 0; });
 
+        var wasChecked = checked;
         myApp.controlPanel.closeAllMenus();
-
         if (checkable)
-            checked = !checked;
+            checked = !wasChecked;
     }
 
     onCheckedChanged: {
@@ -68,7 +68,7 @@ Rectangle {
         } else {
             if (menu && checked)
                 checked = false;
-            opacityAnimation.duration = closeDownHighlight ? 1000 : 500;
+            opacityAnimation.duration = closeDownHighlight ? 1500 : 500;
             xAnimation.duration = closeDownHighlight ? 7000 : 5000;
             yAnimation.duration = closeDownHighlight ? 7000 : 5000;
             if (!alwaysVisible) {

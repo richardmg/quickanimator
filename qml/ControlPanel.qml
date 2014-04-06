@@ -96,7 +96,7 @@ Rectangle {
         }
         ControlPanelButton {
             text: "x"
-            gridX: 2; gridY: 0
+            gridX: 1; gridY: 0
             checked: myApp.model.recordsPositionX && !myApp.model.recordsPositionY
             onClicked: {
                 myApp.model.clearRecordState();
@@ -105,7 +105,7 @@ Rectangle {
         }
         ControlPanelButton {
             text: "y"
-            gridX: 2; gridY: 1
+            gridX: 2; gridY: 0
             checked: !myApp.model.recordsPositionX && myApp.model.recordsPositionY
             onClicked: {
                 myApp.model.clearRecordState();
@@ -114,7 +114,7 @@ Rectangle {
         }
         ControlPanelButton {
             text: "r"
-            gridX: 2; gridY: 0
+            gridX: 1; gridY: 1
             checked: myApp.model.recordsRotation && !myApp.model.recordsScale
             onClicked: {
                 myApp.model.clearRecordState();
@@ -123,7 +123,7 @@ Rectangle {
         }
         ControlPanelButton {
             text: "s"
-            gridX: 2; gridY: 0
+            gridX: 2; gridY: 1
             checked: !myApp.model.recordsRotation && myApp.model.recordsScale
             onClicked: {
                 myApp.model.clearRecordState();
@@ -132,7 +132,7 @@ Rectangle {
         }
         ControlPanelButton {
             text: "Anchor x"
-            gridX: 2; gridY: 0
+            gridX: 1; gridY: 2
             checked: myApp.model.recordsAnchorX && !myApp.model.recordsAnchorY
             onClicked: {
                 myApp.model.clearRecordState();
@@ -141,7 +141,7 @@ Rectangle {
         }
         ControlPanelButton {
             text: "Anchor y"
-            gridX: 2; gridY: 0
+            gridX: 2; gridY: 2
             checked: !myApp.model.recordsAnchorX && myApp.model.recordsAnchorY
             onClicked: {
                 myApp.model.clearRecordState();
