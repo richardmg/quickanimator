@@ -23,52 +23,85 @@ Rectangle {
     property Item originalParent
     property Item menu
 
+    property bool _enableAnim: true
+    property bool _menuItem: null
+
     signal clicked
 
     property bool closeDownHighlight: false
 
     onClicked: {
+        if (!alwaysVisible && !menu)
+            closeDownHighlight = Qt.binding(function() { return opacity > 0; });
+
+        myApp.controlPanel.closeAllMenus();
+
         if (checkable)
             checked = !checked;
-
-        if (!menu) {
-            if (!alwaysVisible)
-                closeDownHighlight = Qt.binding(function() { return opacity > 0; });
-            myApp.controlPanel.closeAllMenus();
-        }
     }
 
     onCheckedChanged: {
-        if (menu) {
-            menu.openMenu(checked, 0)
-            for (var i = 0; i< originalParent.originalChildren.length; ++i) {
-                var sibling = originalParent.originalChildren[i];
-                if (sibling !== root)
-                    sibling.opacity = !checked
-            }
-        }
+        if (menu)
+            menu.openMenu(checked, root)
     }
 
-    function showButton(show, buttonIndex)
+    function showButton(show, menuItem, childIndex)
     {
+        _menuItem = menuItem;
         if (show) {
+            var gx = menuItem ? menuItem.gridX : 0;
+            var gy = menuItem ? menuItem.gridY : 0;
             closeDownHighlight = false;
             var gridPos = menuGridRoot.mapToItem(null, 0, 0);
-            x = gridPos.x + (gridX * width);
-            y = gridPos.y + (gridY * height);
-            opacityAnimation.duration = 1000 * Math.random()
+            _enableAnim = false;
+            x = gridPos.x + ((gx + gridX) * width) + (50 * Math.random());
+            y = gridPos.y + ((gy + gridY) * height) + (50 * Math.random());
+            opacity = 0;
+            opacityAnimation.duration = 500;
+            xAnimation.duration = 500;
+            yAnimation.duration = 500;
+            _enableAnim = true;
+
+            x = gridPos.x + ((gx + gridX) * width);
+            y = gridPos.y + ((gy + gridY) * height);
             opacity = 1;
         } else {
             if (menu && checked)
                 checked = false;
-            opacityAnimation.duration = closeDownHighlight ? 1500 : (1000 * Math.random())
-            opacity = alwaysVisible ? 1 : 0
+            opacityAnimation.duration = closeDownHighlight ? 1000 : 500;
+            xAnimation.duration = closeDownHighlight ? 7000 : 5000;
+            yAnimation.duration = closeDownHighlight ? 7000 : 5000;
+            if (!alwaysVisible) {
+                opacity = 0;
+                if (closeDownHighlight) {
+                    x += Math.random() * 50
+                    y += Math.random() * 50
+                } else {
+                    x = 1000 * Math.random();
+                    y = 1000 * Math.random();
+                }
+            }
         }
     }
 
     Behavior on opacity {
+        enabled: _enableAnim;
         NumberAnimation {
             id: opacityAnimation
+            easing.type: Easing.OutQuad
+        }
+    }
+    Behavior on x {
+        enabled: _enableAnim;
+        NumberAnimation {
+            id: xAnimation
+            easing.type: Easing.OutQuad
+        }
+    }
+    Behavior on y {
+        enabled: _enableAnim;
+        NumberAnimation {
+            id: yAnimation
             easing.type: Easing.OutQuad
         }
     }
@@ -114,7 +147,7 @@ Rectangle {
             anchors.fill: parent
             onClicked: root.clicked()
             hoverEnabled: true
-            onContainsMouseChanged: root.hovered = pressed || containsMouse
+            onContainsMouseChanged: root.hovered = pressed// || containsMouse
             onPressedChanged: root.hovered = pressed || containsMouse
         }
     }

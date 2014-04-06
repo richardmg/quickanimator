@@ -11,6 +11,8 @@ Item {
     property list<Item> originalChildren
 
     Component.onCompleted: {
+        width = childrenRect.width
+        height = childrenRect.height
         originalChildren = children;
         var p = parent;
         while (p && p.parent)
@@ -24,15 +26,15 @@ Item {
 
     Connections {
         target: myApp.controlPanel
-        onCloseAllMenus: openMenu(false)
+        onCloseAllMenus: openMenu(false, null)
     }
 
-    function openMenu(open)
+    function openMenu(open, menuItem)
     {
         for (var i = 0; i < originalChildren.length; ++i) {
             var child = originalChildren[i];
             if (child.showButton)
-                child.showButton(open, i);
+                child.showButton(open, menuItem, i);
         }
     }
 

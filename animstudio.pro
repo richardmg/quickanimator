@@ -12,6 +12,8 @@ QMAKE_INFO_PLIST = Info.plist
 HEADERS += fileio.h
 SOURCES += fileio.cpp main.cpp
 
+OTHER_FILES += qml/ControlPanel.qml
+
 qml.files = $$PWD/qml
 dummy.files = $$PWD/dummy.jpeg
 QMAKE_BUNDLE_DATA += qml dummy

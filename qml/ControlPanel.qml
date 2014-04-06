@@ -3,13 +3,15 @@ import QtQuick 2.0
 Rectangle {
     id: root
     color: myApp.style.dark
+    width: rootMenu.width
+    height: rootMenu.height
 //    x: myApp.style.splitViewSpacing
 
     readonly property Item menuGridRoot: root
 
     Timer {
         interval: 1
-        onTriggered: rootMenu.openMenu(true)
+        onTriggered: rootMenu.openMenu(true, null);
         running: true
     }
 
@@ -18,22 +20,9 @@ Rectangle {
     ControlPanelSubMenu {
         id: rootMenu;
         ControlPanelButton {
-            text: ">"
-            checkable: true
-            onClicked: myApp.timeline.togglePlay(checked)
-            gridX: 0; gridY: 0
-            alwaysVisible: true
-        }
-        ControlPanelButton {
-            text: "<<"
-            onClicked: myApp.model.setTime(0);
-            gridX: 0; gridY: 1
-            alwaysVisible: true
-        }
-        ControlPanelButton {
-            text: "..."
+            text: "!"
             menu: moreOptions
-            gridX: 0; gridY: 2
+            gridX: 0; gridY: 0
             alwaysVisible: true
         }
     }
@@ -41,24 +30,35 @@ Rectangle {
     ControlPanelSubMenu {
         id: moreOptions
         ControlPanelButton {
+            text: ">"
+            checkable: true
+            onClicked: myApp.timeline.togglePlay(checked)
+            gridX: 0; gridY: -1
+        }
+        ControlPanelButton {
+            text: "<<"
+            onClicked: myApp.model.setTime(0);
+            gridX: 0; gridY: -2
+        }
+        ControlPanelButton {
             text: "Record\noptions"
             menu: recordOption
-            gridX: 1; gridY: 2
+            gridX: 0; gridY: -3
         }
         ControlPanelButton {
             text: "Keyframe"
             checkable: true
             onCheckedChanged: myApp.keyframeInfo.visible = checked
-            gridX: 2; gridY: 2
+            gridX: 0; gridY: -4
         }
         ControlPanelButton {
             text: "[ ]"
-            gridX: 3; gridY: 2
+            gridX: 0; gridY: -5
         }
         ControlPanelButton {
             text: "Sprites"
             onClicked: myApp.addImage("dummy.jpeg")
-            gridX: 4; gridY: 2
+            gridX: 0; gridY: -6
         }
     }
 
@@ -66,7 +66,7 @@ Rectangle {
         id: recordOption
         ControlPanelButton {
             text: "x & y"
-            gridX: 1; gridY: 1
+            gridX: 0; gridY: 0 
             checked: myApp.model.recordsPositionX && myApp.model.recordsPositionY
             onClicked: {
                 myApp.model.clearRecordState();
@@ -75,26 +75,8 @@ Rectangle {
             }
         }
         ControlPanelButton {
-            text: "x"
-            gridX: 1; gridY: 0
-            checked: myApp.model.recordsPositionX && !myApp.model.recordsPositionY
-            onClicked: {
-                myApp.model.clearRecordState();
-                myApp.model.recordsPositionX = true;
-            }
-        }
-        ControlPanelButton {
-            text: "y"
-            gridX: 2; gridY: 0
-            checked: !myApp.model.recordsPositionX && myApp.model.recordsPositionY
-            onClicked: {
-                myApp.model.clearRecordState();
-                myApp.model.recordsPositionY = true;
-            }
-        }
-        ControlPanelButton {
             text: "r & s"
-            gridX: 2; gridY: 1
+            gridX: 0; gridY: 1
             checked: myApp.model.recordsRotation && myApp.model.recordsScale
             onClicked: {
                 myApp.model.clearRecordState();
@@ -103,26 +85,8 @@ Rectangle {
             }
         }
         ControlPanelButton {
-            text: "r"
-            gridX: 3; gridY: 0
-            checked: myApp.model.recordsRotation && !myApp.model.recordsScale
-            onClicked: {
-                myApp.model.clearRecordState();
-                myApp.model.recordsRotation = true;
-            }
-        }
-        ControlPanelButton {
-            text: "s"
-            gridX: 4; gridY: 0
-            checked: !myApp.model.recordsRotation && myApp.model.recordsScale
-            onClicked: {
-                myApp.model.clearRecordState();
-                myApp.model.recordsScale = true;
-            }
-        }
-        ControlPanelButton {
             text: "Anchor\nx & y"
-            gridX: 3; gridY: 1
+            gridX: 0; gridY: 2
             checked: myApp.model.recordsAnchorX && myApp.model.recordsAnchorY
             onClicked: {
                 myApp.model.clearRecordState();
@@ -131,8 +95,44 @@ Rectangle {
             }
         }
         ControlPanelButton {
+            text: "x"
+            gridX: 2; gridY: 0
+            checked: myApp.model.recordsPositionX && !myApp.model.recordsPositionY
+            onClicked: {
+                myApp.model.clearRecordState();
+                myApp.model.recordsPositionX = true;
+            }
+        }
+        ControlPanelButton {
+            text: "y"
+            gridX: 2; gridY: 1
+            checked: !myApp.model.recordsPositionX && myApp.model.recordsPositionY
+            onClicked: {
+                myApp.model.clearRecordState();
+                myApp.model.recordsPositionY = true;
+            }
+        }
+        ControlPanelButton {
+            text: "r"
+            gridX: 2; gridY: 0
+            checked: myApp.model.recordsRotation && !myApp.model.recordsScale
+            onClicked: {
+                myApp.model.clearRecordState();
+                myApp.model.recordsRotation = true;
+            }
+        }
+        ControlPanelButton {
+            text: "s"
+            gridX: 2; gridY: 0
+            checked: !myApp.model.recordsRotation && myApp.model.recordsScale
+            onClicked: {
+                myApp.model.clearRecordState();
+                myApp.model.recordsScale = true;
+            }
+        }
+        ControlPanelButton {
             text: "Anchor x"
-            gridX: 5; gridY: 0
+            gridX: 2; gridY: 0
             checked: myApp.model.recordsAnchorX && !myApp.model.recordsAnchorY
             onClicked: {
                 myApp.model.clearRecordState();
@@ -141,7 +141,7 @@ Rectangle {
         }
         ControlPanelButton {
             text: "Anchor y"
-            gridX: 6; gridY: 0
+            gridX: 2; gridY: 0
             checked: !myApp.model.recordsAnchorX && myApp.model.recordsAnchorY
             onClicked: {
                 myApp.model.clearRecordState();

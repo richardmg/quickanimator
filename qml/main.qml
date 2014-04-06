@@ -46,12 +46,7 @@ ApplicationWindow {
             // Bottom left and bottom right
             width: parent.width
             handleDelegate: SplitHandle {}
-
-            ControlPanel {
-                id: controlPanel
-                width: 100
-                height: 208
-            }
+            height: 200
 
             TimelineSprites {
                 id: timelineSprites
@@ -88,6 +83,11 @@ ApplicationWindow {
 //                value: layerTreeFlickable.contentY
 //            }
         }
+    }
+
+    ControlPanel {
+        id: controlPanel
+        anchors.bottom: parent.bottom
     }
 
     Component {
