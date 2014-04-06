@@ -9,7 +9,6 @@ Rectangle {
     opacity: 0
     visible: opacity != 0
     color: myApp.style.dark
-    radius: 4
 
     property int gridX: 0
     property int gridY: 0
@@ -54,12 +53,12 @@ Rectangle {
             closeDownHighlight = false;
             var gridPos = menuGridRoot.mapToItem(null, 0, 0);
             _enableAnim = false;
-            x = gridPos.x + ((gx + gridX) * width) + (50 * Math.random());
-            y = gridPos.y + ((gy + gridY) * height) + (50 * Math.random());
+            x = gridPos.x + ((gx + gridX) * width) - (50 * Math.random());
+            y = gridPos.y + ((gy + gridY) * height) - 50//(50 * Math.random());
             opacity = 0;
-            opacityAnimation.duration = 500;
-            xAnimation.duration = 500;
-            yAnimation.duration = 500;
+            opacityAnimation.duration = 300;
+            xAnimation.duration = 300;
+            yAnimation.duration = 300;
             _enableAnim = true;
 
             x = gridPos.x + ((gx + gridX) * width);
@@ -68,17 +67,17 @@ Rectangle {
         } else {
             if (menu && checked)
                 checked = false;
-            opacityAnimation.duration = closeDownHighlight ? 1500 : 500;
+            opacityAnimation.duration = closeDownHighlight ? 800 : 300;
             xAnimation.duration = closeDownHighlight ? 7000 : 5000;
             yAnimation.duration = closeDownHighlight ? 7000 : 5000;
             if (!alwaysVisible) {
                 opacity = 0;
                 if (closeDownHighlight) {
-                    x += Math.random() * 50
-                    y += Math.random() * 50
+                    //x -= Math.random() * 100
+                    //y -= Math.random() * 100
                 } else {
-                    x = 1000 * Math.random();
-                    y = 1000 * Math.random();
+                    x += 500 * Math.random();
+                    y += 500 * Math.random();
                 }
             }
         }
