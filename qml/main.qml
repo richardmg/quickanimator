@@ -4,8 +4,8 @@ import QtQuick.Layouts 1.0
 
 ApplicationWindow {
     id: myApp
-    width: 1024
-    height: 768
+    visible: true
+    visibility: Qt.WindowFullScreen
 
     property alias stage: stage
     property alias keyframeInfo: keyframeInfo
@@ -96,10 +96,8 @@ ApplicationWindow {
             model: myApp.model
             width: image.width
             height: image.height
-            Image {
-                id: image
-                source: "../dummy.jpeg"
-            }
+            property alias image: image;
+            Image { id: image }
         }
     }
 
@@ -108,7 +106,7 @@ ApplicationWindow {
     function addImage(url)
     {
         var layer = {}
-        layer.sprite = stageSpriteComponent.createObject(stage.sprites, {"objectName":"sprite " + nextSpriteNr++})
+        layer.sprite = stageSpriteComponent.createObject(stage.sprites, {"objectName":"sprite " + nextSpriteNr++, "image.source":url});
         model.addLayer(layer);
         timelineSprites.model.append({});
     }

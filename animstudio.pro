@@ -5,18 +5,22 @@
 TEMPLATE = app
 TARGET = animstudio
 INCLUDEPATH += .
-QT += quick qml widgets
+QT += quick qml widgets gui-private
 QMAKE_INFO_PLIST = Info.plist
+osx: LIBS += -framework WebKit -framework Cocoa
 
-# Input
-HEADERS += fileio.h
+HEADERS += fileio.h \
+    webview.h
 SOURCES += fileio.cpp main.cpp
-
-OTHER_FILES += qml/ControlPanel.qml
-
-qml.files = $$PWD/qml
-dummy.files = $$PWD/dummy.jpeg
-QMAKE_BUNDLE_DATA += qml dummy
+OBJECTIVE_SOURCES += \
+    webview.mm
 
 OTHER_FILES += qml/*.qml \
-    qml/ControlPanelSubMenu.qml
+    qml/ControlPanelSubMenu.qml \
+    qml/ControlPanel.qml
+
+qml.files = $$PWD/qml
+osx: qml.path = ./Contents/Resources
+dummy.files = $$PWD/dummy.jpeg
+osx: dummy.path = ./Contents/Resources
+QMAKE_BUNDLE_DATA += qml dummy

@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import WebView 1.0
 
 Rectangle {
     id: root
@@ -16,6 +17,11 @@ Rectangle {
     }
 
     signal closeAllMenus()
+
+    WebView {
+        id: webView
+        onImageUrlChanged: myApp.addImage(imageUrl);
+    }
 
     ControlPanelSubMenu {
         id: rootMenu;
@@ -57,7 +63,7 @@ Rectangle {
         }
         ControlPanelButton {
             text: "Sprites"
-            onClicked: myApp.addImage("dummy.jpeg")
+            onClicked: webView.search();
             gridX: 0; gridY: -6
         }
     }

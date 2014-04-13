@@ -99,7 +99,7 @@ QtObject {
         layer.parentLayer = null;
         layer.sprite.addKeyframe(layer.sprite.createKeyframe(0));
         layer.sprite.setTime(0);
-        layer.sprite.parentChanged.connect(function() { root.parentHierarchyChanged(layer); });
+        layer.sprite.parentChanged.connect(function() { if (root) root.parentHierarchyChanged(layer); });
 
         selectLayer(layer, true);
         layersUpdated(-1, layers.length);
