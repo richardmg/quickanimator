@@ -212,12 +212,15 @@ Item {
         target: myApp.model
 
         onSelectedLayersUpdated: {
-            if (unselectedLayer != -1)
-                myApp.model.layers[unselectedLayer].focus.destroy();
+            if (unselectedLayer != -1) {
+                var layer = myApp.model.layers[unselectedLayer];
+                layer.focus.visible = false;
+                layer.focus.destroy();
+                layer.focus = null;
+            }
             if (selectedLayer != -1) {
-                var layer = myApp.model.layers[selectedLayer];
-                layer.focus = layerFocus.createObject(0);
-                layer.focus.parent = focusFrames;
+                layer = myApp.model.layers[selectedLayer];
+                layer.focus = layerFocus.createObject(focusFrames);
                 layer.focus.target = layer.sprite;
                 layer.focus.syncFocusPosition();
             }
