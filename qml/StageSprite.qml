@@ -26,6 +26,14 @@ Item {
 
     objectName: "unknown sprite"
 
+    onChildrenRectChanged: {
+        // for image loaded over the net, this will happen late
+        anchorX = childrenRect.width / 2;
+        anchorY = childrenRect.height / 2;
+        synch(sprite);
+        print(width, height)
+    }
+
     function setTime(time)
     {
         _updateToAndFromState(time);

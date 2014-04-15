@@ -94,9 +94,9 @@ ApplicationWindow {
         id: stageSpriteComponent
         StageSprite {
             model: myApp.model
+            property alias image: image;
             width: image.width
             height: image.height
-            property alias image: image;
             Image { id: image }
         }
     }
