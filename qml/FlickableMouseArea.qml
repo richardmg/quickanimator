@@ -14,12 +14,15 @@ MultiPointTouchArea {
     property bool pressed: false
     property bool flicking: false
 
+    property real _prevMouseX: 0
+    property real _prevMouseY: 0
+    property bool _mouseDetected: false
+
     property TouchPoint activeTouchPoint: null
     touchPoints: [ TouchPoint { id: tp1; }, TouchPoint { id: tp2; } ]
 
-
     onPressed: {
-        if (activeTouchPoint)
+        if (activeTouchPoint || _mouseDetected)
             return;
 
         if (root.contains(Qt.point(tp1.x, tp1.y)))
@@ -29,7 +32,7 @@ MultiPointTouchArea {
     }
 
     onUpdated: {
-        if (!activeTouchPoint)
+        if (activeTouchPoint || _mouseDetected)
             return;
 
         root.mouseX = activeTouchPoint.x
@@ -38,6 +41,9 @@ MultiPointTouchArea {
     }
 
     onReleased: {
+        if (activeTouchPoint || _mouseDetected)
+            return;
+
         activeTouchPoint = null;
         pressed = false
     }
@@ -46,7 +52,7 @@ MultiPointTouchArea {
         anchors.fill: parent
 
         onPressedChanged: {
-            activeTouchPoint = null;
+            _mouseDetected = true;
             root.mouseX = mouseX;
             root.mouseY = mouseY;
             root.pressed = pressed;
@@ -56,10 +62,14 @@ MultiPointTouchArea {
             root.mouseX = mouseX;
             root.mouseY = mouseY;
         }
-    }
 
-    property real _prevMouseX: 0
-    property real _prevMouseY: 0
+        onWheel: {
+            flicking = true;
+            momentumX = wheel.pixelDelta.x * friction;
+            momentumY = wheel.pixelDelta.y * friction;
+            animateMomentumToRest(0);
+        }
+    }
 
     onPressedChanged: {
         if (pressed) {
@@ -71,23 +81,7 @@ MultiPointTouchArea {
             momentumY = momentumYAnimation.to;
             flicking = true;
         } else {
-            if (Math.abs(momentumX) > 2) {
-                momentumXAnimation.from = momentumX
-                momentumXAnimation.duration = 1000
-                momentumXAnimation.restart();
-            } else {
-                momentumX = momentumRestX;
-            }
-            if (Math.abs(momentumY) > 2) {
-                momentumYAnimation.from = momentumY
-                momentumYAnimation.duration = 1000
-                momentumYAnimation.restart();
-            } else {
-                momentumY = momentumRestY;
-            }
-
-            if (!momentumXAnimation.running && !momentumYAnimation.running)
-                flicking = false;
+            animateMomentumToRest(2);
         }
     }
 
@@ -103,6 +97,27 @@ MultiPointTouchArea {
             return;
         momentumY = (mouseY - _prevMouseY) * friction
         _prevMouseY = mouseY;
+    }
+
+    function animateMomentumToRest(threshold)
+    {
+        if (Math.abs(momentumX) > threshold) {
+            momentumXAnimation.from = momentumX
+            momentumXAnimation.duration = 1000
+            momentumXAnimation.restart();
+        } else {
+            momentumX = momentumRestX;
+        }
+        if (Math.abs(momentumY) > threshold) {
+            momentumYAnimation.from = momentumY
+            momentumYAnimation.duration = 1000
+            momentumYAnimation.restart();
+        } else {
+            momentumY = momentumRestY;
+        }
+
+        if (!momentumXAnimation.running && !momentumYAnimation.running)
+            flicking = false;
     }
 
     NumberAnimation {
