@@ -56,38 +56,27 @@ Item {
             pressStartTime = new Date().getTime();
             pressStartPos = pos;
 
-            if (myApp.model.selectedLayers.length !== 0) {
-                var layer = overlapsHandle(pos);
-                if (layer) {
-                    // start drag
-                    currentAction = {
-                        layer: layer, 
-                        dragging: true,
-                        x: pos.x,
-                        y: pos.y
-                    };
-                    myApp.model.inLiveDrag = true;
-                } else {
-                    // Start rotation
-                    var layer = myApp.model.selectedLayers[0];
-                    var sprite = layer.sprite
-                    var globalPos = sprites.mapFromItem(sprite.parent, sprite.x + sprite.anchorX, sprite.y + sprite.anchorY);
-                    var center = {x: globalPos.x, y: globalPos.y};
-                    currentAction = getAngleAndRadius(center, pos);
-                    currentAction.rotating = true
-                }
+            if (myApp.model.recordsPositionX) {
+                currentAction = {
+                    x: pos.x,
+                    y: pos.y
+                };
+                myApp.model.inLiveDrag = true;
+            } else if (myApp.model.selectedLayers.length !== 0) {
+                var layer = myApp.model.selectedLayers[0];
+                var sprite = layer.sprite
+                var globalPos = sprites.mapFromItem(sprite.parent, sprite.x + sprite.anchorX, sprite.y + sprite.anchorY);
+                var center = {x: globalPos.x, y: globalPos.y};
+                currentAction = getAngleAndRadius(center, pos);
             }
         }
 
         onPositionChanged: {
             // drag or rotate current layer:
             var pos = {x:mouseX, y:mouseY}
-            if (currentAction.selecting) {
-                var layer = myApp.model.getLayerAt(pos);
-                if (layer && !layer.selected)
-                    myApp.model.selectLayer(layer, true);
-            } else if (myApp.model.selectedLayers.length !== 0) {
-                if (currentAction.dragging) {
+
+            if (myApp.model.selectedLayers.length !== 0) {
+                if (myApp.model.recordsPositionX) {
                     // continue drag
                     var dx = pos.x - currentAction.x;
                     var dy = pos.y - currentAction.y;
@@ -128,7 +117,7 @@ Item {
 
                     currentAction.x = pos.x;
                     currentAction.y = pos.y;
-                } else if (currentAction.rotating) {
+                } else {
                     // continue rotate
                     layer = myApp.model.selectedLayers[0];
                     sprite = layer.sprite
@@ -150,9 +139,6 @@ Item {
                     currentAction.angle = aar.angle;
                     currentAction.radius = aar.radius;
                 }
-            } else {
-                var startSelect = (Math.abs(pos.x - pressStartPos.x) < 10 || Math.abs(pos.y - pressStartPos.y) < 10);
-                currentAction.selecting = true;
             }
         }
 
@@ -164,16 +150,43 @@ Item {
                 && Math.abs(pos.y - pressStartPos.y) < 10;
 
             if (click) {
+                var m = myApp.model;
                 currentAction = {};
-                var layer = myApp.model.getLayerAt(pos);
-                var select = layer && !layer.selected
-                for (var i = myApp.model.selectedLayers.length - 1; i >= 0; --i)
-                    myApp.model.selectLayer(myApp.model.selectedLayers[i], false)
-                if (select)
-                    myApp.model.selectLayer(layer, select)
+                var layer = m.getLayerAt(pos);
+
+                if (!layer || !layer.selected)
+                    unselectAllLayers();
+
+                if (layer) {
+                    if (!layer.selected)
+                        m.selectLayer(layer, true);
+                    else
+                        changeRecordState();
+                }
             }
 
             myApp.model.inLiveDrag = false;
+        }
+    }
+
+    function unselectAllLayers()
+    {
+        var m = myApp.model;
+        for (var i = m.selectedLayers.length - 1; i >= 0; --i)
+            m.selectLayer(m.selectedLayers[i], false)
+    }
+
+    function changeRecordState()
+    {
+        var m = myApp.model;
+        if (m.recordsPositionX) {
+            m.clearRecordState();
+            m.recordsScale = true;
+            m.recordsRotation = true;
+        } else {
+            m.clearRecordState();
+            m.recordsPositionX = true;
+            m.recordsPositionY = true;
         }
     }
 
@@ -185,7 +198,7 @@ Item {
             width: focusSize * 2
             height: focusSize * 2
             color: "transparent"
-            radius: focusSize
+            radius: myApp.model.recordsPositionX ? 0 : focusSize
             border.width: 3
             border.color: Qt.rgba(255, 0, 0, 0.7)
             smooth: true

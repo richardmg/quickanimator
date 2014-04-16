@@ -46,7 +46,7 @@ ApplicationWindow {
             // Bottom left and bottom right
             width: parent.width
             handleDelegate: SplitHandle {}
-            height: 200
+            height: 50
 
             TimelineSprites {
                 id: timelineSprites
