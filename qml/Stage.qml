@@ -111,7 +111,8 @@ Item {
                                 sprite.x = newSpritePos.x
                             if (model.recordsPositionY)
                                 sprite.y = newSpritePos.y
-                            myApp.model.syncLayer(layer);
+                            if (myApp.model.recording)
+                                myApp.model.syncLayer(layer);
                         }
                     }
 
@@ -134,7 +135,8 @@ Item {
                             layer.sprite.transScaleX *= aar.radius / currentAction.radius;
                             layer.sprite.transScaleY = layer.sprite.transScaleX;
                         }
-                        myApp.model.syncLayer(layer);
+                        if (myApp.model.recording)
+                            myApp.model.syncLayer(layer);
                     }
                     currentAction.angle = aar.angle;
                     currentAction.radius = aar.radius;

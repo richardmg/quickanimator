@@ -42,21 +42,31 @@ ApplicationWindow {
             }
         }
 
-        SplitView {
+        Row {
             // Bottom left and bottom right
             width: parent.width
-            handleDelegate: SplitHandle {}
             height: 50
 
-            TimelineSprites {
-                id: timelineSprites
-                height: parent.height
-                Component.onCompleted: width = controlPanel.width
+            Rectangle {
+                color: "red"
             }
+
+            MultiTouchButton {
+                id: recordButton
+                text: "R"
+                checkable: true
+                onCheckedChanged: myApp.model.recording = checked
+            }
+
+//            TimelineSprites {
+//                id: timelineSprites
+//                height: parent.height
+//                Component.onCompleted: width = controlPanel.width
+//            }
 
             Timeline {
                 id: timeline
-                width: parent.width / 3
+                width: parent.width
                 height: parent.height
 
                 FlickableMouseArea {
@@ -67,27 +77,12 @@ ApplicationWindow {
                     Component.onCompleted: myApp.msPerFrameFlickable = msPerFrameFlickView
                 }
             }
-
-            // Sync the two timeline flickables:
-//            Binding {
-//                property Item t: layerTreeFlickable
-//                target: t.moving ? null : t
-//                property: "contentY"
-//                value: timelineFlickable.contentY
-//            }
-
-//            Binding {
-//                property Item t: timelineFlickable
-//                target: t.moving ? null : t
-//                property: "contentY"
-//                value: layerTreeFlickable.contentY
-//            }
         }
     }
 
     ControlPanel {
         id: controlPanel
-        anchors.bottom: parent.bottom
+        y: 400
     }
 
     Component {
