@@ -29,11 +29,8 @@ Item {
                 pressStartTime = new Date();
                 animation.running = false;
                 dragged = 0;
-            } else if (_playing) {
-                animation.lastTickTime = new Date();
-                animation.running = true;
             } else {
-                animation.stop()
+                togglePlay(_playing);
             }
         }
 
@@ -41,6 +38,8 @@ Item {
             dragged += Math.abs(momentumX)
             myApp.model.setTime(myApp.model.time + (-momentumX * 20 / myApp.model.msPerFrame));
         }
+
+        onClicked: togglePlay(!_playing);
     }
 
     Rectangle {
@@ -53,8 +52,10 @@ Item {
     function togglePlay(play)
     {
         _playing = play;
-        animation.lastTickTime = new Date();
-        animation.running = play;
+        if (!flickable.flicking) {
+            animation.lastTickTime = new Date();
+            animation.running = play;
+        }
     }
 
     NumberAnimation {
