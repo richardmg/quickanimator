@@ -29,6 +29,8 @@ Rectangle {
             ctx.beginPath();
             ctx.clearRect(0, 0, width, height);
 
+            var timeShift = (width / (2 * cellWidth));
+
             var focusIndex = myApp.model.focusedLayerIndex;
             var focusIndexData = root.model[focusIndex];
             if (focusIndexData) {
@@ -39,7 +41,6 @@ Rectangle {
                 grd.addColorStop(1, '#206CD3');
                 ctx.fillStyle = grd;
 
-                var timeShift = (width / (2 * cellWidth));
                 var startIndex = sprite.getKeyframe(time - timeShift).volatileIndex;
                 var endIndex = sprite.getKeyframe(time + timeShift).volatileIndex;
 
@@ -50,7 +51,12 @@ Rectangle {
             }
 
             ctx.fillStyle = myApp.style.timelineline;
-            ctx.fillRect(parent.width / 2, 0, 1, parent.height);
+            ctx.font = "15px Arial";
+            ctx.fillRect(parent.width / 2, 0, 2, parent.height);
+            for (var t = timeShift - time; t <= root.width / 2; t += 25) {
+                ctx.fillRect((t * cellWidth), parent.height / 2, 2, parent.height / 2);
+                ctx.fillText(Math.round(t - timeShift + time), (t * cellWidth) + 5, parent.height - 2);
+            }
 
             ctx.stroke();
         }
