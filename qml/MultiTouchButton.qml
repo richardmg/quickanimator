@@ -12,7 +12,6 @@ Rectangle {
     property bool pressed: false
     property bool checked: false
     property bool checkable: false
-    property bool useHighlight: true
 
     property bool _mouseDetected: false
 
@@ -21,17 +20,6 @@ Rectangle {
     onClicked: {
         if (checkable)
             checked = !checked;
-    }
-
-    Rectangle {
-        anchors.fill: parent
-        anchors.margins: 2
-        radius: 4
-        color: useHighlight && (pressed || checked) ? myApp.style.labelHighlight : myApp.style.label;
-        Text {
-            text: root.text
-            anchors.centerIn: parent
-        }
     }
 
     MultiPointTouchArea {

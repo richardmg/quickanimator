@@ -8,7 +8,6 @@ ApplicationWindow {
     visibility: Qt.WindowFullScreen
 
     property alias stage: stage
-    property alias keyframeInfo: keyframeInfo
     property alias controlPanel: controlPanel;
 
     property Timeline timeline
@@ -19,71 +18,54 @@ ApplicationWindow {
     property Style style: Style {}
     property Model model: Model {}
 
-    SplitView {
-        orientation: Qt.Vertical
-        anchors.fill: parent
-        handleDelegate: SplitHandle {}
+    Stage {
+        id: stage
+        width: parent.width
+        anchors.bottom: bottomRow.top
+    }
 
-        SplitView {
-            height: 2 * parent.height / 3
-            width: parent.width
-            handleDelegate: SplitHandle {}
-            Layout.fillHeight: true
+    Row {
+        id: bottomRow
+        width: parent.width
+        height: childrenRect.height
+        anchors.bottom: parent.bottom
 
-            KeyframeInfo {
-                id: keyframeInfo
-                width: parent.width / 3
-                visible: false
+        Rectangle {
+            color: "red"
+        }
+
+        MultiTouchButton {
+            id: recordButton
+            text: ""
+            onClicked: myApp.model.recording = !myApp.model.recording
+
+            Rectangle {
+                width: 1
+                height: parent.height
+                anchors.right: parent.right
+                color: myApp.style.timelineline
             }
 
-            Stage {
-                id: stage
-                clip: true
+            Rectangle {
+                width: 20
+                height: 20
+                radius: 20
+                anchors.centerIn: parent
+                color: myApp.model.recording ? "#ff0000" : "#550000"
             }
         }
 
-        Row {
-            // Bottom left and bottom right
+        Timeline {
+            id: timeline
             width: parent.width
-            height: childrenRect.height
+            height: parent.height
 
-            Rectangle {
-                color: "red"
-            }
-
-            MultiTouchButton {
-                id: recordButton
-                text: ""
-                useHighlight: false
-                onClicked: myApp.model.recording = !myApp.model.recording
-
-                Rectangle {
-                    width: 20
-                    height: 20
-                    radius: 20
-                    anchors.centerIn: parent
-                    color: myApp.model.recording ? "#ff0000" : "#550000"
-                }
-            }
-
-//            TimelineSprites {
-//                id: timelineSprites
-//                height: parent.height
-//                Component.onCompleted: width = controlPanel.width
-//            }
-
-            Timeline {
-                id: timeline
-                width: parent.width
-                height: parent.height
-
-                FlickableMouseArea {
-                    id: msPerFrameFlickView
-                    anchors.fill: parent
-                    enabled: false
-                    onMomentumXChanged: myApp.model.msPerFrame = Math.max(16, myApp.model.msPerFrame - momentumX);
-                    Component.onCompleted: myApp.msPerFrameFlickable = msPerFrameFlickView
-                }
+            FlickableMouseArea {
+                id: msPerFrameFlickView
+                anchors.fill: parent
+                enabled: false
+                onMomentumXChanged: myApp.model.msPerFrame = Math.max(16, myApp.model.msPerFrame - momentumX);
+                Component.onCompleted: myApp.msPerFrameFlickable = msPerFrameFlickView
             }
         }
     }
@@ -111,6 +93,5 @@ ApplicationWindow {
         var layer = {}
         layer.sprite = stageSpriteComponent.createObject(stage.sprites, {"objectName":"sprite " + nextSpriteNr++, "image.source":url});
         model.addLayer(layer);
-        timelineSprites.model.append({});
     }
 }
