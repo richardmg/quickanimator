@@ -14,6 +14,11 @@ MultiPointTouchArea {
     property bool pressed: false
     property bool flicking: false
 
+    signal clicked
+    property var _pressTime
+    property real _pressMouseX
+    property real _pressMouseY
+
     property real _prevMouseX: 0
     property real _prevMouseY: 0
     property bool _mouseDetected: false
@@ -80,8 +85,19 @@ MultiPointTouchArea {
             momentumX = momentumXAnimation.to;
             momentumY = momentumYAnimation.to;
             flicking = true;
+
+            _pressTime = (new Date()).getTime();
+            _pressMouseX = mouseX;
+            _pressMouseY = mouseY;
         } else {
             animateMomentumToRest(2);
+
+            var click = (new Date().getTime() - _pressTime) < 300
+                && Math.abs(mouseX - _pressMouseX) < 10
+                && Math.abs(mouseY - _pressMouseY) < 10;
+
+            if (click)
+                root.clicked();
         }
     }
 
