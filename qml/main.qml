@@ -45,7 +45,7 @@ ApplicationWindow {
         Row {
             // Bottom left and bottom right
             width: parent.width
-            height: 50
+            height: childrenRect.height
 
             Rectangle {
                 color: "red"
@@ -53,9 +53,17 @@ ApplicationWindow {
 
             MultiTouchButton {
                 id: recordButton
-                text: "R"
-                checkable: true
-                onCheckedChanged: myApp.model.recording = checked
+                text: ""
+                useHighlight: false
+                onClicked: myApp.model.recording = !myApp.model.recording
+
+                Rectangle {
+                    width: 20
+                    height: 20
+                    radius: 20
+                    anchors.centerIn: parent
+                    color: myApp.model.recording ? "#ff0000" : "#550000"
+                }
             }
 
 //            TimelineSprites {

@@ -11,7 +11,8 @@ Rectangle {
     property string text: "button"
     property bool pressed: false
     property bool checked: false
-    property bool checkable: false || menu
+    property bool checkable: false
+    property bool useHighlight: true
 
     property bool _mouseDetected: false
 
@@ -26,7 +27,7 @@ Rectangle {
         anchors.fill: parent
         anchors.margins: 2
         radius: 4
-        color: pressed || checked ? myApp.style.labelHighlight : myApp.style.label;
+        color: useHighlight && (pressed || checked) ? myApp.style.labelHighlight : myApp.style.label;
         Text {
             text: root.text
             anchors.centerIn: parent
