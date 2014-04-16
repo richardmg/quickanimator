@@ -10,6 +10,7 @@ Rectangle {
     Connections {
         target: myApp.model
         onStatesUpdated: canvas.requestPaint()
+        onFocusedLayerIndexChanged: canvas.requestPaint()
     }
 
     color: myApp.style.dark
@@ -28,32 +29,24 @@ Rectangle {
             ctx.beginPath();
             ctx.clearRect(0, 0, width, height);
 
-            // Close table on left side:
-            ctx.lineTo(0, 20 * myApp.style.cellHeight)
+            var focusIndex = myApp.model.focusedLayerIndex;
+            var focusIndexData = root.model[focusIndex];
+            if (focusIndexData) {
+                var sprite = focusIndexData.sprite;
 
-            for (var row=0; row<myApp.model.layers.length + 1; ++row) {
-                ctx.moveTo(0, row * myApp.style.cellHeight);
-                ctx.lineTo(width, row * myApp.style.cellHeight)
+                ctx.fillStyle = Qt.rgba(0.9, 0.5, 0.3, 1);
+                var grd = ctx.createLinearGradient(0, 0, 0, parent.height * 4);
+                grd.addColorStop(0, '#8ED6FF');
+                grd.addColorStop(1, '#206CD3');
+                ctx.fillStyle = grd;
 
-                var rowData = root.model[row];
-                if (rowData) {
-                    var sprite = rowData.sprite;
+                var timeShift = (width / (2 * cellWidth));
+                var startIndex = sprite.getKeyframe(time - timeShift).volatileIndex;
+                var endIndex = sprite.getKeyframe(time + timeShift).volatileIndex;
 
-                    ctx.fillStyle = Qt.rgba(0.9, 0.5, 0.3, 1);
-                    var grd = ctx.createLinearGradient(0, 0, 0, myApp.style.cellHeight * 4);
-                    grd.addColorStop(0, '#8ED6FF');
-                    grd.addColorStop(1, '#206CD3');
-                    ctx.fillStyle = grd;
-
-                    var timeShift = (width / (2 * cellWidth));
-                    var startIndex = sprite.getKeyframe(time - timeShift).volatileIndex;
-                    var endIndex = sprite.getKeyframe(time + timeShift).volatileIndex;
-
-                    for (var t = startIndex; t <= endIndex; ++t) {
-                        var keyframe = sprite.keyframes[t];
-                        ctx.fillRect(((keyframe.time - time) * cellWidth) + (width / 2),
-                                     (row * myApp.style.cellHeight), cellWidth, myApp.style.cellHeight - 1);
-                    }
+                for (var t = startIndex; t <= endIndex; ++t) {
+                    var keyframe = sprite.keyframes[t];
+                    ctx.fillRect(((keyframe.time - time) * cellWidth) + (width / 2), 0, cellWidth, parent.height);
                 }
             }
             ctx.stroke();

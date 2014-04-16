@@ -1,17 +1,18 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.0
 
-Item {
+Rectangle {
     id: root
 
     property bool _playing: false
 
-    clip: true
     Component.onCompleted: myApp.timeline = root
+    color: myApp.style.dark
 
     TimelineCanvas {
-        width: root.width
-        height: parent.height
+        anchors.fill: parent
+        anchors.topMargin: 2
+        anchors.bottomMargin: 2
     }
 
     FlickableMouseArea {

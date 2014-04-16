@@ -21,6 +21,7 @@ ApplicationWindow {
     Stage {
         id: stage
         width: parent.width
+        anchors.top: parent.top
         anchors.bottom: bottomRow.top
     }
 
