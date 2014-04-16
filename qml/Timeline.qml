@@ -43,13 +43,6 @@ Rectangle {
         onClicked: togglePlay(!_playing);
     }
 
-    Rectangle {
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: 1
-        height: parent.height
-        color: "red"
-    }
-
     function togglePlay(play)
     {
         _playing = play;

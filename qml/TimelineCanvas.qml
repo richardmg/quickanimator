@@ -34,7 +34,6 @@ Rectangle {
             if (focusIndexData) {
                 var sprite = focusIndexData.sprite;
 
-                ctx.fillStyle = Qt.rgba(0.9, 0.5, 0.3, 1);
                 var grd = ctx.createLinearGradient(0, 0, 0, parent.height * 4);
                 grd.addColorStop(0, '#8ED6FF');
                 grd.addColorStop(1, '#206CD3');
@@ -49,6 +48,10 @@ Rectangle {
                     ctx.fillRect(((keyframe.time - time) * cellWidth) + (width / 2), 0, cellWidth, parent.height);
                 }
             }
+
+            ctx.fillStyle = myApp.style.timelineline;
+            ctx.fillRect(parent.width / 2, 0, 1, parent.height);
+
             ctx.stroke();
         }
     }
