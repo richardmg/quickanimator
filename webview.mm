@@ -10,13 +10,18 @@
 
 #include <UIKit/UIKit.h>
 
-void MyWebView::search(const QString &url)
+void MyWebView::search()
 {
-    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url.toNSString()]];
-    UIView *view = reinterpret_cast<UIView *>(QGuiApplication::focusWindow()->winId());
-    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
-    [webView loadRequest:request];
-    [view addSubview:webView];
+//    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url.toNSString()]];
+//    UIView *view = reinterpret_cast<UIView *>(QGuiApplication::focusWindow()->winId());
+//    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
+//    [webView loadRequest:request];
+//    [view addSubview:webView];
+}
+
+MyWebView::~MyWebView()
+{
+//    [reinterpret_cast<WebView *>(m_webView) release];
 }
 
 #elif defined(Q_OS_OSX)
@@ -77,6 +82,11 @@ void MyWebView::search()
     [nsWindow setContentView:reinterpret_cast<WebView *>(m_webView)];
 }
 
+MyWebView::~MyWebView()
+{
+    [reinterpret_cast<WebView *>(m_webView) release];
+}
+
 #endif
 
 MyWebView::MyWebView(QQuickItem *parent) :
@@ -84,9 +94,4 @@ MyWebView::MyWebView(QQuickItem *parent) :
     , m_qtView(0)
     , m_webView(0)
 {
-}
-
-MyWebView::~MyWebView()
-{
-    [reinterpret_cast<WebView *>(m_webView) release];
 }
