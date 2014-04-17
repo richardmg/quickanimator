@@ -88,7 +88,8 @@ Item {
             height:sprite.height,
             rotation:transRotation,
             scale:transScaleX,
-            opacity:sprite.opacity
+            opacity:sprite.opacity,
+            visible: sprite.visible
         };
     }
 
@@ -173,6 +174,10 @@ Item {
     function _interpolate(time)
     {
         var effectiveKeyframe = _fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState;
+        visible = effectiveKeyframe.visible;
+        if (!visible)
+            return;
+
         if (_toState.time === effectiveKeyframe.time) {
             x = effectiveKeyframe.x;
             y = effectiveKeyframe.y;

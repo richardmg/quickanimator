@@ -97,8 +97,11 @@ QtObject {
         layers.push(layer);
         layer.selected = false;
         layer.parentLayer = null;
-        // there should always be a keyframe at time 0
-        layer.sprite.addKeyframe(layer.sprite.createKeyframe(0));
+
+        // There should always be a keyframe at time 0 that can
+        // never be deleted (it simplifies algorithms elsewhere)
+        var keyframe = layer.sprite.createKeyframe(0)
+        layer.sprite.addKeyframe(keyframe);
         layer.sprite.setTime(time);
         layer.sprite.parentChanged.connect(function() { if (root) root.parentHierarchyChanged(layer); });
 
@@ -107,8 +110,11 @@ QtObject {
         statesUpdated(layer);
         setFocusLayer(focusedLayerIndex);
 
-        // create keyframe at current time
-        getOrCreateKeyframe(layer);
+        if (time !== 0) {
+            // Make it look like the layer appears at 'time' in the scene
+            keyframe.visible = false;
+            keyframe = getOrCreateKeyframe(layer);
+        }
     }
 
     function unselectAllLayers()
