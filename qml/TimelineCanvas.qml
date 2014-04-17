@@ -59,10 +59,18 @@ Rectangle {
             for (var tickmark = -halfTickCount; tickmark < halfTickCount; ++tickmark) {
                 var relativeTime = (tickmark * timeBetweenTickmarks) - (time % timeBetweenTickmarks);
                 var absoluteTime = Math.round(time + relativeTime);
-                var clockTimeSec = (myApp.model.msPerFrame * absoluteTime) / 1000;
+                if (absoluteTime < 0)
+                    continue;
+
                 var posX = (relativeTime + timeShift) * cellWidth;
                 ctx.fillRect(posX, parent.height / 2, 2, parent.height / 2);
-                ctx.fillText(clockTimeSec + " s", posX + 5, parent.height - 2);
+
+                var clockTimeSec = (myApp.model.msPerFrame * absoluteTime) / 1000;
+                var hours = Math.floor(clockTimeSec / 3600) % 24;
+                var minutes = Math.floor(clockTimeSec / 60) % 60;
+                var seconds = Math.floor(clockTimeSec % 60);
+                var label = hours + ":" + minutes + ":" + seconds;
+                ctx.fillText(label, posX + 5, parent.height - 2);
             }
 
             ctx.stroke();
