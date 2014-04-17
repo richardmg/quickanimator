@@ -50,12 +50,19 @@ Rectangle {
                 }
             }
 
-            ctx.fillStyle = myApp.style.timelineline;
             ctx.font = "15px Arial";
+            ctx.fillStyle = myApp.style.timelineline;
             ctx.fillRect(parent.width / 2, 0, 2, parent.height);
-            for (var t = timeShift - time; t <= root.width / 2; t += 25) {
-                ctx.fillRect((t * cellWidth), parent.height / 2, 2, parent.height / 2);
-                ctx.fillText(Math.round(t - timeShift + time), (t * cellWidth) + 5, parent.height - 2);
+
+            var timeBetweenTickmarks = 25;
+            var halfTickCount = Math.ceil(width / (2 * cellWidth * timeBetweenTickmarks));
+            for (var tickmark = -halfTickCount; tickmark < halfTickCount; ++tickmark) {
+                var relativeTime = (tickmark * timeBetweenTickmarks) - (time % timeBetweenTickmarks);
+                var absoluteTime = Math.round(time + relativeTime);
+                var clockTimeSec = (myApp.model.msPerFrame * absoluteTime) / 1000;
+                var posX = (relativeTime + timeShift) * cellWidth;
+                ctx.fillRect(posX, parent.height / 2, 2, parent.height / 2);
+                ctx.fillText(clockTimeSec + " s", posX + 5, parent.height - 2);
             }
 
             ctx.stroke();
