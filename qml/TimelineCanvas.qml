@@ -36,9 +36,13 @@ Rectangle {
             if (focusIndexData) {
                 var sprite = focusIndexData.sprite;
 
-                var grd = ctx.createLinearGradient(0, 0, 0, parent.height * 4);
-                grd.addColorStop(0, '#8ED6FF');
-                grd.addColorStop(1, '#206CD3');
+                var grd = ctx.createLinearGradient(0, 0, width, 200);
+                grd.addColorStop(0.00, '#516B89');
+                grd.addColorStop(0.25, '#9FBAE0');
+                grd.addColorStop(0.45, '#C1CDDD');
+                grd.addColorStop(0.55, '#C1CDDD');
+                grd.addColorStop(0.77, '#9FBAE0');
+                grd.addColorStop(1.00, '#516B89');
                 ctx.fillStyle = grd;
 
                 var startIndex = sprite.getKeyframe(time - timeShift).volatileIndex;
@@ -46,13 +50,13 @@ Rectangle {
 
                 for (var t = startIndex; t <= endIndex; ++t) {
                     var keyframe = sprite.keyframes[t];
-                    ctx.fillRect(((keyframe.time - time) * cellWidth) + (width / 2), 0, cellWidth, parent.height);
+                    ctx.fillRect(Math.round(((keyframe.time - time) * cellWidth) + (width / 2)), 0, cellWidth, parent.height);
                 }
             }
 
             ctx.font = "15px Arial";
             ctx.fillStyle = myApp.style.timelineline;
-            ctx.fillRect(parent.width / 2, 0, 2, parent.height);
+            ctx.fillRect(width / 2, 0, 2, parent.height);
 
             var timeBetweenTickmarks = 25;
             var halfTickCount = Math.ceil(width / (2 * cellWidth * timeBetweenTickmarks));
