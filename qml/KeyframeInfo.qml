@@ -1,26 +1,20 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
+import WebView 1.0
 
 Rectangle {
     id: root
+    color: myApp.style.dark
 
-    gradient: Gradient {
-        GradientStop {
-            position: 0.0;
-            color: Qt.lighter(myApp.style.accent, 1.3)
-        }
-        GradientStop {
-            position: 200.0 / height;
-            color: Qt.lighter(myApp.style.accent, 1.5)
-        }
+    WebView {
+        id: webView
+        onImageUrlChanged: myApp.addImage(imageUrl);
     }
+
     Column {
         spacing: 5
-        TitleBar {
-            title: "Keyframe"
-            width: root.width
-        }
+        y: 10
         GridLayout {
             x: 5
             rowSpacing: 2
@@ -110,13 +104,18 @@ Rectangle {
             ItemComboBox { }
             Button {
                 Layout.columnSpan: 3
-                text: stateName.enabled ? "Delete keyframe" : "New keyframe"
+                text: stateName.enabled ? "Delete keyframe" : "Create keyframe"
                 onClicked: {
                     if (stateName.enabled)
                         myApp.model.removeFocusedKeyframe();
                     else
                         myApp.model.syncLayer(myApp.model.layers[myApp.model.focusedLayerIndex]);
                 }
+            }
+            Button {
+                Layout.columnSpan: 3
+                text: "Google image search"
+                onClicked: webView.search();
             }
         }
     }

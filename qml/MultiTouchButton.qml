@@ -8,7 +8,6 @@ Rectangle {
     height: 67
     color: myApp.style.dark
 
-    property string text: "button"
     property bool pressed: false
     property bool checked: false
     property bool checkable: false

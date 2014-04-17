@@ -8,7 +8,6 @@ ApplicationWindow {
     visibility: Qt.WindowFullScreen
 
     property alias stage: stage
-    property alias controlPanel: controlPanel;
 
     property Timeline timeline
     property Flickable timelineFlickable
@@ -18,17 +17,43 @@ ApplicationWindow {
     property Style style: Style {}
     property Model model: Model {}
 
-    Stage {
-        id: stage
+    SplitView {
         width: parent.width
         anchors.top: parent.top
         anchors.bottom: timeline.top
+
+        KeyframeInfo {
+            id: menu
+            visible: false
+            width: 300
+        }
+
+        Stage {
+            id: stage
+            Layout.fillWidth: true
+        }
+    }
+
+    MultiTouchButton {
+        id: menuButton
+        anchors.bottom: parent.bottom
+        height: timeline.height
+        checkable: true
+        onCheckedChanged: menu.visible = checked;
+
+        Rectangle {
+            width: 1
+            height: parent.height
+            anchors.right: parent.right
+            color: myApp.style.timelineline
+        }
     }
 
     Timeline {
         id: timeline
-        width: parent.width
         anchors.bottom: parent.bottom
+        anchors.left: menuButton.right
+        anchors.right: parent.right
         height: 50
 
         FlickableMouseArea {
@@ -38,11 +63,6 @@ ApplicationWindow {
             onMomentumXChanged: myApp.model.msPerFrame = Math.max(16, myApp.model.msPerFrame - momentumX);
             Component.onCompleted: myApp.msPerFrameFlickable = msPerFrameFlickView
         }
-    }
-
-    ControlPanel {
-        id: controlPanel
-        y: 400
     }
 
     Component {

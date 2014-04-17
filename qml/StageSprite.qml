@@ -3,6 +3,9 @@ import QtQuick 2.1
 Item {
     id: sprite
 
+    x: parent.width / 2
+    y: parent.height / 2
+
     property real anchorX: childrenRect.width / 2
     property real anchorY: childrenRect.height / 2
     property alias transRotation: tRotation.angle
