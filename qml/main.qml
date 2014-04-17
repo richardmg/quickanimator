@@ -31,30 +31,7 @@ ApplicationWindow {
         height: childrenRect.height
         anchors.bottom: parent.bottom
 
-        Rectangle {
-            color: "red"
-        }
-
-        MultiTouchButton {
-            id: recordButton
-            text: ""
-            onClicked: myApp.model.recording = !myApp.model.recording
-
-            Rectangle {
-                width: 1
-                height: parent.height
-                anchors.right: parent.right
-                color: myApp.style.timelineline
-            }
-
-            Rectangle {
-                width: 20
-                height: 20
-                radius: 20
-                anchors.centerIn: parent
-                color: myApp.model.recording ? "#ff0000" : "#550000"
-            }
-        }
+        RecordButton {}
 
         Timeline {
             id: timeline
