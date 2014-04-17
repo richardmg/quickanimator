@@ -17,8 +17,6 @@ QtObject {
     signal statesUpdated(var layer)
     signal parentHierarchyChanged(var layer)
 
-    property bool recording: false
-
     property bool inLiveDrag: false
     property bool recordsPositionX: true
     property bool recordsPositionY: true

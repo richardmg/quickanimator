@@ -22,29 +22,21 @@ ApplicationWindow {
         id: stage
         width: parent.width
         anchors.top: parent.top
-        anchors.bottom: bottomRow.top
+        anchors.bottom: timeline.top
     }
 
-    Row {
-        id: bottomRow
+    Timeline {
+        id: timeline
         width: parent.width
-        height: childrenRect.height
         anchors.bottom: parent.bottom
+        height: 50
 
-        RecordButton {}
-
-        Timeline {
-            id: timeline
-            width: parent.width
-            height: parent.height
-
-            FlickableMouseArea {
-                id: msPerFrameFlickView
-                anchors.fill: parent
-                enabled: false
-                onMomentumXChanged: myApp.model.msPerFrame = Math.max(16, myApp.model.msPerFrame - momentumX);
-                Component.onCompleted: myApp.msPerFrameFlickable = msPerFrameFlickView
-            }
+        FlickableMouseArea {
+            id: msPerFrameFlickView
+            anchors.fill: parent
+            enabled: false
+            onMomentumXChanged: myApp.model.msPerFrame = Math.max(16, myApp.model.msPerFrame - momentumX);
+            Component.onCompleted: myApp.msPerFrameFlickable = msPerFrameFlickView
         }
     }
 
