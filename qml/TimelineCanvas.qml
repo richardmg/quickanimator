@@ -58,9 +58,9 @@ Rectangle {
             ctx.fillStyle = myApp.style.timelineline;
             ctx.fillRect(width / 2, 0, 2, parent.height);
 
-            var timeBetweenTickmarks = 25;
+            var timeBetweenTickmarks = 30; // sec = (30 / myApp.model.msPerFrame)
             var halfTickCount = Math.ceil(width / (2 * cellWidth * timeBetweenTickmarks));
-            for (var tickmark = -halfTickCount; tickmark < halfTickCount; ++tickmark) {
+            for (var tickmark = -halfTickCount; tickmark <= halfTickCount; ++tickmark) {
                 var relativeTime = (tickmark * timeBetweenTickmarks) - (time % timeBetweenTickmarks);
                 var absoluteTime = Math.round(time + relativeTime);
                 if (absoluteTime < 0)
@@ -73,6 +73,9 @@ Rectangle {
                 var hours = Math.floor(clockTimeSec / 3600) % 24;
                 var minutes = Math.floor(clockTimeSec / 60) % 60;
                 var seconds = Math.floor(clockTimeSec % 60);
+                hours = hours < 10 ? "0" + hours : hours
+                minutes = minutes < 10 ? "0" + minutes : minutes
+                seconds = seconds < 10 ? "0" + seconds : seconds
                 var label = hours + ":" + minutes + ":" + seconds;
                 ctx.fillText(label, posX + 5, parent.height - 2);
             }
