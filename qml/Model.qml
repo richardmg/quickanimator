@@ -97,14 +97,18 @@ QtObject {
         layers.push(layer);
         layer.selected = false;
         layer.parentLayer = null;
+        // there should always be a keyframe at time 0
         layer.sprite.addKeyframe(layer.sprite.createKeyframe(0));
-        layer.sprite.setTime(0);
+        layer.sprite.setTime(time);
         layer.sprite.parentChanged.connect(function() { if (root) root.parentHierarchyChanged(layer); });
 
         selectLayer(layer, true);
         layersUpdated(-1, layers.length);
         statesUpdated(layer);
         setFocusLayer(focusedLayerIndex);
+
+        // create keyframe at current time
+        getOrCreateKeyframe(layer);
     }
 
     function unselectAllLayers()

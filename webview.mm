@@ -13,7 +13,7 @@
 void MyWebView::search(const QString &url)
 {
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url.toNSString()]];
-    UIView *view = reinterpret_cast<UIView *>(QGuiApplication::focusWindow()->handle()->winId());
+    UIView *view = reinterpret_cast<UIView *>(QGuiApplication::focusWindow()->winId());
     UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
     [webView loadRequest:request];
     [view addSubview:webView];
@@ -63,7 +63,7 @@ void MyWebView::search(const QString &url)
 
 void MyWebView::search()
 {
-    NSWindow *nsWindow = [reinterpret_cast<NSView *>(QGuiApplication::focusWindow()->handle()->winId()) window];
+    NSWindow *nsWindow = [reinterpret_cast<NSView *>(QGuiApplication::focusWindow()->winId()) window];
     if (!m_webView) {
         m_qtView = [nsWindow contentView];
         WebView *webView = [[WebView alloc] initWithFrame:NSMakeRect(0, 0, 800, 600) frameName:nil groupName:nil];

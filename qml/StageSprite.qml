@@ -30,7 +30,11 @@ Item {
         // for image loaded over the net, this will happen late
         anchorX = childrenRect.width / 2;
         anchorY = childrenRect.height / 2;
-        synch(sprite);
+        for (var j = 0; j < keyframes.length; ++j) {
+            var keyframe = keyframes[j];
+            keyframe.anchorX = anchorX;
+            keyframe.anchorY = anchorY;
+        }
     }
 
     function setTime(time)
