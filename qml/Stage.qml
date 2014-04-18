@@ -9,6 +9,7 @@ Item {
     property var pressStartTime: 0
     property var pressStartPos: undefined
     property var currentAction: new Object()
+    property bool timelineWasPlaying: false
 
     Rectangle {
         id: sprites
@@ -52,6 +53,7 @@ Item {
 
         onPressed: {
             // start new layer operation, drag or rotate:
+            timelineWasPlaying = myApp.timeline.playing;
             var pos = {x:mouseX, y:mouseY}
             pressStartTime = new Date().getTime();
             pressStartPos = pos;
@@ -100,7 +102,7 @@ Item {
                         keyframe.x = sprite.x;
                         keyframe.y = sprite.y;
                         layer.focus.syncFocusPosition();
-                        myApp.timeline.togglePlay(true);
+                        myApp.timeline.stagePlay = true;
                     } else {
                         // Move selected sprites
                         for (var i in myApp.model.selectedLayers) {
@@ -113,7 +115,7 @@ Item {
                             if (model.recordsPositionY)
                                 sprite.y = newSpritePos.y
                             myApp.model.syncLayer(layer);
-                            myApp.timeline.togglePlay(true);
+                            myApp.timeline.stagePlay = true;
                         }
                     }
 
@@ -137,7 +139,7 @@ Item {
                             layer.sprite.transScaleY = layer.sprite.transScaleX;
                         }
                         myApp.model.syncLayer(layer);
-                        myApp.timeline.togglePlay(true);
+                        myApp.timeline.stagePlay = true;
                     }
                     currentAction.angle = aar.angle;
                     currentAction.radius = aar.radius;
@@ -169,7 +171,7 @@ Item {
             }
 
             myApp.model.inLiveDrag = false;
-            myApp.timeline.togglePlay(false);
+            myApp.timeline.stagePlay = false;
         }
     }
 

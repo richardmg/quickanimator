@@ -4,9 +4,10 @@ import QtQuick.Controls 1.0
 Rectangle {
     id: root
 
-    readonly property bool playing: _playing;
+    readonly property bool playing: _timelinePlay || stagePlay;
 
-    property bool _playing: false
+    property bool stagePlay: false
+    property bool _timelinePlay: false
 
     Component.onCompleted: myApp.timeline = root
     color: myApp.style.dark
@@ -20,38 +21,22 @@ Rectangle {
     FlickableMouseArea {
         id: flickable
         anchors.fill: parent
-        property var pressStartTime: new Date()
-        property real prevMouseX: 0
-        property real prevMouseY: 0
-        property real dragged: 0
+        momentumRestX: playing ? -1 : 0
+        onFlickingChanged: updatePlayAnimation();
+        onMomentumXChanged: myApp.model.setTime(myApp.model.time + (-momentumX * 20 / myApp.model.msPerFrame));
 
-        momentumRestX: _playing ? -1 : 0
-
-        onFlickingChanged: {
-            if (flicking) {
-                pressStartTime = new Date();
-                animation.running = false;
-                dragged = 0;
-            } else {
-                togglePlay(_playing);
-            }
+        onClicked: {
+            _timelinePlay = !_timelinePlay;
+            updatePlayAnimation();
         }
-
-        onMomentumXChanged: {
-            dragged += Math.abs(momentumX)
-            myApp.model.setTime(myApp.model.time + (-momentumX * 20 / myApp.model.msPerFrame));
-        }
-
-        onClicked: togglePlay(!_playing);
     }
 
-    function togglePlay(play)
+    onPlayingChanged: updatePlayAnimation();
+
+    function updatePlayAnimation()
     {
-        _playing = play;
-        if (!flickable.flicking) {
-            animation.lastTickTime = new Date();
-            animation.running = play;
-        }
+        animation.lastTickTime = new Date();
+        animation.running = playing && !flickable.flicking;
     }
 
     NumberAnimation {
