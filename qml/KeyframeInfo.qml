@@ -9,7 +9,10 @@ Rectangle {
 
     WebView {
         id: webView
-        onImageUrlChanged: myApp.addImage(imageUrl);
+        onImageUrlChanged: {
+            myApp.addImage(imageUrl)
+            root.visible = false
+        }
     }
 
     Flickable {
