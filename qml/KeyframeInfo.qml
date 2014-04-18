@@ -24,6 +24,10 @@ Rectangle {
                 onClicked: webView.search();
             }
             Button {
+                text: "Play on press"
+                onClicked: webView.search();
+            }
+            Button {
                 text: "Visible"
             }
             Button {

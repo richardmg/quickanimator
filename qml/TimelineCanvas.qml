@@ -13,6 +13,11 @@ Rectangle {
         onFocusedLayerIndexChanged: canvas.requestPaint()
     }
 
+    Connections {
+        target: myApp.timeline
+        onPlayingChanged: canvas.requestPaint()
+    }
+
     color: myApp.style.dark
 
     Canvas {
@@ -55,9 +60,10 @@ Rectangle {
             }
 
             ctx.font = "15px Arial";
-            ctx.fillStyle = myApp.style.timelineline;
+            ctx.fillStyle = myApp.timeline.playing ? "orange" : myApp.style.timelineline;
             ctx.fillRect(width / 2, 0, 2, parent.height);
 
+            ctx.fillStyle = myApp.style.timelineline;
             var timeBetweenTickmarks = 30; // sec = (30 / myApp.model.msPerFrame)
             var halfTickCount = Math.ceil(width / (2 * cellWidth * timeBetweenTickmarks));
             for (var tickmark = -halfTickCount; tickmark <= halfTickCount; ++tickmark) {

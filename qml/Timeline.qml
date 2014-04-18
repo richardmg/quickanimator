@@ -4,6 +4,8 @@ import QtQuick.Controls 1.0
 Rectangle {
     id: root
 
+    readonly property bool playing: _playing;
+
     property bool _playing: false
 
     Component.onCompleted: myApp.timeline = root
