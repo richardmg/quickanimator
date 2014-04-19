@@ -21,6 +21,7 @@ Rectangle {
     FlickableMouseArea {
         id: flickable
         anchors.fill: parent
+        friction: 0.1
         momentumRestX: playing ? -1 : 0
         onFlickingChanged: updatePlayAnimation();
         onMomentumXChanged: myApp.model.setTime(myApp.model.time + (-momentumX * 20 / myApp.model.msPerFrame));

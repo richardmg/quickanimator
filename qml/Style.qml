@@ -8,7 +8,7 @@ QtObject {
     property color label: Qt.darker(myApp.style.accent, 1.0)
     property color dark: Qt.darker(myApp.style.accent, 1.4)
     property int splitViewSpacing: 20
-    property int cellWidth: 15
+    property int cellWidth: 10
     property int cellHeight: 35
 
     property Gradient stageGradient: Gradient {

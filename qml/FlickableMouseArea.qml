@@ -7,7 +7,7 @@ MultiPointTouchArea {
     property real momentumY: 0
     property alias momentumRestX: momentumXAnimation.to
     property alias momentumRestY: momentumYAnimation.to
-    property real friction: 0.3
+    property real friction: 1
 
     property int mouseX: 0
     property int mouseY: 0
