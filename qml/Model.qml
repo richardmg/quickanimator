@@ -35,11 +35,11 @@ QtObject {
         recordsAnchorY = false;
     }
 
-    function syncLayer(layer)
+    function syncReparentLayers(parentLayer)
     {
-        getOrCreateKeyframe(layer);
+        var changedSprite = parentLayer.sprite;
         for (var l in layers)
-            layers[l].sprite.synch(layer.sprite);
+            layers[l].sprite.synchReparentLayer(changedSprite);
     }
 
     function getOrCreateKeyframe(layer)

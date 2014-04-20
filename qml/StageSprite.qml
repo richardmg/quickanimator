@@ -117,7 +117,7 @@ Item {
         var gRotation = (Math.atan2(dy, dx) * 180 / Math.PI);
         var gScale = Math.sqrt((dx * dx) + (dy * dy));
 
-        // Get keyframeParent geometry in commonParent ordinates:
+        // Get keyframeParent geometry in commonParent coordinates:
         var itemHotspotX = (keyframeParent.width / 2);
         var itemHotspotY = (keyframeParent.height / 2);
         var gItemHotspot = keyframeParent.mapToItem(commonParent, itemHotspotX, itemHotspotY);
@@ -139,39 +139,21 @@ Item {
         return translatedKeyframe;
     }
 
-    function synch(changedSprite)
+    function synchReparentKeyframe(changedSprite)
     {
+        // Since changedSprite has changed, all descandant of it has changed as well (relative
+        // to Stage, not parent). As such, we need to synch their keyframes left-side, so that
+        // they end up with the geometry they now got upon reparenting.
         _updateToAndFromState()
-        if (changedSprite === sprite)
-            return _synch();
-        if (!_toState.effectiveKeyframe)
-            return false;
-        if (_fromState.time === _toState.time)
-            return _synch();
-        return false;
-    }
+        if (!_fromState.effectiveKeyframe || _fromState.time !== changedSprite._fromState.time)
+            return;
 
-    function _synch()
-    {
-        var keyframe = _fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState;
-        keyframe.x = x;
-        keyframe.y = y;
-        keyframe.z = z;
-        keyframe.anchorX = anchorX;
-        keyframe.anchorY = anchorY;
-        keyframe.rotation = transRotation;
-        keyframe.scale = transScaleX;
-        keyframe.opacity = opacity;
-
-        if (_fromState.volatileIndex > 0 && _fromState.effectiveKeyframe) {
-            var p = getKeyframeParent(_fromState.volatileIndex - 1);
-            var translated = _createKeyframeRelativeToParent(_fromState.time, p);
-            _fromState.x = translated.x;
-            _fromState.y = translated.y;
-            _fromState.scale = translated.scale;
-            _fromState.rotation = translated.rotation;
-        }
-        return true;
+        var p = getKeyframeParent(_fromState.volatileIndex - 1);
+        var translated = _createKeyframeRelativeToParent(_fromState.time, p);
+        _fromState.x = translated.x;
+        _fromState.y = translated.y;
+        _fromState.scale = translated.scale;
+        _fromState.rotation = translated.rotation;
     }
 
     function _interpolate(time)

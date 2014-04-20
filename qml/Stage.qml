@@ -87,12 +87,11 @@ Item {
                         // Move anchor
                         var layer = myApp.model.selectedLayers[0];
                         var sprite = layer.sprite
-                        var keyframe = sprite.getKeyframe(myApp.model.time);
+                        keyframe = myApp.model.getOrCreateKeyframe(layer);
                         var globalPos = focusFrames.mapFromItem(sprite, keyframe.anchorX, keyframe.anchorY);
                         var localDelta = focusFrames.mapToItem(sprite, globalPos.x + dx, globalPos.y + dy);
                         keyframe.anchorX = localDelta.x;
                         keyframe.anchorY = localDelta.y;
-                        sprite.synchSpriteWithAnchorKeyframe(keyframe);
 
                         // When changing origin of rotation, the focus rotate with it. But we want the focus
                         // to follow the mouse, so move the sprite back so the focus ends up under the mouse again:
@@ -101,20 +100,25 @@ Item {
                         sprite.y -= (newGlobalPos.y - globalPos.y) - dy;
                         keyframe.x = sprite.x;
                         keyframe.y = sprite.y;
-                        layer.focus.syncFocusPosition();
+                        myApp.model.syncReparentLayers(layer);
                         myApp.timeline.stagePlay = true;
                     } else {
                         // Move selected sprites
                         for (var i in myApp.model.selectedLayers) {
                             layer = myApp.model.selectedLayers[i];
+                            keyframe = myApp.model.getOrCreateKeyframe(layer);
                             sprite = layer.sprite
                             globalPos = sprites.mapFromItem(sprite.parent, sprite.x, sprite.y);
                             var newSpritePos = sprites.mapToItem(sprite.parent, globalPos.x + dx, globalPos.y + dy);
-                            if (model.recordsPositionX)
-                                sprite.x = newSpritePos.x
-                            if (model.recordsPositionY)
+                            if (model.recordsPositionX) {
+                                sprite.x = newSpritePos.x;
+                                keyframe.x = sprite.x;
+                            }
+                            if (model.recordsPositionY) {
                                 sprite.y = newSpritePos.y
-                            myApp.model.syncLayer(layer);
+                                keyframe.y = sprite.y;
+                            }
+                            myApp.model.syncReparentLayers(layer);
                             myApp.timeline.stagePlay = true;
                         }
                     }
@@ -125,7 +129,7 @@ Item {
                     // continue rotate
                     layer = myApp.model.selectedLayers[0];
                     sprite = layer.sprite
-                    keyframe = sprite.getCurrentKeyframe();
+                    var keyframe = sprite.getCurrentKeyframe();
                     globalPos = sprites.mapFromItem(sprite.parent, sprite.x + sprite.anchorX, sprite.y + sprite.anchorY);
                     var center = {x: globalPos.x, y: globalPos.y};
                     var aar = getAngleAndRadius(center, pos);
@@ -147,6 +151,7 @@ Item {
                             layer.sprite.transScaleX = keyframe.scale;
                             layer.sprite.transScaleY = keyframe.scale;
                         }
+                        myApp.model.syncReparentLayers(layer);
                         myApp.timeline.stagePlay = true;
                     }
                     currentAction.angle = aar.angle;
