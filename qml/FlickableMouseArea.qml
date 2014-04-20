@@ -34,6 +34,10 @@ MultiPointTouchArea {
             activeTouchPoint = tp1;
         else if (root.contains(Qt.point(tp2.x, tp2.y)))
             activeTouchPoint = tp2;
+
+        root.mouseX = activeTouchPoint.x
+        root.mouseY = activeTouchPoint.y
+        root.pressed = activeTouchPoint.pressed;
     }
 
     onUpdated: {
