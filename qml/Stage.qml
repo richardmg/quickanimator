@@ -129,16 +129,24 @@ Item {
                     globalPos = sprites.mapFromItem(sprite.parent, sprite.x + sprite.anchorX, sprite.y + sprite.anchorY);
                     var center = {x: globalPos.x, y: globalPos.y};
                     var aar = getAngleAndRadius(center, pos);
+
                     for (var i in myApp.model.selectedLayers) {
                         layer = myApp.model.selectedLayers[i];
-                        keyframe = layer.sprite.getKeyframe(myApp.model.time);
-                        if (myApp.model.recordsRotation)
-                            layer.sprite.transRotation += aar.angle - currentAction.angle;
-                        if (myApp.model.recordsScale) {
-                            layer.sprite.transScaleX *= aar.radius / currentAction.radius;
-                            layer.sprite.transScaleY = layer.sprite.transScaleX;
+                        keyframe = myApp.model.getOrCreateKeyframe(layer);
+                        if (myApp.model.recordsRotation) {
+                            var a = aar.angle - currentAction.angle;
+                            var b = a - 360;
+                            var c = a + 360;
+                            a = Math.abs(a) < Math.abs(b) ? a : b;
+                            a = Math.abs(a) < Math.abs(c) ? a : c;
+                            keyframe.rotation += a;
+                            layer.sprite.transRotation = keyframe.rotation;
                         }
-                        myApp.model.syncLayer(layer);
+                        if (myApp.model.recordsScale) {
+                            keyframe.scale *= aar.radius / currentAction.radius;
+                            layer.sprite.transScaleX = keyframe.scale;
+                            layer.sprite.transScaleY = keyframe.scale;
+                        }
                         myApp.timeline.stagePlay = true;
                     }
                     currentAction.angle = aar.angle;
