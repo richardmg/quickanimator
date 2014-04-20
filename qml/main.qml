@@ -26,6 +26,7 @@ ApplicationWindow {
             id: menu
             visible: false
             width: 300
+            z: 1
         }
 
         Stage {
@@ -68,11 +69,18 @@ ApplicationWindow {
     Component {
         id: stageSpriteComponent
         StageSprite {
+            id: stageSprite
             model: myApp.model
             property alias image: image;
             width: image.width
             height: image.height
-            Image { id: image }
+            Image {
+                id: image
+                onStatusChanged: {
+                    if (status === Image.Ready)
+                        stageSprite.resetSpriteAnchors();
+                }
+            }
         }
     }
 
