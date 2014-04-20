@@ -42,6 +42,10 @@ Rectangle {
             Button {
                 text: "Create keyframe"
             }
+            TimelineSprites {
+                width: root.width
+                height: 300
+            }
         }
     }
 }

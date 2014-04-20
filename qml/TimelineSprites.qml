@@ -7,7 +7,7 @@ Rectangle {
 
     property var _delegates: new Array()
 
-    color: myApp.style.dark
+    color: "white"//myApp.style.dark
 
     Connections {
         target: myApp.model
@@ -25,6 +25,8 @@ Rectangle {
             if (layer.sprite.parent !== null)
                 listModel.syncWithModel();
         }
+
+        onLayersUpdated: listModel.syncWithModel();
     }
 
     ListModel {
@@ -138,7 +140,7 @@ Rectangle {
                         currentDelegate.highlight = false;
                         currentDelegate.treeLabel.highlight = false;
 
-                        if (currentDelegate != delegate && (currentDelegate.index2 < index2 || currentDelegate.index2 > index3 )) {
+                        if (currentDelegate !== delegate && (currentDelegate.index2 < index2 || currentDelegate.index2 > index3 )) {
                             var mapped = area.mapToItem(listView, mouseX, mouseY)
                             var targetIndex = listView.indexAt(mapped.x, mapped.y);
                             var targetIsSibling = !insideLabel(mouseX, mouseY);
@@ -146,6 +148,9 @@ Rectangle {
                         }
 
                         currentDelegate = null;
+                    } else {
+                        // Move dragged item back in place
+                        listModel.syncWithModel();
                     }
                 }
             }
