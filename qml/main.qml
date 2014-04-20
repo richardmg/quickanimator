@@ -8,6 +8,7 @@ ApplicationWindow {
     visibility: Qt.WindowFullScreen
 
     property alias stage: stage
+    property alias menuButton: menuButton
 
     property Timeline timeline
     property Flickable timelineFlickable

@@ -11,7 +11,7 @@ Rectangle {
         id: webView
         onImageUrlChanged: {
             myApp.addImage(imageUrl)
-            root.visible = false
+            myApp.menuButton.checked = false;
         }
     }
 
