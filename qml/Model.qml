@@ -39,7 +39,7 @@ QtObject {
     {
         var changedSprite = parentLayer.sprite;
         for (var l in layers)
-            layers[l].sprite.synchReparentLayer(changedSprite);
+            layers[l].sprite.synchReparentKeyframe(changedSprite);
     }
 
     function getOrCreateKeyframe(layer)

@@ -23,8 +23,8 @@ Item {
 
     property real spriteTime: 0
 
-    property var _fromState
-    property var _toState
+    property var _fromKeyframe
+    property var _toKeyframe
     property bool _invalidCache: true
 
     objectName: "unknown sprite"
@@ -42,7 +42,7 @@ Item {
 
     function setTime(time)
     {
-        _updateToAndFromState(time);
+        _updateCurrentKeyframes(time);
         spriteTime = time;
         if (!myApp.model.inLiveDrag)
             _interpolate(spriteTime);
@@ -51,14 +51,14 @@ Item {
     function getKeyframe(time)
     {
         var intTime = Math.floor(time);
-        return (intTime >= _fromState.time && intTime < _toState.time)
+        return (intTime >= _fromKeyframe.time && intTime < _toKeyframe.time)
                 ? getCurrentKeyframe() : _getKeyframeBinarySearch(intTime);
     }
 
     function getCurrentKeyframe()
     {
-        _updateToAndFromState(spriteTime);
-        return _fromState;
+        _updateCurrentKeyframes(spriteTime);
+        return _fromKeyframe;
     }
 
     function addKeyframe(keyframe)
@@ -103,7 +103,7 @@ Item {
         var currentKeyframe = getCurrentKeyframe();
 
         if (keyframeParent === parent)
-            return _fromState.reparentKeyframe ? _fromState.reparentKeyframe : _fromState;
+            return _fromKeyframe.reparentKeyframe ? _fromKeyframe.reparentKeyframe : _fromKeyframe;
 
         var commonParent = myApp.stage.sprites;
 
@@ -144,26 +144,26 @@ Item {
         // Since changedSprite has changed, all descandant of it has changed as well (relative
         // to Stage, not parent). As such, we need to synch their keyframes left-side, so that
         // they end up with the geometry they now got upon reparenting.
-        _updateToAndFromState()
-        if (!_fromState.reparentKeyframe || _fromState.time !== changedSprite._fromState.time)
+        _updateCurrentKeyframes(spriteTime);
+        if (!_fromKeyframe.reparentKeyframe || _fromKeyframe.time !== changedSprite._fromKeyframe.time)
             return;
 
-        var p = getKeyframeParent(_fromState.volatileIndex - 1);
-        var translated = _createKeyframeRelativeToParent(_fromState.time, p);
-        _fromState.x = translated.x;
-        _fromState.y = translated.y;
-        _fromState.scale = translated.scale;
-        _fromState.rotation = translated.rotation;
+        var p = getKeyframeParent(_fromKeyframe.volatileIndex - 1);
+        var translated = _createKeyframeRelativeToParent(_fromKeyframe.time, p);
+        _fromKeyframe.x = translated.x;
+        _fromKeyframe.y = translated.y;
+        _fromKeyframe.scale = translated.scale;
+        _fromKeyframe.rotation = translated.rotation;
     }
 
     function _interpolate(time)
     {
-        var keyframe = _fromState.reparentKeyframe ? _fromState.reparentKeyframe : _fromState;
+        var keyframe = _fromKeyframe.reparentKeyframe ? _fromKeyframe.reparentKeyframe : _fromKeyframe;
         visible = keyframe.visible;
         if (!visible)
             return;
 
-        if (_toState.time === keyframe.time) {
+        if (_toKeyframe.time === keyframe.time) {
             x = keyframe.x;
             y = keyframe.y;
             anchorX = keyframe.anchorX;
@@ -174,43 +174,43 @@ Item {
         } else {
             var reparentKeyframeMs = keyframe.time * model.msPerFrame
             var advanceMs = (spriteTime * model.msPerFrame) - reparentKeyframeMs;
-            x = _interpolated(keyframe.x, _toState.x, advanceMs, "linear");
-            y = _interpolated(keyframe.y, _toState.y, advanceMs, "linear");
-            z = _interpolated(keyframe.z, _toState.z, advanceMs, "linear");
-            anchorX = _interpolated(keyframe.anchorX, _toState.anchorX, advanceMs, "linear");
-            anchorY = _interpolated(keyframe.anchorY, _toState.anchorY, advanceMs, "linear");
-            transScaleX = transScaleY = _interpolated(keyframe.scale, _toState.scale, advanceMs, "linear");
-            transRotation = _interpolated(keyframe.rotation, _toState.rotation, advanceMs, "linear");
-            opacity = _interpolated(keyframe.opacity, _toState.opacity, advanceMs, "linear");
+            x = _interpolated(keyframe.x, _toKeyframe.x, advanceMs, "linear");
+            y = _interpolated(keyframe.y, _toKeyframe.y, advanceMs, "linear");
+            z = _interpolated(keyframe.z, _toKeyframe.z, advanceMs, "linear");
+            anchorX = _interpolated(keyframe.anchorX, _toKeyframe.anchorX, advanceMs, "linear");
+            anchorY = _interpolated(keyframe.anchorY, _toKeyframe.anchorY, advanceMs, "linear");
+            transScaleX = transScaleY = _interpolated(keyframe.scale, _toKeyframe.scale, advanceMs, "linear");
+            transRotation = _interpolated(keyframe.rotation, _toKeyframe.rotation, advanceMs, "linear");
+            opacity = _interpolated(keyframe.opacity, _toKeyframe.opacity, advanceMs, "linear");
         }
     }
 
     function _interpolated(from, to, advanceMs, curve)
     {
         // Ignore curve for now:
-        var fromStateMs = _fromState.time * model.msPerFrame
-        var totalTimeBetweenStatesMs = (_toState.time * model.msPerFrame) - fromStateMs;
+        var fromStateMs = _fromKeyframe.time * model.msPerFrame
+        var totalTimeBetweenStatesMs = (_toKeyframe.time * model.msPerFrame) - fromStateMs;
         return from + (((to - from) / totalTimeBetweenStatesMs) * advanceMs);
     }
 
-    function _updateToAndFromState(time)
+    function _updateCurrentKeyframes(time)
     {
         var intTime = Math.floor(time);
-        _invalidCache = _invalidCache || !_fromState || !_toState || intTime < _fromState.time || intTime >= _toState.time;
+        _invalidCache = _invalidCache || !_fromKeyframe || !_toKeyframe || intTime < _fromKeyframe.time || intTime >= _toKeyframe.time;
         if (!_invalidCache)
             return;
 
         _invalidCache = false;
-        _fromState = _getKeyframeBinarySearch(intTime);
-        keyframeIndex = _fromState.volatileIndex;
+        _fromKeyframe = _getKeyframeBinarySearch(intTime);
+        keyframeIndex = _fromKeyframe.volatileIndex;
         if (keyframeIndex === keyframes.length - 1) {
-            _toState = _fromState;
+            _toKeyframe = _fromKeyframe;
         } else {
-            _toState = keyframes[keyframeIndex + 1];
-            _toState.volatileIndex = keyframeIndex + 1;
+            _toKeyframe = keyframes[keyframeIndex + 1];
+            _toKeyframe.volatileIndex = keyframeIndex + 1;
         }
 
-        var p = getKeyframeParent(_fromState.volatileIndex);
+        var p = getKeyframeParent(_fromKeyframe.volatileIndex);
         if (p.parent === sprite) {
             // Sprites cannot be children of each other
             p.parent = null;
