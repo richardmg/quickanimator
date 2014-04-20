@@ -103,7 +103,7 @@ Item {
         var currentKeyframe = getCurrentKeyframe();
 
         if (keyframeParent === parent)
-            return _fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState;
+            return _fromState.reparentKeyframe ? _fromState.reparentKeyframe : _fromState;
 
         var commonParent = myApp.stage.sprites;
 
@@ -145,7 +145,7 @@ Item {
         // to Stage, not parent). As such, we need to synch their keyframes left-side, so that
         // they end up with the geometry they now got upon reparenting.
         _updateToAndFromState()
-        if (!_fromState.effectiveKeyframe || _fromState.time !== changedSprite._fromState.time)
+        if (!_fromState.reparentKeyframe || _fromState.time !== changedSprite._fromState.time)
             return;
 
         var p = getKeyframeParent(_fromState.volatileIndex - 1);
@@ -158,30 +158,30 @@ Item {
 
     function _interpolate(time)
     {
-        var effectiveKeyframe = _fromState.effectiveKeyframe ? _fromState.effectiveKeyframe : _fromState;
-        visible = effectiveKeyframe.visible;
+        var keyframe = _fromState.reparentKeyframe ? _fromState.reparentKeyframe : _fromState;
+        visible = keyframe.visible;
         if (!visible)
             return;
 
-        if (_toState.time === effectiveKeyframe.time) {
-            x = effectiveKeyframe.x;
-            y = effectiveKeyframe.y;
-            anchorX = effectiveKeyframe.anchorX;
-            anchorY = effectiveKeyframe.anchorY;
-            transScaleX = transScaleY = effectiveKeyframe.scale;
-            transRotation = effectiveKeyframe.rotation;
-            opacity = effectiveKeyframe.opacity;
+        if (_toState.time === keyframe.time) {
+            x = keyframe.x;
+            y = keyframe.y;
+            anchorX = keyframe.anchorX;
+            anchorY = keyframe.anchorY;
+            transScaleX = transScaleY = keyframe.scale;
+            transRotation = keyframe.rotation;
+            opacity = keyframe.opacity;
         } else {
-            var effectiveKeyframeMs = effectiveKeyframe.time * model.msPerFrame
-            var advanceMs = (spriteTime * model.msPerFrame) - effectiveKeyframeMs;
-            x = _interpolated(effectiveKeyframe.x, _toState.x, advanceMs, "linear");
-            y = _interpolated(effectiveKeyframe.y, _toState.y, advanceMs, "linear");
-            z = _interpolated(effectiveKeyframe.z, _toState.z, advanceMs, "linear");
-            anchorX = _interpolated(effectiveKeyframe.anchorX, _toState.anchorX, advanceMs, "linear");
-            anchorY = _interpolated(effectiveKeyframe.anchorY, _toState.anchorY, advanceMs, "linear");
-            transScaleX = transScaleY = _interpolated(effectiveKeyframe.scale, _toState.scale, advanceMs, "linear");
-            transRotation = _interpolated(effectiveKeyframe.rotation, _toState.rotation, advanceMs, "linear");
-            opacity = _interpolated(effectiveKeyframe.opacity, _toState.opacity, advanceMs, "linear");
+            var reparentKeyframeMs = keyframe.time * model.msPerFrame
+            var advanceMs = (spriteTime * model.msPerFrame) - reparentKeyframeMs;
+            x = _interpolated(keyframe.x, _toState.x, advanceMs, "linear");
+            y = _interpolated(keyframe.y, _toState.y, advanceMs, "linear");
+            z = _interpolated(keyframe.z, _toState.z, advanceMs, "linear");
+            anchorX = _interpolated(keyframe.anchorX, _toState.anchorX, advanceMs, "linear");
+            anchorY = _interpolated(keyframe.anchorY, _toState.anchorY, advanceMs, "linear");
+            transScaleX = transScaleY = _interpolated(keyframe.scale, _toState.scale, advanceMs, "linear");
+            transRotation = _interpolated(keyframe.rotation, _toState.rotation, advanceMs, "linear");
+            opacity = _interpolated(keyframe.opacity, _toState.opacity, advanceMs, "linear");
         }
     }
 
@@ -221,9 +221,9 @@ Item {
     function getKeyframeParent(keyframeIndex)
     {
         for (var i = keyframeIndex; i >= 0; --i) {
-            var effectiveKeyframe = keyframes[i].effectiveKeyframe;
-            if (effectiveKeyframe) {
-                var p = effectiveKeyframe.parent;
+            var reparentKeyframe = keyframes[i].reparentKeyframe;
+            if (reparentKeyframe) {
+                var p = reparentKeyframe.parent;
                 break;
             }
         }
@@ -270,9 +270,9 @@ Item {
 
         var currentKeyframe = getCurrentKeyframe();
         if (getKeyframeParent(currentKeyframe.volatileIndex - 1) === newParent)
-            currentKeyframe.effectiveKeyframe = null;
+            currentKeyframe.reparentKeyframe = null;
         else
-            currentKeyframe.effectiveKeyframe = _createKeyframeRelativeToParent(currentKeyframe.time, newParent);
+            currentKeyframe.reparentKeyframe = _createKeyframeRelativeToParent(currentKeyframe.time, newParent);
 
         // Reparent sprite:
         parent = null;
