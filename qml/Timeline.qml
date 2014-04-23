@@ -10,10 +10,25 @@ Rectangle {
     property bool _timelinePlay: false
 
     focus: true
+    property double keyPressTime: 0
+
+    Keys.onPressed: {
+        if (event.key === Qt.Key_Space) {
+            if (keyPressTime === 0) {
+                keyPressTime = new Date().getTime()
+                _timelinePlay = !_timelinePlay;
+                updatePlayAnimation();
+            }
+        }
+    }
+
     Keys.onReleased: {
         if (event.key === Qt.Key_Space) {
-            _timelinePlay = !_timelinePlay
-            updatePlayAnimation();
+            if (keyPressTime + 300 < new Date().getTime()) {
+                _timelinePlay = !_timelinePlay
+                updatePlayAnimation();
+            }
+            keyPressTime = 0;
         }
     }
 
