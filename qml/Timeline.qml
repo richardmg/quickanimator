@@ -9,7 +9,19 @@ Rectangle {
     property bool stagePlay: false
     property bool _timelinePlay: false
 
-    Component.onCompleted: myApp.timeline = root
+    focus: true
+    Keys.onReleased: {
+        if (event.key === Qt.Key_Space) {
+            _timelinePlay = !_timelinePlay
+            updatePlayAnimation();
+        }
+    }
+
+    Component.onCompleted: {
+        myApp.timeline = root
+        forceActiveFocus()
+    }
+
     color: myApp.style.dark
 
     TimelineCanvas {

@@ -83,7 +83,7 @@ Item {
                     var dx = pos.x - currentAction.x;
                     var dy = pos.y - currentAction.y;
 
-                    if (mouse.modifiers & Qt.ControlModifier) {
+                    if (mouse.modifiers & Qt.ShiftModifier) {
                         // Move anchor
                         var layer = myApp.model.selectedLayers[0];
                         var sprite = layer.sprite
