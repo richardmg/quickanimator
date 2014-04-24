@@ -65,14 +65,6 @@ Rectangle {
             }
 
             ctx.font = "15px Arial";
-            if (myApp.timeline.playing)
-                ctx.fillStyle = "orange"
-            else if (myApp.stage.autoPlay)
-                ctx.fillStyle = "orange"
-            else
-                ctx.fillStyle = myApp.style.timelineline;
-            ctx.fillRect(width / 2, 0, 2, parent.height);
-
             ctx.fillStyle = myApp.style.timelineline;
             var timeBetweenTickmarks = 30; // sec = (30 / myApp.model.msPerFrame)
             var halfTickCount = Math.ceil(width / (2 * cellWidth * timeBetweenTickmarks));
@@ -95,6 +87,14 @@ Rectangle {
                 var label = hours + ":" + minutes + ":" + seconds;
                 ctx.fillText(label, posX + 5, parent.height - 2);
             }
+
+            if (myApp.timeline.playing)
+                ctx.fillStyle = "orange"
+            else if (myApp.stage.autoPlay)
+                ctx.fillStyle = "orange"
+            else
+                ctx.fillStyle = myApp.style.timelineline;
+            ctx.fillRect(width / 2, 0, 2, parent.height);
 
             ctx.stroke();
         }

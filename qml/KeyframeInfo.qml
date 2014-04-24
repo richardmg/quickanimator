@@ -25,20 +25,31 @@ Rectangle {
         Column {
             width: childrenRect.width
             height: childrenRect.height
+            spacing: 2
             Button {
                 id: googleButton
                 text: "Google image search"
                 onClicked: webView.search();
             }
 
-            RowLayout {
+            Rectangle {
                 width: parent.width
-                Label {
-                    text: "Autoplay"
+                height: 40
+                RowLayout {
+                    anchors.fill:parent
+                    anchors.margins: 10
+                    Label {
+                        text: "Autoplay"
+                    }
+                    Switch {
+                        id: autoPlayButton
+                        onCheckedChanged: myApp.stage.autoPlay = checked;
+                        Layout.alignment: Qt.AlignRight
+                    }
                 }
-                Switch {
-                    id: autoPlayButton
-                    onCheckedChanged: myApp.stage.autoPlay = checked;
+                MouseArea{
+                    anchors.fill: parent
+                    onReleased: autoPlayButton.checked = !autoPlayButton.checked
                 }
             }
 
