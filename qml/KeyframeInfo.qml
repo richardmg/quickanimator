@@ -1,6 +1,7 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
+import QtQuick.Controls 1.1
 import WebView 1.0
 
 Rectangle {
@@ -26,6 +27,17 @@ Rectangle {
                 text: "Google image search"
                 onClicked: webView.search();
             }
+
+            RowLayout {
+                width: parent.width
+                Label {
+                    text: "Autoplay"
+                }
+                Switch {
+                    onCheckedChanged: myApp.stage.autoPlay = checked;
+                }
+            }
+
             Button {
                 text: "Play on press"
                 onClicked: webView.search();

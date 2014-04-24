@@ -18,6 +18,30 @@ ApplicationWindow {
     property Style style: Style {}
     property Model model: Model {}
 
+
+    FocusScope {
+        focus: true
+        Component.onCompleted: forceActiveFocus()
+        property double keyPressTime: 0
+
+        Keys.onPressed: {
+            if (event.key === Qt.Key_Space) {
+                if (keyPressTime === 0) {
+                    keyPressTime = new Date().getTime()
+                    timeline.userPlay = !timeline.userPlay;
+                }
+            }
+        }
+
+        Keys.onReleased: {
+            if (event.key === Qt.Key_Space) {
+                if (keyPressTime + 200 < new Date().getTime())
+                    timeline.userPlay = !timeline.userPlay;
+                keyPressTime = 0;
+            }
+        }
+    }
+
     SplitView {
         width: parent.width
         anchors.top: parent.top

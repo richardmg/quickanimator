@@ -4,37 +4,13 @@ import QtQuick.Controls 1.0
 Rectangle {
     id: root
 
-    readonly property bool playing: _timelinePlay || stagePlay;
+    readonly property bool playing: userPlay || stagePlay;
 
     property bool stagePlay: false
-    property bool _timelinePlay: false
-
-    focus: true
-    property double keyPressTime: 0
-
-    Keys.onPressed: {
-        if (event.key === Qt.Key_Space) {
-            if (keyPressTime === 0) {
-                keyPressTime = new Date().getTime()
-                _timelinePlay = !_timelinePlay;
-                updatePlayAnimation();
-            }
-        }
-    }
-
-    Keys.onReleased: {
-        if (event.key === Qt.Key_Space) {
-            if (keyPressTime + 300 < new Date().getTime()) {
-                _timelinePlay = !_timelinePlay
-                updatePlayAnimation();
-            }
-            keyPressTime = 0;
-        }
-    }
+    property bool userPlay: false
 
     Component.onCompleted: {
         myApp.timeline = root
-        forceActiveFocus()
     }
 
     color: myApp.style.dark
@@ -52,11 +28,7 @@ Rectangle {
         momentumRestX: playing ? -1 : 0
         onFlickingChanged: updatePlayAnimation();
         onMomentumXChanged: myApp.model.setTime(myApp.model.time + (-momentumX * 20 / myApp.model.msPerFrame));
-
-        onClicked: {
-            _timelinePlay = !_timelinePlay;
-            updatePlayAnimation();
-        }
+        onClicked: userPlay = !userPlay;
     }
 
     onPlayingChanged: updatePlayAnimation();

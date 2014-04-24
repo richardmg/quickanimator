@@ -18,6 +18,11 @@ Rectangle {
         onPlayingChanged: canvas.requestPaint()
     }
 
+    Connections {
+        target: myApp.stage
+        onAutoPlayChanged: canvas.requestPaint()
+    }
+
     color: myApp.style.dark
 
     Canvas {
@@ -60,7 +65,12 @@ Rectangle {
             }
 
             ctx.font = "15px Arial";
-            ctx.fillStyle = myApp.timeline.playing ? "orange" : myApp.style.timelineline;
+            if (myApp.timeline.playing)
+                ctx.fillStyle = "orange"
+            else if (myApp.stage.autoPlay)
+                ctx.fillStyle = "orange"
+            else
+                ctx.fillStyle = myApp.style.timelineline;
             ctx.fillRect(width / 2, 0, 2, parent.height);
 
             ctx.fillStyle = myApp.style.timelineline;
