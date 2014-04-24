@@ -30,13 +30,15 @@ ApplicationWindow {
                     keyPressTime = new Date().getTime()
                     timeline.userPlay = !timeline.userPlay;
                 }
-            } else if (event.modifiers === Qt.ControlModifier) {
+            } else if (event.modifiers & Qt.ControlModifier) {
                 if (event.key === Qt.Key_M)
                     menuButton.checked = !menuButton.checked;
                 else if (event.key === Qt.Key_A)
                     menu.autoPlayButton.checked = !menu.autoPlayButton.checked;
                 else if (event.key === Qt.Key_G)
                     menu.googleButton.clicked();
+                else if (event.key === Qt.Key_Left)
+                    model.setTime(0);
             }
         }
 
