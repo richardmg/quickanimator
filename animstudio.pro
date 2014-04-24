@@ -20,7 +20,8 @@ OTHER_FILES += qml/*.qml \
     qml/ControlPanelSubMenu.qml \
     qml/ControlPanel.qml \
     qml/RecordButton.qml \
-    qml/MenuButton.qml
+    qml/MenuButton.qml \
+    TODO.txt
 
 qml.files = $$PWD/qml
 osx: qml.path = ./Contents/Resources

@@ -1,0 +1,10 @@
+- Refactor Flickable out of TimeLineSprites, and put the items directly into the menu
+- Implement all buttons
+- Add undo button
+- Fix iOS WebView
+- Long-press on web view follows link
+- Show transparent image suggestions
+- create cast / be able to copy images / load from other movies
+- Save movie as QML
+- Save as H.264
+- Upload to youtube
