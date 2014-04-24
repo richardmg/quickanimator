@@ -4,8 +4,6 @@ import QtQuick.Controls.Styles 1.1
 
 Rectangle {
     id: root
-    width: 90
-    height: 67
     color: myApp.style.dark
 
     property bool pressed: false

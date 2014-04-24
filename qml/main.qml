@@ -53,7 +53,7 @@ ApplicationWindow {
     SplitView {
         width: parent.width
         anchors.top: parent.top
-        anchors.bottom: timeline.top
+        anchors.bottom: bottomMenu.top
 
         KeyframeInfo {
             id: menu
@@ -68,34 +68,45 @@ ApplicationWindow {
         }
     }
 
-    MultiTouchButton {
-        id: menuButton
+    RowLayout {
+        id: bottomMenu
+        width: parent.width
+        height: 50
         anchors.bottom: parent.bottom
-        height: timeline.height
-        checkable: true
-        onCheckedChanged: menu.visible = checked;
+        spacing: 0
 
         Rectangle {
-            width: 1
+            width: 2
             height: parent.height
-            anchors.right: parent.right
-            color: myApp.style.timelineline
+            color: myApp.style.dark
         }
-    }
 
-    Timeline {
-        id: timeline
-        anchors.bottom: parent.bottom
-        anchors.left: menuButton.right
-        anchors.right: parent.right
-        height: 50
+        MultiTouchButton {
+            id: menuButton
+            width: 90
+            height: parent.height
+            checkable: true
+            onCheckedChanged: menu.visible = checked;
+            color: menuButton.checked ? "white" : myApp.style.dark
+        }
 
-        FlickableMouseArea {
-            id: msPerFrameFlickView
-            anchors.fill: parent
-            enabled: false
-            onMomentumXChanged: myApp.model.msPerFrame = Math.max(16, myApp.model.msPerFrame - momentumX);
-            Component.onCompleted: myApp.msPerFrameFlickable = msPerFrameFlickView
+        Rectangle {
+            width: 2
+            height: parent.height
+            color: menuButton.checked ? "white" : myApp.style.timelineline
+        }
+
+        Timeline {
+            id: timeline
+            height: parent.height
+            Layout.fillWidth: true
+            FlickableMouseArea {
+                id: msPerFrameFlickView
+                anchors.fill: parent
+                enabled: false
+                onMomentumXChanged: myApp.model.msPerFrame = Math.max(16, myApp.model.msPerFrame - momentumX);
+                Component.onCompleted: myApp.msPerFrameFlickable = msPerFrameFlickView
+            }
         }
     }
 
