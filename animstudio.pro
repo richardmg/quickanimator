@@ -19,7 +19,8 @@ OTHER_FILES += qml/*.qml \
     qml/MultiTouchButton.qml \
     qml/ControlPanelSubMenu.qml \
     qml/ControlPanel.qml \
-    qml/RecordButton.qml
+    qml/RecordButton.qml \
+    qml/MenuButton.qml
 
 qml.files = $$PWD/qml
 osx: qml.path = ./Contents/Resources

@@ -18,7 +18,6 @@ ApplicationWindow {
     property Style style: Style {}
     property Model model: Model {}
 
-
     FocusScope {
         focus: true
         Component.onCompleted: forceActiveFocus()

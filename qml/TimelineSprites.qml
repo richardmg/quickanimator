@@ -7,7 +7,7 @@ Rectangle {
 
     property var _delegates: new Array()
 
-    color: "white"//myApp.style.dark
+    color: "white"
 
     Connections {
         target: myApp.model
@@ -46,6 +46,7 @@ Rectangle {
     ListView {
         id: listView
         anchors.fill: parent
+        anchors.margins: 2
         flickableDirection: Flickable.HorizontalAndVerticalFlick
         model: listModel
         Component.onCompleted: myApp.layerTreeFlickable = listView
