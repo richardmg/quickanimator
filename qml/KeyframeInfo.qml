@@ -7,6 +7,8 @@ import WebView 1.0
 Rectangle {
     id: root
     color: myApp.style.dark
+    property alias autoPlayButton: autoPlayButton
+    property alias googleButton: googleButton
 
     WebView {
         id: webView
@@ -24,6 +26,7 @@ Rectangle {
             width: childrenRect.width
             height: childrenRect.height
             Button {
+                id: googleButton
                 text: "Google image search"
                 onClicked: webView.search();
             }
@@ -34,14 +37,11 @@ Rectangle {
                     text: "Autoplay"
                 }
                 Switch {
+                    id: autoPlayButton
                     onCheckedChanged: myApp.stage.autoPlay = checked;
                 }
             }
 
-            Button {
-                text: "Play on press"
-                onClicked: webView.search();
-            }
             Button {
                 text: "Visible"
             }
