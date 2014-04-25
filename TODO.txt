@@ -1,5 +1,6 @@
 Bugs:
 - reparenting jumps during playback
+- change layer z order does not work
 - force keyfocus back after googling
 
 Backlog:
