@@ -1,3 +1,7 @@
+Bugs:
+- reparenting jumps during playback
+
+Backlog:
 - Refactor Flickable out of TimeLineSprites, and put the items directly into the menu
 - Implement all buttons
 - Add undo button
@@ -6,7 +10,11 @@
 - pinch-gesture on timeline to zoom
 - autoplay "on" color should match timline marker
 - Show transparent image suggestions
+- Save movie to device (as QML)
+- Save movie to cloud
+- Load movie from disk
+- Load movie from cloud
 - create cast / be able to copy images / load from other movies
-- Save movie as QML
+- open movie as cast member
 - Save as H.264
 - Upload to youtube
