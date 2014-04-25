@@ -48,35 +48,67 @@ Rectangle {
             }
 
             MenuButton {
-                text: "   Align"
+                text: "Align"
                 checkable: true
-                height: drawMode.checked ? implicitHeight : 0
-                visible: height !== 0
-                Behavior on height { NumberAnimation { duration: 100 } }
+                parentMenuButton: drawMode
+            }
+
+            MenuButton {
+                id: keyframeButton
+                text: "Keyframe"
+                checkable: true
             }
 
             MenuButton {
                 text: "Delete keyframe"
+                parentMenuButton: keyframeButton
             }
 
             MenuButton {
                 text: "Create keyframe"
+                parentMenuButton: keyframeButton
             }
 
-            Rectangle {
-                width: parent.width
-                height: space
-                color: "transparent"
+            MenuButton {
+                text: "x"
+                parentMenuButton: keyframeButton
+            }
+
+            MenuButton {
+                text: "y"
+                parentMenuButton: keyframeButton
+            }
+
+            MenuButton {
+                text: "width"
+                parentMenuButton: keyframeButton
+            }
+
+            MenuButton {
+                text: "height"
+                parentMenuButton: keyframeButton
+            }
+
+            MenuButton {
+                text: "scale"
+                parentMenuButton: keyframeButton
+            }
+
+            MenuButton {
+                text: "rotation"
+                parentMenuButton: keyframeButton
             }
 
             MenuButton {
                 text: "Visible"
                 checkable: true
+                parentMenuButton: keyframeButton
             }
 
             MenuButton {
                 text: "Opacity"
                 checkable: true
+                parentMenuButton: keyframeButton
             }
 
             Rectangle {

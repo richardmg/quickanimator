@@ -4,24 +4,29 @@ import QtQuick.Controls 1.1
 
 Rectangle {
     id: root
-    width: parent.width
-    implicitHeight: 40
 
     property string text: ""
     property bool checkable: false
     property bool checked: false
     property real contentOpacity: 1
+    property Item parentMenuButton: null
+
     signal clicked
+
+    width: parent.width
+    height: !parentMenuButton || parentMenuButton.checked ? 40 : 0
+    visible: height !== 0
+    Behavior on height { NumberAnimation { duration: 100 } }
 
     onCheckedChanged: buttonSwitch.checked = checked;
 
     RowLayout {
         x: 10
         width: parent.width - (x * 2)
-        height: root.implicitHeight
+        height: root.height
 
         Label {
-            text: root.text
+            text: (parentMenuButton ? "   " : "") + root.text
             opacity: contentOpacity
         }
 
