@@ -55,7 +55,7 @@ ApplicationWindow {
         anchors.top: parent.top
         anchors.bottom: bottomMenu.top
 
-        KeyframeInfo {
+        TimelineMenu {
             id: menu
             visible: false
             width: 300
