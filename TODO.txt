@@ -1,5 +1,6 @@
 Bugs:
 - reparenting jumps during playback
+- force keyfocus back after googling
 
 Backlog:
 - Refactor Flickable out of TimeLineSprites, and put the items directly into the menu
@@ -10,11 +11,13 @@ Backlog:
 - pinch-gesture on timeline to zoom
 - autoplay "on" color should match timline marker
 - Show transparent image suggestions
+- Quick image copy (like when stenciling train rails etc)
 - Save movie to device (as QML)
 - Save movie to cloud
 - Load movie from disk
 - Load movie from cloud
-- create cast / be able to copy images / load from other movies
+- create cast
+- load cast members from other movies
 - open movie as cast member
 - Save as H.264
 - Upload to youtube
