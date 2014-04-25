@@ -25,6 +25,7 @@ Rectangle {
         contentHeight: 1000
 
         ColumnLayout {
+            id: layout
             anchors.fill: parent
             spacing: 2
             MenuButton {
@@ -38,6 +39,18 @@ Rectangle {
                 text: "Auto play"
                 checkable: true
                 onCheckedChanged: myApp.stage.autoPlay = checked;
+            }
+
+            MenuButton {
+                id: drawMode
+                text: "Draw mode"
+                checkable: true
+            }
+
+            MenuButton {
+                text: "   Align"
+                checkable: true
+                visible: drawMode.checked
             }
 
             MenuButton {
