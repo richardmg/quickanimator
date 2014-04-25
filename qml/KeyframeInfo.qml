@@ -24,7 +24,7 @@ Rectangle {
         anchors.margins: 2
         contentHeight: 1000
 
-        ColumnLayout {
+        Column {
             id: layout
             anchors.fill: parent
             spacing: 2
@@ -50,7 +50,9 @@ Rectangle {
             MenuButton {
                 text: "   Align"
                 checkable: true
-                visible: drawMode.checked
+                height: drawMode.checked ? implicitHeight : 0
+                visible: height !== 0
+                Behavior on height { NumberAnimation { duration: 100 } }
             }
 
             MenuButton {
