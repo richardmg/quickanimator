@@ -87,7 +87,20 @@ Rectangle {
 
             TimelineSprites {
                 width: parent.width
+                height: 400
                 Layout.fillHeight: true
+            }
+
+            Rectangle {
+                width: parent.width
+                height: space
+                color: "transparent"
+            }
+
+            Rectangle {
+                width: parent.width
+                height: root.height
+                color: "white"
             }
         }
     }
