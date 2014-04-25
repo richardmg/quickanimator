@@ -9,6 +9,8 @@ Backlog:
 - Add undo button
 - Fix iOS WebView
 - Long-press on web view follows link
+- draggable stage / move origo (show up in timelinesprites?)
+- disable layer / focus on layer ignoring parent geometry changes
 - pinch-gesture on timeline to zoom
 - autoplay "on" color should match timline marker
 - Show transparent image suggestions

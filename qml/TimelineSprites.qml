@@ -4,10 +4,11 @@ import QtQuick.Controls 1.0
 Rectangle {
     property alias flickable: listView
     property alias model: listModel
+    implicitHeight: (listModel.count * 42) - (listModel.count !== 0 ? 2 : 0)
 
     property var _delegates: new Array()
 
-    color: "white"
+    color: myApp.style.dark
 
     Connections {
         target: myApp.model
@@ -31,6 +32,11 @@ Rectangle {
 
     ListModel {
         id: listModel
+
+//        ListElement {}
+//        ListElement {}
+//        ListElement {}
+
         function syncWithModel()
         {
             listView.model = null;
@@ -46,48 +52,38 @@ Rectangle {
     ListView {
         id: listView
         anchors.fill: parent
-        anchors.margins: 2
-        flickableDirection: Flickable.HorizontalAndVerticalFlick
+        flickableDirection: Flickable.HorizontalFlick
         model: listModel
         Component.onCompleted: myApp.layerTreeFlickable = listView
 
         delegate: Item {
             id: delegate
             width: parent.width
-            height: myApp.style.cellHeight
+            height: 42
+
             Component.onCompleted: {
                 _delegates.push(delegate);
                 if (myApp.model.selectedLayers.indexOf(modelLayer) != -1)
                     treeLabel.highlight = true;
             }
 
-            property int margin: 2
+            property int margin: 10
             property alias treeLabel: treeLabel
             property bool highlight: false
             property int index2: index
             property var modelLayer: myApp.model.layers[index]
 
             Rectangle {
-                height: highlight ? 3 : 1
-                width: parent.width
-                color: highlight ? myApp.style.labelHighlight : myApp.style.timelineline
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: margin
-            }
-
-            Rectangle {
                 id: treeLabel
                 property bool highlight: false
-                color: highlight ? myApp.style.labelHighlight : myApp.style.label
-                x: margin + (myApp.model.getLayerIndentLevel(modelLayer) * 15)
-                height: parent.height - 5
-                width: label.width + 20
-                radius: 3
+                color: highlight ? "orange" : "white"
+                height: 40
+                width: parent.width
                 Label {
                     id: label
-                    x: 10
+                    x: margin + (myApp.model.getLayerIndentLevel(modelLayer) * 15)
                     anchors.verticalCenter: parent.verticalCenter
-                    text: modelLayer ? modelLayer.sprite.objectName : ""
+                    text: modelLayer ? modelLayer.sprite.objectName : "<unknown>"
                 }
             }
 
