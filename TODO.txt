@@ -13,6 +13,7 @@ Backlog:
 - support keyframes without interpolating / select curve / no curve
 - support goto
 - support javascripting in keyframe
+- support for adding text
 - disable layer / focus on layer ignoring parent geometry changes
 - pinch-gesture on timeline to zoom
 - autoplay "on" color should match timline marker
@@ -25,5 +26,7 @@ Backlog:
 - create cast
 - load cast members from other movies
 - open movie as cast member
+- support for recording audio
+- rip music from youtube video
 - Save as H.264
 - Upload to youtube
