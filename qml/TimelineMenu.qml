@@ -111,6 +111,13 @@ Rectangle {
                 parentMenuButton: keyframeButton
             }
 
+            MenuButton {
+                text: "Interpolate"
+                checkable: true
+                checked: true
+                parentMenuButton: keyframeButton
+            }
+
             Rectangle {
                 width: parent.width
                 height: space
