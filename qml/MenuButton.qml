@@ -13,6 +13,7 @@ Rectangle {
 
     signal clicked
 
+    color: parentMenuButton ? "#e8e8e8" : "white"
     width: parent.width
     height: !parentMenuButton || parentMenuButton.checked ? 40 : 0
     visible: height !== 0
