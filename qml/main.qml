@@ -31,7 +31,7 @@ ApplicationWindow {
                 }
             } else if (event.modifiers & Qt.ControlModifier) {
                 if (event.key === Qt.Key_M)
-                    menuButton.checked = !menuButton.checked;
+                    menu.visible = !menu.visible
                 else if (event.key === Qt.Key_A)
                     menu.interactionPlayButton.checked = !menu.interactionPlayButton.checked;
                 else if (event.key === Qt.Key_G)
@@ -53,8 +53,6 @@ ApplicationWindow {
     SplitView {
         width: parent.width
         height: parent.height
-        anchors.top: parent.top
-        anchors.bottom: bottomMenu.top
 
         TimelineMenu {
             id: menu
@@ -64,35 +62,37 @@ ApplicationWindow {
             z: 1
         }
 
-        Stage {
-            id: stage
-            Layout.fillWidth: true
-        }
-    }
+        Column {
+            Stage {
+                id: stage
+                width: parent.width
+                height: parent.height - bottomMenu.height
+            }
 
-    RowLayout {
-        id: bottomMenu
-        width: parent.width
-        height: 50
-        anchors.bottom: parent.bottom
-        spacing: 0
+            RowLayout {
+                id: bottomMenu
+                width: parent.width
+                height: 50
+                spacing: 0
 
-        MultiTouchButton {
-            id: menuButton
-            checkable: true
-            onCheckedChanged: menu.visible = checked;
-        }
+                MultiTouchButton {
+                    id: menuButton
+                    visible: !menu.visible
+                    onClicked: menu.visible = true;
+                }
 
-        Timeline {
-            id: timeline
-            height: parent.height
-            Layout.fillWidth: true
-            FlickableMouseArea {
-                id: msPerFrameFlickView
-                anchors.fill: parent
-                enabled: false
-                onMomentumXChanged: myApp.model.msPerFrame = Math.max(16, myApp.model.msPerFrame - momentumX);
-                Component.onCompleted: myApp.msPerFrameFlickable = msPerFrameFlickView
+                Timeline {
+                    id: timeline
+                    height: parent.height
+                    Layout.fillWidth: true
+                    FlickableMouseArea {
+                        id: msPerFrameFlickView
+                        anchors.fill: parent
+                        enabled: false
+                        onMomentumXChanged: myApp.model.msPerFrame = Math.max(16, myApp.model.msPerFrame - momentumX);
+                        Component.onCompleted: myApp.msPerFrameFlickable = msPerFrameFlickView
+                    }
+                }
             }
         }
     }

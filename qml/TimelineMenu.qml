@@ -202,5 +202,20 @@ Rectangle {
                 color: "white"
             }
         }
+
     }
+    MultiTouchButton {
+        id: menuButton
+        height: 50
+        width: parent.width - 2
+        anchors.bottom: parent.bottom
+        onClicked: root.visible = false
+        flat: true
+    }
+//        Rectangle {
+//            width: 100
+//            height: 100
+//            color: "red"
+//        }
+
 }
