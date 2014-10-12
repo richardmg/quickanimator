@@ -20,7 +20,7 @@ Rectangle {
 
     Connections {
         target: myApp.stage
-        onAutoPlayChanged: canvas.requestPaint()
+        onTimelinePlayChanged: canvas.requestPaint()
     }
 
     color: myApp.style.dark

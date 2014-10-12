@@ -10,7 +10,7 @@ Item {
     property var pressStartPos: undefined
     property var currentAction: new Object()
     property bool timelineWasPlaying: false
-    property bool autoPlay: false
+    property bool timelinePlay: false
 
     Rectangle {
         id: sprites
@@ -102,7 +102,7 @@ Item {
                         keyframe.x = sprite.x;
                         keyframe.y = sprite.y;
                         myApp.model.syncReparentLayers(layer);
-                        if (autoPlay)
+                        if (timelinePlay)
                             myApp.timeline.stagePlay = true;
                     } else {
                         // Move selected sprites
@@ -121,7 +121,7 @@ Item {
                                 keyframe.y = sprite.y;
                             }
                             myApp.model.syncReparentLayers(layer);
-                            if (autoPlay)
+                            if (timelinePlay)
                                 myApp.timeline.stagePlay = true;
                         }
                     }
@@ -155,7 +155,7 @@ Item {
                             layer.sprite.transScaleY = keyframe.scale;
                         }
                         myApp.model.syncReparentLayers(layer);
-                        if (autoPlay)
+                        if (timelinePlay)
                             myApp.timeline.stagePlay = true;
                     }
                     currentAction.angle = aar.angle;

@@ -16,12 +16,13 @@ OBJECTIVE_SOURCES += \
     webview.mm
 
 OTHER_FILES += qml/*.qml \
+    TODO.txt \
     qml/MultiTouchButton.qml \
     qml/ControlPanelSubMenu.qml \
     qml/ControlPanel.qml \
     qml/RecordButton.qml \
     qml/MenuButton.qml \
-    TODO.txt
+    qml/RadioButtonGroup.qml
 
 qml.files = $$PWD/qml
 osx: qml.path = ./Contents/Resources

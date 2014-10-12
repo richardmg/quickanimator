@@ -10,6 +10,7 @@ Rectangle {
     property bool checked: false
     property real contentOpacity: 1
     property Item parentMenuButton: null
+    property QtObject radioButtonGroup: null
 
     signal clicked
 
@@ -20,6 +21,11 @@ Rectangle {
     Behavior on height { NumberAnimation { duration: 100 } }
 
     onCheckedChanged: buttonSwitch.checked = checked;
+
+    Component.onCompleted: {
+        if (radioButtonGroup)
+            radioButtonGroup.addItem(root)
+    }
 
     RowLayout {
         x: 10

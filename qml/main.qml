@@ -33,7 +33,7 @@ ApplicationWindow {
                 if (event.key === Qt.Key_M)
                     menuButton.checked = !menuButton.checked;
                 else if (event.key === Qt.Key_A)
-                    menu.autoPlayButton.checked = !menu.autoPlayButton.checked;
+                    menu.interactionPlayButton.checked = !menu.interactionPlayButton.checked;
                 else if (event.key === Qt.Key_G)
                     menu.googleButton.clicked();
                 else if (event.key === Qt.Key_Left)

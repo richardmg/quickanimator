@@ -6,7 +6,7 @@ import WebView 1.0
 Rectangle {
     id: root
     color: myApp.style.dark
-    property alias autoPlayButton: autoPlayButton
+    property alias interactionPlayButton: interactionPlayButton
     property alias googleButton: googleButton
 
     readonly property int space: 6
@@ -17,6 +17,10 @@ Rectangle {
             myApp.addImage(imageUrl)
             myApp.menuButton.checked = false;
         }
+    }
+
+    RadioButtonGroup {
+        id: timelineGroup
     }
 
     Flickable {
@@ -35,10 +39,37 @@ Rectangle {
             }
 
             MenuButton {
-                id: autoPlayButton
-                text: "Auto play"
+                id: timelineModeButton
+                text: "Timeline mode"
                 checkable: true
-                onCheckedChanged: myApp.stage.autoPlay = checked;
+            }
+
+            MenuButton {
+                id: continuousPlayButton
+                text: "Continuous play"
+                checkable: true
+                checked: true
+                onCheckedChanged: myApp.stage.timelinePlay = checked;
+                parentMenuButton: timelineModeButton
+                radioButtonGroup: timelineGroup
+            }
+
+            MenuButton {
+                id: interactionPlayButton
+                text: "Interaction play"
+                checkable: true
+                onCheckedChanged: myApp.stage.timelinePlay = checked;
+                parentMenuButton: timelineModeButton
+                radioButtonGroup: timelineGroup
+            }
+
+            MenuButton {
+                id: clearFramesButton
+                text: "Clear frames"
+                checkable: true
+//                onCheckedChanged: myApp.stage.autoPlay = checked;
+                parentMenuButton: timelineModeButton
+                radioButtonGroup: timelineGroup
             }
 
             MenuButton {
