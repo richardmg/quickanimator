@@ -15,7 +15,7 @@ Item {
     Rectangle {
         id: sprites
         anchors.fill: parent
-        gradient: myApp.style.stageGradient
+        color: "white"
         objectName: "stage"
     }
 
