@@ -13,7 +13,7 @@ Rectangle {
         myApp.timeline = root
     }
 
-    color: myApp.style.dark
+    color: "white"
 
     TimelineCanvas {
         anchors.fill: parent

@@ -52,6 +52,7 @@ ApplicationWindow {
 
     SplitView {
         width: parent.width
+        height: parent.height
         anchors.top: parent.top
         anchors.bottom: bottomMenu.top
 
@@ -59,6 +60,7 @@ ApplicationWindow {
             id: menu
             visible: false
             width: 250
+            height: parent.height
             z: 1
         }
 
@@ -74,12 +76,6 @@ ApplicationWindow {
         height: 50
         anchors.bottom: parent.bottom
         spacing: 0
-
-        Rectangle {
-            width: 2
-            height: parent.height
-            color: myApp.style.dark
-        }
 
         MultiTouchButton {
             id: menuButton

@@ -4,7 +4,7 @@ import QtQuick.Controls.Styles 1.1
 
 Rectangle {
     id: root
-    color: root.checked || root.pressed ? "white" : myApp.style.dark
+    color: "white"
 
     property bool pressed: false
     property bool checked: false
@@ -62,7 +62,7 @@ Rectangle {
             anchors.right: parent.right
             width: 2
             height: root.height
-            color: root.checked || root.pressed ? "white" : myApp.style.timelineline
+            color: myApp.style.timelineline
         }
     }
 }

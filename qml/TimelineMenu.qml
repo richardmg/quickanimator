@@ -23,7 +23,9 @@ Rectangle {
 
     Flickable {
         anchors.fill: parent
-        anchors.margins: 2
+        anchors.topMargin: 2
+        anchors.rightMargin: 2
+        anchors.bottomMargin: 2
         contentHeight: 1000
 
         Column {

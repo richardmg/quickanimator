@@ -24,7 +24,7 @@ Rectangle {
         onTimelinePlayChanged: canvas.requestPaint()
     }
 
-    color: myApp.style.dark
+    color: "white"
 
     Canvas {
         id: canvas
