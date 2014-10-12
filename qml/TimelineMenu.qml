@@ -1,6 +1,7 @@
 import QtQuick 2.1
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 1.1
+import QtQuick.Controls.Styles 1.2
 import WebView 1.0
 
 Rectangle {
@@ -20,10 +21,6 @@ Rectangle {
         }
     }
 
-    RadioButtonGroup {
-        id: timelineGroup
-    }
-
     Flickable {
         anchors.fill: parent
         anchors.margins: 2
@@ -39,28 +36,17 @@ Rectangle {
                 onClicked: webView.search();
             }
 
-            MenuButton {
-                id: timelineModeButton
-                text: "Timeline"
-                checkable: true
-            }
-
-            MenuButton {
-                id: continuousPlayButton
-                text: "Continuous play"
-                checkable: true
-                checked: true
-                parentMenuButton: timelineModeButton
-                radioButtonGroup: timelineGroup
+            Rectangle {
+                width: parent.width
+                height: space
+                color: "transparent"
             }
 
             MenuButton {
                 id: interactionPlayButton
-                text: "Interaction play"
+                text: "Auto-record on move"
                 checkable: true
                 onCheckedChanged: myApp.stage.timelinePlay = checked;
-                parentMenuButton: timelineModeButton
-                radioButtonGroup: timelineGroup
             }
 
             MenuButton {
@@ -158,7 +144,40 @@ Rectangle {
 
             MenuButton {
                 id: trashcanButton
-                text: "Trashcan"
+                text: "Cut"
+            }
+
+            Rectangle {
+                width: parent.width
+                height: space
+                color: "transparent"
+            }
+
+            Slider {
+                id: speedSlider
+                width: parent.width
+                height: 40
+                value: 0.5
+                style: SliderStyle {
+                    groove: Rectangle {
+                        color:"white"
+                        implicitHeight: control.height
+                        Label {
+                            x: 10
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: "Speed"
+                        }
+                    }
+                    handle: Rectangle {
+                        anchors.centerIn: parent
+                        color: myApp.style.dark
+                        implicitWidth: 15
+                        implicitHeight: control.height - 2
+                        border.width: 2
+                        border.color: "white"
+                    }
+
+                }
             }
 
             Rectangle {
