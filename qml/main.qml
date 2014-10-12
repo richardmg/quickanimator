@@ -58,7 +58,7 @@ ApplicationWindow {
         TimelineMenu {
             id: menu
             visible: false
-            width: 300
+            width: 250
             z: 1
         }
 
@@ -83,17 +83,8 @@ ApplicationWindow {
 
         MultiTouchButton {
             id: menuButton
-            width: 90
-            height: parent.height
             checkable: true
             onCheckedChanged: menu.visible = checked;
-            color: menuButton.checked ? "white" : myApp.style.dark
-        }
-
-        Rectangle {
-            width: 2
-            height: parent.height
-            color: menuButton.checked ? "white" : myApp.style.timelineline
         }
 
         Timeline {

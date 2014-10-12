@@ -4,15 +4,19 @@ import QtQuick.Controls.Styles 1.1
 
 Rectangle {
     id: root
-    color: myApp.style.dark
+    color: root.checked || root.pressed ? "white" : myApp.style.dark
 
     property bool pressed: false
     property bool checked: false
     property bool checkable: false
+    property bool flat: false
 
     property bool _mouseDetected: false
 
     signal clicked
+
+    height: parent.height
+    width: 90
 
     onClicked: {
         if (checkable)
@@ -53,5 +57,12 @@ Rectangle {
             onPressedChanged: root.pressed = pressed
         }
 
+        Rectangle {
+            visible: !root.flat
+            anchors.right: parent.right
+            width: 2
+            height: root.height
+            color: root.checked || root.pressed ? "white" : myApp.style.timelineline
+        }
     }
 }

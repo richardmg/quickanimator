@@ -10,6 +10,7 @@ Rectangle {
     property alias googleButton: googleButton
 
     readonly property int space: 6
+    clip: true
 
     WebView {
         id: webView
@@ -40,7 +41,7 @@ Rectangle {
 
             MenuButton {
                 id: timelineModeButton
-                text: "Timeline mode"
+                text: "Timeline"
                 checkable: true
             }
 
@@ -49,7 +50,6 @@ Rectangle {
                 text: "Continuous play"
                 checkable: true
                 checked: true
-                onCheckedChanged: myApp.stage.timelinePlay = checked;
                 parentMenuButton: timelineModeButton
                 radioButtonGroup: timelineGroup
             }
@@ -59,15 +59,6 @@ Rectangle {
                 text: "Interaction play"
                 checkable: true
                 onCheckedChanged: myApp.stage.timelinePlay = checked;
-                parentMenuButton: timelineModeButton
-                radioButtonGroup: timelineGroup
-            }
-
-            MenuButton {
-                id: clearFramesButton
-                text: "Clear frames"
-                checkable: true
-//                onCheckedChanged: myApp.stage.autoPlay = checked;
                 parentMenuButton: timelineModeButton
                 radioButtonGroup: timelineGroup
             }
@@ -147,6 +138,27 @@ Rectangle {
                 checkable: true
                 checked: true
                 parentMenuButton: keyframeButton
+            }
+
+            Rectangle {
+                width: parent.width
+                height: space
+                color: "transparent"
+            }
+
+            MenuButton {
+                id: undoButton
+                text: "Undo"
+            }
+
+            MenuButton {
+                id: redoButton
+                text: "Redo"
+            }
+
+            MenuButton {
+                id: trashcanButton
+                text: "Trashcan"
             }
 
             Rectangle {
