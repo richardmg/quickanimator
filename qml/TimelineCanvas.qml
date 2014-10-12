@@ -11,6 +11,7 @@ Rectangle {
         target: myApp.model
         onStatesUpdated: canvas.requestPaint()
         onFocusedLayerIndexChanged: canvas.requestPaint()
+        onMsPerFrameChanged: canvas.requestPaint()
     }
 
     Connections {

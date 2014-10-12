@@ -157,7 +157,11 @@ Rectangle {
                 id: speedSlider
                 width: parent.width
                 height: 40
-                value: 0.5
+                minimumValue: 0
+                maximumValue: 2000
+                value: 1850
+                onValueChanged: myApp.model.msPerFrame = maximumValue - value + 10
+
                 style: SliderStyle {
                     groove: Rectangle {
                         color:"white"
