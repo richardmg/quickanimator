@@ -13,11 +13,33 @@ Rectangle {
     readonly property int space: 6
     clip: true
 
+    property bool __speedSliderGuard: false
+
     WebView {
         id: webView
         onImageUrlChanged: {
             myApp.addImage(imageUrl)
             myApp.menuButton.checked = false;
+        }
+    }
+
+    property Component sliderStyle: SliderStyle {
+        groove: Rectangle {
+            color:"white"
+            implicitHeight: control.height
+            Label {
+                x: 10
+                anchors.verticalCenter: parent.verticalCenter
+                text: control.text
+            }
+        }
+        handle: Rectangle {
+            anchors.centerIn: parent
+            color: myApp.style.dark
+            implicitWidth: 15
+            implicitHeight: control.height - 2
+            border.width: 2
+            border.color: "white"
         }
     }
 
@@ -156,34 +178,41 @@ Rectangle {
             }
 
             Slider {
-                id: speedSlider
+                id: slowDownSlider
                 width: parent.width
                 height: 40
-                minimumValue: 0
-                maximumValue: 2000
-                value: 1850
-                onValueChanged: myApp.model.msPerFrame = maximumValue - value + 10
-
-                style: SliderStyle {
-                    groove: Rectangle {
-                        color:"white"
-                        implicitHeight: control.height
-                        Label {
-                            x: 10
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: "Speed"
-                        }
-                    }
-                    handle: Rectangle {
-                        anchors.centerIn: parent
-                        color: myApp.style.dark
-                        implicitWidth: 15
-                        implicitHeight: control.height - 2
-                        border.width: 2
-                        border.color: "white"
-                    }
-
+                minimumValue: 200
+                maximumValue: 3000
+                value: maximumValue
+                onValueChanged: {
+                    if (__speedSliderGuard)
+                        return
+                    __speedSliderGuard = true
+                    speedUpSlider.value = speedUpSlider.minimumValue
+                    myApp.model.msPerFrame = maximumValue - value + minimumValue
+                    __speedSliderGuard = false
                 }
+                property string text: "Slow down"
+                style: sliderStyle
+            }
+
+            Slider {
+                id: speedUpSlider
+                width: parent.width
+                height: 40
+                minimumValue: 10
+                maximumValue: 200
+                value: minimumValue
+                onValueChanged: {
+                    if (__speedSliderGuard)
+                        return
+                    __speedSliderGuard = true
+                    slowDownSlider.value = slowDownSlider.maximumValue
+                    myApp.model.msPerFrame = maximumValue - value + minimumValue
+                    __speedSliderGuard = false
+                }
+                property string text: "Speed up"
+                style: sliderStyle
             }
 
             Rectangle {
@@ -204,6 +233,7 @@ Rectangle {
         }
 
     }
+
     MultiTouchButton {
         id: menuButton
         height: 50
