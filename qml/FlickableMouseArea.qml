@@ -73,6 +73,7 @@ MultiPointTouchArea {
         }
 
         onWheel: {
+            _mouseDetected = true;
             flicking = true;
             momentumX = wheel.pixelDelta.x * friction;
             momentumY = wheel.pixelDelta.y * friction;
