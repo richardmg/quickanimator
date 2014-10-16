@@ -41,7 +41,7 @@ MultiPointTouchArea {
     }
 
     onUpdated: {
-        if (activeTouchPoint || _mouseDetected)
+        if (!activeTouchPoint || _mouseDetected)
             return;
 
         root.mouseX = activeTouchPoint.x
@@ -50,7 +50,7 @@ MultiPointTouchArea {
     }
 
     onReleased: {
-        if (activeTouchPoint || _mouseDetected)
+        if (!activeTouchPoint || _mouseDetected)
             return;
 
         activeTouchPoint = null;

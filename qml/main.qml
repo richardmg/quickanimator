@@ -50,29 +50,35 @@ ApplicationWindow {
         }
     }
 
-    Stage {
-        id: stage
+    Item {
         anchors.fill: parent
-    }
 
-    Timeline {
-        id: timeline
-        anchors.fill: parent
-    }
+        Stage {
+            id: stage
+            anchors.fill: parent
+        }
 
-    TimelineMenu {
-        id: menu
-        visible: false
-        width: 250
-        height: parent.height
-    }
+        Timeline {
+            id: timeline
+            anchors.fill: parent
+            visible: Qt.platform.os === "osx" || menuButton.pressed
+            flickableHeight: Qt.platform.os === "osx" ? 20 : parent.height
+        }
 
-    MultiTouchButton {
-        id: menuButton
-        height: 50
-        anchors.bottom: parent.bottom
-        visible: !menu.visible
-        onClicked: menu.visible = true;
+        TimelineMenu {
+            id: menu
+            visible: false
+            width: 250
+            height: parent.height
+        }
+
+        MultiTouchButton {
+            id: menuButton
+            height: 50
+            anchors.bottom: parent.bottom
+            visible: !menu.visible
+            onClicked: menu.visible = true;
+        }
     }
 
     Component {
