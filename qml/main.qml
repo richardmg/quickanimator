@@ -50,51 +50,29 @@ ApplicationWindow {
         }
     }
 
-    SplitView {
-        width: parent.width
+    Stage {
+        id: stage
+        anchors.fill: parent
+    }
+
+    Timeline {
+        id: timeline
+        anchors.fill: parent
+    }
+
+    TimelineMenu {
+        id: menu
+        visible: false
+        width: 250
         height: parent.height
+    }
 
-        TimelineMenu {
-            id: menu
-            visible: false
-            width: 250
-            height: parent.height
-            z: 1
-        }
-
-        Column {
-            Stage {
-                id: stage
-                width: parent.width
-                height: parent.height - bottomMenu.height
-            }
-
-            RowLayout {
-                id: bottomMenu
-                width: parent.width
-                height: 50
-                spacing: 0
-
-                MultiTouchButton {
-                    id: menuButton
-                    visible: !menu.visible
-                    onClicked: menu.visible = true;
-                }
-
-                Timeline {
-                    id: timeline
-                    height: parent.height
-                    Layout.fillWidth: true
-                    FlickableMouseArea {
-                        id: msPerFrameFlickView
-                        anchors.fill: parent
-                        enabled: false
-                        onMomentumXChanged: myApp.model.msPerFrame = Math.max(16, myApp.model.msPerFrame - momentumX);
-                        Component.onCompleted: myApp.msPerFrameFlickable = msPerFrameFlickView
-                    }
-                }
-            }
-        }
+    MultiTouchButton {
+        id: menuButton
+        height: 50
+        anchors.bottom: parent.bottom
+        visible: !menu.visible
+        onClicked: menu.visible = true;
     }
 
     Component {

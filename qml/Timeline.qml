@@ -1,7 +1,7 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.0
 
-Rectangle {
+Item {
     id: root
 
     readonly property bool playing: userPlay || stagePlay;
@@ -13,12 +13,9 @@ Rectangle {
         myApp.timeline = root
     }
 
-    color: "white"
-
     TimelineCanvas {
-        anchors.fill: parent
-        anchors.topMargin: 2
-        anchors.bottomMargin: 2
+        width: parent.width
+        height: 20
     }
 
     FlickableMouseArea {

@@ -76,7 +76,7 @@ Rectangle {
                     continue;
 
                 var posX = (relativeTime + timeShift) * cellWidth;
-                ctx.fillRect(posX, parent.height / 2, 2, parent.height / 2);
+                ctx.fillRect(posX, 0, 2, parent.height);
 
                 var clockTimeSec = (myApp.model.msPerFrame * absoluteTime) / 1000;
                 var hours = Math.floor(clockTimeSec / 3600) % 24;
