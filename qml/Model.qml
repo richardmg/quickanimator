@@ -12,6 +12,11 @@ QtObject {
     property var focusedKeyframe: null
     property int msPerFrame: 200
 
+    readonly property int userInterfaceStateEdit: 0
+    readonly property int userInterfaceStatePlay: 1
+    readonly property int userInterfaceStateMenu: 2
+    property int userInterfaceState: userInterfaceStatePlay
+
     signal layersUpdated(var removedLayer, var addedLayer)
     signal selectedLayersUpdated(var unselectedLayer, var selectedLayer)
     signal statesUpdated(var layer)
@@ -24,6 +29,13 @@ QtObject {
     property bool recordsScale: false
     property bool recordsAnchorX: false
     property bool recordsAnchorY: false
+
+    function shiftUserInterfaceState()
+    {
+        ++userInterfaceState;
+        if (userInterfaceState > 1) // NB: skipping 3rd state for now
+            userInterfaceState = 0
+    }
 
     function clearRecordState()
     {

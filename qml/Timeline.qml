@@ -4,7 +4,6 @@ import QtQuick.Controls 1.0
 Item {
     id: root
 
-    property real flickableHeight: height
     readonly property bool playing: userPlay || stagePlay;
 
     property bool stagePlay: false
@@ -21,14 +20,14 @@ Item {
 
     FlickableMouseArea {
         id: flickable
-        width: parent.width
-        height: flickableHeight
+        anchors.fill: parent
         friction: 0.1
         momentumRestX: playing ? -1 : 0
         onFlickingChanged: updatePlayAnimation();
         onMomentumXChanged: myApp.model.setTime(myApp.model.time + (-momentumX * 20 / myApp.model.msPerFrame));
         onMomentumYChanged: myApp.model.setTime(myApp.model.time + ( momentumY * 20 / myApp.model.msPerFrame));
         onClicked: userPlay = !userPlay;
+        onRightClicked: myApp.model.shiftUserInterfaceState();
     }
 
     onPlayingChanged: updatePlayAnimation();

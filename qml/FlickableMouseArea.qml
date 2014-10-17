@@ -15,6 +15,8 @@ MultiPointTouchArea {
     property bool flicking: false
 
     signal clicked
+    signal rightClicked
+
     property var _pressTime
     property real _pressMouseX
     property real _pressMouseY
@@ -59,17 +61,23 @@ MultiPointTouchArea {
 
     MouseArea {
         anchors.fill: parent
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
 
         onPressedChanged: {
             _mouseDetected = true;
-            root.mouseX = mouseX;
-            root.mouseY = mouseY;
-            root.pressed = pressed;
+
+            if (pressedButtons === Qt.LeftButton || pressedButtons === Qt.NoButton) {
+                root.mouseX = mouseX;
+                root.mouseY = mouseY;
+                root.pressed = pressed;
+            }
         }
 
         onPositionChanged: {
-            root.mouseX = mouseX;
-            root.mouseY = mouseY;
+            if (pressedButtons === Qt.LeftButton) {
+                root.mouseX = mouseX;
+                root.mouseY = mouseY;
+            }
         }
 
         onWheel: {
@@ -78,6 +86,16 @@ MultiPointTouchArea {
             momentumX = wheel.pixelDelta.x * friction;
             momentumY = wheel.pixelDelta.y * friction;
             animateMomentumToRest(0);
+        }
+
+        onClicked: {
+            if (mouse.button === Qt.RightButton)
+                root.rightClicked();
+        }
+
+        onDoubleClicked: {
+            if (mouse.button === Qt.RightButton)
+                root.rightClicked();
         }
     }
 

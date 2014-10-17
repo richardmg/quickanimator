@@ -26,6 +26,7 @@ Item {
 
     MouseArea {
         anchors.fill: sprites
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
 
         function getAngleAndRadius(p1, p2)
         {
@@ -189,6 +190,11 @@ Item {
 
             myApp.model.inLiveDrag = false;
             myApp.timeline.stagePlay = false;
+        }
+
+        onClicked: {
+            if (mouse.button === Qt.RightButton)
+                myApp.model.shiftUserInterfaceState()
         }
     }
 

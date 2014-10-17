@@ -61,8 +61,9 @@ ApplicationWindow {
         Timeline {
             id: timeline
             anchors.fill: parent
-            visible: Qt.platform.os === "osx" || menuButton.pressed
-            flickableHeight: Qt.platform.os === "osx" ? 20 : parent.height
+            opacity: model.userInterfaceState === model.userInterfaceStatePlay ? 1 : 0
+            visible: opacity !== 0
+            Behavior on opacity { NumberAnimation{ duration: 100 } }
         }
 
         TimelineMenu {
