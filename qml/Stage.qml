@@ -54,6 +54,9 @@ Item {
         }
 
         onPressed: {
+            if (mouse.button === Qt.RightButton)
+                return;
+
             // start new layer operation, drag or rotate:
             timelineWasPlaying = myApp.timeline.playing;
             var pos = {x:mouseX, y:mouseY}
@@ -76,6 +79,9 @@ Item {
         }
 
         onPositionChanged: {
+            if (mouse.button === Qt.RightButton)
+                return;
+
             // drag or rotate current layer:
             var pos = {x:mouseX, y:mouseY}
 
@@ -166,6 +172,9 @@ Item {
         }
 
         onReleased: {
+            if (mouse.button === Qt.RightButton)
+                return;
+
             var pos = {x:mouseX, y:mouseY}
 
             var click = (new Date().getTime() - pressStartTime) < 300 

@@ -61,7 +61,7 @@ ApplicationWindow {
         Timeline {
             id: timeline
             anchors.fill: parent
-            opacity: model.userInterfaceState === model.userInterfaceStatePlay ? 1 : 0
+            opacity: 1//menuButton.pressed ? 1 : 0
             visible: opacity !== 0
             Behavior on opacity { NumberAnimation{ duration: 100 } }
         }
@@ -78,7 +78,7 @@ ApplicationWindow {
             height: 50
             anchors.bottom: parent.bottom
             visible: !menu.visible
-            onClicked: menu.visible = true;
+//            onClicked: menu.visible = true;
         }
     }
 

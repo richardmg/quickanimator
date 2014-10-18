@@ -9,8 +9,8 @@ MultiPointTouchArea {
     property alias momentumRestY: momentumYAnimation.to
     property real friction: 1
 
-    property int mouseX: 0
-    property int mouseY: 0
+    property real mouseX: 0
+    property real mouseY: 0
     property bool pressed: false
     property bool flicking: false
 
@@ -23,49 +23,48 @@ MultiPointTouchArea {
 
     property real _prevMouseX: 0
     property real _prevMouseY: 0
-    property bool _mouseDetected: false
 
     property TouchPoint activeTouchPoint: null
     touchPoints: [ TouchPoint { id: tp1; }, TouchPoint { id: tp2; } ]
 
     onPressed: {
-        if (activeTouchPoint || _mouseDetected)
+        var rightmostTouchpoint =
+              tp1.pressed && !tp2.pressed ? tp1
+            : tp2.pressed && !tp1.pressed ? tp2
+            : (tp1.x > tp1.x) ? tp1 : tp2;
+        if (activeTouchPoint === rightmostTouchpoint)
             return;
 
-        if (root.contains(Qt.point(tp1.x, tp1.y)))
-            activeTouchPoint = tp1;
-        else if (root.contains(Qt.point(tp2.x, tp2.y)))
-            activeTouchPoint = tp2;
+        activeTouchPoint = rightmostTouchpoint;
 
-        root.mouseX = activeTouchPoint.x
-        root.mouseY = activeTouchPoint.y
-        root.pressed = activeTouchPoint.pressed;
-    }
-
-    onUpdated: {
-        if (!activeTouchPoint || _mouseDetected)
-            return;
-
-        root.mouseX = activeTouchPoint.x
-        root.mouseY = activeTouchPoint.y
-        root.pressed = activeTouchPoint.pressed;
+// bug in MultiPointTouchArea: x, y is not updated onPressed :(
+//        root.mouseX = activeTouchPoint.x
+//        root.mouseY = activeTouchPoint.y
+//        root.pressed = true
     }
 
     onReleased: {
-        if (!activeTouchPoint || _mouseDetected)
-            return;
-
+        if (touchPoints.indexOf(activeTouchPoint) === -1)
+            return
         activeTouchPoint = null;
-        pressed = false
+        pressed = false;
+    }
+
+    onUpdated: {
+        if (touchPoints.indexOf(activeTouchPoint) === -1)
+            return
+        root.mouseX = activeTouchPoint.x
+        root.mouseY = activeTouchPoint.y
+        root.pressed = true
+        updateMomentum()
     }
 
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton | Qt.RightButton
+        enabled: Qt.platform.os === "osx"
 
         onPressedChanged: {
-            _mouseDetected = true;
-
             if (pressedButtons === Qt.LeftButton || pressedButtons === Qt.NoButton) {
                 root.mouseX = mouseX;
                 root.mouseY = mouseY;
@@ -81,7 +80,6 @@ MultiPointTouchArea {
         }
 
         onWheel: {
-            _mouseDetected = true;
             flicking = true;
             momentumX = wheel.pixelDelta.x * friction;
             momentumY = wheel.pixelDelta.y * friction;
@@ -101,19 +99,9 @@ MultiPointTouchArea {
 
     onPressedChanged: {
         if (pressed) {
-            momentumXAnimation.running = false;
-            momentumYAnimation.running = false;
-            _prevMouseX = mouseX;
-            _prevMouseY = mouseY;
-            momentumX = momentumXAnimation.to;
-            momentumY = momentumYAnimation.to;
-            flicking = true;
-
-            _pressTime = (new Date()).getTime();
-            _pressMouseX = mouseX;
-            _pressMouseY = mouseY;
+            restartFlicking();
         } else {
-            animateMomentumToRest(2);
+            animateMomentumToRest(1);
 
             var click = (new Date().getTime() - _pressTime) < 300
                 && Math.abs(mouseX - _pressMouseX) < 10
@@ -124,18 +112,26 @@ MultiPointTouchArea {
         }
     }
 
-    onMouseXChanged: {
-        if (!root.pressed)
-            return;
+    function updateMomentum()
+    {
         momentumX = (mouseX - _prevMouseX) * friction;
+        momentumY = (mouseY - _prevMouseY) * friction
         _prevMouseX = mouseX;
+        _prevMouseY = mouseY;
     }
 
-    onMouseYChanged: {
-        if (!root.pressed)
-            return;
-        momentumY = (mouseY - _prevMouseY) * friction
+    function restartFlicking()
+    {
+        momentumXAnimation.running = false;
+        momentumYAnimation.running = false;
+        momentumX = momentumXAnimation.to;
+        momentumY = momentumYAnimation.to;
+        _prevMouseX = mouseX;
         _prevMouseY = mouseY;
+        _pressTime = (new Date()).getTime();
+        _pressMouseX = mouseX;
+        _pressMouseY = mouseY;
+        flicking = true;
     }
 
     function animateMomentumToRest(threshold)

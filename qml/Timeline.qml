@@ -20,13 +20,14 @@ Item {
 
     FlickableMouseArea {
         id: flickable
-        anchors.fill: parent
+        width: parent.width
+        height: parent.height
         friction: 0.1
         momentumRestX: playing ? -1 : 0
         onFlickingChanged: updatePlayAnimation();
         onMomentumXChanged: myApp.model.setTime(myApp.model.time + (-momentumX * 20 / myApp.model.msPerFrame));
         onMomentumYChanged: myApp.model.setTime(myApp.model.time + ( momentumY * 20 / myApp.model.msPerFrame));
-        onClicked: userPlay = !userPlay;
+//        onClicked: userPlay = !userPlay;
         onRightClicked: myApp.model.shiftUserInterfaceState();
     }
 
