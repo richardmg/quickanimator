@@ -7,13 +7,14 @@ MultiPointTouchArea {
     property real momentumY: 0
     property alias momentumRestX: momentumXAnimation.to
     property alias momentumRestY: momentumYAnimation.to
-    property real friction: 1
 
     property real mouseX: 0
     property real mouseY: 0
     property bool pressed: false
     property bool flicking: false
 
+    signal momentumXUpdated
+    signal momentumYUpdated
     signal clicked
     signal rightClicked
 
@@ -31,11 +32,12 @@ MultiPointTouchArea {
         var rightmostTouchpoint =
               tp1.pressed && !tp2.pressed ? tp1
             : tp2.pressed && !tp1.pressed ? tp2
-            : (tp1.x > tp1.x) ? tp1 : tp2;
+            : (tp1.x > tp2.x) ? tp1 : tp2;
         if (activeTouchPoint === rightmostTouchpoint)
             return;
 
         activeTouchPoint = rightmostTouchpoint;
+        pressed = false;
 
 // bug in MultiPointTouchArea: x, y is not updated onPressed :(
 //        root.mouseX = activeTouchPoint.x
@@ -81,8 +83,8 @@ MultiPointTouchArea {
 
         onWheel: {
             flicking = true;
-            momentumX = wheel.pixelDelta.x * friction;
-            momentumY = wheel.pixelDelta.y * friction;
+            momentumX = wheel.pixelDelta.x
+            momentumY = wheel.pixelDelta.y
             animateMomentumToRest(0);
         }
 
@@ -114,11 +116,20 @@ MultiPointTouchArea {
 
     function updateMomentum()
     {
-        momentumX = (mouseX - _prevMouseX) * friction;
-        momentumY = (mouseY - _prevMouseY) * friction
+        var prevMomentumX = momentumX;
+        var prevMomentumY = momentumY;
+        momentumX = mouseX - _prevMouseX
+        momentumY = mouseY - _prevMouseY
         _prevMouseX = mouseX;
         _prevMouseY = mouseY;
+        if (prevMomentumX === momentumX)
+            momentumXUpdated()
+        if (prevMomentumY === momentumY)
+            momentumYUpdated()
     }
+
+    onMomentumXChanged: momentumXUpdated()
+    onMomentumYChanged: momentumYUpdated()
 
     function restartFlicking()
     {
@@ -177,6 +188,7 @@ MultiPointTouchArea {
         id: momentumYAnimation
         target: root
         property: "momentumY"
+        duration: 1000
         to: 0
         easing.type: Easing.OutQuad
         onStopped: if (!momentumXAnimation.running) flicking = false

@@ -22,13 +22,20 @@ Item {
         id: flickable
         width: parent.width
         height: parent.height
-        friction: 0.1
         momentumRestX: playing ? -1 : 0
         onFlickingChanged: updatePlayAnimation();
-        onMomentumXChanged: myApp.model.setTime(myApp.model.time + (-momentumX * 20 / myApp.model.msPerFrame));
-        onMomentumYChanged: myApp.model.setTime(myApp.model.time + ( momentumY * 20 / myApp.model.msPerFrame));
+        onMomentumXUpdated: updateTime()
+        onMomentumYUpdated: updateTime()
+
 //        onClicked: userPlay = !userPlay;
         onRightClicked: myApp.model.shiftUserInterfaceState();
+
+        function updateTime()
+        {
+            var r = Math.sqrt(momentumX * momentumX + momentumY * momentumY);
+            r = momentumX < 0 ? -r : r;
+            myApp.model.setTime(myApp.model.time - (r * 0.04));
+        }
     }
 
     onPlayingChanged: updatePlayAnimation();
