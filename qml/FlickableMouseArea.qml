@@ -1,7 +1,7 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.0
 
-MultiPointTouchArea {
+Item {
     id: root
     property real momentumX: 0
     property real momentumY: 0
@@ -21,56 +21,63 @@ MultiPointTouchArea {
     property var _pressTime
     property real _pressMouseX
     property real _pressMouseY
-
     property real _prevMouseX: 0
     property real _prevMouseY: 0
 
-    property TouchPoint activeTouchPoint: null
-    touchPoints: [ TouchPoint { id: tp1; }, TouchPoint { id: tp2; } ]
+    MultiPointTouchArea {
+        anchors.fill: parent
+        enabled: myApp.model.touchUI
 
-    onPressed: {
-        var rightmostTouchpoint =
-              tp1.pressed && !tp2.pressed ? tp1
-            : tp2.pressed && !tp1.pressed ? tp2
-            : (tp1.x > tp2.x) ? tp1 : tp2;
-        if (activeTouchPoint === rightmostTouchpoint)
-            return;
+        property TouchPoint activeTouchPoint: null
+        touchPoints: [ TouchPoint { id: tp1; }, TouchPoint { id: tp2; } ]
 
-        activeTouchPoint = rightmostTouchpoint;
-        pressed = false;
+        onPressed: {
+            var rightmostTouchpoint =
+                    tp1.pressed && !tp2.pressed ? tp1
+                  : tp2.pressed && !tp1.pressed ? tp2
+                  : (tp1.x > tp2.x) ? tp1 : tp2;
+            if (activeTouchPoint === rightmostTouchpoint)
+                return;
 
-// bug in MultiPointTouchArea: x, y is not updated onPressed :(
-//        root.mouseX = activeTouchPoint.x
-//        root.mouseY = activeTouchPoint.y
-//        root.pressed = true
-    }
+            activeTouchPoint = rightmostTouchpoint;
+            root.pressed = false;
 
-    onReleased: {
-        if (touchPoints.indexOf(activeTouchPoint) === -1)
-            return
-        activeTouchPoint = null;
-        pressed = false;
-    }
+            // bug in MultiPointTouchArea: x, y is not updated onPressed :(
+            //        root.mouseX = activeTouchPoint.x
+            //        root.mouseY = activeTouchPoint.y
+            //        root.pressed = true
+        }
 
-    onUpdated: {
-        if (touchPoints.indexOf(activeTouchPoint) === -1)
-            return
-        root.mouseX = activeTouchPoint.x
-        root.mouseY = activeTouchPoint.y
-        root.pressed = true
-        updateMomentum()
+        onReleased: {
+            if (touchPoints.indexOf(activeTouchPoint) === -1)
+                return
+            activeTouchPoint = null;
+            root.pressed = false;
+        }
+
+        onUpdated: {
+            if (touchPoints.indexOf(activeTouchPoint) === -1)
+                return
+            root.mouseX = activeTouchPoint.x
+            root.mouseY = activeTouchPoint.y
+            root.pressed = true
+            root.updateMomentum()
+        }
     }
 
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton | Qt.RightButton
-        enabled: Qt.platform.os === "osx"
+        enabled: !myApp.model.touchUI
 
         onPressedChanged: {
-            if (pressedButtons === Qt.LeftButton || pressedButtons === Qt.NoButton) {
+            if (pressedButtons === Qt.LeftButton) {
                 root.mouseX = mouseX;
                 root.mouseY = mouseY;
-                root.pressed = pressed;
+                root.pressed = true;
+            } else if (pressedButtons === Qt.NoButton) {
+                root.pressed = false;
+                root.updateMomentum()
             }
         }
 
@@ -78,6 +85,7 @@ MultiPointTouchArea {
             if (pressedButtons === Qt.LeftButton) {
                 root.mouseX = mouseX;
                 root.mouseY = mouseY;
+                root.updateMomentum()
             }
         }
 
@@ -99,6 +107,11 @@ MultiPointTouchArea {
         }
     }
 
+
+    /////////////////////////////////////////////////////
+    // MultiPointTouchArea / MouseArea agnostic functions
+    /////////////////////////////////////////////////////
+
     onPressedChanged: {
         if (pressed) {
             restartFlicking();
@@ -106,13 +119,16 @@ MultiPointTouchArea {
             animateMomentumToRest(1);
 
             var click = (new Date().getTime() - _pressTime) < 300
-                && Math.abs(mouseX - _pressMouseX) < 10
-                && Math.abs(mouseY - _pressMouseY) < 10;
+                    && Math.abs(mouseX - _pressMouseX) < 10
+                    && Math.abs(mouseY - _pressMouseY) < 10;
 
             if (click)
                 root.clicked();
         }
     }
+
+    onMomentumXChanged: momentumXUpdated()
+    onMomentumYChanged: momentumYUpdated()
 
     function updateMomentum()
     {
@@ -127,9 +143,6 @@ MultiPointTouchArea {
         if (prevMomentumY === momentumY)
             momentumYUpdated()
     }
-
-    onMomentumXChanged: momentumXUpdated()
-    onMomentumYChanged: momentumYUpdated()
 
     function restartFlicking()
     {

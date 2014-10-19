@@ -30,6 +30,8 @@ QtObject {
     property bool recordsAnchorX: false
     property bool recordsAnchorY: false
 
+    property bool touchUI: Qt.platform.os === "ios"
+
     function shiftUserInterfaceState()
     {
         ++userInterfaceState;
