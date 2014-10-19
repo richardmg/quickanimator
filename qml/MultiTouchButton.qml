@@ -4,19 +4,21 @@ import QtQuick.Controls.Styles 1.1
 
 Rectangle {
     id: root
-    color: "white"
+    border.color: "black"
+    color: "transparent"
+    opacity: 0.2
 
     property bool pressed: false
     property bool checked: false
     property bool checkable: false
-    property bool flat: false
 
     property bool _mouseDetected: false
 
     signal clicked
 
-    height: parent.height
-    width: 90
+    height: myApp.height < 500 ? myApp.height / 4 : 70
+    width: height
+    radius: 4
 
     onClicked: {
         if (checkable)
@@ -55,14 +57,6 @@ Rectangle {
             anchors.fill: parent
             onClicked: root.clicked()
             onPressedChanged: root.pressed = pressed
-        }
-
-        Rectangle {
-            visible: !root.flat
-            anchors.right: parent.right
-            width: 2
-            height: root.height
-            color: myApp.style.timelineline
         }
     }
 }

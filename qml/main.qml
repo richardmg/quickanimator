@@ -11,6 +11,7 @@ ApplicationWindow {
     property alias menuButton: menuButton
 
     property Timeline timeline
+    property TimelineMenu menu
     property Flickable timelineFlickable
     property Flickable layerTreeFlickable
     property FlickableMouseArea msPerFrameFlickable
@@ -61,9 +62,26 @@ ApplicationWindow {
         Timeline {
             id: timeline
             anchors.fill: parent
-            opacity: 1//menuButton.pressed ? 1 : 0
             visible: opacity !== 0
             Behavior on opacity { NumberAnimation{ duration: 100 } }
+        }
+
+        Column {
+            height: childrenRect.height
+            anchors.bottom: parent.bottom
+            spacing: 1
+            MultiTouchButton {
+                id: flickButton
+            }
+            MultiTouchButton {
+                id: menuButton
+            }
+        }
+
+        PlayMenu {
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            visible: menuButton.pressed
         }
 
         TimelineMenu {
@@ -73,13 +91,6 @@ ApplicationWindow {
             height: parent.height
         }
 
-        MultiTouchButton {
-            id: menuButton
-            height: 50
-            anchors.bottom: parent.bottom
-            visible: !menu.visible
-//            onClicked: menu.visible = true;
-        }
     }
 
     Component {

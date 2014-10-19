@@ -42,6 +42,8 @@ Item {
 
             activeTouchPoint = rightmostTouchpoint;
             root.pressed = false;
+            root.flicking = true;
+            root.animating = true;
 
             // bug in MultiPointTouchArea: x, y is not updated onPressed :(
             //        root.mouseX = activeTouchPoint.x

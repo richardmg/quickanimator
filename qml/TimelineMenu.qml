@@ -240,7 +240,6 @@ Rectangle {
         width: parent.width - 2
         anchors.bottom: parent.bottom
         onClicked: root.visible = false
-        flat: true
     }
 //        Rectangle {
 //            width: 100

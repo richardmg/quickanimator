@@ -6,6 +6,7 @@ Item {
 
     readonly property bool playing: userPlay || stagePlay;
     readonly property alias flicking: flickable.flicking
+    readonly property alias animating: flickable.animating
 
     property bool stagePlay: false
     property bool userPlay: false
