@@ -5,6 +5,7 @@ Item {
     id: root
 
     readonly property bool playing: userPlay || stagePlay;
+    readonly property alias flicking: flickable.flicking
 
     property bool stagePlay: false
     property bool userPlay: false
@@ -23,7 +24,7 @@ Item {
         width: parent.width
         height: parent.height
         momentumRestX: playing ? -1 : 0
-        onFlickingChanged: updatePlayAnimation();
+        onAnimatingChanged: updatePlayAnimation();
         onMomentumXUpdated: updateTime()
         onMomentumYUpdated: updateTime()
 
@@ -43,7 +44,7 @@ Item {
     function updatePlayAnimation()
     {
         animation.lastTickTime = new Date();
-        animation.running = playing && !flickable.flicking;
+        animation.running = playing && !flickable.animating;
     }
 
     NumberAnimation {

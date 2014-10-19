@@ -11,6 +11,7 @@ Item {
     property real mouseX: 0
     property real mouseY: 0
     property bool pressed: false
+    property bool animating: false
     property bool flicking: false
 
     signal momentumXUpdated
@@ -53,6 +54,7 @@ Item {
                 return
             activeTouchPoint = null;
             root.pressed = false;
+            root.flicking = false;
         }
 
         onUpdated: {
@@ -77,6 +79,7 @@ Item {
                 root.pressed = true;
             } else if (pressedButtons === Qt.NoButton) {
                 root.pressed = false;
+                root.flicking = false;
                 root.updateMomentum()
             }
         }
@@ -90,7 +93,8 @@ Item {
         }
 
         onWheel: {
-            flicking = true;
+            animating = true;
+            flicking = true
             momentumX = wheel.pixelDelta.x
             momentumY = wheel.pixelDelta.y
             animateMomentumToRest(0);
@@ -114,7 +118,7 @@ Item {
 
     onPressedChanged: {
         if (pressed) {
-            restartFlicking();
+            restartanimating();
         } else {
             animateMomentumToRest(1);
 
@@ -144,7 +148,7 @@ Item {
             momentumYUpdated()
     }
 
-    function restartFlicking()
+    function restartanimating()
     {
         momentumXAnimation.running = false;
         momentumYAnimation.running = false;
@@ -155,7 +159,8 @@ Item {
         _pressTime = (new Date()).getTime();
         _pressMouseX = mouseX;
         _pressMouseY = mouseY;
-        flicking = true;
+        animating = true;
+        flicking = true
     }
 
     function animateMomentumToRest(threshold)
@@ -175,8 +180,10 @@ Item {
             momentumY = momentumRestY;
         }
 
-        if (!momentumXAnimation.running && !momentumYAnimation.running)
+        if (!momentumXAnimation.running && !momentumYAnimation.running) {
+            animating = false;
             flicking = false;
+        }
     }
 
     NumberAnimation {
@@ -186,7 +193,10 @@ Item {
         duration: 1000
         to: 0
         easing.type: Easing.OutQuad
-        onStopped: if (!momentumYAnimation.running) flicking = false
+        onStopped: if (!momentumYAnimation.running) {
+                       animating = false;
+                       flicking = false;
+                   }
         onToChanged: {
             if (running) {
                 from = momentumX
@@ -204,7 +214,10 @@ Item {
         duration: 1000
         to: 0
         easing.type: Easing.OutQuad
-        onStopped: if (!momentumXAnimation.running) flicking = false
+        onStopped: if (!momentumXAnimation.running) {
+                       animating = false;
+                       flicking = false;
+                   }
         onToChanged: {
             if (running) {
                 from = momentumY
