@@ -1,11 +1,17 @@
 import QtQuick 2.0
 
 Item {
-    width: childrenRect.width
+    width: parent.width
     height: childrenRect.height
 
+    Rectangle {
+        anchors.fill: parent
+        color: "black"
+        opacity: 0.1
+    }
+
     Row {
-        spacing: 1
+        anchors.right: parent.right
         MultiTouchButton {
             Text { x: 2; y: 2; text: "Undo" }
         }

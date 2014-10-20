@@ -66,18 +66,23 @@ ApplicationWindow {
             Behavior on opacity { NumberAnimation{ duration: 100 } }
         }
 
-        MultiTouchButton {
-            id: menuButton
-            anchors.bottom: parent.bottom
-            visible: model.touchUI
-        }
-
         PlayMenu {
             anchors.right: parent.right
             anchors.bottom: parent.bottom
             opacity: model.touchUI ? (menuButton.pressed ? 1 : 0) : 1
             visible: opacity !== 0
             Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+        }
+
+        MultiTouchButton {
+            id: menuButton
+            anchors.bottom: parent.bottom
+            visible: model.touchUI
+            Rectangle {
+                anchors.fill: parent
+                color: "black"
+                opacity: 0.1
+            }
         }
 
         TimelineMenu {

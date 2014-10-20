@@ -4,9 +4,7 @@ import QtQuick.Controls.Styles 1.1
 
 Rectangle {
     id: root
-    border.color: "black"
     color: "transparent"
-    opacity: 0.2
 
     property bool pressed: false
     property bool checked: false
