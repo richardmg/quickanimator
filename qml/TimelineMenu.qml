@@ -44,11 +44,15 @@ Rectangle {
     }
 
     Flickable {
-        anchors.fill: parent
+        anchors.top: parent.top
+        anchors.bottom: menuButton.top
+        anchors.left: parent.left
+        anchors.right: parent.right
         anchors.topMargin: 2
         anchors.rightMargin: 2
         anchors.bottomMargin: 2
         contentHeight: 1000
+        clip: true
 
         Column {
             id: layout
@@ -239,12 +243,10 @@ Rectangle {
         height: 50
         width: parent.width - 2
         anchors.bottom: parent.bottom
+        color: "white"
+        opacity: 1
+        Text { x: 2; y: 2; text: "Close" }
         onClicked: root.visible = false
     }
-//        Rectangle {
-//            width: 100
-//            height: 100
-//            color: "red"
-//        }
 
 }
