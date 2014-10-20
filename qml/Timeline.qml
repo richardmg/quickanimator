@@ -25,6 +25,7 @@ Item {
         width: parent.width
         height: parent.height
         momentumRestX: playing ? -1 : 0
+        acceptedButtons: Qt.RightButton
         onAnimatingChanged: updatePlayAnimation();
         onMomentumXUpdated: myApp.model.setTime(myApp.model.time - (momentumX * 0.1));
         onMomentumYUpdated: if (momentumX === 0) myApp.model.setTime(myApp.model.time - (momentumY * 0.005));

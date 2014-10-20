@@ -14,6 +14,9 @@ Item {
     property bool animating: false
     property bool flicking: false
 
+    property alias acceptedButtons: mouseArea.acceptedButtons
+    property int acceptedFlickButtons: acceptedButtons
+
     signal momentumXUpdated
     signal momentumYUpdated
     signal clicked
@@ -70,12 +73,13 @@ Item {
     }
 
     MouseArea {
+        id: mouseArea
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton | Qt.RightButton
         enabled: !myApp.model.touchUI
 
         onPressedChanged: {
-            if (pressedButtons === Qt.LeftButton) {
+            if (pressedButtons & acceptedFlickButtons) {
                 root.mouseX = mouseX;
                 root.mouseY = mouseY;
                 root.pressed = true;
@@ -87,7 +91,7 @@ Item {
         }
 
         onPositionChanged: {
-            if (pressedButtons === Qt.LeftButton) {
+            if (pressedButtons & acceptedFlickButtons) {
                 root.mouseX = mouseX;
                 root.mouseY = mouseY;
                 root.updateMomentum()
