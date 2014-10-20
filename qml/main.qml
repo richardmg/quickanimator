@@ -89,8 +89,6 @@ ApplicationWindow {
             id: menu
             visible: false
             anchors.fill: parent
-            width: 250
-            height: parent.height
         }
 
     }
