@@ -45,11 +45,13 @@ Rectangle {
 
     Flickable {
         anchors.fill: parent
-        contentHeight: 1000
+        contentHeight: layout.height
 
         Column {
             id: layout
-            anchors.fill: parent
+            width: parent.width
+            height: childrenRect.height
+
             spacing: 2
 
             MenuButton {
@@ -236,8 +238,13 @@ Rectangle {
 
             Rectangle {
                 width: parent.width
-                height: root.height
-                color: "white"
+                height: space
+                color: "transparent"
+            }
+
+            MenuButton {
+                text: "Close"
+                onClicked: root.visible = false
             }
         }
 

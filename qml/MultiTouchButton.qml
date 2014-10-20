@@ -14,8 +14,8 @@ Rectangle {
 
     signal clicked
 
-    height: myApp.height < 500 ? myApp.height / 4 : 70
-    width: height
+    height: 50
+    width: 100
     radius: 4
 
     onClicked: {

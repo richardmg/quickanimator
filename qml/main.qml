@@ -76,13 +76,9 @@ ApplicationWindow {
 
         MultiTouchButton {
             id: menuButton
-            anchors.bottom: parent.bottom
+            width: 50
+            height: parent.height
             visible: model.touchUI
-            Rectangle {
-                anchors.fill: parent
-                color: "black"
-                opacity: 0.1
-            }
         }
 
         TimelineMenu {
