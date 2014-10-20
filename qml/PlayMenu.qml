@@ -7,6 +7,9 @@ Item {
     Row {
         spacing: 1
         MultiTouchButton {
+            Text { x: 2; y: 2; text: "Undo" }
+        }
+        MultiTouchButton {
             onClicked: myApp.menu.visible = true;
             Text { x: 2; y: 2; text: "Rewind" }
         }
