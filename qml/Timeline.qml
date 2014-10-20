@@ -26,18 +26,11 @@ Item {
         height: parent.height
         momentumRestX: playing ? -1 : 0
         onAnimatingChanged: updatePlayAnimation();
-        onMomentumXUpdated: updateTime()
-        onMomentumYUpdated: updateTime()
+        onMomentumXUpdated: myApp.model.setTime(myApp.model.time - (momentumX * 0.1));
+        onMomentumYUpdated: if (momentumX === 0) myApp.model.setTime(myApp.model.time - (momentumY * 0.005));
 
 //        onClicked: userPlay = !userPlay;
         onRightClicked: myApp.model.shiftUserInterfaceState();
-
-        function updateTime()
-        {
-            var r = Math.sqrt(momentumX * momentumX + momentumY * momentumY);
-            r = momentumX < 0 ? -r : r;
-            myApp.model.setTime(myApp.model.time - (r * 0.04));
-        }
     }
 
     onPlayingChanged: updatePlayAnimation();
