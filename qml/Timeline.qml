@@ -22,7 +22,7 @@ Item {
 
     FlickableMouseArea {
         id: flickable
-        visible: myApp.menuButton.visible && myApp.menuButton.pressed
+        visible: !myApp.menuButton.visible || myApp.menuButton.pressed
         width: parent.width
         height: parent.height
         momentumRestX: playing ? -1 : 0

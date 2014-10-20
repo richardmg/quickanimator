@@ -10,7 +10,7 @@ Rectangle {
     property alias interactionPlayButton: interactionPlayButton
     property alias googleButton: googleButton
 
-    readonly property int space: 6
+    readonly property int space: 4
     clip: true
 
     property bool __speedSliderGuard: false
@@ -44,20 +44,25 @@ Rectangle {
     }
 
     Flickable {
-        anchors.top: parent.top
-        anchors.bottom: menuButton.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.topMargin: 2
-        anchors.rightMargin: 2
-        anchors.bottomMargin: 2
+        anchors.fill: parent
         contentHeight: 1000
-        clip: true
 
         Column {
             id: layout
             anchors.fill: parent
             spacing: 2
+
+            MenuButton {
+                text: "Close"
+                onClicked: root.visible = false
+            }
+
+            Rectangle {
+                width: parent.width
+                height: space
+                color: "transparent"
+            }
+
             MenuButton {
                 id: googleButton
                 text: "Google image search"
@@ -237,16 +242,4 @@ Rectangle {
         }
 
     }
-
-    MultiTouchButton {
-        id: menuButton
-        height: 50
-        width: parent.width - 2
-        anchors.bottom: parent.bottom
-        color: "white"
-        opacity: 1
-        Text { x: 2; y: 2; text: "Close" }
-        onClicked: root.visible = false
-    }
-
 }
