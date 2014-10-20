@@ -77,7 +77,7 @@ ApplicationWindow {
             anchors.bottom: parent.bottom
             opacity: model.touchUI ? (menuButton.pressed ? 1 : 0) : 1
             visible: opacity !== 0
-            Behavior on opacity { NumberAnimation { duration: 300; easing.type: Easing.OutCubic } }
+            Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
         }
 
         TimelineMenu {

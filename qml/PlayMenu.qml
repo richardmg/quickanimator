@@ -10,12 +10,12 @@ Item {
             Text { x: 2; y: 2; text: "Undo" }
         }
         MultiTouchButton {
-            onClicked: myApp.menu.visible = true;
-            Text { x: 2; y: 2; text: "Rewind" }
+            onClicked: myApp.model.time = 0
+            Text { x: 2; y: 2; text: myApp.model.time === 0 ? "Forward" : "Rewind" }
         }
         MultiTouchButton {
-            onClicked: menu.visible = true;
-            Text { x: 2; y: 2; text: "Play" }
+            onClicked: myApp.timeline.userPlay = !myApp.timeline.userPlay
+            Text { x: 2; y: 2; text:  myApp.timeline.userPlay ? "Stop" : "Play" }
         }
         MultiTouchButton {
             onClicked: menu.visible = true;
