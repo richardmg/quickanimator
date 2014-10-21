@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 Item {
     id: root
-    property bool contentsVisible: flickable.contentX < root.width
+    property bool contentsVisible: true//flickable.contentX < root.width
 
     Rectangle {
         anchors.fill: parent
@@ -10,11 +10,20 @@ Item {
         opacity: 0.1
     }
 
-    Flickable {
+    FlickableMouseArea {
         id: flickable
         anchors.fill: parent
-        contentHeight: height
-        contentWidth: root.width * 2
+
+        onMomentumXUpdated: {
+            if (Math.abs(momentumX) > 10) {
+                buttonRow.visible = !buttonRow.visible
+                stop()
+            }
+        }
+
+
+//        contentHeight: height
+//        contentWidth: root.width * 2
 
         Row {
             id: buttonRow

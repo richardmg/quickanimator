@@ -22,11 +22,23 @@ Item {
     signal clicked
     signal rightClicked
 
+    function stop()
+    {
+        momentumXAnimation.running = false;
+        momentumYAnimation.running = false;
+        momentumX = 0
+        momentumY = 0
+        animating = true;
+        flicking = true
+        _stopped = true;
+    }
+
     property var _pressTime
     property real _pressMouseX
     property real _pressMouseY
     property real _prevMouseX: 0
     property real _prevMouseY: 0
+    property bool _stopped: false
 
     MultiPointTouchArea {
         anchors.fill: parent
@@ -44,6 +56,7 @@ Item {
                 return;
 
             activeTouchPoint = rightmostTouchpoint;
+            _stopped = false;
             root.pressed = false;
             root.flicking = true;
             root.animating = true;
@@ -63,7 +76,7 @@ Item {
         }
 
         onUpdated: {
-            if (touchPoints.indexOf(activeTouchPoint) === -1)
+            if (touchPoints.indexOf(activeTouchPoint) === -1 || _stopped)
                 return
             root.mouseX = activeTouchPoint.x
             root.mouseY = activeTouchPoint.y
@@ -80,6 +93,7 @@ Item {
 
         onPressedChanged: {
             if (pressedButtons & acceptedFlickButtons) {
+                _stopped = false
                 root.mouseX = mouseX;
                 root.mouseY = mouseY;
                 root.pressed = true;
@@ -91,6 +105,8 @@ Item {
         }
 
         onPositionChanged: {
+            if (_stopped)
+                return
             if (pressedButtons & acceptedFlickButtons) {
                 root.mouseX = mouseX;
                 root.mouseY = mouseY;
@@ -99,6 +115,12 @@ Item {
         }
 
         onWheel: {
+            if (_stopped) {
+                if (wheel.pixelDelta.x === 0 && wheel.pixelDelta.y === 0)
+                    _stopped = false
+                return
+            }
+
             animating = true;
             flicking = true
             momentumX = wheel.pixelDelta.x
