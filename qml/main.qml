@@ -67,9 +67,10 @@ ApplicationWindow {
         }
 
         PlayMenu {
-            anchors.right: parent.right
+            width: parent.width
+            height: 50
             anchors.bottom: parent.bottom
-            opacity: model.touchUI ? (menuButton.pressed ? 1 : 0) : 1
+            opacity: !contentsVisible ? 0.01 : model.touchUI ? (menuButton.pressed ? 1 : 0) : 1
             visible: opacity !== 0
             Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
         }
