@@ -9,6 +9,7 @@ ApplicationWindow {
 
     property alias stage: stage
     property alias menuButton: menuButton
+    property alias playMenu: playMenu
 
     property Timeline timeline
     property TimelineMenu menu
@@ -67,6 +68,7 @@ ApplicationWindow {
         }
 
         PlayMenu {
+            id: playMenu
             width: parent.width
             height: 50
             anchors.bottom: parent.bottom

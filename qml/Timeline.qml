@@ -28,9 +28,19 @@ Item {
         momentumRestX: playing ? -1 : 0
         acceptedButtons: Qt.RightButton
         onAnimatingChanged: updatePlayAnimation();
-        onMomentumXUpdated: myApp.model.setTime(myApp.model.time - (momentumX * 0.1));
-        onMomentumYUpdated: if (momentumX === 0) myApp.model.setTime(myApp.model.time - (momentumY * 0.005));
         onRightClicked: myApp.model.shiftUserInterfaceState();
+
+        onMomentumXUpdated: {
+            myApp.model.setTime(myApp.model.time - (momentumX * 0.1));
+        }
+
+        onMomentumYUpdated: {
+            if (Math.abs(momentumY) < 10 || Math.abs(momentumX) >= 5)
+                return;
+            myApp.playMenu.rotate(momentumY > 0);
+            stopMomentumX()
+            stopMomentumY()
+        }
     }
 
     onPlayingChanged: updatePlayAnimation();
