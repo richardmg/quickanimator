@@ -48,6 +48,7 @@ Item {
         touchPoints: [ TouchPoint { id: tp1; }, TouchPoint { id: tp2; } ]
 
         onPressed: {
+            print(pressed)
             var rightmostTouchpoint =
                     tp1.pressed && !tp2.pressed ? tp1
                   : tp2.pressed && !tp1.pressed ? tp2
