@@ -34,6 +34,7 @@ Item {
 
         property bool rotated: false
         property int lockDirection: 0
+
         onMomentumYUpdated: {
             if (Math.abs(momentumY) > 8 && !rotated) {
                 if (!lockDirection)
@@ -46,9 +47,11 @@ Item {
                 rotated = false;
             }
         }
+
         onPressedChanged: {
             if (!pressed) {
-                rotated = false;
+                if (momentumY === 0)
+                    rotated = false;
                 lockDirection = 0;
             }
         }
