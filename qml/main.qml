@@ -63,8 +63,6 @@ ApplicationWindow {
         Timeline {
             id: timeline
             anchors.fill: parent
-            visible: opacity !== 0
-            Behavior on opacity { NumberAnimation{ duration: 100 } }
         }
 
         PlayMenu {

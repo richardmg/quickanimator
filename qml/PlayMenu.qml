@@ -3,13 +3,17 @@ import QtQuick 2.0
 Item {
     id: root
     property int menuIndex: 0
-    property var menuRows: [playRow, editRow, emptyRow]
+    property var menuRows: [playRow, editRow]
 
     function rotate(down)
     {
         if (down) {
-            if (++menuIndex === menuRows.length)
-                menuIndex = 0;
+            if (myApp.model.fullScreenMode)
+                myApp.model.fullScreenMode = false;
+            else
+                menuIndex = (menuIndex + 1 === menuRows.length) ? 0 : menuIndex + 1;
+        } else {
+            myApp.model.fullScreenMode = !myApp.model.fullScreenMode;
         }
     }
 
@@ -17,7 +21,7 @@ Item {
         id: background
         anchors.fill: parent
         color: "black"
-        opacity: menuIndex !== menuRows.length - 1 ? 0.1 : 0
+        opacity: myApp.model.fullScreenMode ? 0 : 0.1
         visible: opacity !== 0
         Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
     }
@@ -48,11 +52,5 @@ Item {
         MultiTouchButton {
             Text { x: 2; y: 2; text: "Redo" }
         }
-    }
-
-    PlayMenuRow {
-        id: emptyRow
-        opacity: 0
-        Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
     }
 }

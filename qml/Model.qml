@@ -16,6 +16,7 @@ QtObject {
     readonly property int userInterfaceStatePlay: 1
     readonly property int userInterfaceStateMenu: 2
     property int userInterfaceState: userInterfaceStatePlay
+    property bool fullScreenMode: false
 
     signal layersUpdated(var removedLayer, var addedLayer)
     signal selectedLayersUpdated(var unselectedLayer, var selectedLayer)
