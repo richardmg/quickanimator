@@ -39,10 +39,11 @@ Rectangle {
         }
 
         onReleased: {
-            root.pressed = false;
-            if (tp && contains(Qt.point(tp.x, tp.y)))
+            root.pressed = tp !== null && tp.pressed;
+            if (!root.pressed && contains(Qt.point(tp.x, tp.y))) {
                 root.clicked();
-            tp = null;
+                tp = null;
+            }
         }
 
         MouseArea {
