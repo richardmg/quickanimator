@@ -2,17 +2,23 @@ import QtQuick 2.0
 
 Item {
     id: root
-    property bool contentsVisible: true//flickable.contentX < root.width
+    property int menuIndex: 0
 
     function rotate(down)
     {
+        if (++menuIndex === 3)
+            menuIndex = 0;
         buttonRow.visible = !buttonRow.visible
+        background.opacity = (menuIndex === 2) ? 0 : 0.1
     }
 
     Rectangle {
+        id: background
         anchors.fill: parent
         color: "black"
         opacity: 0.1
+        visible: opacity !== 0
+        Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
     }
 
     Row {

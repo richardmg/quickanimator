@@ -10,8 +10,6 @@ Rectangle {
     property bool checked: false
     property bool checkable: false
 
-    property bool _mouseDetected: false
-
     signal clicked
 
     height: 50
@@ -30,8 +28,6 @@ Rectangle {
         property TouchPoint tp: null
 
         onPressed: {
-            if (_mouseDetected)
-                return;
             if (tp1.pressed && contains(Qt.point(tp1.x, tp1.y)))
                 tp = tp1;
             else if (tp2.pressed && contains(Qt.point(tp2.x, tp2.y)))
@@ -43,11 +39,10 @@ Rectangle {
         }
 
         onReleased: {
-            if (_mouseDetected)
-                return;
             root.pressed = false;
-            if (contains(Qt.point(tp.x, tp.y)))
+            if (tp && contains(Qt.point(tp.x, tp.y)))
                 root.clicked();
+            tp = null;
         }
 
         MouseArea {
