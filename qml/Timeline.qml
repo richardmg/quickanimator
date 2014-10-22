@@ -38,7 +38,7 @@ Item {
             if (momentumY > 8 && !rotated) {
                 myApp.playMenu.rotate(momentumY > 0);
                 rotated = true;
-            } else if (momentumY <= 0) {
+            } else if (momentumY <= 4) {
                 rotated = false;
             }
         }

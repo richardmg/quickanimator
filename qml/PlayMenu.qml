@@ -3,33 +3,33 @@ import QtQuick 2.0
 Item {
     id: root
     property int menuIndex: 0
+    property var menuRows: [playRow, editRow, emptyRow]
 
     function rotate(down)
     {
-        if (++menuIndex === 3)
+        menuRows[menuIndex].opacity = 0;
+
+        if (++menuIndex === menuRows.length)
             menuIndex = 0;
-        buttonRow.visible = !buttonRow.visible
-        background.opacity = (menuIndex === 2) ? 0 : 0.1
+
+        menuRows[menuIndex].opacity = 1
     }
 
     Rectangle {
         id: background
         anchors.fill: parent
         color: "black"
-        opacity: 0.1
+        opacity: menuIndex !== menuRows.length - 1 ? 0.1 : 0
         visible: opacity !== 0
         Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
     }
 
     Row {
-        id: buttonRow
+        id: playRow
         height: parent.height
         width: childrenRect.width
         x: root.width - width
-
-        MultiTouchButton {
-            Text { x: 2; y: 2; text: "Undo" }
-        }
+        Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
 
         MultiTouchButton {
             onClicked: myApp.model.time = 0
@@ -42,13 +42,30 @@ Item {
         }
 
         MultiTouchButton {
-            onClicked: menu.visible = true;
             Text { x: 2; y: 2; text: "Record" }
+        }
+    }
+
+    Row {
+        id: editRow
+        height: parent.height
+        width: childrenRect.width
+        x: root.width - width
+        opacity: 0
+        Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+
+        MultiTouchButton {
+            Text { x: 2; y: 2; text: "Undo" }
         }
 
         MultiTouchButton {
-            onClicked: menu.visible = true;
-            Text { x: 2; y: 2; text: "Menu" }
+            Text { x: 2; y: 2; text: "Redo" }
         }
+    }
+
+    Row {
+        id: emptyRow
+        opacity: 0
+        Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
     }
 }
