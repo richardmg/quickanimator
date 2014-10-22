@@ -131,19 +131,21 @@ Item {
         }
 
         onWheel: {
-            if (wheel.pixelDelta.x === 0 && wheel.pixelDelta.y === 0) {
-                _momentumXStopped = false;
-                _momentumYStopped = false;
-                animating = false;
-                flicking = false;
-                return;
-            }
-
-            animating = true;
-            flicking = true
-
+            root.pressed = true
             updateMouse(root.mouseX + wheel.pixelDelta.x, root.mouseY + wheel.pixelDelta.y);
-            animateMomentumToRest(0);
+            wheelCleanupTimer.restart();
+        }
+
+        Timer {
+            id: wheelCleanupTimer
+            interval: 50
+            onTriggered: {
+                root._momentumXStopped = false;
+                root._momentumYStopped = false;
+                root.animating = false;
+                root.flicking = false;
+                root.pressed = false;
+            }
         }
 
         onClicked: {
