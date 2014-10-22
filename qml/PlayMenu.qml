@@ -5,6 +5,8 @@ Item {
     property int menuIndex: 0
     property var menuRows: [playRow, editRow]
 
+    clip: true
+
     function rotate(down)
     {
         if (down) {
