@@ -92,14 +92,10 @@ Item {
         onUpdated: {
             if (touchPoints.indexOf(activeTouchPoint) === -1)
                 return
-            var px = activeTouchPoint.x
-            var py = activeTouchPoint.y
-            var a = Math.atan2(px, py)
-            print((a / Math.PI * 2) * 360())
             if (!_momentumXStopped)
-                root.mouseX = px
+                root.mouseX = activeTouchPoint.x
             if (!_momentumYStopped)
-                root.mouseY = py
+                root.mouseY = activeTouchPoint.y
             root.pressed = true
             root.updateMomentum()
         }

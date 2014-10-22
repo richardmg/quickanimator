@@ -32,10 +32,14 @@ Item {
         onAnimatingChanged: updatePlayAnimation();
         onRightClicked: myApp.model.shiftUserInterfaceState();
         onMomentumXUpdated: myApp.model.setTime(myApp.model.time - (momentumX * 0.1));
+
+        property bool rotated: false
         onMomentumYUpdated: {
-            if (momentumY > 10) {
+            if (momentumY > 8 && !rotated) {
                 myApp.playMenu.rotate(momentumY > 0);
-                stopMomentumY();
+                rotated = true;
+            } else if (momentumY <= 0) {
+                rotated = false;
             }
         }
     }
