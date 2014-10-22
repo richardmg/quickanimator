@@ -7,6 +7,8 @@ Item {
     property real momentumY: 0
     property alias momentumRestX: momentumXAnimation.to
     property alias momentumRestY: momentumYAnimation.to
+    property alias momentumXAnimationDuration: momentumXAnimation.duration
+    property alias momentumYAnimationDuration: momentumYAnimation.duration
     property int splitAngle: -1 // [0, 90]
 
     property real mouseX: 0
@@ -230,14 +232,15 @@ Item {
 
     function animateMomentumToRest(threshold)
     {
-        if (Math.abs(momentumX) > threshold) {
+        if (Math.abs(momentumX) > threshold && momentumXAnimationDuration !== 0) {
             momentumXAnimation.from = momentumX
             momentumXAnimation.duration = 1000
             momentumXAnimation.restart();
         } else {
             momentumX = momentumRestX;
         }
-        if (Math.abs(momentumY) > threshold) {
+
+        if (Math.abs(momentumY) > threshold && momentumYAnimationDuration !== 0) {
             momentumYAnimation.from = momentumY
             momentumYAnimation.duration = 1000
             momentumYAnimation.restart();

@@ -25,6 +25,7 @@ Item {
         width: parent.width
         height: parent.height
         momentumRestX: playing ? -1 : 0
+        momentumYAnimationDuration: 0
         splitAngle: 60
         acceptedButtons: Qt.RightButton
 
@@ -49,11 +50,11 @@ Item {
         }
 
         onPressedChanged: {
-            if (!pressed) {
-                if (momentumY === 0)
-                    rotated = false;
-                lockDirection = 0;
-            }
+            if (pressed)
+                return;
+
+            rotated = false;
+            lockDirection = 0;
         }
     }
 
