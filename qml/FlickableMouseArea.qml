@@ -55,7 +55,7 @@ Item {
 
     MultiPointTouchArea {
         anchors.fill: parent
-        enabled: myApp.model.touchUI
+        enabled: myApp.touchUI
         property bool workAroundPosBug: false
 
         property TouchPoint activeTouchPoint: null
@@ -110,7 +110,7 @@ Item {
         id: mouseArea
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton | Qt.RightButton
-        enabled: !myApp.model.touchUI
+        enabled: !myApp.touchUI
 
         onPressedChanged: {
             if (pressedButtons & acceptedFlickButtons) {

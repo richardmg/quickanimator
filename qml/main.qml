@@ -7,6 +7,9 @@ ApplicationWindow {
     visible: true
     visibility: Qt.WindowFullScreen
 
+    property bool touchUI: Qt.platform.os === "ios"
+    property bool simulator: false
+
     property alias stage: stage
     property alias menuButton: menuButton
     property alias playMenu: playMenu
@@ -70,7 +73,7 @@ ApplicationWindow {
             width: parent.width
             height: 50
             anchors.bottom: parent.bottom
-            opacity: model.touchUI ? (menuButton.pressed ? 1 : 0) : 1
+            opacity: touchUI && !simulator ? (menuButton.pressed ? 1 : 0) : 1
             visible: opacity !== 0
             Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
         }
@@ -79,7 +82,7 @@ ApplicationWindow {
             id: menuButton
             width: 50
             height: parent.height
-            visible: model.touchUI
+            visible: touchUI
         }
 
         TimelineMenu {
