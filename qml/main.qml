@@ -5,9 +5,7 @@ import QtQuick.Layouts 1.0
 ApplicationWindow {
     id: myApp
     visible: true
-//    visibility: Qt.WindowFullScreen
-    width: 800
-    height: 600
+    visibility: Qt.WindowFullScreen
 
     property alias stage: stage
     property alias menuButton: menuButton
