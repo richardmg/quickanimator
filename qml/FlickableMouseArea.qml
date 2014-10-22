@@ -7,6 +7,7 @@ Item {
     property real momentumY: 0
     property alias momentumRestX: momentumXAnimation.to
     property alias momentumRestY: momentumYAnimation.to
+    property int splitAngle: -1 // [0, 90]
 
     property real mouseX: 0
     property real mouseY: 0
@@ -91,10 +92,14 @@ Item {
         onUpdated: {
             if (touchPoints.indexOf(activeTouchPoint) === -1)
                 return
+            var px = activeTouchPoint.x
+            var py = activeTouchPoint.y
+            var a = Math.atan2(px, py)
+            print((a / Math.PI * 2) * 360())
             if (!_momentumXStopped)
-                root.mouseX = activeTouchPoint.x
+                root.mouseX = px
             if (!_momentumYStopped)
-                root.mouseY = activeTouchPoint.y
+                root.mouseY = py
             root.pressed = true
             root.updateMomentum()
         }
@@ -186,14 +191,25 @@ Item {
     {
         var prevMomentumX = momentumX;
         var prevMomentumY = momentumY;
-        momentumX = mouseX - _prevMouseX
-        momentumY = mouseY - _prevMouseY
+        var distx = mouseX - _prevMouseX
+        var disty = mouseY - _prevMouseY
+        var a = ((Math.atan2(distx, disty) / (2 * Math.PI)) * 360) - 90;
+        var flickH = (a > -splitAngle && a < splitAngle) || (a > -180 - splitAngle && a < -180 + splitAngle);
+
         _prevMouseX = mouseX;
         _prevMouseY = mouseY;
-        if (prevMomentumX === momentumX)
-            momentumXUpdated()
-        if (prevMomentumY === momentumY)
-            momentumYUpdated()
+
+        if (splitAngle === -1 || flickH) {
+            momentumX = distx;
+            if (prevMomentumX === momentumX)
+                momentumXUpdated();
+        }
+
+        if (splitAngle === -1 || !flickH) {
+            momentumY = disty;
+            if (prevMomentumY === momentumY)
+                momentumYUpdated();
+        }
     }
 
     function restartanimating()
