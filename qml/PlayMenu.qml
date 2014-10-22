@@ -40,6 +40,7 @@ Item {
 
         MultiTouchButton {
             Text { x: 2; y: 2; text: "Record" }
+            onClicked: print("Record")
         }
     }
 
@@ -47,10 +48,12 @@ Item {
         id: editRow
         MultiTouchButton {
             Text { x: 2; y: 2; text: "Undo" }
+            onClicked: print("undo")
         }
 
         MultiTouchButton {
             Text { x: 2; y: 2; text: "Redo" }
+            onClicked: print("redo")
         }
     }
 }

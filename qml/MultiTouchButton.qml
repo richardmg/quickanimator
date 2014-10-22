@@ -39,18 +39,14 @@ Rectangle {
         }
 
         onReleased: {
-            root.pressed = tp !== null && tp.pressed;
-            if (!root.pressed && contains(Qt.point(tp.x, tp.y))) {
-                root.clicked();
-                tp = null;
+            // work around double release callback:
+            if (root.pressed) {
+                root.pressed = tp.pressed;
+                if (contains(Qt.point(tp.x, tp.y))) {
+                    root.clicked();
+                    tp = null;
+                }
             }
-        }
-
-        MouseArea {
-            id: mouseArea
-            anchors.fill: parent
-            onClicked: root.clicked()
-            onPressedChanged: root.pressed = pressed
         }
     }
 }

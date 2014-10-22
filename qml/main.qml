@@ -10,8 +10,8 @@ ApplicationWindow {
     property alias stage: stage
     property alias menuButton: menuButton
     property alias playMenu: playMenu
+    property alias timeline: timeline
 
-    property Timeline timeline
     property TimelineMenu menu
     property Flickable timelineFlickable
     property Flickable layerTreeFlickable

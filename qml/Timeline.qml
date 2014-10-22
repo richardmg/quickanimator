@@ -11,10 +11,6 @@ Item {
     property bool stagePlay: false
     property bool userPlay: false
 
-    Component.onCompleted: {
-        myApp.timeline = root
-    }
-
     TimelineCanvas {
         width: parent.width
         height: 20
