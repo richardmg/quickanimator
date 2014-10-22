@@ -7,12 +7,10 @@ Item {
 
     function rotate(down)
     {
-        menuRows[menuIndex].opacity = 0;
-
-        if (++menuIndex === menuRows.length)
-            menuIndex = 0;
-
-        menuRows[menuIndex].opacity = 1
+        if (down) {
+            if (++menuIndex === menuRows.length)
+                menuIndex = 0;
+        }
     }
 
     Rectangle {
@@ -24,13 +22,8 @@ Item {
         Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
     }
 
-    Row {
+    PlayMenuRow {
         id: playRow
-        height: parent.height
-        width: childrenRect.width
-        x: root.width - width
-        Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
-
         MultiTouchButton {
             onClicked: myApp.model.time = 0
             Text { x: 2; y: 2; text: myApp.model.time === 0 ? "Forward" : "Rewind" }
@@ -46,14 +39,8 @@ Item {
         }
     }
 
-    Row {
+    PlayMenuRow {
         id: editRow
-        height: parent.height
-        width: childrenRect.width
-        x: root.width - width
-        opacity: 0
-        Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
-
         MultiTouchButton {
             Text { x: 2; y: 2; text: "Undo" }
         }
@@ -63,7 +50,7 @@ Item {
         }
     }
 
-    Row {
+    PlayMenuRow {
         id: emptyRow
         opacity: 0
         Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
