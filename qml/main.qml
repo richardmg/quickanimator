@@ -13,7 +13,7 @@ ApplicationWindow {
     property alias stage: stage
     property alias menuButton: menuButton
     property alias playMenu: playMenu
-    property alias timeline: timeline
+    property alias timeFlickable: timeFlickable
 
     property TimelineMenu menu
     property Flickable timelineFlickable
@@ -32,7 +32,7 @@ ApplicationWindow {
             if (event.key === Qt.Key_Space) {
                 if (keyPressTime === 0) {
                     keyPressTime = new Date().getTime()
-                    timeline.userPlay = !timeline.userPlay;
+                    timeFlickable.userPlay = !timeFlickable.userPlay;
                 }
             } else if (event.modifiers & Qt.ControlModifier) {
                 if (event.key === Qt.Key_M)
@@ -49,7 +49,7 @@ ApplicationWindow {
         Keys.onReleased: {
             if (event.key === Qt.Key_Space) {
                 if (keyPressTime + 200 < new Date().getTime())
-                    timeline.userPlay = !timeline.userPlay;
+                    timeFlickable.userPlay = !timeFlickable.userPlay;
                 keyPressTime = 0;
             }
         }
@@ -63,8 +63,16 @@ ApplicationWindow {
             anchors.fill: parent
         }
 
-        Timeline {
-            id: timeline
+        TimelineCanvas {
+            width: parent.width
+            height: 20
+            opacity: myApp.model.fullScreenMode ? 0 : 1
+            visible: opacity !== 0
+            Behavior on opacity { NumberAnimation{ duration: 100 } }
+        }
+
+        TimeFlickable {
+            id: timeFlickable
             anchors.fill: parent
         }
 

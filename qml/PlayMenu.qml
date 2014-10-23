@@ -36,8 +36,8 @@ Item {
         }
 
         MultiTouchButton {
-            onClicked: myApp.timeline.userPlay = !myApp.timeline.userPlay
-            Text { x: 2; y: 2; text:  myApp.timeline.userPlay ? "Stop" : "Play" }
+            onClicked: myApp.timeFlickable.userPlay = !myApp.timeFlickable.userPlay
+            Text { x: 2; y: 2; text:  myApp.timeFlickable.userPlay ? "Stop" : "Play" }
         }
 
         MultiTouchButton {

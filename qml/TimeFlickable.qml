@@ -11,14 +11,6 @@ Item {
     property bool stagePlay: false
     property bool userPlay: false
 
-    TimelineCanvas {
-        width: parent.width
-        height: 20
-        opacity: myApp.model.fullScreenMode ? 0 : 1
-        visible: opacity !== 0
-        Behavior on opacity { NumberAnimation{ duration: 100 } }
-    }
-
     FlickableMouseArea {
         id: flickable
         visible: !myApp.menuButton.visible || myApp.menuButton.pressed || myApp.simulator

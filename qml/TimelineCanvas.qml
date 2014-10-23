@@ -15,7 +15,7 @@ Rectangle {
     }
 
     Connections {
-        target: myApp.timeline
+        target: myApp.timeFlickable
         onPlayingChanged: canvas.requestPaint()
     }
 
@@ -89,7 +89,7 @@ Rectangle {
                 ctx.fillText(label, posX + 5, parent.height - 2);
             }
 
-            if (myApp.timeline.playing)
+            if (myApp.timeFlickable.playing)
                 ctx.fillStyle = "orange"
             else if (myApp.stage.autoPlay)
                 ctx.fillStyle = "orange"
