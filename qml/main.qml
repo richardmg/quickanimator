@@ -63,14 +63,6 @@ ApplicationWindow {
             anchors.fill: parent
         }
 
-        TimelineCanvas {
-            width: parent.width
-            height: 20
-            opacity: myApp.model.fullScreenMode ? 0 : 1
-            visible: opacity !== 0
-            Behavior on opacity { NumberAnimation{ duration: 100 } }
-        }
-
         TimeFlickable {
             id: timeFlickable
             anchors.fill: parent

@@ -3,27 +3,21 @@ import QtQuick 2.0
 Item {
     id: root
     property int menuIndex: 0
-    property var menuRows: [playRow, editRow]
+    property var menuRows: [playRow, editRow, timelineRow, emptyRow]
 
     clip: true
 
     function rotate(down)
     {
-        if (down) {
-            if (myApp.model.fullScreenMode)
-                myApp.model.fullScreenMode = false;
-            else
-                menuIndex = (menuIndex + 1 === menuRows.length) ? 0 : menuIndex + 1;
-        } else {
-            myApp.model.fullScreenMode = !myApp.model.fullScreenMode;
-        }
+        if (down)
+            menuIndex = (menuIndex + 1 === menuRows.length) ? 0 : menuIndex + 1;
     }
 
     Rectangle {
         id: background
         anchors.fill: parent
         color: "black"
-        opacity: myApp.model.fullScreenMode ? 0 : 0.1
+        opacity: myApp.model.fullScreenMode || menuIndex === menuRows.indexOf(emptyRow) ? 0 : 0.3
         visible: opacity !== 0
         Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
     }
@@ -57,5 +51,17 @@ Item {
             Text { x: 2; y: 2; text: "Redo" }
             onClicked: print("redo")
         }
+    }
+
+    PlayMenuRow {
+        id: timelineRow
+//        TimelineCanvas {
+//            width: parent.width
+//            height: parent.height
+//        }
+    }
+
+    PlayMenuRow {
+        id: emptyRow
     }
 }

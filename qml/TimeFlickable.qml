@@ -26,15 +26,10 @@ Item {
         onMomentumXUpdated: myApp.model.setTime(myApp.model.time - (momentumX * 0.1));
 
         property bool rotated: false
-        property int lockDirection: 0
 
         onMomentumYUpdated: {
             if (Math.abs(momentumY) > 8 && !rotated) {
-                if (!lockDirection)
-                    lockDirection = momentumY;
-                else if (lockDirection < 0 !== momentumY < 0)
-                    return;
-                myApp.playMenu.rotate(lockDirection > 0);
+                myApp.playMenu.rotate(momentumY > 0);
                 rotated = true;
             } else if (momentumY !== 0 && Math.abs(momentumY) <= 4) {
                 rotated = false;
@@ -44,9 +39,7 @@ Item {
         onPressedChanged: {
             if (pressed)
                 return;
-
             rotated = false;
-            lockDirection = 0;
         }
     }
 
