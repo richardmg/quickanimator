@@ -19,7 +19,7 @@ Item {
         color: "black"
         opacity: myApp.model.fullScreenMode || menuIndex === menuRows.indexOf(emptyRow) ? 0 : 0.3
         visible: opacity !== 0
-        Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+//        Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
     }
 
     PlayMenuRow {
@@ -55,10 +55,10 @@ Item {
 
     PlayMenuRow {
         id: timelineRow
-//        TimelineCanvas {
-//            width: parent.width
-//            height: parent.height
-//        }
+        TimelineCanvas {
+            width: parent.width
+            height: parent.height
+        }
     }
 
     PlayMenuRow {

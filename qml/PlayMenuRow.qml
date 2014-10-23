@@ -15,15 +15,15 @@ Row {
 
     state: menuIndex === menuRows.indexOf(root) ? "in" : "out"
 
-    transitions: [
-        Transition {
-            from: "in"
-            animations: NumberAnimation { target: root; property: "y"; from: -50; to: 0; duration: 200; easing.type: Easing.OutCubic }
-        },
-        Transition {
-            from: "out"
-            animations: NumberAnimation { target: root; property: "y"; from: 0; to: 50; duration: 200; easing.type: Easing.OutCubic }
-        }
-    ]
+//    transitions: [
+//        Transition {
+//            from: "in"
+//            animations: NumberAnimation { target: root; property: "y"; from: -50; to: 0; duration: 200; easing.type: Easing.OutCubic }
+//        },
+//        Transition {
+//            from: "out"
+//            animations: NumberAnimation { target: root; property: "y"; from: 0; to: 50; duration: 200; easing.type: Easing.OutCubic }
+//        }
+//    ]
 
 }
