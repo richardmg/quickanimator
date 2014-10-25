@@ -53,12 +53,12 @@ Item {
         ProxyButton {
             Text { x: 2; y: 2; text: "Bar" }
             onClicked: print("bar")
-            flickStop: true
         }
 
         ProxyButton {
             Text { x: 2; y: 2; text: "Baz" }
             onClicked: print("baz")
+            flickStop: true
         }
     }
 
@@ -95,14 +95,14 @@ Item {
 
         onMomentumXUpdated: {
             buttonRow.x += momentumX;
-            buttonRow.x = (buttonRow.x > parent.width) ? parent.width : (buttonRow.x < -buttonRow.width) ? -buttonRow.width : buttonRow.x;
+            buttonRow.x = (buttonRow.x > parent.width) ? parent.width : (buttonRow.x < parent.width - buttonRow.width) ? parent.width - buttonRow.width : buttonRow.x;
         }
 
         onPressedChanged: {
             if (pressed) {
                 snapAnimation.stop();
             } else {
-                var button = Math.abs(momentumX) > 20 ? closestButton(momentumX > 0) : null;
+                var button = Math.abs(momentumX) > 15 ? closestButton(momentumX > 0) : null;
                 if (button) {
                     stopMomentumX();
                     snapAnimation.to = root.width - button.x - button.width;
