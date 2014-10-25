@@ -5,7 +5,11 @@ import QtQuick.Layouts 1.0
 ApplicationWindow {
     id: myApp
     visible: true
-    visibility: Qt.WindowFullScreen
+//    visibility: Qt.Window
+    width: 1024
+    height: 600
+
+    Component.onCompleted: width += 1
 
     property bool touchUI: Qt.platform.os === "ios"
     property bool simulator: false

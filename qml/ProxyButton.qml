@@ -9,6 +9,7 @@ Rectangle {
     property bool pressed: false
     property bool checked: false
     property bool checkable: false
+    property bool flickStop: false
 
     signal clicked
 
