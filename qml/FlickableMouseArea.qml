@@ -90,10 +90,14 @@ Item {
         onReleased: {
             if (touchPoints.indexOf(activeTouchPoint) === -1)
                 return
-            activeTouchPoint = null;
+            if (!_momentumXStopped)
+                root.mouseX = activeTouchPoint.x;
+            if (!_momentumYStopped)
+                root.mouseY = activeTouchPoint.y;
             root.pressed = true; // ensure that we emit clicked (workAroundPosBug)
             root.pressed = false;
             root.flicking = false;
+            activeTouchPoint = null;
         }
 
         onUpdated: {
@@ -126,7 +130,10 @@ Item {
                 root.pressed = true;
                 root.updateMouse(mouseX, mouseY)
             } else if (pressedButtons === Qt.NoButton) {
-                root.updateMouse(mouseX, mouseY)
+                if (!_momentumXStopped)
+                    root.mouseX = mouseX;
+                if (!_momentumYStopped)
+                    root.mouseY = mouseY;
                 root.pressed = false;
                 root.flicking = false;
             }
