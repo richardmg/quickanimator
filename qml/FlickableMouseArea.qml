@@ -205,11 +205,15 @@ Item {
         var prevMomentumY = momentumY;
         var distx = mouseX - _prevMouseX
         var disty = mouseY - _prevMouseY
-        var a = ((Math.atan2(distx, disty) / (2 * Math.PI)) * 360) - 90;
-        var flickH = (a > -splitAngle && a < splitAngle) || (a > -180 - splitAngle && a < -180 + splitAngle);
 
         _prevMouseX = mouseX;
         _prevMouseY = mouseY;
+
+        var flickH = true;
+        if (splitAngle !== -1) {
+            var a = ((Math.atan2(distx, disty) / (2 * Math.PI)) * 360) - 90;
+            flickH = (a > -splitAngle && a < splitAngle) || (a > -180 - splitAngle && a < -180 + splitAngle);
+        }
 
         if (splitAngle === -1 || flickH) {
             momentumX = distx;

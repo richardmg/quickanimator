@@ -63,20 +63,20 @@ ApplicationWindow {
             anchors.fill: parent
         }
 
-        TimeFlickable {
-            id: timeFlickable
-            anchors.fill: parent
-        }
-
         TimelineCanvas {
             width: parent.width
             height: 15
         }
 
+        TimeFlickable {
+            id: timeFlickable
+            anchors.fill: parent
+        }
+
         PlayMenu {
             id: playMenu
             width: parent.width
-            height: 50
+            height: 70
             anchors.bottom: parent.bottom
             opacity: touchUI && !simulator ? (menuButton.pressed ? 1 : 0) : 1
             visible: opacity !== 0

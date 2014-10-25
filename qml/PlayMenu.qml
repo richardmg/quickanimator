@@ -18,27 +18,27 @@ Item {
         height: parent.height
         x: parent.width - width
 
-        MultiTouchButton {
+        ProxyButton {
             onClicked: myApp.model.time = 0
             Text { x: 2; y: 2; text: myApp.model.time === 0 ? "Forward" : "Rewind" }
         }
 
-        MultiTouchButton {
+        ProxyButton {
             onClicked: myApp.timeFlickable.userPlay = !myApp.timeFlickable.userPlay
             Text { x: 2; y: 2; text:  myApp.timeFlickable.userPlay ? "Stop" : "Play" }
         }
 
-        MultiTouchButton {
+        ProxyButton {
             Text { x: 2; y: 2; text: "Record" }
             onClicked: print("Record")
         }
 
-        MultiTouchButton {
+        ProxyButton {
             Text { x: 2; y: 2; text: "Undo" }
             onClicked: print("undo")
         }
 
-        MultiTouchButton {
+        ProxyButton {
             Text { x: 2; y: 2; text: "Redo" }
             onClicked: print("redo")
         }
@@ -47,7 +47,7 @@ Item {
     FlickableMouseArea {
         anchors.fill: parent
 
-        onMomentumXChanged: {
+        onMomentumXUpdated: {
             buttonRow.x += momentumX;
             buttonRow.x = (buttonRow.x > parent.width) ? parent.width
                                                        : (buttonRow.x < -buttonRow.width) ? -buttonRow.width

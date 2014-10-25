@@ -9,6 +9,7 @@ Rectangle {
     property bool pressed: false
     property bool checked: false
     property bool checkable: false
+    property bool touchAreaEnabled: touchArea.enabled
 
     signal clicked
 
@@ -22,6 +23,7 @@ Rectangle {
     }
 
     MultiPointTouchArea {
+        id: touchArea
         anchors.fill: parent
         property TouchPoint activeTouchPoint: null
         touchPoints: [ TouchPoint { id: tp1; }, TouchPoint { id: tp2; } ]
