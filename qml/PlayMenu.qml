@@ -3,6 +3,13 @@ import QtQuick 2.0
 Item {
     id: root
 
+    onVisibleChanged: {
+        if (!visible)
+            return;
+        if (buttonRow.x >= flickable.leftStop)
+            buttonRow.x = buttonRow.startX
+    }
+
     Rectangle {
         id: background
         x: -5
@@ -29,7 +36,8 @@ Item {
         id: buttonRow
         width: childrenRect.width
         height: parent.height
-        x: root.width - recordButton.x - recordButton.width //parent.width - width
+        property int startX: root.width - recordButton.x - recordButton.width
+        x: startX
 
         ProxyButton {
             onClicked: myApp.model.time = 0
@@ -77,7 +85,12 @@ Item {
     }
 
     FlickableMouseArea {
+        id: flickable
         anchors.fill: parent
+
+        property int leftStop: parent.width
+        property int rightStop: parent.width - buttonRow.width
+        property int overshoot: 100
 
         PropertyAnimation {
             id: snapAnimation
@@ -115,10 +128,6 @@ Item {
             return bestChild;
         }
 
-        property int leftStop: parent.width
-        property int rightStop: parent.width - buttonRow.width
-        property int overshoot: 100
-
         onMomentumXUpdated: {
             // Ensure that the menu cannot be dragged passed the stop
             // points, and apply some overshoot resitance.
@@ -133,6 +142,7 @@ Item {
         onPressedChanged: {
             if (pressed) {
                 snapAnimation.stop();
+                bounceAnimation.stop();
             } else {
                 // Check if we should bounce to a button stop or the right edge
                 var button = Math.abs(momentumX) > 15 ? closestButton(momentumX > 0) : null;
