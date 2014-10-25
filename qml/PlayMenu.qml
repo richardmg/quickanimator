@@ -65,6 +65,14 @@ Item {
     FlickableMouseArea {
         anchors.fill: parent
 
+        PropertyAnimation {
+            id: snapAnimation
+            target: buttonRow
+            properties: "x"
+            duration: 200
+            easing.type: Easing.OutExpo
+        }
+
         function closestButton(right)
         {
             var children = buttonRow.children;
@@ -91,12 +99,15 @@ Item {
         }
 
         onPressedChanged: {
-            if (pressed)
-                return;
-            var button = Math.abs(momentumX) > 15 ? closestButton(momentumX > 0) : null;
-            if (button) {
-                buttonRow.x = root.width - button.x - button.width;
-                stopMomentumX();
+            if (pressed) {
+                snapAnimation.stop();
+            } else {
+                var button = Math.abs(momentumX) > 20 ? closestButton(momentumX > 0) : null;
+                if (button) {
+                    stopMomentumX();
+                    snapAnimation.to = root.width - button.x - button.width;
+                    snapAnimation.restart();
+                }
             }
         }
 
