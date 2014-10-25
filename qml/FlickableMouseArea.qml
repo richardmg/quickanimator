@@ -118,6 +118,8 @@ Item {
             if (pressedButtons & acceptedFlickButtons) {
                 _momentumXStopped = false
                 _momentumYStopped = false
+                root.mouseX = mouseX;
+                root.mouseY = mouseY;
                 root.pressed = true;
                 root.updateMouse(mouseX, mouseY)
             } else if (pressedButtons === Qt.NoButton) {
