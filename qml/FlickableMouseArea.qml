@@ -89,6 +89,7 @@ Item {
             if (touchPoints.indexOf(activeTouchPoint) === -1)
                 return
             activeTouchPoint = null;
+            root.pressed = true; // ensure that we emit clicked (workAroundPosBug)
             root.pressed = false;
             root.flicking = false;
         }
