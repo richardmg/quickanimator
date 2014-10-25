@@ -53,5 +53,12 @@ Item {
                                                        : (buttonRow.x < -buttonRow.width) ? -buttonRow.width
                                                                                           : buttonRow.x;
         }
+
+        onClicked: {
+            var p = mapToItem(buttonRow, mouseX, mouseY);
+            var button = buttonRow.childAt(p.x, p.y);
+            if (button)
+                button.clicked();
+        }
     }
 }
