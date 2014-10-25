@@ -9,18 +9,18 @@ Item {
         width: parent.width - (x * 2)
         height: parent.height - x
         anchors.fill: parent
-        border.color: "blue"
+        border.color: "darkblue"
         gradient: Gradient {
             GradientStop {
                 position: 0.0;
-                color: Qt.rgba(0.5, 0.5, 0.9, 1.0)
+                color: Qt.rgba(0.3, 0.3, 1.0, 1.0)
             }
             GradientStop {
                 position: 1.0;
-                color: Qt.rgba(0.2, 0.2, 0.7, 1.0)
+                color: Qt.rgba(0.1, 0.1, 1.0, 1.0)
             }
         }
-        opacity: myApp.model.fullScreenMode || buttonRow.x >= width || buttonRow.x <= -buttonRow.width ? 0 : 0.3
+        opacity: myApp.model.fullScreenMode || buttonRow.x >= width || buttonRow.x <= -buttonRow.width ? 0 : 0.5
         visible: opacity !== 0
         Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
     }
@@ -33,44 +33,44 @@ Item {
 
         ProxyButton {
             onClicked: myApp.model.time = 0
-            Text { x: 2; y: 2; text: myApp.model.time === 0 ? "Forward" : "Rewind" }
+            text: myApp.model.time === 0 ? "Forward" : "Rewind"
         }
 
         ProxyButton {
             onClicked: myApp.timeFlickable.userPlay = !myApp.timeFlickable.userPlay
-            Text { x: 2; y: 2; text:  myApp.timeFlickable.userPlay ? "Stop" : "Play" }
+            text:  myApp.timeFlickable.userPlay ? "Stop" : "Play"
         }
 
         ProxyButton {
             id: recordButton
-            Text { x: 2; y: 2; text: "Record" }
+            text: "Record"
             onClicked: print("Record")
             flickStop: true
         }
 
         ProxyButton {
-            Text { x: 2; y: 2; text: "Undo" }
+            text: "Undo"
             onClicked: print("undo")
         }
 
         ProxyButton {
-            Text { x: 2; y: 2; text: "Redo" }
+            text: "Redo"
             onClicked: print("redo")
             flickStop: true
         }
 
         ProxyButton {
-            Text { x: 2; y: 2; text: "Foo" }
+            text: "Foo"
             onClicked: print("foo")
         }
 
         ProxyButton {
-            Text { x: 2; y: 2; text: "Bar" }
+            text: "Bar"
             onClicked: print("bar")
         }
 
         ProxyButton {
-            Text { x: 2; y: 2; text: "Baz" }
+            text: "Baz"
             onClicked: print("baz")
             flickStop: true
         }
