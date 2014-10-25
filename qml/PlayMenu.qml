@@ -36,7 +36,7 @@ Item {
         id: buttonRow
         width: childrenRect.width
         height: parent.height
-        property int startX: root.width - recordButton.x - recordButton.width
+        property int startX: root.width - menuStartButton.x - menuStartButton.width
         x: startX
 
         ProxyButton {
@@ -50,35 +50,49 @@ Item {
         }
 
         ProxyButton {
-            id: recordButton
             text: "Record"
             onClicked: print("Record")
-            flickStop: true
         }
 
         ProxyButton {
-            text: "Undo"
+            id: menuStartButton
+            text: "Slowmo"
             onClicked: print("undo")
+            flickStop: true
+        }
+
+        ProxyButton { text: "|" }
+
+        ProxyButton {
+            text: "Undo"
+            onClicked: print("bar")
         }
 
         ProxyButton {
             text: "Redo"
             onClicked: print("redo")
+        }
+
+        ProxyButton {
+            text: "Cut"
+            onClicked: print("foo")
             flickStop: true
         }
 
+        ProxyButton { text: "|" }
+
         ProxyButton {
-            text: "Foo"
-            onClicked: print("foo")
+            text: "Cast"
+            onClicked: print("baz")
         }
 
         ProxyButton {
-            text: "Bar"
-            onClicked: print("bar")
+            text: "Google"
+            onClicked: print("baz")
         }
 
         ProxyButton {
-            text: "Baz"
+            text: "Settings"
             onClicked: print("baz")
             flickStop: true
         }
