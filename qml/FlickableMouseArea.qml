@@ -9,6 +9,8 @@ Item {
     property alias momentumRestY: momentumYAnimation.to
     property alias momentumXAnimationDuration: momentumXAnimation.duration
     property alias momentumYAnimationDuration: momentumYAnimation.duration
+    property alias momentumXAnimationEasing: momentumXAnimation.easing
+    property alias momentumYAnimationEasing: momentumYAnimation.easing
     property int splitAngle: -1 // [0, 90]
 
     property real mouseX: 0
