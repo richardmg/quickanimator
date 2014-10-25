@@ -103,7 +103,9 @@ Item {
 
         onMomentumXUpdated: {
             buttonRow.x += momentumX;
-            buttonRow.x = (buttonRow.x > parent.width) ? parent.width : (buttonRow.x < parent.width - buttonRow.width) ? parent.width - buttonRow.width : buttonRow.x;
+            var leftStop = parent.width
+            var rightStop = parent.width - buttonRow.width - 100;
+            buttonRow.x = (buttonRow.x > leftStop) ? leftStop : (buttonRow.x < rightStop) ? rightStop : buttonRow.x;
         }
 
         onPressedChanged: {
@@ -116,11 +118,10 @@ Item {
                     bounceAnimation.stop();
                     snapAnimation.to = root.width - button.x - button.width;
                     snapAnimation.restart();
-                } else if (momentumX < -15) {
+                } else if (buttonRow.x < parent.width - buttonRow.width) {
                     stopMomentumX();
                     snapAnimation.stop();
-                    bounceAnimation.from = buttonRow.x - 30
-                    bounceAnimation.to = buttonRow.x
+                    bounceAnimation.to = parent.width - buttonRow.width;
                     bounceAnimation.restart();
                 }
             }
