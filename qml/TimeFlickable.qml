@@ -28,10 +28,10 @@ Item {
         property bool rotated: false
 
         onMomentumYUpdated: {
-            if (Math.abs(momentumY) > 8 && !rotated) {
-                myApp.playMenu.rotate(momentumY > 0);
+            if (momentumY > 8 && !rotated) {
+                myApp.playMenu.rotate(true);
                 rotated = true;
-            } else if (momentumY !== 0 && Math.abs(momentumY) <= 4) {
+            } else if (momentumY !== 0 && momentumY <= 4) {
                 rotated = false;
             }
         }
