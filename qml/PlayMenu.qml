@@ -101,27 +101,36 @@ Item {
             return bestChild;
         }
 
+        property int leftStop: parent.width
+        property int rightStop: parent.width - buttonRow.width
+        property int overshoot: 100
+
         onMomentumXUpdated: {
-            buttonRow.x += momentumX;
-            var leftStop = parent.width
-            var rightStop = parent.width - buttonRow.width - 100;
-            buttonRow.x = (buttonRow.x > leftStop) ? leftStop : (buttonRow.x < rightStop) ? rightStop : buttonRow.x;
+            // Ensure that the menu cannot be dragged passed the stop
+            // points, and apply some overshoot resitance.
+            var dist = Math.max(0, rightStop - buttonRow.x);
+            buttonRow.x += momentumX * Math.pow(1 - (dist / overshoot), 2);
+            if (buttonRow.x > leftStop)
+                buttonRow.x = leftStop;
+            else if (buttonRow.x < rightStop - overshoot)
+                buttonRow.x = rightStop - overshoot;
         }
 
         onPressedChanged: {
             if (pressed) {
                 snapAnimation.stop();
             } else {
+                // Check if we should bounce to a button stop or the right edge
                 var button = Math.abs(momentumX) > 15 ? closestButton(momentumX > 0) : null;
                 if (button) {
                     stopMomentumX();
                     bounceAnimation.stop();
                     snapAnimation.to = root.width - button.x - button.width;
                     snapAnimation.restart();
-                } else if (buttonRow.x < parent.width - buttonRow.width) {
+                } else if (buttonRow.x < rightStop) {
                     stopMomentumX();
                     snapAnimation.stop();
-                    bounceAnimation.to = parent.width - buttonRow.width;
+                    bounceAnimation.to = rightStop
                     bounceAnimation.restart();
                 }
             }
