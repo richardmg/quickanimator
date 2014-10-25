@@ -3,12 +3,12 @@ import QtQuick 2.0
 Item {
     id: root
 
-    onVisibleChanged: {
-        if (!visible)
-            return;
-        if (buttonRow.x >= flickable.leftStop)
-            buttonRow.x = buttonRow.startX
-    }
+//    onVisibleChanged: {
+//        if (!visible)
+//            return;
+//        if (buttonRow.x >= flickable.leftStop)
+//            buttonRow.x = buttonRow.startX
+//    }
 
     Rectangle {
         id: background
@@ -36,65 +36,77 @@ Item {
         id: buttonRow
         width: childrenRect.width
         height: parent.height
-        property int startX: root.width - menuStartButton.x - menuStartButton.width
-        x: startX
+        objectName: "top"
 
-        ProxyButton {
-            onClicked: myApp.model.time = 0
-            text: myApp.model.time === 0 ? "Forward" : "Rewind"
+        Row {
+            width: root.width
+            height: parent.height
+            layoutDirection: Qt.RightToLeft
+        objectName: "second"
+
+            ProxyButton {
+                onClicked: myApp.model.time = 0
+                text: myApp.model.time === 0 ? "Forward" : "Rewind"
+            }
+
+            ProxyButton {
+                onClicked: myApp.timeFlickable.userPlay = !myApp.timeFlickable.userPlay
+                text:  myApp.timeFlickable.userPlay ? "Stop" : "Play"
+            }
+
+            ProxyButton {
+                text: "Record"
+                onClicked: print("Record")
+            }
+
+            ProxyButton {
+                text: "Slowmo"
+                onClicked: print("undo")
+                flickStop: true
+            }
         }
 
-        ProxyButton {
-            onClicked: myApp.timeFlickable.userPlay = !myApp.timeFlickable.userPlay
-            text:  myApp.timeFlickable.userPlay ? "Stop" : "Play"
+        Row {
+            width: root.width
+            height: parent.height
+            layoutDirection: Qt.RightToLeft
+
+            ProxyButton {
+                text: "Undo"
+                onClicked: print("bar")
+            }
+
+            ProxyButton {
+                text: "Redo"
+                onClicked: print("redo")
+            }
+
+            ProxyButton {
+                text: "Cut"
+                onClicked: print("foo")
+                flickStop: true
+            }
         }
 
-        ProxyButton {
-            text: "Record"
-            onClicked: print("Record")
-        }
+        Row {
+            width: root.width
+            height: parent.height
+            layoutDirection: Qt.RightToLeft
 
-        ProxyButton {
-            id: menuStartButton
-            text: "Slowmo"
-            onClicked: print("undo")
-            flickStop: true
-        }
+            ProxyButton {
+                text: "Cast"
+                onClicked: print("baz")
+            }
 
-        ProxyButton { text: "|" }
+            ProxyButton {
+                text: "Google"
+                onClicked: print("baz")
+            }
 
-        ProxyButton {
-            text: "Undo"
-            onClicked: print("bar")
-        }
-
-        ProxyButton {
-            text: "Redo"
-            onClicked: print("redo")
-        }
-
-        ProxyButton {
-            text: "Cut"
-            onClicked: print("foo")
-            flickStop: true
-        }
-
-        ProxyButton { text: "|" }
-
-        ProxyButton {
-            text: "Cast"
-            onClicked: print("baz")
-        }
-
-        ProxyButton {
-            text: "Google"
-            onClicked: print("baz")
-        }
-
-        ProxyButton {
-            text: "Settings"
-            onClicked: print("baz")
-            flickStop: true
+            ProxyButton {
+                text: "Settings"
+                onClicked: print("baz")
+            }
         }
     }
 
@@ -110,7 +122,7 @@ Item {
             id: snapAnimation
             target: buttonRow
             properties: "x"
-            duration: 200
+            duration: Math.abs(buttonRow.x - to)
             easing.type: Easing.OutExpo
         }
 
@@ -130,8 +142,6 @@ Item {
 
             for (var i in children) {
                 var child = children[right ? i : children.length - i - 1];
-                if (!child.flickStop)
-                    continue;
                 var dist = root.width - root.mapFromItem(buttonRow, child.x, child.y).x - child.width;
                 if ((right && dist > 0 && dist < bestChildDist) || (!right && dist < 0 && dist > bestChildDist)) {
                     bestChild = child;
@@ -175,10 +185,15 @@ Item {
         }
 
         onClicked: {
-            var p = mapToItem(buttonRow, mouseX, mouseY);
-            var button = buttonRow.childAt(p.x, p.y);
-            if (button)
-                button.clicked();
+            var p = buttonRow;
+            do {
+                var pos = mapToItem(p, mouseX, mouseY);
+                var child = p.childAt(pos.x, pos.y);
+                p = child;
+            } while (p && !child.isButton);
+
+            if (child && child.isButton)
+                child.clicked();
         }
     }
 }

@@ -10,6 +10,7 @@ Rectangle {
     property bool checkable: false
     property bool flickStop: false
     property alias text: text.text
+    readonly property bool isButton: true
 
     signal clicked
 
