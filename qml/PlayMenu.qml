@@ -3,7 +3,7 @@ import QtQuick 2.0
 Item {
     id: root
     property int menuIndex: 0
-    property var menuRows: [playRow, editRow, timelineRow, emptyRow]
+    property var menuRows: [playRow, editRow, emptyRow]
 
     clip: true
 
@@ -50,14 +50,6 @@ Item {
         MultiTouchButton {
             Text { x: 2; y: 2; text: "Redo" }
             onClicked: print("redo")
-        }
-    }
-
-    PlayMenuRow {
-        id: timelineRow
-        TimelineCanvas {
-            width: parent.width
-            height: parent.height
         }
     }
 

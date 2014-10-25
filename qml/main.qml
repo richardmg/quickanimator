@@ -68,6 +68,11 @@ ApplicationWindow {
             anchors.fill: parent
         }
 
+        TimelineCanvas {
+            width: parent.width
+            height: 15
+        }
+
         PlayMenu {
             id: playMenu
             width: parent.width
