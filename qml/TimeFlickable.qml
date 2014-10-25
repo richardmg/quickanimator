@@ -17,30 +17,10 @@ Item {
         width: parent.width
         height: parent.height
         momentumRestX: playing ? -1 : 0
-        momentumYAnimationDuration: 0
-        splitAngle: 60
         acceptedButtons: Qt.RightButton
 
         onAnimatingChanged: updatePlayAnimation();
-        onRightClicked: myApp.model.shiftUserInterfaceState();
         onMomentumXUpdated: myApp.model.setTime(myApp.model.time - (momentumX * 0.1));
-
-        property bool rotated: false
-
-        onMomentumYUpdated: {
-            if (momentumY > 8 && !rotated) {
-                myApp.playMenu.rotate(true);
-                rotated = true;
-            } else if (momentumY !== 0 && momentumY <= 4) {
-                rotated = false;
-            }
-        }
-
-        onPressedChanged: {
-            if (pressed)
-                return;
-            rotated = false;
-        }
     }
 
     onPlayingChanged: updatePlayAnimation();
