@@ -73,6 +73,14 @@ Item {
             easing.type: Easing.OutExpo
         }
 
+        PropertyAnimation {
+            id: bounceAnimation
+            target: buttonRow
+            properties: "x"
+            duration: 200
+            easing.type: Easing.OutBounce
+        }
+
         function closestButton(right)
         {
             var children = buttonRow.children;
@@ -105,18 +113,15 @@ Item {
                 var button = Math.abs(momentumX) > 15 ? closestButton(momentumX > 0) : null;
                 if (button) {
                     stopMomentumX();
-                    snapAnimation.stop();
-                    snapAnimation.from = buttonRow.x;
+                    bounceAnimation.stop();
                     snapAnimation.to = root.width - button.x - button.width;
-                    snapAnimation.easing.type = Easing.OutExpo;
                     snapAnimation.restart();
                 } else if (momentumX < -15) {
                     stopMomentumX();
                     snapAnimation.stop();
-                    snapAnimation.to = buttonRow.x
-                    snapAnimation.from = buttonRow.x - 30
-//                    snapAnimation.easing.type = Easing.OutBounce;
-                    snapAnimation.restart();
+                    bounceAnimation.from = buttonRow.x - 30
+                    bounceAnimation.to = buttonRow.x
+                    bounceAnimation.restart();
                 }
             }
         }
