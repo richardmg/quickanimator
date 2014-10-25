@@ -105,7 +105,17 @@ Item {
                 var button = Math.abs(momentumX) > 15 ? closestButton(momentumX > 0) : null;
                 if (button) {
                     stopMomentumX();
+                    snapAnimation.stop();
+                    snapAnimation.from = buttonRow.x;
                     snapAnimation.to = root.width - button.x - button.width;
+                    snapAnimation.easing.type = Easing.OutExpo;
+                    snapAnimation.restart();
+                } else if (momentumX < -15) {
+                    stopMomentumX();
+                    snapAnimation.stop();
+                    snapAnimation.to = buttonRow.x
+                    snapAnimation.from = buttonRow.x - 30
+//                    snapAnimation.easing.type = Easing.OutBounce;
                     snapAnimation.restart();
                 }
             }
