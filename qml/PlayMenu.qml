@@ -5,8 +5,21 @@ Item {
 
     Rectangle {
         id: background
+        x: -5
+        width: parent.width - (x * 2)
+        height: parent.height - x
         anchors.fill: parent
-        color: "black"
+        border.color: "blue"
+        gradient: Gradient {
+            GradientStop {
+                position: 0.0;
+                color: Qt.rgba(0.5, 0.5, 0.9, 1.0)
+            }
+            GradientStop {
+                position: 1.0;
+                color: Qt.rgba(0.2, 0.2, 0.7, 1.0)
+            }
+        }
         opacity: myApp.model.fullScreenMode || buttonRow.x >= width || buttonRow.x <= -buttonRow.width ? 0 : 0.3
         visible: opacity !== 0
         Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
@@ -16,7 +29,7 @@ Item {
         id: buttonRow
         width: childrenRect.width
         height: parent.height
-        x: parent.width - width
+        x: root.width - recordButton.x - recordButton.width //parent.width - width
 
         ProxyButton {
             onClicked: myApp.model.time = 0
@@ -29,6 +42,7 @@ Item {
         }
 
         ProxyButton {
+            id: recordButton
             Text { x: 2; y: 2; text: "Record" }
             onClicked: print("Record")
             flickStop: true
