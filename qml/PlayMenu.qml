@@ -47,6 +47,7 @@ Item {
         objectName: "second"
 
             ProxyButton {
+                id: firstButton
                 onClicked: myApp.model.time = 0
                 text: myApp.model.time === 0 ? "Forward" : "Rewind"
             }
@@ -154,6 +155,21 @@ Item {
             return bestChild;
         }
 
+        function animateToButton(button)
+        {
+            if (button) {
+                stopMomentumX();
+                bounceAnimation.stop();
+                snapAnimation.to = root.width - button.x - button.width;
+                snapAnimation.restart();
+            } else if (buttonRow.x < rightStop) {
+                stopMomentumX();
+                snapAnimation.stop();
+                bounceAnimation.to = rightStop
+                bounceAnimation.restart();
+            }
+        }
+
         onMomentumXUpdated: {
             // Ensure that the menu cannot be dragged passed the stop
             // points, and apply some overshoot resitance.
@@ -170,19 +186,7 @@ Item {
                 snapAnimation.stop();
                 bounceAnimation.stop();
             } else {
-                // Check if we should bounce to a button stop or the right edge
-                var button = Math.abs(momentumX) > 15 ? closestButton(momentumX > 0) : null;
-                if (button) {
-                    stopMomentumX();
-                    bounceAnimation.stop();
-                    snapAnimation.to = root.width - button.x - button.width;
-                    snapAnimation.restart();
-                } else if (buttonRow.x < rightStop) {
-                    stopMomentumX();
-                    snapAnimation.stop();
-                    bounceAnimation.to = rightStop
-                    bounceAnimation.restart();
-                }
+                animateToButton(Math.abs(momentumX) > 15 ? closestButton(momentumX > 0) : null);
             }
         }
 
@@ -194,8 +198,12 @@ Item {
                 p = child;
             } while (p && !child.isButton);
 
-            if (child && child.isButton)
+            if (child && child.isButton) {
                 child.clicked();
+            } else {
+                child = closestButton(false)
+                animateToButton(child ? child : firstButton);
+            }
         }
     }
 }
