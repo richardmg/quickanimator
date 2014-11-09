@@ -13,7 +13,7 @@ Item {
 
     FlickableMouseArea {
         id: flickable
-        visible: !myApp.menuButton.visible || myApp.menuButton.pressed || myApp.simulator
+        visible: !myApp.menuButton.visible || myApp.menuButton.pressed || simulator
         width: parent.width
         height: parent.height
         momentumRestX: playing ? -1 : 0
