@@ -21,8 +21,14 @@ int main(int argc, char* argv[])
     QDir::setCurrent(bundleRoot.absolutePath());
 #endif
 
-    QQmlApplicationEngine engine("qml/main.qml");
-//    engine.rootContext()->setContextProperty("WebView", new MyWebView());
+    QQmlApplicationEngine engine;
+#if TARGET_IPHONE_SIMULATOR
+    engine.rootContext()->setContextProperty("simulator", true);
+#else
+    engine.rootContext()->setContextProperty("simulator", false);
+#endif
+
+    engine.load("qml/main.qml");
     return app.exec();
 }
 

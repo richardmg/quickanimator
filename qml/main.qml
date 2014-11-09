@@ -6,13 +6,12 @@ ApplicationWindow {
     id: myApp
     visible: true
 //    visibility: Qt.Window
-    width: 1024
+    width: 1500
     height: 600
 
     Component.onCompleted: width += 1
 
     property bool touchUI: Qt.platform.os === "ios"
-    property bool simulator: false
 
     property alias stage: stage
     property alias menuButton: menuButton
