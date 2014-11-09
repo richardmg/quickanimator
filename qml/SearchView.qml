@@ -1,0 +1,34 @@
+import QtQuick 2.0
+
+Rectangle {
+
+    property var images: null
+
+    function search()
+    {
+        visible = true;
+        var doc = new XMLHttpRequest();
+        doc.onreadystatechange = function() {
+            if (doc.readyState === XMLHttpRequest.DONE) {
+                images = new Array;
+                var imageTags = doc.responseText.match(/<img[^>]*>/g)
+                for (var i = 0; i < imageTags.length; ++i) {
+                    var tag = imageTags[i];
+                    var index = tag.indexOf("src");
+                    var url = tag.substr(index).match(/"[^"]*/)[0].substr(1);
+                    images.push(url)
+                }
+                listView.model = images.length
+            }
+        }
+
+        doc.open("GET", "https://www.google.com/search?site=imghp&tbm=isch&q=teddy")
+        doc.send();
+    }
+
+    ListView {
+        id: listView
+        anchors.fill: parent
+        delegate: Image { source: images[index] }
+    }
+}

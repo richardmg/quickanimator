@@ -25,7 +25,8 @@ OTHER_FILES += qml/*.qml \
     qml/RadioButtonGroup.qml \
     qml/PlayMenu.qml \
     qml/PlayMenuRow.qml \
-    qml/ProxyButton.qml
+    qml/ProxyButton.qml \
+    qml/SearchView.qml
 
 qml.files = $$PWD/qml
 osx: qml.path = ./Contents/Resources

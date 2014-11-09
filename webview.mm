@@ -110,6 +110,10 @@ MyWebView::~MyWebView()
     Q_UNUSED(request);
     Q_UNUSED(frame);
 
+    NSString *script = @"var names = []; var a = document.getElementsByTagName(\"IMG\");for (var i=0, len=a.length; i<len; i++){names.push(document.images[i].src);}String(names);";
+    NSString *urls = [sender stringByEvaluatingJavaScriptFromString:script];
+    NSLog(@"urls: %@", urls);
+
     NSDictionary *element = [actionInformation objectForKey:@"WebActionElementKey"];
     NSString *imageUrl = [[element objectForKey:@"WebElementImageURL"] absoluteString];
     if (imageUrl) {

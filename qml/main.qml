@@ -17,6 +17,7 @@ ApplicationWindow {
     property alias menuButton: menuButton
     property alias playMenu: playMenu
     property alias timeFlickable: timeFlickable
+    property alias searchView: searchView
 
     property TimelineMenu menu
     property Flickable timelineFlickable
@@ -97,6 +98,12 @@ ApplicationWindow {
             id: menu
             visible: false
             anchors.fill: parent
+        }
+
+        SearchView {
+            id: searchView
+            anchors.fill: parent
+            visible: false
         }
 
     }

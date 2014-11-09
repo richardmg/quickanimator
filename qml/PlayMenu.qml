@@ -53,6 +53,11 @@ Item {
             }
 
             ProxyButton {
+                text: "Google"
+                onClicked: myApp.searchView.search()
+            }
+
+            ProxyButton {
                 onClicked: myApp.timeFlickable.userPlay = !myApp.timeFlickable.userPlay
                 text:  myApp.timeFlickable.userPlay ? "Stop" : "Play"
             }
@@ -103,7 +108,7 @@ Item {
 
             ProxyButton {
                 text: "Google"
-                onClicked: webView.search()
+                onClicked: myApp.searchView.search()
             }
 
             ProxyButton {
@@ -206,4 +211,5 @@ Item {
             }
         }
     }
+
 }
