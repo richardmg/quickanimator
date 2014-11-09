@@ -35,17 +35,8 @@ static NSURL *const kUrl = [NSURL URLWithString:@"http://www.google.com/imghp"];
         navigationType:(UIWebViewNavigationType)navigationType
 {
     Q_UNUSED(webView);
+    Q_UNUSED(request);
     Q_UNUSED(navigationType);
-
-    NSString *script = @"var names = []; var a = document.getElementsByTagName(\"IMG\");for (var i=0, len=a.length; i<len; i++){names.push(document.images[i].src);}String(names);";
-    NSString *urls = [self.webView stringByEvaluatingJavaScriptFromString:script];
-    NSLog(@"urls:", urls);
-
-//    NSLog(@"req: %@", request.URL.path);
-//    NSLog(@"req: %@", request.URL.query);
-//    NSLog(@"req: %@", request.URL.relativeString);
-    NSLog(@"req: %@", request.HTTPBody);
-    NSLog(@"------");
 
 //    NSDictionary *element = [actionInformation objectForKey:@"WebActionElementKey"];
 //    NSString *imageUrl = [[element objectForKey:@"WebElementImageURL"] absoluteString];

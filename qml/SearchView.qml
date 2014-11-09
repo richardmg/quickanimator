@@ -1,6 +1,7 @@
 import QtQuick 2.0
 
 Rectangle {
+    id: root
 
     property var images: null
 
@@ -16,9 +17,11 @@ Rectangle {
                     var tag = imageTags[i];
                     var index = tag.indexOf("src");
                     var url = tag.substr(index).match(/"[^"]*/)[0].substr(1);
-                    images.push(url)
+                    if (url.indexOf("http") === 0)
+                        images.push(url)
                 }
                 listView.model = images.length
+                print(images)
             }
         }
 
@@ -29,6 +32,16 @@ Rectangle {
     ListView {
         id: listView
         anchors.fill: parent
-        delegate: Image { source: images[index] }
+        orientation: Qt.Horizontal
+        delegate: Image {
+            source: images[index]
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    root.visible = false
+                    myApp.addImage(source)
+                }
+            }
+        }
     }
 }
