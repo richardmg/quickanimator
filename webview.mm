@@ -14,7 +14,6 @@ static NSURL *const kUrl = [NSURL URLWithString:@"http://www.google.com/imghp"];
 
 void MyWebView::search()
 {
-    qDebug() << __FUNCTION__;
     UIView *view = reinterpret_cast<UIView *>(QGuiApplication::focusWindow()->winId());
     if (!m_webView) {
         NSURLRequest *request = [NSURLRequest requestWithURL:kUrl];
