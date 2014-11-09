@@ -1,14 +1,16 @@
 import QtQuick 2.0
+import WebView 1.0
 
 Item {
     id: root
 
-//    onVisibleChanged: {
-//        if (!visible)
-//            return;
-//        if (buttonRow.x >= flickable.leftStop)
-//            buttonRow.x = buttonRow.startX
-//    }
+    WebView {
+        id: webView
+        onImageUrlChanged: {
+            myApp.addImage(imageUrl)
+            myApp.menuButton.checked = false;
+        }
+    }
 
     Rectangle {
         id: background
@@ -100,7 +102,7 @@ Item {
 
             ProxyButton {
                 text: "Google"
-                onClicked: print("baz")
+                onClicked: webView.search()
             }
 
             ProxyButton {

@@ -10,18 +10,24 @@
 
 #include <UIKit/UIKit.h>
 
+static NSURL *const kUrl = [NSURL URLWithString:@"http://www.google.com/imghp"];
+
 void MyWebView::search()
 {
-//    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url.toNSString()]];
-//    UIView *view = reinterpret_cast<UIView *>(QGuiApplication::focusWindow()->winId());
-//    UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, 300, 300)];
-//    [webView loadRequest:request];
-//    [view addSubview:webView];
+    qDebug() << __FUNCTION__;
+    UIView *view = reinterpret_cast<UIView *>(QGuiApplication::focusWindow()->winId());
+    if (!m_webView) {
+        NSURLRequest *request = [NSURLRequest requestWithURL:kUrl];
+        UIWebView *webView = [[UIWebView alloc] initWithFrame:view.frame];
+        m_webView = webView;
+        [webView loadRequest:request];
+    }
+    [view addSubview:reinterpret_cast<UIWebView *>(m_webView)];
 }
 
 MyWebView::~MyWebView()
 {
-//    [reinterpret_cast<WebView *>(m_webView) release];
+    [reinterpret_cast<UIWebView *>(m_webView) release];
 }
 
 #elif defined(Q_OS_OSX)
@@ -73,7 +79,7 @@ void MyWebView::search()
         m_qtView = [nsWindow contentView];
         WebView *webView = [[WebView alloc] initWithFrame:NSMakeRect(0, 0, 800, 600) frameName:nil groupName:nil];
         m_webView = webView;
-        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"http://www.google.com/imghp"]];
+        NSURLRequest *request = [NSURLRequest requestWithURL:kUrl];
         [[webView mainFrame] loadRequest:request];
         WebDelegate *delegate = [[WebDelegate alloc] initWithMyWebView:this];
         [webView setPolicyDelegate:delegate];
