@@ -21,11 +21,10 @@ Rectangle {
                         images.push(url)
                 }
                 listView.model = images.length
-                print(images)
             }
         }
 
-        doc.open("GET", "https://www.google.com/search?site=imghp&tbm=isch&q=teddy")
+        doc.open("GET", "http://www.google.com/search?site=imghp&tbm=isch&q=teddy")
         doc.send();
     }
 
@@ -39,7 +38,7 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: {
                     root.visible = false
-                    myApp.addImage(source)
+                    myApp.addImage(images[index])
                 }
             }
         }
