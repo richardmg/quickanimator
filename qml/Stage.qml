@@ -89,7 +89,12 @@ Item {
             }
         }
 
-        onPositionChanged: {
+        onPositionChanged: move(mouseX, mouseY)
+        onMomentumXChanged: if (!flickable.pressed) move(currentAction.x + flickable.momentumX, currentAction.y)
+        onMomentumYChanged: if (!flickable.pressed) move(currentAction.x, currentAction.y + flickable.momentumY)
+
+        function move(mouseX, mouseY)
+        {
             if (!myApp.model.hasSelection)
                 return;
 
