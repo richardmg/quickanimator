@@ -3,6 +3,9 @@ import QtQuick.Controls 1.0
 
 Item {
     id: root
+
+    property FlickableMouseArea mouseArea: null
+
     property alias sprites: sprites
     property int focusSize: 20
 
@@ -25,15 +28,14 @@ Item {
         anchors.fill: sprites
     }
 
-    FlickableMouseArea {
-        anchors.fill: sprites
-        acceptedButtons: Qt.LeftButton | Qt.RightButton
+    Connections {
+        target: mouseArea
 
         onPressedChanged: {
-            if (pressed)
-                mousePressed()
+            if (mouseArea.pressed)
+                mousePressed(mouseArea.mouseX, mouseArea.mouseY)
             else
-                mouseReleased()
+                mouseReleased(mouseArea.mouseX, mouseArea.mouseY)
         }
 
         function getAngleAndRadius(p1, p2)
@@ -61,13 +63,16 @@ Item {
             return null;
         }
 
-        function mousePressed()
+        function mousePressed(mouseX, mouseY)
         {
             // start new layer operation, drag or rotate:
             timelineWasPlaying = myApp.timeFlickable.playing;
             var pos = {x:mouseX, y:mouseY}
             pressStartTime = new Date().getTime();
             pressStartPos = pos;
+
+            if (!myApp.model.hasSelection)
+                return;
 
             if (myApp.model.recordsPositionX) {
                 currentAction = {
@@ -85,6 +90,9 @@ Item {
         }
 
         onPositionChanged: {
+            if (!myApp.model.hasSelection)
+                return;
+
             // drag or rotate current layer:
             var pos = {x:mouseX, y:mouseY}
 
@@ -174,7 +182,7 @@ Item {
             }
         }
 
-        function mouseReleased()
+        function mouseReleased(mouseX, mouseY)
         {
             var pos = {x:mouseX, y:mouseY}
 

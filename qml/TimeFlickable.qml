@@ -5,22 +5,18 @@ Item {
     id: root
 
     readonly property bool playing: userPlay || stagePlay;
-    readonly property alias flicking: flickable.flicking
-    readonly property alias animating: flickable.animating
+    property bool flicking: flickable.flicking
+    property bool animating: flickable.animating
+
+    property FlickableMouseArea flickable: null;
 
     property bool stagePlay: false
     property bool userPlay: false
 
-    FlickableMouseArea {
-        id: flickable
-        visible: !myApp.menuButton.visible || myApp.menuButton.pressed || simulator
-        width: parent.width
-        height: parent.height
-        momentumRestX: playing ? -1 : 0
-        acceptedButtons: Qt.RightButton
-
+    Connections {
+        target: myApp.model.hasSelection ? null : flickable
         onAnimatingChanged: updatePlayAnimation();
-        onMomentumXUpdated: myApp.model.setTime(myApp.model.time - (momentumX * 0.1));
+        onMomentumXUpdated: myApp.model.setTime(myApp.model.time - (flickable.momentumX * 0.1));
     }
 
     onPlayingChanged: updatePlayAnimation();

@@ -24,9 +24,9 @@ Item {
 
     signal momentumXUpdated
     signal momentumYUpdated
-    signal clicked
-    signal rightClicked
-    signal positionChanged
+    signal clicked(var mouseX, var mouseY)
+    signal rightClicked(var mouseX, var mouseY)
+    signal positionChanged(var mouseX, var mouseY)
 
     function stopMomentumX()
     {
@@ -165,12 +165,12 @@ Item {
 
         onClicked: {
             if (mouse.button === Qt.RightButton)
-                root.rightClicked();
+                root.rightClicked(mouseX, mouseY);
         }
 
         onDoubleClicked: {
             if (mouse.button === Qt.RightButton)
-                root.rightClicked();
+                root.rightClicked(mouseX, mouseY);
         }
     }
 
@@ -198,7 +198,7 @@ Item {
                     && Math.abs(mouseY - _pressMouseY) < 10;
 
             if (click)
-                root.clicked();
+                root.clicked(mouseX, mouseY);
         }
     }
 
@@ -212,7 +212,7 @@ Item {
         if (!_momentumYStopped)
             mouseY = my;
 
-        positionChanged()
+        positionChanged(mx, my)
 
         var prevMomentumX = momentumX;
         var prevMomentumY = momentumY;

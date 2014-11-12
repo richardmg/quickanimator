@@ -7,6 +7,7 @@ QtObject {
     property real time: 0
     property int endTime: 0
     property var layers: new Array()
+    property bool hasSelection: false
     property var selectedLayers: new Array()
     property var focusedLayerIndex: 0
     property var focusedKeyframe: null
@@ -140,6 +141,7 @@ QtObject {
         selectedLayers = new Array();
         for (var i = 0; i < unselectedLayers.length; ++i)
             selectedLayersUpdated(layers.indexOf(unselectedLayers[i]), -1);
+        hasSelection = false;
     }
 
     function selectLayer(layer, select)
@@ -160,8 +162,8 @@ QtObject {
                 focusedLayerIndex = -1;
                 updateFocusedKeyframe();
             }
-
         }
+        hasSelection = selectedLayers.length !== 0
     }
     
     function removeLayer(layer)
@@ -171,6 +173,7 @@ QtObject {
         if (layer.selected) {
             selectedLayers.splice(selectedLayers.indexOf(layer), 1);
             selectedLayersUpdated(layer.indexOf(layer), -1);
+            hasSelection = selectedLayers.length !== 0
         }
         layersUpdated(index, -1); 
     }

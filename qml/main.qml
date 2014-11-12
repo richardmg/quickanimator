@@ -65,6 +65,7 @@ ApplicationWindow {
         Stage {
             id: stage
             anchors.fill: parent
+            mouseArea: flickable
         }
 
         TimelineCanvas {
@@ -75,6 +76,13 @@ ApplicationWindow {
         TimeFlickable {
             id: timeFlickable
             anchors.fill: parent
+            flickable: flickable
+        }
+
+        FlickableMouseArea {
+            id: flickable
+            anchors.fill: parent
+            momentumRestX: timeFlickable.playing ? -1 : 0
         }
 
         PlayMenu {
