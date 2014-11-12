@@ -8,6 +8,7 @@ Item {
 
     property var pressStartTime: 0
     property var pressStartPos: undefined
+    property var lastClickTime: 0
     property var currentAction: new Object()
     property bool timelineWasPlaying: false
     property bool timelinePlay: false
@@ -177,11 +178,14 @@ Item {
 
             var pos = {x:mouseX, y:mouseY}
 
-            var click = (new Date().getTime() - pressStartTime) < 300 
+            var time = new Date().getTime();
+            var click = (time - pressStartTime) < 300
                 && Math.abs(pos.x - pressStartPos.x) < 10
                 && Math.abs(pos.y - pressStartPos.y) < 10;
+            var multiClick = click && (time - lastClickTime < 1000)
 
             if (click) {
+                lastClickTime = time;
                 var m = myApp.model;
                 currentAction = {};
                 var layer = m.getLayerAt(pos);
@@ -190,10 +194,18 @@ Item {
                     unselectAllLayers();
 
                 if (layer) {
-                    if (!layer.selected)
+                    // click on sprite
+                    if (!layer.selected) {
                         m.selectLayer(layer, true);
-                    else
-                        changeRecordState();
+                    } else {
+                        if (multiClick) {
+                            // multi-click on sprite changes record operation
+                            changeRecordState();
+                        } else {
+                            // click on selected sprite (unless multi-click) unselects it
+                            myApp.model.selectLayer(layer, false);
+                        }
+                    }
                 }
             }
 
