@@ -5,8 +5,8 @@ Item {
     id: root
 
     readonly property bool playing: userPlay || stagePlay;
-    property bool flicking: flickable.flicking
-    property bool animating: flickable.animating
+    property bool flicking: flickable ? flickable.flicking : false
+    property bool animating: flickable ? flickable.animating : false
 
     property FlickableMouseArea flickable: null;
 
@@ -14,7 +14,7 @@ Item {
     property bool userPlay: false
 
     Connections {
-        target: myApp.model.hasSelection ? null : flickable
+        target: flickable
         onAnimatingChanged: updatePlayAnimation();
         onMomentumXUpdated: myApp.model.setTime(myApp.model.time - (flickable.momentumX * 0.1));
     }
