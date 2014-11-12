@@ -26,6 +26,7 @@ Item {
     signal momentumYUpdated
     signal clicked
     signal rightClicked
+    signal positionChanged
 
     function stopMomentumX()
     {
@@ -210,6 +211,8 @@ Item {
             mouseX = mx;
         if (!_momentumYStopped)
             mouseY = my;
+
+        positionChanged()
 
         var prevMomentumX = momentumX;
         var prevMomentumY = momentumY;

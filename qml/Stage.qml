@@ -25,9 +25,16 @@ Item {
         anchors.fill: sprites
     }
 
-    MouseArea {
+    FlickableMouseArea {
         anchors.fill: sprites
         acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+        onPressedChanged: {
+            if (pressed)
+                mousePressed()
+            else
+                mouseReleased()
+        }
 
         function getAngleAndRadius(p1, p2)
         {
@@ -54,10 +61,8 @@ Item {
             return null;
         }
 
-        onPressed: {
-            if (mouse.button === Qt.RightButton)
-                return;
-
+        function mousePressed()
+        {
             // start new layer operation, drag or rotate:
             timelineWasPlaying = myApp.timeFlickable.playing;
             var pos = {x:mouseX, y:mouseY}
@@ -80,9 +85,6 @@ Item {
         }
 
         onPositionChanged: {
-            if (mouse.button === Qt.RightButton)
-                return;
-
             // drag or rotate current layer:
             var pos = {x:mouseX, y:mouseY}
 
@@ -92,7 +94,7 @@ Item {
                     var dx = pos.x - currentAction.x;
                     var dy = pos.y - currentAction.y;
 
-                    if (mouse.modifiers & Qt.ShiftModifier) {
+                    if (false /* todo: come up with solution */) {
                         // Move anchor
                         var layer = myApp.model.selectedLayers[0];
                         var sprite = layer.sprite
@@ -172,10 +174,8 @@ Item {
             }
         }
 
-        onReleased: {
-            if (mouse.button === Qt.RightButton)
-                return;
-
+        function mouseReleased()
+        {
             var pos = {x:mouseX, y:mouseY}
 
             var time = new Date().getTime();
@@ -211,11 +211,6 @@ Item {
 
             myApp.model.inLiveDrag = false;
             myApp.timeFlickable.stagePlay = false;
-        }
-
-        onClicked: {
-            if (mouse.button === Qt.RightButton)
-                myApp.model.shiftUserInterfaceState()
         }
     }
 
