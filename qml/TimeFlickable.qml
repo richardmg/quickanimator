@@ -24,7 +24,7 @@ Item {
     function updatePlayAnimation()
     {
         animation.lastTickTime = new Date();
-        animation.running = playing && !flickable.animating;
+        animation.running = playing && (!flickable || !flickable.animating)
     }
 
     NumberAnimation {
