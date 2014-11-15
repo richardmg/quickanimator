@@ -64,7 +64,7 @@ Item {
 
             ProxyButton {
                 text: "Record"
-                onClicked: print("Record")
+                onClicked: myApp.stage.timelinePlay = !myApp.stage.timelinePlay
             }
 
             ProxyButton {
