@@ -5,7 +5,8 @@ Rectangle {
     id: root
 
     property var images: null
-    onVisibleChanged: listView.headerItem.forceActiveFocus()
+    onVisibleChanged: if (listView.headerItem) listView.headerItem.forceActiveFocus()
+    Component.onCompleted: listView.headerItem.forceActiveFocus()
 
     function search()
     {

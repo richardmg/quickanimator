@@ -41,7 +41,8 @@ Item {
 
         onTickChanged: {
             var tickTime = (new Date()).getTime();
-            var timeIncrement = ((tickTime - lastTickTime) / myApp.model.msPerFrame) * -flickable.momentumX;
+            var flickAdjust = flickable ? -flickable.momentumX : 0
+            var timeIncrement = ((tickTime - lastTickTime) / myApp.model.msPerFrame) * flickAdjust
             myApp.model.setTime(myApp.model.time + timeIncrement);
             lastTickTime = tickTime;
         }
