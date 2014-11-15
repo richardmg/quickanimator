@@ -6,6 +6,7 @@ TEMPLATE = app
 TARGET = animstudio
 INCLUDEPATH += .
 QT += quick qml widgets gui-private
+CONFIG += release qtquickcompiler
 QMAKE_INFO_PLIST = Info.plist
 osx: LIBS += -framework WebKit -framework Cocoa
 
