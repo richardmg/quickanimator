@@ -5,8 +5,8 @@ Rectangle {
     id: root
 
     property var images: null
-    onVisibleChanged: if (listView.headerItem) listView.headerItem.forceActiveFocus()
-    Component.onCompleted: listView.headerItem.forceActiveFocus()
+    onVisibleChanged: if (visible && listView.headerItem) listView.headerItem.forceActiveFocus()
+    Component.onCompleted: if (visible) listView.headerItem.forceActiveFocus()
 
     function search()
     {
@@ -63,6 +63,7 @@ Rectangle {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
+                    Qt.inputMethod.hide()
                     root.visible = false
                     myApp.addImage(images[index])
                 }
