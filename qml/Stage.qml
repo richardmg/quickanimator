@@ -193,30 +193,22 @@ Item {
             var click = (time - pressStartTime) < 300
                 && Math.abs(pos.x - pressStartPos.x) < 10
                 && Math.abs(pos.y - pressStartPos.y) < 10;
-            var multiClick = click && (time - lastClickTime < 1000)
+            var multiClick = click && (time - lastClickTime < 600)
 
             if (click) {
                 lastClickTime = time;
                 var m = myApp.model;
                 currentAction = {};
                 var layer = m.getLayerAt(pos);
+                var hasSelection = myApp.model.selectedLayers.length > 0
 
-                if (!layer || !layer.selected)
-                    unselectAllLayers();
-
-                if (layer) {
-                    // click on sprite
-                    if (!layer.selected) {
+                if (hasSelection && !multiClick) {
+                    unselectAllLayers()
+                } else if (layer) {
+                    if (!hasSelection)
                         m.selectLayer(layer, true);
-                    } else {
-                        if (multiClick) {
-                            // multi-click on sprite changes record operation
-                            changeRecordState();
-                        } else {
-                            // click on selected sprite (unless multi-click) unselects it
-                            myApp.model.selectLayer(layer, false);
-                        }
-                    }
+                    else
+                        changeRecordState();
                 }
             }
 
