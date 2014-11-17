@@ -66,8 +66,15 @@ Item {
             }
 
             ProxyButton {
-                text: "Record"
-                onClicked: myApp.stage.timelinePlay = !myApp.stage.timelinePlay
+                text: myApp.stage.timelinePlay ? "Stop\nRecording" : "Record"
+                onClicked: {
+                    if (myApp.stage.timelinePlay) {
+                        myApp.model.unselectAllLayers()
+                        myApp.stage.timelinePlay = false
+                    } else {
+                        myApp.stage.timelinePlay = true
+                    }
+                }
             }
 
             ProxyButton {

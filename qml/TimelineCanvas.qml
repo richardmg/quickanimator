@@ -89,10 +89,8 @@ Rectangle {
                 ctx.fillText(label, posX + 5, parent.height - 2);
             }
 
-            if (myApp.timeFlickable.playing)
-                ctx.fillStyle = "orange"
-            else if (myApp.stage.autoPlay)
-                ctx.fillStyle = "orange"
+            if (myApp.stage.timelinePlay)
+                ctx.fillStyle = "red"
             else
                 ctx.fillStyle = myApp.style.timelineline;
             ctx.fillRect(width / 2, 0, 2, parent.height);
