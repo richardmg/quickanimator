@@ -5,8 +5,8 @@ Rectangle {
     id: root
 
     property var images: null
-    onVisibleChanged: if (visible && listView.headerItem) listView.headerItem.forceActiveFocus()
-    Component.onCompleted: if (visible) listView.headerItem.forceActiveFocus()
+    onVisibleChanged: if (visible && searchText) searchText.forceActiveFocus()
+    Component.onCompleted: if (visible) searchText.forceActiveFocus()
 
     function search()
     {
@@ -30,42 +30,47 @@ Rectangle {
             }
         }
 
-        doc.open("GET", "http://www.google.com/search?site=imghp&tbm=isch&q=" + listView.headerItem.text)
+        doc.open("GET", "http://www.google.com/search?site=imghp&tbm=isch&q=" + searchText.text)
         doc.send();
     }
 
-    GridView {
-        id: listView
+    Flickable {
+        // Need extra flickable to work around gridview images stealing focus on load
         anchors.fill: parent
-        cellWidth: parent.width / 4
-        cellHeight: cellWidth
-        header: TextField {
+        contentWidth: width
+        contentHeight: (listView.model * listView.cellHeight) / 4
+        onContentHeightChanged: print(contentHeight)
+        TextField {
             id: searchText
             width: parent.width
             onTextChanged: search();
         }
+        GridView {
+            id: listView
+            anchors.top: searchText.bottom
+            anchors.topMargin: 1
+            width: parent.width
+            height: (cellHeight * model) / 4
+            interactive: false
+            cellWidth: parent.width / 4
+            cellHeight: cellWidth
 
-        delegate: Image {
-            source: images[index] ? images[index] : ""
-            width: listView.cellWidth
-            height: listView.cellHeight
-            onSourceSizeChanged: {
-                var scale = width / Math.max(sourceSize.width, sourceSize.height)
-                width = sourceSize.width * scale
-                height = sourceSize.height * scale
-            }
-            onFocusChanged: {
-                if (focus && root.visible) {
-                    listView.headerItem.forceActiveFocus()
+            delegate: Image {
+                source: images[index] ? images[index] : ""
+                width: listView.cellWidth
+                height: listView.cellHeight
+                onSourceSizeChanged: {
+                    var scale = width / Math.max(sourceSize.width, sourceSize.height)
+                    width = sourceSize.width * scale
+                    height = sourceSize.height * scale
                 }
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    Qt.inputMethod.hide()
-                    root.visible = false
-                    myApp.addImage(images[index])
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        Qt.inputMethod.hide()
+                        root.visible = false
+                        myApp.addImage(images[index])
+                    }
                 }
             }
         }
