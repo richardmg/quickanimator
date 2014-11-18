@@ -39,12 +39,13 @@ Rectangle {
         anchors.fill: parent
         contentWidth: width
         contentHeight: (listView.model * listView.cellHeight) / 4
-        onContentHeightChanged: print(contentHeight)
+
         TextField {
             id: searchText
             width: parent.width
             onTextChanged: search();
         }
+
         GridView {
             id: listView
             anchors.top: searchText.bottom
