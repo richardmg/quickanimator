@@ -140,6 +140,7 @@ Item {
             id: snapAnimation
             target: buttonRow
             properties: "x"
+            to: 0
             duration: Math.abs(buttonRow.x - to)
             easing.type: Easing.OutExpo
         }
