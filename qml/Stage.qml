@@ -74,12 +74,13 @@ Item {
             if (!myApp.model.hasSelection)
                 return;
 
+            myApp.model.inLiveDrag = true;
+
             if (myApp.model.recordsPositionX) {
                 currentAction = {
                     x: pos.x,
                     y: pos.y
                 };
-                myApp.model.inLiveDrag = true;
             } else if (myApp.model.selectedLayers.length !== 0) {
                 var layer = myApp.model.selectedLayers[0];
                 var sprite = layer.sprite
