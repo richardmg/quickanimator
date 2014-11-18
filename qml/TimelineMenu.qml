@@ -196,12 +196,12 @@ Rectangle {
                 maximumValue: 3000
                 value: maximumValue
                 onValueChanged: {
-                    if (__speedSliderGuard)
-                        return
-                    __speedSliderGuard = true
-                    speedUpSlider.value = speedUpSlider.minimumValue
-                    myApp.model.msPerFrame = maximumValue - value + minimumValue
-                    __speedSliderGuard = false
+//                    if (__speedSliderGuard)
+//                        return
+//                    __speedSliderGuard = true
+//                    speedUpSlider.value = speedUpSlider.minimumValue
+//                    myApp.model.msPerFrame = maximumValue - value + minimumValue
+//                    __speedSliderGuard = false
                 }
                 property string text: "Slow down"
                 style: sliderStyle

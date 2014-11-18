@@ -127,8 +127,15 @@ ApplicationWindow {
             Image {
                 id: image
                 onStatusChanged: {
-                    if (status === Image.Ready)
-                        stageSprite.resetSpriteAnchors();
+                    if (status === Image.Ready) {
+                        anchorX = width / 2;
+                        anchorY = height / 2;
+                        for (var j = 0; j < keyframes.length; ++j) {
+                            var keyframe = keyframes[j];
+                            keyframe.anchorX = anchorX;
+                            keyframe.anchorY = anchorY;
+                        }
+                    }
                 }
             }
         }

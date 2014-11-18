@@ -31,19 +31,6 @@ Item {
 
     objectName: "unknown sprite"
 
-    function resetSpriteAnchors()
-    {
-        // for image loaded over the net, we need to calculate
-        // anchors after the image size has been set
-        anchorX = childrenRect.width / 2;
-        anchorY = childrenRect.height / 2;
-        for (var j = 0; j < keyframes.length; ++j) {
-            var keyframe = keyframes[j];
-            keyframe.anchorX = anchorX;
-            keyframe.anchorY = anchorY;
-        }
-    }
-
     function setTime(time)
     {
         _updateCurrentKeyframes(time);
