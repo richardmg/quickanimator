@@ -197,16 +197,17 @@ Item {
                 buttonRow.x = rightStop - overshoot;
         }
 
-        onPressedChanged: {
-            if (pressed) {
-                snapAnimation.stop();
-                bounceAnimation.stop();
-            } else {
-                animateToButton(Math.abs(momentumX) > 15 ? closestButton(momentumX > 0) : null);
-            }
+        onPressed: {
+            snapAnimation.stop();
+            bounceAnimation.stop();
         }
 
-        onClicked: {
+        onReleased: {
+            if (!clickCount) {
+                animateToButton(Math.abs(momentumX) > 15 ? closestButton(momentumX > 0) : null);
+                return;
+            }
+
             var p = buttonRow;
             do {
                 var pos = mapToItem(p, mouseX, mouseY);

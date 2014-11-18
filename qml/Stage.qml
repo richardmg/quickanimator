@@ -9,9 +9,7 @@ Item {
     property alias sprites: sprites
     property int focusSize: 20
 
-    property var pressStartTime: 0
     property var pressStartPos: undefined
-    property var lastClickTime: 0
     property var currentAction: new Object()
     property bool timelineWasPlaying: false
     property bool timelinePlay: false
@@ -44,13 +42,6 @@ Item {
     Connections {
         target: mouseArea
 
-        onPressedChanged: {
-            if (mouseArea.pressed)
-                mousePressed(mouseArea.mouseX, mouseArea.mouseY)
-            else
-                mouseReleased(mouseArea.mouseX, mouseArea.mouseY)
-        }
-
         function getAngleAndRadius(p1, p2)
         {
             var dx = p2.x - p1.x;
@@ -76,12 +67,10 @@ Item {
             return null;
         }
 
-        function mousePressed(mouseX, mouseY)
-        {
+        onPressed: {
             // start new layer operation, drag or rotate:
             timelineWasPlaying = myApp.timeFlickable.playing;
             var pos = {x:mouseX, y:mouseY}
-            pressStartTime = new Date().getTime();
             pressStartPos = pos;
 
             if (!myApp.model.hasSelection)
@@ -193,30 +182,20 @@ Item {
             }
         }
 
-        function mouseReleased(mouseX, mouseY)
-        {
+        onReleased: {
             var pos = {x:mouseX, y:mouseY}
 
-            var time = new Date().getTime();
-            var click = (time - pressStartTime) < 300
-                && Math.abs(pos.x - pressStartPos.x) < 10
-                && Math.abs(pos.y - pressStartPos.y) < 10;
-            var multiClick = click && (time - lastClickTime < 600)
-
-            if (click) {
-                lastClickTime = time;
-                var m = myApp.model;
-                currentAction = {};
-                var layer = m.getLayerAt(pos);
-                var hasSelection = myApp.model.selectedLayers.length > 0
-
-                if (hasSelection && !multiClick) {
+            if (clickCount) {
+                if (myApp.model.hasSelection) {
                     unselectAllLayers()
-                } else if (layer) {
-                    if (!hasSelection)
+                } else {
+                    var m = myApp.model;
+                    currentAction = {};
+                    var layer = m.getLayerAt(pos);
+                    if (layer) {
                         m.selectLayer(layer, true);
-                    else
-                        changeRecordState();
+                        myApp.spriteMenu.opacity = 1
+                    }
                 }
             }
 

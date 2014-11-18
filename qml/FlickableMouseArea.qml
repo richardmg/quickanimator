@@ -15,7 +15,6 @@ Item {
 
     property real mouseX: 0
     property real mouseY: 0
-    property bool pressed: false
     property bool animating: false
     property bool flicking: false
 
@@ -24,7 +23,8 @@ Item {
 
     signal momentumXUpdated
     signal momentumYUpdated
-    signal clicked(var mouseX, var mouseY)
+    signal pressed(var mouseX, var mouseY)
+    signal released(var mouseX, var mouseY, var clickCount)
     signal rightClicked(var mouseX, var mouseY)
     signal positionChanged(var mouseX, var mouseY)
 
@@ -51,6 +51,7 @@ Item {
     }
 
     property var _pressTime
+    property int _clickCount: 0
     property real _pressMouseX
     property real _pressMouseY
     property real _prevMouseX: 0
@@ -78,14 +79,12 @@ Item {
             _momentumXStopped = false;
             _momentumYStopped = false;
 
-            root.pressed = false;
             root.flicking = true;
             root.animating = true;
 
             workAroundPosBug = true;
             // bug in MultiPointTouchArea: x, y is not updated onPressed :(
             // updateMouse(activeTouchPoint.x, activeTouchPoint.y);
-            // root.pressed = true
         }
 
         onReleased: {
@@ -95,8 +94,9 @@ Item {
                 root.mouseX = activeTouchPoint.x;
             if (!_momentumYStopped)
                 root.mouseY = activeTouchPoint.y;
-            root.pressed = true; // ensure that we emit clicked (workAroundPosBug)
-            root.pressed = false;
+            if (workAroundPosBug)
+                updatePressed(true)
+            updatePressed(false)
             root.flicking = false;
             activeTouchPoint = null;
         }
@@ -108,7 +108,7 @@ Item {
             if (workAroundPosBug) {
                 root.mouseX = activeTouchPoint.x;
                 root.mouseY = activeTouchPoint.y;
-                root.pressed = true;
+                updatePressed(true)
                 workAroundPosBug = false;
             }
 
@@ -128,14 +128,14 @@ Item {
                 _momentumYStopped = false
                 root.mouseX = mouseX;
                 root.mouseY = mouseY;
-                root.pressed = true;
+                updatePressed(true)
                 root.updateMouse(mouseX, mouseY)
             } else if (pressedButtons === Qt.NoButton) {
                 if (!_momentumXStopped)
                     root.mouseX = mouseX;
                 if (!_momentumYStopped)
                     root.mouseY = mouseY;
-                root.pressed = false;
+                updatePressed(false)
                 root.flicking = false;
             }
         }
@@ -146,7 +146,7 @@ Item {
         }
 
         onWheel: {
-            root.pressed = true
+            updatePressed(true)
             updateMouse(root.mouseX + wheel.pixelDelta.x, root.mouseY + wheel.pixelDelta.y);
             wheelCleanupTimer.restart();
         }
@@ -159,7 +159,7 @@ Item {
                 root._momentumYStopped = false;
                 root.animating = false;
                 root.flicking = false;
-                root.pressed = false;
+                updatePressed(false)
             }
         }
 
@@ -179,26 +179,30 @@ Item {
     // MultiPointTouchArea / MouseArea agnostic functions
     /////////////////////////////////////////////////////
 
-    onPressedChanged: {
+    function updatePressed(pressed)
+    {
         if (pressed) {
             stopMomentumAnimation();
-
             _prevMouseX = mouseX;
             _prevMouseY = mouseY;
+            var timeSinceLastPress = new Date().getTime() - _pressTime;
+            if (timeSinceLastPress > 300)
+                _clickCount = 0
             _pressTime = (new Date()).getTime();
             _pressMouseX = mouseX;
             _pressMouseY = mouseY;
             animating = true;
             flicking = true
+            root.pressed(mouseX, mouseY)
         } else {
             animateMomentumToRest(1);
 
-            var click = (new Date().getTime() - _pressTime) < 300
+            var timeSincePress = new Date().getTime() - _pressTime;
+            var click = timeSincePress < 300
                     && Math.abs(mouseX - _pressMouseX) < 10
                     && Math.abs(mouseY - _pressMouseY) < 10;
-
-            if (click)
-                root.clicked(mouseX, mouseY);
+            _clickCount = click ? _clickCount + 1 : 0;
+            root.released(mouseX, mouseY, _clickCount);
         }
     }
 

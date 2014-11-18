@@ -16,6 +16,7 @@ ApplicationWindow {
     property alias stage: stage
     property alias menuButton: menuButton
     property alias playMenu: playMenu
+    property alias spriteMenu: spriteMenu
     property alias timeFlickable: timeFlickable
     property alias searchView: searchView
 
@@ -93,6 +94,20 @@ ApplicationWindow {
             opacity: touchUI && !simulator ? (menuButton.pressed ? 1 : 0) : 1
             visible: opacity !== 0
             Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+        }
+
+        SpriteMenu {
+            id: spriteMenu
+            width: 70
+            height: parent.height
+            anchors.right: parent.right
+            opacity: 0
+            visible: opacity !== 0
+            Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+
+//            Connections {
+//                target: flickable
+//            }
         }
 
         MultiTouchButton {
