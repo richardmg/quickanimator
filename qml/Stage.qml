@@ -32,7 +32,10 @@ Item {
             visible: myApp.model.hasSelection && myApp.model.recordsRotation
             width: 5
             height: 5
-            anchors.centerIn: parent
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.rightMargin: 100
+            anchors.bottomMargin: 150
             color: "red"
         }
     }
