@@ -44,11 +44,11 @@ Item {
             width: root.width
             height: parent.height
             layoutDirection: Qt.RightToLeft
-        objectName: "second"
+            objectName: "second"
 
             ProxyButton {
                 id: firstButton
-                onClicked: myApp.model.time = 0
+                onClicked: myApp.model.setTime(0)
                 text: myApp.model.time === 0 ? "Forward" : "Rewind"
             }
 
