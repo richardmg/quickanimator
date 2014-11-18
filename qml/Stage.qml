@@ -106,7 +106,7 @@ Item {
                         // Move anchor
                         var layer = myApp.model.selectedLayers[0];
                         var sprite = layer.sprite
-                        keyframe = myApp.model.getOrCreateKeyframe(layer);
+                        var keyframe = myApp.model.getOrCreateKeyframe(layer);
                         var globalPos = focusFrames.mapFromItem(sprite, keyframe.anchorX, keyframe.anchorY);
                         var localDelta = focusFrames.mapToItem(sprite, globalPos.x + dx, globalPos.y + dy);
                         keyframe.anchorX = localDelta.x;
@@ -150,7 +150,7 @@ Item {
                     // continue rotate
                     layer = myApp.model.selectedLayers[0];
                     sprite = layer.sprite
-                    var keyframe = sprite.getCurrentKeyframe();
+                    keyframe = sprite.getCurrentKeyframe();
                     globalPos = sprites.mapFromItem(sprite.parent, sprite.x + sprite.anchorX, sprite.y + sprite.anchorY);
                     var center = {x: globalPos.x, y: globalPos.y};
                     var aar = getAngleAndRadius(center, pos);
