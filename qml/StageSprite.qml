@@ -215,8 +215,8 @@ Item {
                 transRotation = keyframe.rotation;
             opacity = keyframe.opacity;
         } else {
-            reparentKeyframeMs = keyframe.time * model.msPerFrame
-            advanceMs = (spriteTime * model.msPerFrame) - reparentKeyframeMs;
+            var reparentKeyframeMs = keyframe.time * model.msPerFrame
+            var advanceMs = (spriteTime * model.msPerFrame) - reparentKeyframeMs;
             if (!model.recordsPositionX)
                 x = _interpolated(keyframe.x, _toKeyframe.x, advanceMs, "linear");
             if (!model.recordsPositionY)
