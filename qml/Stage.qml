@@ -164,13 +164,14 @@ Item {
                             var c = a + 360;
                             a = Math.abs(a) < Math.abs(b) ? a : b;
                             a = Math.abs(a) < Math.abs(c) ? a : c;
-                            keyframe.rotation += a;
-                            layer.sprite.transRotation = keyframe.rotation;
+                            layer.sprite.transRotation += a;
+                            keyframe.rotation = layer.sprite.transRotation;
                         }
                         if (myApp.model.recordsScale) {
                             keyframe.scale *= aar.radius / currentAction.radius;
-                            layer.sprite.transScaleX = keyframe.scale;
-                            layer.sprite.transScaleY = keyframe.scale;
+                            layer.sprite.transScaleX *= aar.radius / currentAction.radius;
+                            layer.sprite.transScaleY *= aar.radius / currentAction.radius;
+                            keyframe.scale = layer.sprite.transScaleX;
                         }
                         myApp.model.syncReparentLayers(layer);
                         if (timelinePlay)
