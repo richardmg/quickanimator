@@ -5,21 +5,19 @@ Item {
     id: root
 
     readonly property bool playing: userPlay || stagePlay;
-    property bool flicking: flickable ? flickable.flicking : false
-    property bool animating: flickable ? flickable.animating : false
-
-    property FlickableMouseArea flickable: null;
-
     property bool stagePlay: false
     property bool userPlay: false
+    onPlayingChanged: updatePlayAnimation();
+
+    readonly property bool flicking: flickable ? flickable.flicking : false
+    readonly property bool animating: flickable ? flickable.animating : false
+    property FlickableMouseArea flickable: null;
 
     Connections {
         target: flickable
         onAnimatingChanged: updatePlayAnimation();
         onMomentumXUpdated: myApp.model.setTime(myApp.model.time - (flickable.momentumX * 0.1));
     }
-
-    onPlayingChanged: updatePlayAnimation();
 
     function updatePlayAnimation()
     {
