@@ -32,6 +32,7 @@ Item {
             visible: myApp.model.hasSelection && (myApp.model.recordsRotation || myApp.model.recordsScale)
             width: 5
             height: 5
+            radius: width
             anchors.bottom: parent.bottom
             anchors.right: parent.right
             anchors.rightMargin: 100
