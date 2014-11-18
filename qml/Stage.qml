@@ -29,7 +29,7 @@ Item {
 
         Rectangle {
             id: rotationCenterItem
-            visible: myApp.model.hasSelection && myApp.model.recordsRotation
+            visible: myApp.model.hasSelection && (myApp.model.recordsRotation || myApp.model.recordsScale)
             width: 5
             height: 5
             anchors.bottom: parent.bottom
