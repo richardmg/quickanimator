@@ -26,6 +26,15 @@ Item {
     Item {
         id: focusFrames
         anchors.fill: sprites
+
+        Rectangle {
+            id: rotationCenterItem
+            visible: myApp.model.recordsRotation
+            width: 5
+            height: 5
+            anchors.centerIn: parent
+            color: "red"
+        }
     }
 
     Connections {
@@ -84,9 +93,7 @@ Item {
             } else if (myApp.model.selectedLayers.length !== 0) {
                 var layer = myApp.model.selectedLayers[0];
                 var sprite = layer.sprite
-                var globalPos = sprites.mapFromItem(sprite.parent, sprite.x + sprite.anchorX, sprite.y + sprite.anchorY);
-                var center = {x: globalPos.x, y: globalPos.y};
-                currentAction = getAngleAndRadius(center, pos);
+                currentAction = getAngleAndRadius(rotationCenterItem, pos);
             }
         }
 
@@ -152,9 +159,7 @@ Item {
                     layer = myApp.model.selectedLayers[0];
                     sprite = layer.sprite
                     keyframe = sprite.getCurrentKeyframe();
-                    globalPos = sprites.mapFromItem(sprite.parent, sprite.x + sprite.anchorX, sprite.y + sprite.anchorY);
-                    var center = {x: globalPos.x, y: globalPos.y};
-                    var aar = getAngleAndRadius(center, pos);
+                    var aar = getAngleAndRadius(rotationCenterItem, pos);
 
                     for (var i in myApp.model.selectedLayers) {
                         layer = myApp.model.selectedLayers[i];
