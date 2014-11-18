@@ -233,8 +233,10 @@ Item {
         var m = myApp.model;
         if (m.recordsPositionX) {
             m.clearRecordState();
-            m.recordsScale = true;
             m.recordsRotation = true;
+        } else if (m.recordsRotation) {
+            m.clearRecordState();
+            m.recordsScale = true;
         } else {
             m.clearRecordState();
             m.recordsPositionX = true;
@@ -244,16 +246,13 @@ Item {
 
     Component {
         id: layerFocus
-        Rectangle {
+        Text {
             id: layerFocusItem
             property Item target: null
             width: focusSize * 2
             height: focusSize * 2
-            color: "transparent"
-            radius: myApp.model.recordsPositionX ? 0 : focusSize
-            border.width: 3
-            border.color: Qt.rgba(255, 0, 0, 0.7)
-            smooth: true
+            color: "red"
+            text: myApp.model.recordsPositionX ? "Move" : myApp.model.recordsRotation ? "Rotate" : "Scale"
 
             function syncFocusPosition()
             {
