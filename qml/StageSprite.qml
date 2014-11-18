@@ -6,6 +6,8 @@ Item {
     x: parent.width / 2
     y: parent.height / 2
 
+    property var layerRef: null
+
     property real anchorX: childrenRect.width / 2
     property real anchorY: childrenRect.height / 2
     property alias transRotation: tRotation.angle
@@ -46,8 +48,10 @@ Item {
     {
         _updateCurrentKeyframes(time);
         spriteTime = time;
-        if (!myApp.model.inLiveDrag)
-            _interpolate(spriteTime);
+        if (layerRef.selected && model.inLiveDrag)
+            _interpolateWithRecordOptionFilter(spriteTime)
+        else
+            _interpolate(spriteTime)
     }
 
     function getKeyframe(time)
@@ -168,6 +172,7 @@ Item {
         if (_toKeyframe.time === keyframe.time) {
             x = keyframe.x;
             y = keyframe.y;
+            z = keyframe.z;
             anchorX = keyframe.anchorX;
             anchorY = keyframe.anchorY;
             transScaleX = transScaleY = keyframe.scale;
@@ -183,6 +188,48 @@ Item {
             anchorY = _interpolated(keyframe.anchorY, _toKeyframe.anchorY, advanceMs, "linear");
             transScaleX = transScaleY = _interpolated(keyframe.scale, _toKeyframe.scale, advanceMs, "linear");
             transRotation = _interpolated(keyframe.rotation, _toKeyframe.rotation, advanceMs, "linear");
+            opacity = _interpolated(keyframe.opacity, _toKeyframe.opacity, advanceMs, "linear");
+        }
+    }
+
+    function _interpolateWithRecordOptionFilter(time)
+    {
+        var keyframe = _fromKeyframe.reparentKeyframe ? _fromKeyframe.reparentKeyframe : _fromKeyframe;
+        visible = keyframe.visible;
+        if (!visible)
+            return;
+
+        if (_toKeyframe.time === keyframe.time) {
+            if (!model.recordsPositionX)
+                x = keyframe.x;
+            if (!model.recordsPositionY)
+                y = keyframe.y;
+            z = keyframe.z;
+            if (!model.recordsAnchorX)
+                anchorX = keyframe.anchorX;
+            if (!model.recordsAnchorY)
+                anchorY = keyframe.anchorY;
+            if (!model.recordsScale)
+                transScaleX = transScaleY = keyframe.scale;
+            if (!model.recordsRotation)
+                transRotation = keyframe.rotation;
+            opacity = keyframe.opacity;
+        } else {
+            reparentKeyframeMs = keyframe.time * model.msPerFrame
+            advanceMs = (spriteTime * model.msPerFrame) - reparentKeyframeMs;
+            if (!model.recordsPositionX)
+                x = _interpolated(keyframe.x, _toKeyframe.x, advanceMs, "linear");
+            if (!model.recordsPositionY)
+                y = _interpolated(keyframe.y, _toKeyframe.y, advanceMs, "linear");
+            z = _interpolated(keyframe.z, _toKeyframe.z, advanceMs, "linear");
+            if (!model.recordsAnchorX)
+                anchorX = _interpolated(keyframe.anchorX, _toKeyframe.anchorX, advanceMs, "linear");
+            if (!model.recordsAnchorY)
+                anchorY = _interpolated(keyframe.anchorY, _toKeyframe.anchorY, advanceMs, "linear");
+            if (!model.recordsScale)
+                transScaleX = transScaleY = _interpolated(keyframe.scale, _toKeyframe.scale, advanceMs, "linear");
+            if (!model.recordsRotation)
+                transRotation = _interpolated(keyframe.rotation, _toKeyframe.rotation, advanceMs, "linear");
             opacity = _interpolated(keyframe.opacity, _toKeyframe.opacity, advanceMs, "linear");
         }
     }

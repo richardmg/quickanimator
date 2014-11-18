@@ -115,6 +115,7 @@ QtObject {
         // There should always be a keyframe at time 0 that can
         // never be deleted (it simplifies algorithms elsewhere)
         var keyframe = layer.sprite.createKeyframe(0)
+        layer.sprite.layerRef = layer
         layer.sprite.addKeyframe(keyframe);
         layer.sprite.setTime(time);
         layer.sprite.parentChanged.connect(function() { if (root) root.parentHierarchyChanged(layer); });
