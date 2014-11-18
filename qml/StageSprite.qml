@@ -20,7 +20,7 @@ Item {
     ]
 
     property QtObject model: parent 
-    property var keyframes: new Array()
+    property var keyframes: new Array
     property int keyframeIndex: 0
 
     property real spriteTime: 0
