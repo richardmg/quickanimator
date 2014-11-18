@@ -89,10 +89,7 @@ Item {
             }
         }
 
-        onPositionChanged: move(mouseX, mouseY)
-
-        function move(mouseX, mouseY)
-        {
+        onPositionChanged: {
             if (!myApp.model.hasSelection)
                 return;
 
