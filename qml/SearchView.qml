@@ -69,6 +69,7 @@ Rectangle {
                     anchors.fill: parent
                     onClicked: {
                         Qt.inputMethod.hide()
+                        searchText.focus = false
                         root.visible = false
                         myApp.addImage(images[index])
                     }

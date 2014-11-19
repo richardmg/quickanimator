@@ -29,6 +29,8 @@ ApplicationWindow {
     property Model model: Model {}
 
     FocusScope {
+        id: focusScope
+        anchors.fill: parent
         focus: true
         Component.onCompleted: forceActiveFocus()
         property double keyPressTime: 0
@@ -45,7 +47,7 @@ ApplicationWindow {
                 else if (event.key === Qt.Key_A)
                     menu.interactionPlayButton.checked = !menu.interactionPlayButton.checked;
                 else if (event.key === Qt.Key_G)
-                    menu.googleButton.clicked();
+                    searchView.visible = true
                 else if (event.key === Qt.Key_Left)
                     model.setTime(0);
             }
@@ -58,10 +60,6 @@ ApplicationWindow {
                 keyPressTime = 0;
             }
         }
-    }
-
-    Item {
-        anchors.fill: parent
 
         Stage {
             id: stage
