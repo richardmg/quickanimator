@@ -86,12 +86,15 @@ ApplicationWindow {
 
             Connections {
                 target: model
-                onHasSelectionChanged: {
-                    if (model.hasSelection)
-                        playMenu.showSpriteMenu();
-                    else
-                        playMenu.showRootMenu();
-                }
+                onHasSelectionChanged: playMenu.showMenuBasedOnContext()
+            }
+
+            function showMenuBasedOnContext()
+            {
+                if (model.hasSelection)
+                    playMenu.showSpriteMenu();
+                else
+                    playMenu.showRootMenu();
             }
         }
 
@@ -108,7 +111,16 @@ ApplicationWindow {
                 radius: 4
             }
 
-            onClicked: playMenu.toggleMenuVisible()
+            onClicked: {
+                if (clickCount === 1) {
+                    if (!playMenu.visible)
+                        playMenu.showMenuBasedOnContext()
+                    playMenu.toggleMenuVisible()
+                } else if (clickCount === 2) {
+                    playMenu.showRootMenu()
+                    playMenu.opacity = 1
+                }
+            }
         }
 
         TimelineMenu {

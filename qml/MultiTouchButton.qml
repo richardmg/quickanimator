@@ -11,7 +11,7 @@ Rectangle {
     property bool checkable: false
     property bool touchAreaEnabled: touchArea.enabled
 
-    signal clicked
+    signal clicked(var clickCount)
 
     height: 50
     width: 100
@@ -28,7 +28,8 @@ Rectangle {
         property TouchPoint activeTouchPoint: null
         touchPoints: [ TouchPoint { id: tp1; }, TouchPoint { id: tp2; } ]
         property TouchPoint tp: null
-        property var pressTime
+        property double pressTime: 0
+        property int clickCount: 0
 
         onPressed: {
             if (tp1.pressed && contains(Qt.point(tp1.x, tp1.y)))
@@ -38,6 +39,8 @@ Rectangle {
             else
                 return;
 
+            if (new Date().getTime() - pressTime > 300)
+                clickCount = 0
             pressTime = (new Date()).getTime();
             root.pressed = true;
         }
@@ -49,7 +52,7 @@ Rectangle {
                 if (contains(Qt.point(tp.x, tp.y))) {
                     tp = null;
                     if (new Date().getTime() - pressTime < 300)
-                        root.clicked();
+                        root.clicked(++clickCount);
                 }
             }
         }
