@@ -51,18 +51,6 @@ Item {
         }
 
         ProxyButton {
-            text: myApp.stage.timelinePlay ? "Stop\nRecording" : "Record"
-            onClicked: {
-                if (myApp.stage.timelinePlay) {
-                    myApp.model.unselectAllLayers()
-                    myApp.stage.timelinePlay = false
-                } else {
-                    myApp.stage.timelinePlay = true
-                }
-            }
-        }
-
-        ProxyButton {
             text: "Slowmo"
             onClicked: print("undo")
             flickStop: true
@@ -104,6 +92,25 @@ Item {
         ProxyButton {
             text: "Scale"
             onClicked: print("Scale")
+        }
+
+        ProxyButton {
+            text: "|"
+        }
+
+        ProxyButton {
+            text: myApp.stage.timelinePlay ? "Stop\nRecording" : "Record"
+            onClicked: {
+                if (myApp.stage.timelinePlay) {
+                    myApp.stage.timelinePlay = false
+                } else {
+                    myApp.stage.timelinePlay = true
+                }
+            }
+        }
+
+        ProxyButton {
+            text: "|"
         }
 
         ProxyButton {
