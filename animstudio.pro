@@ -25,7 +25,6 @@ OTHER_FILES += qml/*.qml \
     qml/MenuButton.qml \
     qml/RadioButtonGroup.qml \
     qml/PlayMenu.qml \
-    qml/SpriteMenu.qml \
     qml/PlayMenuRow.qml \
     qml/ProxyButton.qml \
     qml/SearchView.qml

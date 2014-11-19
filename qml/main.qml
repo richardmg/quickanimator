@@ -14,9 +14,7 @@ ApplicationWindow {
     property bool touchUI: Qt.platform.os === "ios"
 
     property alias stage: stage
-    property alias menuButton: menuButton
     property alias playMenu: playMenu
-    property alias spriteMenu: spriteMenu
     property alias timeFlickable: timeFlickable
     property alias searchView: searchView
 
@@ -55,7 +53,7 @@ ApplicationWindow {
         Stage {
             id: stage
             anchors.fill: parent
-            mouseArea: menuButton.pressed ? null : flickable
+            mouseArea: flickable
         }
 
         TimelineCanvas {
@@ -66,7 +64,7 @@ ApplicationWindow {
         TimeFlickable {
             id: timeFlickable
             anchors.fill: parent
-            flickable: menuButton.pressed || !model.hasSelection ? flickable : null
+            flickable: model.hasSelection ? null : flickable
         }
 
         FlickableMouseArea {
@@ -80,30 +78,17 @@ ApplicationWindow {
             width: parent.width
             height: 70
             anchors.bottom: parent.bottom
-            opacity: touchUI && !simulator ? (menuButton.pressed ? 1 : 0) : 1
-            visible: opacity !== 0
-            Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
-        }
-
-        SpriteMenu {
-            id: spriteMenu
-            width: 70
-            height: parent.height
-            anchors.right: parent.right
             opacity: 0
             visible: opacity !== 0
             Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
 
-//            Connections {
-//                target: flickable
-//            }
-        }
-
-        MultiTouchButton {
-            id: menuButton
-            width: 50
-            height: parent.height
-            visible: touchUI
+            Connections {
+                target: flickable
+                onReleased: {
+                    if (clickCount == 2)
+                       playMenu.opacity = !playMenu.opacity
+                }
+            }
         }
 
         TimelineMenu {

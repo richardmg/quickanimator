@@ -176,20 +176,19 @@ Item {
         }
 
         onReleased: {
+            var m = myApp.model;
             var pos = {x:mouseX, y:mouseY}
+            var layer = m.getLayerAt(pos);
 
-            if (clickCount) {
-                if (myApp.model.hasSelection) {
+            if (clickCount == 1) {
+                currentAction = {};
+
+                if (m.hasSelection)
                     unselectAllLayers()
-                } else {
-                    var m = myApp.model;
-                    currentAction = {};
-                    var layer = m.getLayerAt(pos);
-                    if (layer) {
-                        m.selectLayer(layer, true);
-                        myApp.spriteMenu.opacity = 1
-                    }
-                }
+                else if (layer)
+                    m.selectLayer(layer, true);
+            } else if (clickCount == 2 && layer) {
+                m.selectLayer(layer, true);
             }
 
             myApp.model.inLiveDrag = false;
