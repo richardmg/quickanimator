@@ -106,6 +106,8 @@ Item {
             if (touchPoints.indexOf(activeTouchPoint) === -1)
                 return
 
+            touchCount = touchPoints.length
+
             if (workAroundPosBug) {
                 root.mouseX = activeTouchPoint.x;
                 root.mouseY = activeTouchPoint.y;
