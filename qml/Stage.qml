@@ -7,7 +7,6 @@ Item {
     property FlickableMouseArea mouseArea: null
 
     property alias sprites: sprites
-    property int focusSize: 20
 
     property var pressStartPos: undefined
     property var currentAction: new Object()
@@ -59,21 +58,6 @@ Item {
                 angle: (Math.atan2(dx, dy) / Math.PI) * 180,
                 radius: Math.sqrt(dx*dx + dy*dy)
             }; 
-        }
-
-        function overlapsHandle(pos)
-        {
-            var layers = myApp.model.layers;
-            for (var i=layers.length - 1; i>=0; --i) {
-                var sprite = layers[i].sprite
-                var mapped = sprites.mapFromItem(sprite, sprite.anchorX, sprite.anchorY);
-                var dx = pos.x - mapped.x;
-                var dy = pos.y - mapped.y;
-                var len = Math.sqrt((dx * dx) + (dy * dy))
-                if (len < focusSize)
-                    return layer
-            }
-            return null;
         }
 
         onPressed: {
@@ -241,16 +225,24 @@ Item {
         Rectangle {
             id: layerFocusItem
             property Item target: null
-            width: 5
-            height: 5
+            width: 20
+            height: width
             radius: width
-            color: "red"
+            color: "black"
+            opacity: 0.7
+            Rectangle {
+                anchors.fill: parent
+                anchors.margins: 2
+                radius: width
+                color: "red"
+                opacity: 0.5
+            }
 
             function syncFocusPosition()
             {
                 var mapped = focusFrames.mapFromItem(target, target.anchorX, target.anchorY);
-                layerFocusItem.x = mapped.x - focusSize;
-                layerFocusItem.y = mapped.y - focusSize;
+                layerFocusItem.x = mapped.x - (width / 2);
+                layerFocusItem.y = mapped.y - (width / 2);
             }
 
             Connections {
