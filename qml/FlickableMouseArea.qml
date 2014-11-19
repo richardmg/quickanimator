@@ -129,7 +129,6 @@ Item {
                 root.mouseX = mouseX;
                 root.mouseY = mouseY;
                 updatePressed(true)
-                root.updateMouse(mouseX, mouseY)
             } else if (pressedButtons === Qt.NoButton) {
                 if (!_momentumXStopped)
                     root.mouseX = mouseX;
