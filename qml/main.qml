@@ -88,9 +88,9 @@ ApplicationWindow {
                 target: model
                 onHasSelectionChanged: {
                     if (model.hasSelection)
-                        showSpriteMenu();
+                        playMenu.showSpriteMenu();
                     else
-                        model.showRootMenu();
+                        playMenu.showRootMenu();
                 }
             }
         }
