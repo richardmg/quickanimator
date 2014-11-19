@@ -4,7 +4,7 @@ import QtQuick.Controls 1.0
 Item {
     id: root
 
-    property FlickableMouseArea mouseArea: null
+    property FlickableMouseArea flickable: null
 
     property alias sprites: sprites
 
@@ -48,7 +48,7 @@ Item {
     }
 
     Connections {
-        target: mouseArea
+        target: flickable
 
         function getAngleAndRadius(p1, p2)
         {

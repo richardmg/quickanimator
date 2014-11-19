@@ -18,6 +18,7 @@ Item {
     property bool animating: false
     property bool flicking: false
 
+    property int touchCount: 0
     property alias acceptedButtons: mouseArea.acceptedButtons
     property int acceptedFlickButtons: acceptedButtons
 
@@ -25,7 +26,6 @@ Item {
     signal momentumYUpdated
     signal pressed(var mouseX, var mouseY)
     signal released(var mouseX, var mouseY, var clickCount)
-    signal rightClicked(var mouseX, var mouseY)
     signal positionChanged(var mouseX, var mouseY)
 
     function stopMomentumX()
@@ -96,6 +96,7 @@ Item {
                 root.mouseY = activeTouchPoint.y;
             if (workAroundPosBug)
                 updatePressed(true)
+            touchCount = touchPoints.length
             updatePressed(false)
             root.flicking = false;
             activeTouchPoint = null;
@@ -128,6 +129,7 @@ Item {
                 _momentumYStopped = false
                 root.mouseX = mouseX;
                 root.mouseY = mouseY;
+                root.touchCount = (pressedButtons === Qt.LeftButton) ? 1 : 2;
                 updatePressed(true)
             } else if (pressedButtons === Qt.NoButton) {
                 if (!_momentumXStopped)
@@ -135,6 +137,7 @@ Item {
                 if (!_momentumYStopped)
                     root.mouseY = mouseY;
                 updatePressed(false)
+                root.touchCount = 0;
                 root.flicking = false;
             }
         }
@@ -161,18 +164,7 @@ Item {
                 updatePressed(false)
             }
         }
-
-        onClicked: {
-            if (mouse.button === Qt.RightButton)
-                root.rightClicked(mouseX, mouseY);
-        }
-
-        onDoubleClicked: {
-            if (mouse.button === Qt.RightButton)
-                root.rightClicked(mouseX, mouseY);
-        }
     }
-
 
     /////////////////////////////////////////////////////
     // MultiPointTouchArea / MouseArea agnostic functions
