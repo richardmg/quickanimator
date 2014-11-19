@@ -36,7 +36,7 @@ ApplicationWindow {
             if (event.key === Qt.Key_P) {
                 timeFlickable.userPlay = !timeFlickable.userPlay;
             } else if (event.key === Qt.Key_M) {
-                menu.visible = !menu.visible
+               menuToggleButton.clicked()
             } else if (event.key === Qt.Key_R) {
                 menu.interactionPlayButton.checked = !menu.interactionPlayButton.checked;
             } else if (event.key === Qt.Key_S) {
