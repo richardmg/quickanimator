@@ -33,31 +33,22 @@ ApplicationWindow {
         anchors.fill: parent
         focus: true
         Component.onCompleted: forceActiveFocus()
-        property double keyPressTime: 0
-
-        Keys.onPressed: {
-            if (event.key === Qt.Key_Space) {
-                if (keyPressTime === 0) {
-                    keyPressTime = new Date().getTime()
-                    timeFlickable.userPlay = !timeFlickable.userPlay;
-                }
-            } else if (event.modifiers & Qt.ControlModifier) {
-                if (event.key === Qt.Key_M)
-                    menu.visible = !menu.visible
-                else if (event.key === Qt.Key_A)
-                    menu.interactionPlayButton.checked = !menu.interactionPlayButton.checked;
-                else if (event.key === Qt.Key_G)
-                    searchView.visible = true
-                else if (event.key === Qt.Key_Left)
-                    model.setTime(0);
-            }
-        }
 
         Keys.onReleased: {
-            if (event.key === Qt.Key_Space) {
-                if (keyPressTime + 200 < new Date().getTime())
-                    timeFlickable.userPlay = !timeFlickable.userPlay;
-                keyPressTime = 0;
+            if (event.key === Qt.Key_P) {
+                timeFlickable.userPlay = !timeFlickable.userPlay;
+            } else if (event.key === Qt.Key_M) {
+                menu.visible = !menu.visible
+            } else if (event.key === Qt.Key_R) {
+                menu.interactionPlayButton.checked = !menu.interactionPlayButton.checked;
+            } else if (event.key === Qt.Key_S) {
+                searchView.visible = true
+            } else if (event.key === Qt.Key_Left) {
+                model.setTime(0);
+            } else if (event.key === Qt.Key_Up) {
+                model.setTime(Math.max(0, model.time - 50));
+            } else if (event.key === Qt.Key_Down) {
+                model.setTime(model.time + 50);
             }
         }
 
