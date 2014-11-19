@@ -47,6 +47,8 @@ ApplicationWindow {
                 model.setTime(Math.max(0, model.time - 50));
             } else if (event.key === Qt.Key_Down) {
                 model.setTime(model.time + 50);
+            } else if (event.key === Qt.Key_Escape) {
+                searchView.visible = false;
             }
         }
 

@@ -5,8 +5,17 @@ Rectangle {
     id: root
 
     property var images: null
-    onVisibleChanged: if (visible && searchText) searchText.forceActiveFocus()
     Component.onCompleted: if (visible) searchText.forceActiveFocus()
+
+    onVisibleChanged: {
+        if (visible) {
+            if (searchText)
+                searchText.forceActiveFocus()
+        } else {
+            Qt.inputMethod.hide()
+            searchText.focus = false
+        }
+    }
 
     function search()
     {
@@ -68,8 +77,6 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        Qt.inputMethod.hide()
-                        searchText.focus = false
                         root.visible = false
                         myApp.addImage(images[index])
                     }
