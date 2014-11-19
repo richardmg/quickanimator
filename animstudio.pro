@@ -27,7 +27,10 @@ OTHER_FILES += qml/*.qml \
     qml/PlayMenu.qml \
     qml/PlayMenuRow.qml \
     qml/ProxyButton.qml \
-    qml/SearchView.qml
+    qml/SearchView.qml \
+    qml/TimelineFlickable \
+    qml/TimelineCanvas \
+    qml/TimelineMenu
 
 qml.files = $$PWD/qml
 osx: qml.path = ./Contents/Resources

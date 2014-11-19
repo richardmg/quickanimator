@@ -61,7 +61,7 @@ ApplicationWindow {
             height: 15
         }
 
-        TimeFlickable {
+        TimelineFlickable {
             id: timeFlickable
             anchors.fill: parent
             flickable: model.hasSelection ? null : flickable
