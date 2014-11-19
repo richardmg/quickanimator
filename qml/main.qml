@@ -55,7 +55,7 @@ ApplicationWindow {
         Stage {
             id: stage
             anchors.fill: parent
-            flickable: flickable.touchCount > 1 ? null : flickable
+            flickable: timeFlickable.flickable ? null : flickable
         }
 
         TimelineCanvas {
@@ -66,7 +66,7 @@ ApplicationWindow {
         TimelineFlickable {
             id: timeFlickable
             anchors.fill: parent
-            flickable: model.hasSelection && flickable.touchCount <= 1 ? null : flickable
+            flickable: model.hasSelection && (!menuToggleButton.pressed || flickable.touchCount < 2) ? null : flickable
         }
 
         FlickableMouseArea {

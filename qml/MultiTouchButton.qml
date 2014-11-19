@@ -28,6 +28,7 @@ Rectangle {
         property TouchPoint activeTouchPoint: null
         touchPoints: [ TouchPoint { id: tp1; }, TouchPoint { id: tp2; } ]
         property TouchPoint tp: null
+        property var pressTime
 
         onPressed: {
             if (tp1.pressed && contains(Qt.point(tp1.x, tp1.y)))
@@ -37,6 +38,7 @@ Rectangle {
             else
                 return;
 
+            pressTime = (new Date()).getTime();
             root.pressed = true;
         }
 
@@ -45,8 +47,9 @@ Rectangle {
             if (root.pressed) {
                 root.pressed = tp.pressed;
                 if (contains(Qt.point(tp.x, tp.y))) {
-                    root.clicked();
                     tp = null;
+                    if (new Date().getTime() - pressTime < 300)
+                        root.clicked();
                 }
             }
         }
