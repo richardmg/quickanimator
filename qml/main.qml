@@ -87,8 +87,17 @@ ApplicationWindow {
             Connections {
                 target: flickable
                 onReleased: {
-                    if (clickCount == 2)
-                       playMenu.opacity = !playMenu.opacity
+                    if (clickCount == 2) {
+                        if (playMenu.opacity) {
+                            playMenu.opacity = false
+                        } else {
+                            playMenu.opacity = true
+                            if (model.hasSelection)
+                                playMenu.showSpriteMenu()
+                            else
+                                playMenu.showRootMenu()
+                        }
+                    }
                 }
             }
         }

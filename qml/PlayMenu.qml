@@ -4,13 +4,10 @@ import WebView 1.0
 Item {
     id: root
 
-    WebView {
-        id: webView
-        onImageUrlChanged: {
-            myApp.addImage(imageUrl)
-            myApp.menuButton.checked = false;
-        }
-    }
+    function showRootMenu() { currentMenu = rootMenu }
+    function showSpriteMenu() { currentMenu = spriteMenu }
+
+    property Row currentMenu: rootMenu
 
     Rectangle {
         id: background
@@ -19,6 +16,7 @@ Item {
         height: parent.height - x
         anchors.fill: parent
         border.color: "darkblue"
+        opacity: 0.5
         gradient: Gradient {
             GradientStop {
                 position: 0.0;
@@ -29,102 +27,107 @@ Item {
                 color: Qt.rgba(0.1, 0.1, 1.0, 1.0)
             }
         }
-        opacity: myApp.model.fullScreenMode || buttonRow.x >= width || buttonRow.x <= -buttonRow.width ? 0 : 0.5
-        visible: opacity !== 0
-        Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
     }
 
-    Row {
-        id: buttonRow
-        width: childrenRect.width
-        height: parent.height
-        objectName: "top"
+    PlayMenuRow {
+        id: rootMenu
 
-        Row {
-            width: root.width
-            height: parent.height
-            layoutDirection: Qt.RightToLeft
-            objectName: "second"
+        ProxyButton {
+            onClicked: myApp.model.setTime(0)
+            text: myApp.model.time === 0 ? "Forward" : "Rewind"
+        }
 
-            ProxyButton {
-                id: firstButton
-                onClicked: myApp.model.setTime(0)
-                text: myApp.model.time === 0 ? "Forward" : "Rewind"
+        ProxyButton {
+            text: "Google"
+            onClicked: myApp.searchView.search()
+        }
+
+        ProxyButton {
+            onClicked: {
+                myApp.model.unselectAllLayers()
+                myApp.timeFlickable.userPlay = !myApp.timeFlickable.userPlay
             }
+            text:  myApp.timeFlickable.userPlay ? "Stop" : "Play"
+        }
 
-            ProxyButton {
-                text: "Google"
-                onClicked: myApp.searchView.search()
-            }
-
-            ProxyButton {
-                onClicked: {
+        ProxyButton {
+            text: myApp.stage.timelinePlay ? "Stop\nRecording" : "Record"
+            onClicked: {
+                if (myApp.stage.timelinePlay) {
                     myApp.model.unselectAllLayers()
-                    myApp.timeFlickable.userPlay = !myApp.timeFlickable.userPlay
+                    myApp.stage.timelinePlay = false
+                } else {
+                    myApp.stage.timelinePlay = true
                 }
-                text:  myApp.timeFlickable.userPlay ? "Stop" : "Play"
-            }
-
-            ProxyButton {
-                text: myApp.stage.timelinePlay ? "Stop\nRecording" : "Record"
-                onClicked: {
-                    if (myApp.stage.timelinePlay) {
-                        myApp.model.unselectAllLayers()
-                        myApp.stage.timelinePlay = false
-                    } else {
-                        myApp.stage.timelinePlay = true
-                    }
-                }
-            }
-
-            ProxyButton {
-                text: "Slowmo"
-                onClicked: print("undo")
-                flickStop: true
             }
         }
 
-        Row {
-            width: root.width
-            height: parent.height
-            layoutDirection: Qt.RightToLeft
+        ProxyButton {
+            text: "Slowmo"
+            onClicked: print("undo")
+            flickStop: true
+        }
+    }
 
-            ProxyButton {
-                text: "Undo"
-                onClicked: print("bar")
-            }
+    PlayMenuRow {
 
-            ProxyButton {
-                text: "Redo"
-                onClicked: print("redo")
-            }
-
-            ProxyButton {
-                text: "Cut"
-                onClicked: print("foo")
-                flickStop: true
-            }
+        ProxyButton {
+            text: "Undo"
+            onClicked: print("bar")
         }
 
-        Row {
-            width: root.width
-            height: parent.height
-            layoutDirection: Qt.RightToLeft
+        ProxyButton {
+            text: "Redo"
+            onClicked: print("redo")
+        }
 
-            ProxyButton {
-                text: "Cast"
-                onClicked: print("baz")
-            }
+        ProxyButton {
+            text: "Cut"
+            onClicked: print("foo")
+            flickStop: true
+        }
+    }
 
-            ProxyButton {
-                text: "Google"
-                onClicked: myApp.searchView.search()
-            }
+    PlayMenuRow {
+        id: spriteMenu
 
-            ProxyButton {
-                text: "Settings"
-                onClicked: print("baz")
-            }
+        ProxyButton {
+            text: "Move"
+            onClicked: print("Move")
+        }
+
+        ProxyButton {
+            text: "Rotate"
+            onClicked: print("Rotate")
+        }
+
+        ProxyButton {
+            text: "Scale"
+            onClicked: print("Scale")
+        }
+
+        ProxyButton {
+            text: "More actions"
+            onClicked: print("More")
+            flickStop: true
+        }
+    }
+
+    PlayMenuRow {
+
+        ProxyButton {
+            text: "Cast"
+            onClicked: print("baz")
+        }
+
+        ProxyButton {
+            text: "Google"
+            onClicked: myApp.searchView.search()
+        }
+
+        ProxyButton {
+            text: "Settings"
+            onClicked: print("baz")
         }
     }
 
@@ -133,21 +136,21 @@ Item {
         anchors.fill: parent
 
         property int leftStop: parent.width
-        property int rightStop: parent.width - buttonRow.width
+        property int rightStop: parent.width - currentMenu.width
         property int overshoot: 100
 
         PropertyAnimation {
             id: snapAnimation
-            target: buttonRow
+            target: currentMenu
             properties: "x"
             to: 0
-            duration: Math.abs(buttonRow.x - to)
+            duration: Math.abs(currentMenu.x - to)
             easing.type: Easing.OutExpo
         }
 
         PropertyAnimation {
             id: bounceAnimation
-            target: buttonRow
+            target: currentMenu
             properties: "x"
             duration: 200
             easing.type: Easing.OutBounce
@@ -155,13 +158,13 @@ Item {
 
         function closestButton(right)
         {
-            var children = buttonRow.children;
+            var children = currentMenu.children;
             var bestChild = null;
             var bestChildDist = right ? Number.MAX_VALUE : -Number.MAX_VALUE
 
             for (var i in children) {
                 var child = children[right ? i : children.length - i - 1];
-                var dist = root.width - root.mapFromItem(buttonRow, child.x, child.y).x - child.width;
+                var dist = root.width - root.mapFromItem(currentMenu, child.x, child.y).x - child.width;
                 if ((right && dist > 0 && dist < bestChildDist) || (!right && dist < 0 && dist > bestChildDist)) {
                     bestChild = child;
                     bestChildDist = dist;
@@ -178,7 +181,7 @@ Item {
                 bounceAnimation.stop();
                 snapAnimation.to = root.width - button.x - button.width;
                 snapAnimation.restart();
-            } else if (buttonRow.x < rightStop) {
+            } else if (currentMenu.x < rightStop) {
                 stopMomentumX();
                 snapAnimation.stop();
                 bounceAnimation.to = rightStop
@@ -189,12 +192,12 @@ Item {
         onMomentumXUpdated: {
             // Ensure that the menu cannot be dragged passed the stop
             // points, and apply some overshoot resitance.
-            var dist = Math.max(0, rightStop - buttonRow.x);
-            buttonRow.x += momentumX * Math.pow(1 - (dist / overshoot), 2);
-            if (buttonRow.x > leftStop)
-                buttonRow.x = leftStop;
-            else if (buttonRow.x < rightStop - overshoot)
-                buttonRow.x = rightStop - overshoot;
+            var dist = Math.max(0, rightStop - currentMenu.x);
+            currentMenu.x += momentumX * Math.pow(1 - (dist / overshoot), 2);
+            if (currentMenu.x > leftStop)
+                currentMenu.x = leftStop;
+            else if (currentMenu.x < rightStop - overshoot)
+                currentMenu.x = rightStop - overshoot;
         }
 
         onPressed: {
@@ -208,7 +211,7 @@ Item {
                 return;
             }
 
-            var p = buttonRow;
+            var p = currentMenu;
             do {
                 var pos = mapToItem(p, mouseX, mouseY);
                 var child = p.childAt(pos.x, pos.y);
@@ -219,7 +222,7 @@ Item {
                 child.clicked();
             } else {
                 child = closestButton(false)
-                animateToButton(child ? child : firstButton);
+                animateToButton(child ? child : rootMenu);
             }
         }
     }
