@@ -85,21 +85,29 @@ ApplicationWindow {
             Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
 
             Connections {
-                target: flickable
-                onReleased: {
-                    if (clickCount == 2) {
-                        if (playMenu.opacity) {
-                            playMenu.opacity = false
-                        } else {
-                            playMenu.opacity = true
-                            if (model.hasSelection)
-                                playMenu.showSpriteMenu()
-                            else
-                                playMenu.showRootMenu()
-                        }
-                    }
+                target: model
+                onHasSelectionChanged: {
+                    if (model.hasSelection)
+                        showSpriteMenu();
+                    else
+                        model.showRootMenu();
                 }
             }
+        }
+
+        MultiTouchButton {
+            id: menuToggleButton
+            width: 70
+            height: playMenu.height
+            anchors.bottom: parent.bottom
+            Rectangle {
+                anchors.fill: parent
+                color: "transparent"
+                border.width: 1
+                radius: 4
+            }
+
+            onClicked: playMenu.opacity = playMenu.opacity > 0 ? 0 : 1
         }
 
         TimelineMenu {
