@@ -27,7 +27,7 @@ Item {
 
         Rectangle {
             id: rotationCenterItem
-            visible: myApp.model.hasSelection && (myApp.model.recordsRotation || myApp.model.recordsScale)
+            visible: myApp.model.hasSelection
             width: 5
             height: 5
             radius: width
@@ -36,6 +36,15 @@ Item {
             anchors.rightMargin: 100
             anchors.bottomMargin: 150
             color: "red"
+
+            Text {
+                id: layerFocusItem
+                property Item target: null
+                color: "red"
+                text: myApp.model.recordsPositionX ? "Move" : myApp.model.recordsRotation ? "Rotate" : "Scale"
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.top
+            }
         }
     }
 
@@ -229,13 +238,13 @@ Item {
 
     Component {
         id: layerFocus
-        Text {
+        Rectangle {
             id: layerFocusItem
             property Item target: null
-            width: focusSize * 2
-            height: focusSize * 2
+            width: 5
+            height: 5
+            radius: width
             color: "red"
-            text: myApp.model.recordsPositionX ? "Move" : myApp.model.recordsRotation ? "Rotate" : "Scale"
 
             function syncFocusPosition()
             {
