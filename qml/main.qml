@@ -104,6 +104,7 @@ ApplicationWindow {
                 anchors.fill: parent
                 color: "transparent"
                 border.width: 1
+                border.color: Qt.rgba(0, 0, 1, 0.4)
                 radius: 4
             }
 
