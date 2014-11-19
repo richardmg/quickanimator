@@ -3,7 +3,6 @@ import QtQuick 2.1
 Rectangle {
     id: root
     property int cellWidth: myApp.style.cellWidth
-    property var model: myApp.model.layers
     property real time: myApp.model.time
 
     onTimeChanged: canvas.requestPaint()
@@ -31,6 +30,7 @@ Rectangle {
         anchors.fill: parent
         renderTarget: Canvas.Image
         property real lineWidth: 1.0
+        property int lastLayerIndex: -1
 //        antialiasing: false
 
         onPaint: {
@@ -42,10 +42,15 @@ Rectangle {
 
             var timeShift = (width / (2 * cellWidth));
 
-            var focusIndex = myApp.model.focusedLayerIndex;
-            var focusIndexData = root.model[focusIndex];
-            if (focusIndexData) {
-                var sprite = focusIndexData.sprite;
+            // If there is no selected layer, show the last layer instead
+            var layerIndex = myApp.model.focusedLayerIndex;
+            if (layerIndex == -1)
+                layerIndex = lastLayerIndex
+            lastLayerIndex = layerIndex
+
+            var layer = myApp.model.layers[layerIndex];
+            if (layer) {
+                var sprite = layer.sprite;
 
                 var grd = ctx.createLinearGradient(0, 0, width, 200);
                 grd.addColorStop(0.00, '#516B89');

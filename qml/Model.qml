@@ -6,10 +6,10 @@ QtObject {
     id: root
     property real time: 0
     property int endTime: 0
-    property var layers: new Array()
+    property var layers: new Array
     property bool hasSelection: false
-    property var selectedLayers: new Array()
-    property var focusedLayerIndex: 0
+    property var selectedLayers: new Array
+    property int focusedLayerIndex: -1
     property var focusedKeyframe: null
     property int msPerFrame: 200
 
