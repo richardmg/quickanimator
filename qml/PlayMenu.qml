@@ -155,7 +155,7 @@ Item {
         id: flickable
         anchors.fill: parent
 
-        property int leftStop: parent.width
+        property int leftStop: parent.width - currentMenu.width
         property int rightStop: parent.width - currentMenu.width
         property int overshoot: 100
 
@@ -201,6 +201,11 @@ Item {
                 bounceAnimation.stop();
                 snapAnimation.to = root.width - button.x - button.width;
                 snapAnimation.restart();
+            } else if (currentMenu.x > 0) {
+                stopMomentumX();
+                snapAnimation.stop();
+                bounceAnimation.to = 0
+                bounceAnimation.restart();
             } else if (currentMenu.x < rightStop) {
                 stopMomentumX();
                 snapAnimation.stop();
@@ -212,12 +217,8 @@ Item {
         onMomentumXUpdated: {
             // Ensure that the menu cannot be dragged passed the stop
             // points, and apply some overshoot resitance.
-            var dist = Math.max(0, rightStop - currentMenu.x);
-            currentMenu.x += momentumX * Math.pow(1 - (dist / overshoot), 2);
-            if (currentMenu.x > leftStop)
-                currentMenu.x = leftStop;
-            else if (currentMenu.x < rightStop - overshoot)
-                currentMenu.x = rightStop - overshoot;
+            var overshootDist = (momentumX > 0) ? -Math.min(0, leftStop - currentMenu.x) : Math.max(0, rightStop - currentMenu.x);
+            currentMenu.x += momentumX * Math.pow(1 - (overshootDist / overshoot), 2);
         }
 
         onPressed: {
