@@ -9,6 +9,7 @@ Rectangle {
     property bool checked: false
     property bool checkable: false
     property bool flickStop: false
+    property bool closeMenuOnClick: true
     property alias text: text.text
     readonly property bool isButton: true
 
@@ -21,6 +22,8 @@ Rectangle {
     onClicked: {
         if (checkable)
             checked = !checked;
+        else if (closeMenuOnClick)
+           toggleMenuVisible()
     }
 
     Text {

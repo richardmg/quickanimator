@@ -107,7 +107,7 @@ ApplicationWindow {
                 radius: 4
             }
 
-            onClicked: playMenu.opacity = playMenu.opacity > 0 ? 0 : 1
+            onClicked: playMenu.toggleMenuVisible()
         }
 
         TimelineMenu {

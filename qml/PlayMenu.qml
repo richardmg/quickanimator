@@ -7,6 +7,8 @@ Item {
     function showRootMenu() { currentMenu = rootMenu }
     function showSpriteMenu() { currentMenu = spriteMenu }
 
+    function toggleMenuVisible() { opacity = opacity > 0 ? 0 : 1 }
+
     property Row currentMenu: rootMenu
 
     Rectangle {
@@ -85,6 +87,7 @@ Item {
                 myApp.model.clearRecordState();
                 myApp.model.recordsPositionX = true;
                 myApp.model.recordsPositionY = true;
+                root.opacity = 0
             }
         }
 
