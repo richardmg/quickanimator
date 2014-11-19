@@ -32,11 +32,19 @@ ApplicationWindow {
         focus: true
         Component.onCompleted: forceActiveFocus()
 
-        Keys.onReleased: {
+        Keys.onPressed: {
+            if (event.key === Qt.Key_Escape) {
+                searchView.visible = false;
+                return;
+            }
+
+            if (!(event.modifiers & Qt.ControlModifier))
+                return;
+
             if (event.key === Qt.Key_P) {
                 timeFlickable.userPlay = !timeFlickable.userPlay;
             } else if (event.key === Qt.Key_M) {
-               menuToggleButton.clicked()
+               menuToggleButton.clicked(1)
             } else if (event.key === Qt.Key_R) {
                 menu.interactionPlayButton.checked = !menu.interactionPlayButton.checked;
             } else if (event.key === Qt.Key_S) {
@@ -47,8 +55,6 @@ ApplicationWindow {
                 model.setTime(Math.max(0, model.time - 50));
             } else if (event.key === Qt.Key_Down) {
                 model.setTime(model.time + 50);
-            } else if (event.key === Qt.Key_Escape) {
-                searchView.visible = false;
             }
         }
 
