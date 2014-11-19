@@ -81,17 +81,27 @@ Item {
 
         ProxyButton {
             text: "Move"
-            onClicked: print("Move")
+            onClicked: {
+                myApp.model.clearRecordState();
+                myApp.model.recordsPositionX = true;
+                myApp.model.recordsPositionY = true;
+            }
         }
 
         ProxyButton {
             text: "Rotate"
-            onClicked: print("Rotate")
+            onClicked: {
+                myApp.model.clearRecordState();
+                myApp.model.recordsRotation = true;
+            }
         }
 
         ProxyButton {
             text: "Scale"
-            onClicked: print("Scale")
+            onClicked: {
+                myApp.model.clearRecordState();
+                myApp.model.recordsScale = true;
+            }
         }
 
         ProxyButton {

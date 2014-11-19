@@ -203,22 +203,6 @@ Item {
             m.selectLayer(m.selectedLayers[i], false)
     }
 
-    function changeRecordState()
-    {
-        var m = myApp.model;
-        if (m.recordsPositionX) {
-            m.clearRecordState();
-            m.recordsRotation = true;
-        } else if (m.recordsRotation) {
-            m.clearRecordState();
-            m.recordsScale = true;
-        } else {
-            m.clearRecordState();
-            m.recordsPositionX = true;
-            m.recordsPositionY = true;
-        }
-    }
-
     Component {
         id: layerFocus
         Rectangle {
