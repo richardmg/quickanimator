@@ -47,9 +47,9 @@ Item {
         ProxyButton {
             onClicked: {
                 myApp.model.unselectAllLayers()
-                myApp.timeFlickable.userPlay = !myApp.timeFlickable.userPlay
+                myApp.timelineFlickable.userPlay = !myApp.timelineFlickable.userPlay
             }
-            text:  myApp.timeFlickable.userPlay ? "Stop" : "Play"
+            text: "Play"
         }
 
         ProxyButton {

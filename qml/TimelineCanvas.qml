@@ -14,7 +14,7 @@ Rectangle {
     }
 
     Connections {
-        target: myApp.timeFlickable
+        target: myApp.timelineFlickable
         onPlayingChanged: canvas.requestPaint()
     }
 

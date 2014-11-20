@@ -43,13 +43,13 @@ PlayMenuRow {
             myApp.model.recordsOpacity = true
             myApp.model.inLiveDrag = true
             if (myApp.stage.timelinePlay)
-                myApp.timeFlickable.stagePlay = true;
+                myApp.timelineFlickable.stagePlay = true;
         }
         onReleased: {
             myApp.model.recordsOpacity = false
             myApp.model.inLiveDrag = false
             if (myApp.stage.timelinePlay)
-                myApp.timeFlickable.stagePlay = false;
+                myApp.timelineFlickable.stagePlay = false;
         }
     }
 

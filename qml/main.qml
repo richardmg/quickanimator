@@ -15,11 +15,10 @@ ApplicationWindow {
 
     property alias stage: stage
     property alias playMenu: playMenu
-    property alias timeFlickable: timeFlickable
+    property alias timelineFlickable: timelineFlickable
     property alias searchView: searchView
 
     property TimelineMenu menu
-    property Flickable timelineFlickable
     property Flickable layerTreeFlickable
     property FlickableMouseArea msPerFrameFlickable
 
@@ -42,7 +41,7 @@ ApplicationWindow {
                 return;
 
             if (event.key === Qt.Key_P) {
-                timeFlickable.userPlay = !timeFlickable.userPlay;
+                timelineFlickable.userPlay = !timelineFlickable.userPlay;
             } else if (event.key === Qt.Key_M) {
                menuToggleButton.clicked(1)
             } else if (event.key === Qt.Key_R) {
@@ -67,10 +66,13 @@ ApplicationWindow {
         TimelineCanvas {
             width: parent.width
             height: 15
+            opacity: timelineFlickable.userPlay ? 0 : 1
+            visible: opacity !== 0
+            Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
         }
 
         TimelineFlickable {
-            id: timeFlickable
+            id: timelineFlickable
             anchors.fill: parent
             flickable: (model.hasSelection && !menuToggleButton.pressed && flickable.touchCount < 2) ? null : flickable
         }
@@ -78,7 +80,7 @@ ApplicationWindow {
         FlickableMouseArea {
             id: flickable
             anchors.fill: parent
-            momentumRestX: timeFlickable.playing ? -1 : 0
+            momentumRestX: timelineFlickable.playing ? -1 : 0
         }
 
         PlayMenu {
@@ -125,6 +127,7 @@ ApplicationWindow {
 
             onClicked: {
                 if (clickCount === 1) {
+                    timelineFlickable.userPlay = false
                     if (!playMenu.visible)
                         playMenu.showMenuBasedOnContext()
                     playMenu.toggleMenuVisible()

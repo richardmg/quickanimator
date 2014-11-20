@@ -62,7 +62,7 @@ Item {
 
         onPressed: {
             // start new layer operation, drag or rotate:
-            timelineWasPlaying = myApp.timeFlickable.playing;
+            timelineWasPlaying = myApp.timelineFlickable.playing;
             var pos = {x:mouseX, y:mouseY}
             pressStartPos = pos;
 
@@ -115,7 +115,7 @@ Item {
                         keyframe.y = sprite.y;
                         myApp.model.syncReparentLayers(layer);
                         if (timelinePlay)
-                            myApp.timeFlickable.stagePlay = true;
+                            myApp.timelineFlickable.stagePlay = true;
                     } else {
                         // Move selected sprites
                         for (var i in myApp.model.selectedLayers) {
@@ -134,7 +134,7 @@ Item {
                             }
                             myApp.model.syncReparentLayers(layer);
                             if (timelinePlay)
-                                myApp.timeFlickable.stagePlay = true;
+                                myApp.timelineFlickable.stagePlay = true;
                         }
                     }
 
@@ -167,7 +167,7 @@ Item {
                         }
                         myApp.model.syncReparentLayers(layer);
                         if (timelinePlay)
-                            myApp.timeFlickable.stagePlay = true;
+                            myApp.timelineFlickable.stagePlay = true;
                     }
                     currentAction.angle = aar.angle;
                     currentAction.radius = aar.radius;
@@ -192,7 +192,7 @@ Item {
             }
 
             myApp.model.inLiveDrag = false;
-            myApp.timeFlickable.stagePlay = false;
+            myApp.timelineFlickable.stagePlay = false;
         }
     }
 

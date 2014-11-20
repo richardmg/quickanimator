@@ -38,7 +38,7 @@ Rectangle {
         ControlPanelButton {
             text: ">"
             checkable: true
-            onClicked: myApp.timeFlickable.togglePlay(checked)
+            onClicked: myApp.timelineFlickable.togglePlay(checked)
             gridX: 0; gridY: -1
         }
         ControlPanelButton {
