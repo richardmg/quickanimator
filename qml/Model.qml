@@ -156,17 +156,18 @@ QtObject {
             selectedLayers.push(layer)
             var index = layers.indexOf(layer);
             selectedLayersUpdated(-1, index);
+            hasSelection = selectedLayers.length !== 0
             setFocusLayer(index);
         } else {
             selectedLayers.splice(selectedLayers.indexOf(layer), 1);
             index = layers.indexOf(layer);
+            hasSelection = selectedLayers.length !== 0
             selectedLayersUpdated(index, -1);
             if (focusedLayerIndex === index) {
                 focusedLayerIndex = -1;
                 updateFocusedKeyframe();
             }
         }
-        hasSelection = selectedLayers.length !== 0
     }
     
     function removeLayer(layer)

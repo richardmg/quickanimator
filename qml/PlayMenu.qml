@@ -143,27 +143,27 @@ Item {
         id: opacityMenu
         property bool guard: false
 
-        function updateHandle() {
-            if (myApp.model.hasSelection && !flickable.isPressed) {
-                guard = true
-                x = myApp.model.selectedLayers[0].sprite.opacity * (parent.width - width)
-                guard = false
-            }
+        function syncWithSelectedLayer() {
+            if (!myApp.model.hasSelection)
+                return
+            guard = true
+            x = myApp.model.selectedLayers[0].sprite.opacity * (parent.width - width)
+            guard = false
         }
 
         onIsCurrentChanged: {
             myApp.model.recordsOpacity = isCurrent
-            updateHandle()
+            syncWithSelectedLayer()
         }
 
         Connections {
             target: opacityMenu.isCurrent ? myApp.model : null
-            onSelectedLayersUpdated: opacityMenu.updateHandle()
+            onSelectedLayersUpdated: opacityMenu.syncWithSelectedLayer()
             onTimeChanged: {
                 if (flickable.isPressed && myApp.stage.timelinePlay)
                     opacityMenu.writeOpacityToKeyframes()
                 else
-                    opacityMenu.updateHandle()
+                    opacityMenu.syncWithSelectedLayer()
             }
         }
 
