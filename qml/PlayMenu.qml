@@ -155,18 +155,9 @@ Item {
         id: flickable
         anchors.fill: parent
 
-        property int leftStop: parent.width - currentMenu.width
-        property int rightStop: parent.width - currentMenu.width
+        property int flickStopRight: Math.max(0, parent.width - currentMenu.width)
+        property int flickStopLeft: Math.min(0, parent.width - currentMenu.width)
         property int overshoot: 100
-
-        PropertyAnimation {
-            id: snapAnimation
-            target: currentMenu
-            properties: "x"
-            to: 0
-            duration: Math.abs(currentMenu.x - to)
-            easing.type: Easing.OutExpo
-        }
 
         PropertyAnimation {
             id: bounceAnimation
@@ -176,61 +167,37 @@ Item {
             easing.type: Easing.OutBounce
         }
 
-        function closestButton(right)
+        function bounceMenuBack(onlyIfOutside)
         {
-            var children = currentMenu.children;
-            var bestChild = null;
-            var bestChildDist = right ? Number.MAX_VALUE : -Number.MAX_VALUE
-
-            for (var i in children) {
-                var child = children[right ? i : children.length - i - 1];
-                var dist = root.width - root.mapFromItem(currentMenu, child.x, child.y).x - child.width;
-                if ((right && dist > 0 && dist < bestChildDist) || (!right && dist < 0 && dist > bestChildDist)) {
-                    bestChild = child;
-                    bestChildDist = dist;
-                }
-            }
-
-            return bestChild;
-        }
-
-        function animateToButton(button)
-        {
-            if (button) {
+            if (currentMenu.x > flickStopRight || !onlyIfOutside) {
                 stopMomentumX();
-                bounceAnimation.stop();
-                snapAnimation.to = root.width - button.x - button.width;
-                snapAnimation.restart();
-            } else if (currentMenu.x > 0) {
-                stopMomentumX();
-                snapAnimation.stop();
-                bounceAnimation.to = 0
+                bounceAnimation.to = flickStopRight
                 bounceAnimation.restart();
-            } else if (currentMenu.x < rightStop) {
+            } else if (currentMenu.x < flickStopLeft) {
                 stopMomentumX();
-                snapAnimation.stop();
-                bounceAnimation.to = rightStop
+                bounceAnimation.to = flickStopLeft
                 bounceAnimation.restart();
             }
         }
 
         onMomentumXUpdated: {
-            // Ensure that the menu cannot be dragged passed the stop
-            // points, and apply some overshoot resitance.
-            var overshootDist = (momentumX > 0) ? -Math.min(0, leftStop - currentMenu.x) : Math.max(0, rightStop - currentMenu.x);
-            currentMenu.x += momentumX * Math.pow(1 - (overshootDist / overshoot), 2);
+            var overshootDist = (momentumX > 0) ? currentMenu.x - flickStopRight : flickStopLeft - currentMenu.x;
+            var factor = Math.max(0, Math.min(1, overshootDist / overshoot))
+            var increment = momentumX * Math.pow(1 - factor, 2);
+            currentMenu.x += increment
+            if (!isPressed)
+                bounceMenuBack(true)
         }
 
         onPressed: {
-            snapAnimation.stop();
             bounceAnimation.stop();
         }
 
         onReleased: {
-            if (!clickCount) {
-                animateToButton(Math.abs(momentumX) > 15 ? closestButton(momentumX > 0) : null);
-                return;
-            }
+            bounceMenuBack(true)
+
+            if (!clickCount)
+                return
 
             var p = currentMenu;
             do {
@@ -239,12 +206,10 @@ Item {
                 p = child;
             } while (p && !child.isButton);
 
-            if (child && child.isButton) {
+            if (child && child.isButton)
                 child.clicked();
-            } else {
-                child = closestButton(false)
-                animateToButton(child ? child : rootMenu);
-            }
+            else
+                bounceMenuBack(false)
         }
     }
 

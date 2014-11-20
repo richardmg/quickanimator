@@ -2,7 +2,8 @@ import QtQuick 2.0
 
 Row {
     id: root
-    width: parent.width
+    x: parent.width - width
+    width: childrenRect.width
     height: parent.height
     layoutDirection: Qt.RightToLeft
     opacity: parent.currentMenu === root ? 1 : 0

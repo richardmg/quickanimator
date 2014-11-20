@@ -17,6 +17,7 @@ Item {
     property real mouseY: 0
     property bool animating: false
     property bool flicking: false
+    property bool isPressed: false
 
     property int touchCount: 0
     property alias acceptedButtons: mouseArea.acceptedButtons
@@ -186,6 +187,7 @@ Item {
             _pressMouseY = mouseY;
             animating = true;
             flicking = true
+            root.isPressed = true
             root.pressed(mouseX, mouseY)
         } else {
             animateMomentumToRest(1);
@@ -195,6 +197,7 @@ Item {
                     && Math.abs(mouseX - _pressMouseX) < 10
                     && Math.abs(mouseY - _pressMouseY) < 10;
             _clickCount = click ? _clickCount + 1 : 0;
+            root.isPressed = false
             root.released(mouseX, mouseY, _clickCount);
         }
     }
