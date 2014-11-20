@@ -83,8 +83,10 @@ ApplicationWindow {
 
         PlayMenu {
             id: playMenu
-            width: parent.width
+            x: menuToggleButton.width
+            width: parent.width - x
             height: 70
+            clip: true
             anchors.bottom: parent.bottom
             opacity: 0
             visible: opacity !== 0
