@@ -108,6 +108,12 @@ Item {
         }
 
         ProxyButton {
+            text: "Opacity"
+            closeMenuOnClick: false
+            onClicked: currentMenu = opacityMenu
+        }
+
+        ProxyButton {
             text: "|"
         }
 
@@ -130,6 +136,53 @@ Item {
             text: "More actions"
             onClicked: print("More")
             flickStop: true
+        }
+    }
+
+    PlayMenuRow {
+        id: opacityMenu
+
+        function updateHandle() {
+            if (myApp.model.hasSelection)
+                x = myApp.model.selectedLayers[0].sprite.opacity * (parent.width - width)
+        }
+
+        onVisibleChanged: {
+            updateHandle()
+        }
+
+        Connections {
+            target: opacityMenu.isCurrent ? myApp.model : null
+            onTimeChanged: if (!flickable.isPressed) opacityMenu.updateHandle()
+            onSelectedLayersUpdated: opacityMenu.updateHandle()
+        }
+
+        Connections {
+            target: opacityMenu.isCurrent ? flickable : null
+            onPressed: {
+                if (myApp.stage.timelinePlay)
+                    myApp.timeFlickable.stagePlay = true;
+            }
+            onReleased: {
+                if (myApp.stage.timelinePlay)
+                    myApp.timeFlickable.stagePlay = false;
+            }
+        }
+
+        Rectangle {
+            width: 70
+            height: parent.height
+            color: "blue"
+        }
+
+        onXChanged: {
+            for (var i in myApp.model.selectedLayers) {
+                var layer = myApp.model.selectedLayers[i];
+                var keyframe = myApp.model.getOrCreateKeyframe(layer);
+                var sprite = layer.sprite
+                sprite.opacity = x / (parent.width - width)
+                keyframe.opacity = sprite.opacity
+            }
         }
     }
 

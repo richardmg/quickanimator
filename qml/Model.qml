@@ -140,9 +140,9 @@ QtObject {
         }
         var unselectedLayers = selectedLayers;
         selectedLayers = new Array();
+        hasSelection = false;
         for (var i = 0; i < unselectedLayers.length; ++i)
             selectedLayersUpdated(layers.indexOf(unselectedLayers[i]), -1);
-        hasSelection = false;
     }
 
     function selectLayer(layer, select)
