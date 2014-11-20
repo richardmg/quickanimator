@@ -113,9 +113,7 @@ ApplicationWindow {
             width: 70
             height: playMenu.height
             anchors.bottom: parent.bottom
-            opacity: 1
             Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
-            property int hideButtonClickCount: 0
 
             Rectangle {
                 anchors.fill: parent
@@ -135,8 +133,7 @@ ApplicationWindow {
                     playMenu.showRootMenu()
                     playMenu.opacity = 1
                 }
-                if (++hideButtonClickCount >= 2)
-                    menuToggleButton.opacity = 0
+                opacity = 0
             }
         }
 
