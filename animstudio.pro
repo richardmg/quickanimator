@@ -30,7 +30,8 @@ OTHER_FILES += qml/*.qml \
     qml/SearchView.qml \
     qml/TimelineFlickable \
     qml/TimelineCanvas \
-    qml/TimelineMenu
+    qml/TimelineMenu \
+    qml/OpacitySlider.qml
 
 qml.files = $$PWD/qml
 osx: qml.path = ./Contents/Resources
