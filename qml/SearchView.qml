@@ -53,6 +53,7 @@ Rectangle {
             id: searchText
             width: parent.width
             onTextChanged: search();
+            inputMethodHints: Qt.ImhNoPredictiveText
         }
 
         GridView {
