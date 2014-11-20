@@ -31,6 +31,7 @@ QtObject {
     property bool recordsScale: false
     property bool recordsAnchorX: false
     property bool recordsAnchorY: false
+    property bool recordsOpacity: false
 
     function shiftUserInterfaceState()
     {
@@ -47,6 +48,7 @@ QtObject {
         recordsScale = false;
         recordsAnchorX = false;
         recordsAnchorY = false;
+        recordsOpacity = false;
     }
 
     function syncReparentLayers(parentLayer)

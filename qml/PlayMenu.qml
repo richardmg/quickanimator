@@ -141,29 +141,36 @@ Item {
 
     PlayMenuRow {
         id: opacityMenu
+        property bool guard: false
 
         function updateHandle() {
-            if (myApp.model.hasSelection)
+            if (myApp.model.hasSelection && !flickable.isPressed) {
+                guard = true
                 x = myApp.model.selectedLayers[0].sprite.opacity * (parent.width - width)
+                guard = false
+            }
         }
 
-        onVisibleChanged: {
+        onIsCurrentChanged: {
+            myApp.model.recordsOpacity = isCurrent
             updateHandle()
         }
 
         Connections {
             target: opacityMenu.isCurrent ? myApp.model : null
-            onTimeChanged: if (!flickable.isPressed) opacityMenu.updateHandle()
+            onTimeChanged: opacityMenu.updateHandle()
             onSelectedLayersUpdated: opacityMenu.updateHandle()
         }
 
         Connections {
             target: opacityMenu.isCurrent ? flickable : null
             onPressed: {
+                myApp.model.inLiveDrag = true
                 if (myApp.stage.timelinePlay)
                     myApp.timeFlickable.stagePlay = true;
             }
             onReleased: {
+                myApp.model.inLiveDrag = false
                 if (myApp.stage.timelinePlay)
                     myApp.timeFlickable.stagePlay = false;
             }
@@ -176,6 +183,9 @@ Item {
         }
 
         onXChanged: {
+            if (guard)
+                return;
+
             for (var i in myApp.model.selectedLayers) {
                 var layer = myApp.model.selectedLayers[i];
                 var keyframe = myApp.model.getOrCreateKeyframe(layer);

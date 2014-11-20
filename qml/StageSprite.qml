@@ -200,7 +200,8 @@ Item {
                 transScaleX = transScaleY = keyframe.scale;
             if (!model.recordsRotation)
                 transRotation = keyframe.rotation;
-            opacity = keyframe.opacity;
+            if (!model.recordsOpacity)
+                opacity = keyframe.opacity;
         } else {
             var reparentKeyframeMs = keyframe.time * model.msPerFrame
             var advanceMs = (spriteTime * model.msPerFrame) - reparentKeyframeMs;
@@ -217,7 +218,8 @@ Item {
                 transScaleX = transScaleY = _interpolated(keyframe.scale, _toKeyframe.scale, advanceMs, "linear");
             if (!model.recordsRotation)
                 transRotation = _interpolated(keyframe.rotation, _toKeyframe.rotation, advanceMs, "linear");
-            opacity = _interpolated(keyframe.opacity, _toKeyframe.opacity, advanceMs, "linear");
+            if (!model.recordsOpacity)
+                opacity = _interpolated(keyframe.opacity, _toKeyframe.opacity, advanceMs, "linear");
         }
     }
 
