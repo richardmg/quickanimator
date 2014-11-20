@@ -158,8 +158,13 @@ Item {
 
         Connections {
             target: opacityMenu.isCurrent ? myApp.model : null
-            onTimeChanged: opacityMenu.updateHandle()
             onSelectedLayersUpdated: opacityMenu.updateHandle()
+            onTimeChanged: {
+                if (flickable.isPressed && myApp.stage.timelinePlay)
+                    opacityMenu.writeOpacityToKeyframes()
+                else
+                    opacityMenu.updateHandle()
+            }
         }
 
         Connections {
@@ -182,10 +187,10 @@ Item {
             color: "blue"
         }
 
-        onXChanged: {
-            if (guard)
-                return;
+        onXChanged: if (!guard) writeOpacityToKeyframes()
 
+        function writeOpacityToKeyframes()
+        {
             for (var i in myApp.model.selectedLayers) {
                 var layer = myApp.model.selectedLayers[i];
                 var keyframe = myApp.model.getOrCreateKeyframe(layer);
