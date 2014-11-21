@@ -199,24 +199,25 @@ Item {
         Rectangle {
             id: layerFocusItem
             property Item target: null
-            width: 20
+            width: 8
             height: width
-            radius: width
             color: "transparent"
 
             Rectangle {
-                anchors.horizontalCenter: parent.horizontalCenter
-                height: parent.height
-                width: 2
+                anchors.centerIn: parent
+                width: parent.height
+                height: width
                 color: "black"
+                radius: width
+                Rectangle {
+                    anchors.centerIn: parent
+                    width: parent.width -2
+                    height: width
+                    color: "white"
+                    radius: width
+                }
             }
 
-            Rectangle {
-                anchors.verticalCenter: parent.verticalCenter
-                width: parent.width
-                height: 2
-                color: "black"
-            }
 
             function syncFocusPosition()
             {
