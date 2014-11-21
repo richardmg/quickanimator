@@ -64,11 +64,50 @@ ApplicationWindow {
         }
 
         TimelineCanvas {
-            width: parent.width
+            id: timeline
+            anchors.left: parent.left
+            anchors.right: recordingIndicator.left
+            anchors.rightMargin: 2
             height: 15
             opacity: timelineFlickable.userPlay ? 0 : 1
             visible: opacity !== 0
             Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+        }
+
+
+        Rectangle {
+            id: recordingIndicator
+            height: timeline.height - (y * 2)
+            width: height
+            radius: height
+            color: stage.timelinePlay && model.hasSelection ? "red" : model.hasSelection ? "orange" : "lightgray"
+            anchors.top: parent.top
+            anchors.right: parent.right
+            anchors.margins: 2
+            opacity: timeline.opacity
+
+            SequentialAnimation {
+                running: stage.timelinePlay && model.hasSelection && !timelineFlickable.playing
+                onRunningChanged: if (!running) recordingIndicator.opacity = Qt.binding(function() { return timeline.opacity })
+                loops: Animation.Infinite
+                PauseAnimation { duration: 1000 }
+                PropertyAnimation {
+                    target: recordingIndicator
+                    property: "opacity"
+                    duration: 200
+                    easing.type: Easing.OutQuad
+                    to: 0.0
+                }
+                PauseAnimation { duration: 1000 }
+                PropertyAnimation {
+                    target: recordingIndicator
+                    property: "opacity"
+                    duration: 200
+                    easing.type: Easing.InQuad
+                    to: 1
+                }
+            }
+
         }
 
         TimelineFlickable {
