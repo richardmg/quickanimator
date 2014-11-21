@@ -66,14 +66,27 @@ ApplicationWindow {
         TimelineCanvas {
             id: timeline
             anchors.left: parent.left
-            anchors.right: recordingIndicator.left
-            anchors.rightMargin: 2
+            anchors.right: actionLabel.left
+            anchors.rightMargin: 4
             height: 15
             opacity: timelineFlickable.userPlay ? 0 : 1
             visible: opacity !== 0
             Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
         }
 
+        Text {
+            id: actionLabel
+            color: "gray"
+            width: 50
+            text: !myApp.model.hasSelection ? ""
+                  : myApp.model.recordsPositionX || myApp.model.recordsPositionY ? "Move"
+                  : myApp.model.recordsRotation ? "Rotate"
+                  : myApp.model.recordsScale ? "Scale"
+                  : "Unknown"
+
+            anchors.right: recordingIndicator.left
+            anchors.rightMargin: 4
+        }
 
         Rectangle {
             id: recordingIndicator
