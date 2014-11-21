@@ -202,14 +202,20 @@ Item {
             width: 20
             height: width
             radius: width
-            color: "black"
-            opacity: 0.7
+            color: "transparent"
+
             Rectangle {
-                anchors.fill: parent
-                anchors.margins: 2
-                radius: width
-                color: "red"
-                opacity: 0.5
+                anchors.horizontalCenter: parent.horizontalCenter
+                height: parent.height
+                width: 2
+                color: "black"
+            }
+
+            Rectangle {
+                anchors.verticalCenter: parent.verticalCenter
+                width: parent.width
+                height: 2
+                color: "black"
             }
 
             function syncFocusPosition()
