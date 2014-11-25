@@ -81,6 +81,7 @@ ApplicationWindow {
             font.family: "Arial"
             font.pixelSize: 15
             horizontalAlignment: Text.AlignRight
+            opacity: timeline.opacity
             text: !myApp.model.hasSelection || !stage.flickable ? "Flick"
                   : myApp.model.recordsPositionX || myApp.model.recordsPositionY ? "Move"
                   : myApp.model.recordsRotation ? "Rotate"
