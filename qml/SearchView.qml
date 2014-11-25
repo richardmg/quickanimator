@@ -26,8 +26,11 @@ Rectangle {
                 listView.model = 0
                 images = new Array;
                 var imageTags = doc.responseText.match(/<img[^>]*>/g)
-                if (imageTags.length == 0)
+                if (!imageTags || imageTags.length == 0) {
+                    print("Problems loading images:", doc.statusText, doc.responseText)
                     return;
+                }
+
                 for (var i = 0; i < imageTags.length; ++i) {
                     var tag = imageTags[i];
                     var index = tag.indexOf("src");
