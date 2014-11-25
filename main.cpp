@@ -6,14 +6,12 @@
 #include <QQmlApplicationEngine>
 
 #include "fileio.h"
-#include "webview.h"
 
 int main(int argc, char* argv[])
 {
     QApplication app(argc,argv);
 
     qmlRegisterType<FileIO>("FileIO", 1, 0, "FileIO");
-    qmlRegisterType<MyWebView>("WebView", 1, 0, "WebView");
 
 #ifdef Q_OS_OSX
     QDir bundleRoot = qApp->applicationDirPath();

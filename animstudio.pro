@@ -8,13 +8,9 @@ INCLUDEPATH += .
 QT += quick qml widgets gui-private
 CONFIG += release qtquickcompiler
 QMAKE_INFO_PLIST = Info.plist
-osx: LIBS += -framework WebKit -framework Cocoa
 
-HEADERS += fileio.h \
-    webview.h
+HEADERS += fileio.h
 SOURCES += fileio.cpp main.cpp
-OBJECTIVE_SOURCES += \
-    webview.mm
 
 OTHER_FILES += qml/*.qml \
     TODO.txt \

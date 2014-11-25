@@ -1,5 +1,4 @@
 import QtQuick 2.0
-import WebView 1.0
 
 Item {
     id: root

@@ -2,7 +2,6 @@ import QtQuick 2.1
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 1.1
 import QtQuick.Controls.Styles 1.2
-import WebView 1.0
 
 Rectangle {
     id: root
@@ -14,14 +13,6 @@ Rectangle {
     clip: true
 
     property bool __speedSliderGuard: false
-
-    WebView {
-        id: webView
-        onImageUrlChanged: {
-            myApp.addImage(imageUrl)
-            myApp.menuButton.checked = false;
-        }
-    }
 
     property Component sliderStyle: SliderStyle {
         groove: Rectangle {
@@ -68,7 +59,6 @@ Rectangle {
             MenuButton {
                 id: googleButton
                 text: "Google image search"
-                onClicked: webView.search();
             }
 
             Rectangle {
