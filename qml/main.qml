@@ -80,6 +80,7 @@ ApplicationWindow {
             width: 50
             font.family: "Arial"
             font.pixelSize: 15
+            horizontalAlignment: Text.AlignRight
             text: !myApp.model.hasSelection || !stage.flickable ? "Flick"
                   : myApp.model.recordsPositionX || myApp.model.recordsPositionY ? "Move"
                   : myApp.model.recordsRotation ? "Rotate"
