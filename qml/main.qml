@@ -78,7 +78,7 @@ ApplicationWindow {
             id: actionLabel
             color: "gray"
             width: 50
-            text: !myApp.model.hasSelection ? ""
+            text: !myApp.model.hasSelection || !stage.flickable ? "Flick"
                   : myApp.model.recordsPositionX || myApp.model.recordsPositionY ? "Move"
                   : myApp.model.recordsRotation ? "Rotate"
                   : myApp.model.recordsScale ? "Scale"
