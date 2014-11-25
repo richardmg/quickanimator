@@ -4,10 +4,9 @@ Bugs:
 - force keyfocus back after googling
 
 Backlog:
-- Refactor Flickable out of TimeLineSprites, and put the items directly into the menu
+- Init keyframe props as unset before recorded, to be able to record e.g rotation and later modify pos
 - Implement all buttons
 - Add undo button
-- Fix iOS WebView
 - Long-press on web view follows link
 - draggable stage / move origo (show up in timelinesprites?)
 - support keyframes without interpolating / select curve / no curve
