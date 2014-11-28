@@ -142,7 +142,7 @@ Item {
                             var c = a + 360;
                             a = Math.abs(a) < Math.abs(b) ? a : b;
                             a = Math.abs(a) < Math.abs(c) ? a : c;
-                            changes.rotation = sprite.transRotation + a;
+                            changes.transRotation = sprite.transRotation + a;
                         }
                         if (myApp.model.recordsScale) {
                             changes.transScaleX = sprite.transScaleX * (aar.radius / currentAction.radius);

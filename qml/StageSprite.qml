@@ -82,8 +82,9 @@ Item {
             anchorY: tScale.origin.y,
             width:sprite.width,
             height:sprite.height,
-            rotation:transRotation,
-            scale:transScaleX,
+            transRotation:transRotation,
+            transScaleX:transScaleX,
+            transScaleY:transScaleY,
             opacity:sprite.opacity,
             visible: sprite.visible
         };
@@ -152,8 +153,8 @@ Item {
         translatedKeyframe.parent = keyframeParent;
         translatedKeyframe.x = translatedHotspot.x - (sprite.width / 2);
         translatedKeyframe.y = translatedHotspot.y - (sprite.height / 2);
-        translatedKeyframe.rotation = gRotation - gItemRotation;
-        translatedKeyframe.scale = gScale / gItemScale;
+        translatedKeyframe.transRotation = gRotation - gItemRotation;
+        translatedKeyframe.transScale = gScale / gItemScale;
 
         return translatedKeyframe;
     }
@@ -171,8 +172,8 @@ Item {
         var translated = _createKeyframeRelativeToParent(_fromKeyframe.time, p);
         _fromKeyframe.x = translated.x;
         _fromKeyframe.y = translated.y;
-        _fromKeyframe.scale = translated.scale;
-        _fromKeyframe.rotation = translated.rotation;
+        _fromKeyframe.transScale = translated.transScale;
+        _fromKeyframe.transRotation = translated.transRotation;
     }
 
     function _interpolate(time)
@@ -188,8 +189,9 @@ Item {
             z = keyframe.z;
             anchorX = keyframe.anchorX;
             anchorY = keyframe.anchorY;
-            transScaleX = transScaleY = keyframe.scale;
-            transRotation = keyframe.rotation;
+            transScaleX = keyframe.transScaleX;
+            transScaleY = keyframe.transScaleY;
+            transRotation = keyframe.transRotation;
             opacity = keyframe.opacity;
         } else {
             var reparentKeyframeMs = keyframe.time * model.msPerFrame
@@ -199,8 +201,9 @@ Item {
             z = _interpolated(keyframe.z, _toKeyframe.z, advanceMs, "linear");
             anchorX = _interpolated(keyframe.anchorX, _toKeyframe.anchorX, advanceMs, "linear");
             anchorY = _interpolated(keyframe.anchorY, _toKeyframe.anchorY, advanceMs, "linear");
-            transScaleX = transScaleY = _interpolated(keyframe.scale, _toKeyframe.scale, advanceMs, "linear");
-            transRotation = _interpolated(keyframe.rotation, _toKeyframe.rotation, advanceMs, "linear");
+            transScaleX = _interpolated(keyframe.transScaleX, _toKeyframe.transScaleX, advanceMs, "linear");
+            transScaleY = _interpolated(keyframe.transScaleY, _toKeyframe.transScaleY, advanceMs, "linear");
+            transRotation = _interpolated(keyframe.transRotation, _toKeyframe.transRotation, advanceMs, "linear");
             opacity = _interpolated(keyframe.opacity, _toKeyframe.opacity, advanceMs, "linear");
         }
     }
@@ -222,10 +225,12 @@ Item {
                 anchorX = keyframe.anchorX;
             if (!model.recordsAnchorY)
                 anchorY = keyframe.anchorY;
-            if (!model.recordsScale)
-                transScaleX = transScaleY = keyframe.scale;
+            if (!model.recordsScale) {
+                transScaleX = keyframe.transScaleX;
+                transScaleY = keyframe.transScaleY;
+            }
             if (!model.recordsRotation)
-                transRotation = keyframe.rotation;
+                transRotation = keyframe.transRotation;
             if (!model.recordsOpacity)
                 opacity = keyframe.opacity;
         } else {
@@ -240,10 +245,12 @@ Item {
                 anchorX = _interpolated(keyframe.anchorX, _toKeyframe.anchorX, advanceMs, "linear");
             if (!model.recordsAnchorY)
                 anchorY = _interpolated(keyframe.anchorY, _toKeyframe.anchorY, advanceMs, "linear");
-            if (!model.recordsScale)
-                transScaleX = transScaleY = _interpolated(keyframe.scale, _toKeyframe.scale, advanceMs, "linear");
+            if (!model.recordsScale) {
+                transScaleX = _interpolated(keyframe.transScaleX, _toKeyframe.transScaleX, advanceMs, "linear");
+                transScaleY = _interpolated(keyframe.transScaleY, _toKeyframe.transScaleY, advanceMs, "linear");
+            }
             if (!model.recordsRotation)
-                transRotation = _interpolated(keyframe.rotation, _toKeyframe.rotation, advanceMs, "linear");
+                transRotation = _interpolated(keyframe.transRotation, _toKeyframe.transRotation, advanceMs, "linear");
             if (!model.recordsOpacity)
                 opacity = _interpolated(keyframe.opacity, _toKeyframe.opacity, advanceMs, "linear");
         }
