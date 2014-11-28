@@ -56,8 +56,8 @@ Item {
 
     function addKeyframe(keyframe)
     {
-        var index = keyframes.length === 0 ? 0 : getKeyframe(keyframe.time).volatileIndex + 1;
-        keyframes.splice(index, 0, keyframe);
+        keyframe.volatileIndex = keyframes.length === 0 ? 0 : getKeyframe(keyframe.time).volatileIndex + 1;
+        keyframes.splice(keyframe.volatileIndex, 0, keyframe);
         myApp.model.testAndSetEndTime(keyframe.time);
         _invalidCache = true;
     }
@@ -110,6 +110,18 @@ Item {
         if (flags.propagate) {
             // Iterate through subsequent keyframes and update props
             // that has the same value set as keyframe.
+            for (var i = keyframe.volatileIndex + 1; i < keyframes.length; ++i) {
+                var kf = keyframes[i];
+                for (key in props) {
+                    var noPropSet = true;
+                    if (kf[key] === keyframe[key]) {
+                        kf[key] = props[key];
+                        noPropSet = false;
+                    }
+                }
+                if (noPropSet)
+                    break;
+            }
         }
 
         for (key in props)
