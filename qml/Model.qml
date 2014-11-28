@@ -21,7 +21,7 @@ QtObject {
 
     signal layersUpdated(var removedLayer, var addedLayer)
     signal selectedLayersUpdated(var unselectedLayer, var selectedLayer)
-    signal statesUpdated(var layer)
+    signal statesUpdated(var sprite)
     signal parentHierarchyChanged(var layer)
 
     property bool inLiveDrag: false
@@ -51,25 +51,13 @@ QtObject {
         recordsOpacity = false;
     }
 
-    function syncReparentLayers(parentLayer)
+    function keyframesUpdates(sprite)
     {
-        var changedSprite = parentLayer.sprite;
-        for (var l in layers)
-            layers[l].sprite.synchReparentKeyframe(changedSprite);
-    }
+        statesUpdated(sprite);
+        updateFocusedKeyframe();
 
-    function getOrCreateKeyframe(layer)
-    {
-        var intTime = Math.floor(time);
-        var sprite = layer.sprite;
-        var keyframe = sprite.getKeyframe(intTime);
-        if (!keyframe || keyframe.time !== intTime) {
-            keyframe = sprite.createKeyframe(intTime);
-            sprite.addKeyframe(keyframe);
-            statesUpdated(layer);
-            updateFocusedKeyframe();
-        }
-        return keyframe;
+        for (var l in layers)
+            layers[l].sprite.synchReparentKeyframe(sprite);
     }
 
     function testAndSetEndTime(time)
@@ -124,7 +112,7 @@ QtObject {
 
         selectLayer(layer, true);
         layersUpdated(-1, layers.length);
-        statesUpdated(layer);
+        statesUpdated(layer.sprite);
         setFocusLayer(focusedLayerIndex);
 
         if (time !== 0) {

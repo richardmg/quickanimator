@@ -89,6 +89,32 @@ Item {
         };
     }
 
+    function updateKeyframe(time, props, flags)
+    {
+        var newKeyframeCreated = false;
+        var intTime = Math.floor(time);
+        var keyframe = getKeyframe(intTime);
+
+        if (!keyframe || keyframe.time !== intTime) {
+            keyframe = createKeyframe(intTime);
+            addKeyframe(keyframe);
+            newKeyframeCreated = true;
+        }
+
+        if (time === spriteTime) {
+            for (var key in props)
+                sprite[key] = props[key];
+        }
+
+        for (key in props)
+           keyframe[key] = props[key];
+
+        if (newKeyframeCreated)
+            model.keyframesUpdates(sprite);
+
+        return newKeyframeCreated;
+    }
+
     function _createKeyframeRelativeToParent(time, keyframeParent)
     {
         // Create a keyframe from the current sprite geometry

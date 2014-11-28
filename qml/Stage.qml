@@ -110,20 +110,17 @@ Item {
                     } else {
                         // Move selected sprites
                         for (var i in myApp.model.selectedLayers) {
-                            layer = myApp.model.selectedLayers[i];
-                            keyframe = myApp.model.getOrCreateKeyframe(layer);
-                            sprite = layer.sprite
+                            sprite = myApp.model.selectedLayers[i].sprite;
                             globalPos = sprites.mapFromItem(sprite.parent, sprite.x, sprite.y);
                             var newSpritePos = sprites.mapToItem(sprite.parent, globalPos.x + dx, globalPos.y + dy);
-                            if (model.recordsPositionX) {
-                                sprite.x = newSpritePos.x;
-                                keyframe.x = sprite.x;
-                            }
-                            if (model.recordsPositionY) {
-                                sprite.y = newSpritePos.y
-                                keyframe.y = sprite.y;
-                            }
-                            myApp.model.syncReparentLayers(layer);
+
+                            var changes = {}
+                            if (model.recordsPositionX)
+                                changes.x = newSpritePos.x;
+                            if (model.recordsPositionY)
+                                changes.y = newSpritePos.y;
+                            sprite.updateKeyframe(myApp.model.time, changes, {propagate:true});
+
                             if (timelinePlay)
                                 myApp.timelineFlickable.stagePlay = true;
                         }
@@ -132,31 +129,27 @@ Item {
                     currentAction.x = pos.x;
                     currentAction.y = pos.y;
                 } else {
-                    // continue rotate
-                    layer = myApp.model.selectedLayers[0];
-                    sprite = layer.sprite
-                    keyframe = sprite.getCurrentKeyframe();
+                    // continue rotate / scale
                     var aar = getAngleAndRadius(rotationCenterItem, pos);
 
-                    for (var i in myApp.model.selectedLayers) {
-                        layer = myApp.model.selectedLayers[i];
-                        keyframe = myApp.model.getOrCreateKeyframe(layer);
+                    for (i in myApp.model.selectedLayers) {
+                        sprite = myApp.model.selectedLayers[i].sprite;
+
+                        changes = {}
                         if (myApp.model.recordsRotation) {
                             var a = aar.angle - currentAction.angle;
                             var b = a - 360;
                             var c = a + 360;
                             a = Math.abs(a) < Math.abs(b) ? a : b;
                             a = Math.abs(a) < Math.abs(c) ? a : c;
-                            layer.sprite.transRotation += a;
-                            keyframe.rotation = layer.sprite.transRotation;
+                            changes.rotation = sprite.transRotation + a;
                         }
                         if (myApp.model.recordsScale) {
-                            keyframe.scale *= aar.radius / currentAction.radius;
-                            layer.sprite.transScaleX *= aar.radius / currentAction.radius;
-                            layer.sprite.transScaleY *= aar.radius / currentAction.radius;
-                            keyframe.scale = layer.sprite.transScaleX;
+                            changes.transScaleX = sprite.transScaleX * (aar.radius / currentAction.radius);
+                            changes.transScaleY = sprite.transScaleY * (aar.radius / currentAction.radius);
                         }
-                        myApp.model.syncReparentLayers(layer);
+                        sprite.updateKeyframe(myApp.model.time, changes, {propagate:true});
+
                         if (timelinePlay)
                             myApp.timelineFlickable.stagePlay = true;
                     }
