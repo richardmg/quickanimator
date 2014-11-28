@@ -107,6 +107,11 @@ Item {
                 sprite[key] = props[key];
         }
 
+        if (flags.propagate) {
+            // Iterate through subsequent keyframes and update props
+            // that has the same value set as keyframe.
+        }
+
         for (key in props)
            keyframe[key] = props[key];
 

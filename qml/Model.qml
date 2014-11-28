@@ -110,16 +110,17 @@ QtObject {
         layer.sprite.setTime(time);
         layer.sprite.parentChanged.connect(function() { if (root) root.parentHierarchyChanged(layer); });
 
+        if (time !== 0) {
+            // Make it look like the layer appears at 'time' in the scene
+            keyframe.visible = false;
+            keyframe = layer.sprite.createKeyframe(time)
+            layer.sprite.addKeyframe(keyframe);
+        }
+
         selectLayer(layer, true);
         layersUpdated(-1, layers.length);
         statesUpdated(layer.sprite);
         setFocusLayer(focusedLayerIndex);
-
-        if (time !== 0) {
-            // Make it look like the layer appears at 'time' in the scene
-            keyframe.visible = false;
-            keyframe = getOrCreateKeyframe(layer);
-        }
     }
 
     function unselectAllLayers()

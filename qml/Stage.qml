@@ -119,7 +119,7 @@ Item {
                                 changes.x = newSpritePos.x;
                             if (model.recordsPositionY)
                                 changes.y = newSpritePos.y;
-                            sprite.updateKeyframe(myApp.model.time, changes, {propagate:true});
+                            sprite.updateKeyframe(myApp.model.time, changes, {propagate:!timelinePlay});
 
                             if (timelinePlay)
                                 myApp.timelineFlickable.stagePlay = true;
@@ -148,7 +148,7 @@ Item {
                             changes.transScaleX = sprite.transScaleX * (aar.radius / currentAction.radius);
                             changes.transScaleY = sprite.transScaleY * (aar.radius / currentAction.radius);
                         }
-                        sprite.updateKeyframe(myApp.model.time, changes, {propagate:true});
+                        sprite.updateKeyframe(myApp.model.time, changes, {propagate:!timelinePlay});
 
                         if (timelinePlay)
                             myApp.timelineFlickable.stagePlay = true;
