@@ -12,22 +12,22 @@ Rectangle {
 
     Connections {
         target: myApp.model
-        onSelectedLayersUpdated: {
-            var selected = _delegates[selectedLayer];
+        onSelectedSpritesUpdated: {
+            var selected = _delegates[selectedSprite];
             if (selected)
                 selected.treeLabel.highlight = true;
 
-            var unselected = _delegates[unselectedLayer];
+            var unselected = _delegates[unselectedSprite];
             if (unselected)
                 unselected.treeLabel.highlight = false;
         }
 
         onParentHierarchyChanged: {
-            if (layer.sprite.parent !== null)
+            if (sprite.parent !== null)
                 listModel.syncWithModel();
         }
 
-        onLayersUpdated: listModel.syncWithModel();
+        onSpritesUpdated: listModel.syncWithModel();
     }
 
     ListModel {
@@ -42,8 +42,8 @@ Rectangle {
             listView.model = null;
             _delegates = new Array()
             clear();
-            var layers = myApp.model.layers;
-            for (var i=0; i<layers.length; ++i)
+            var sprites = myApp.model.sprites;
+            for (var i=0; i<sprites.length; ++i)
                 append({})
             listView.model = listModel;
         }
@@ -54,7 +54,7 @@ Rectangle {
         anchors.fill: parent
         flickableDirection: Flickable.HorizontalFlick
         model: listModel
-        Component.onCompleted: myApp.layerTreeFlickable = listView
+        Component.onCompleted: myApp.spriteTreeFlickable = listView
 
         delegate: Item {
             id: delegate
@@ -63,7 +63,7 @@ Rectangle {
 
             Component.onCompleted: {
                 _delegates.push(delegate);
-                if (myApp.model.selectedLayers.indexOf(modelLayer) != -1)
+                if (myApp.model.selectedSprites.indexOf(sprite) != -1)
                     treeLabel.highlight = true;
             }
 
@@ -71,7 +71,7 @@ Rectangle {
             property alias treeLabel: treeLabel
             property bool highlight: false
             property int index2: index
-            property var modelLayer: myApp.model.layers[index]
+            property var sprite: myApp.model.sprites[index]
 
             Rectangle {
                 id: treeLabel
@@ -81,9 +81,9 @@ Rectangle {
                 width: parent.width
                 Label {
                     id: label
-                    x: margin + (myApp.model.getLayerIndentLevel(modelLayer) * 15)
+                    x: margin + (myApp.model.getSpriteIndentLevel(sprite) * 15)
                     anchors.verticalCenter: parent.verticalCenter
-                    text: modelLayer ? modelLayer.sprite.objectName : "<unknown>"
+                    text: sprite ? sprite.objectName : "<unknown>"
                 }
             }
 
@@ -104,8 +104,8 @@ Rectangle {
                 }
 
                 onPressed: {
-                    myApp.model.unselectAllLayers();
-                    myApp.model.selectLayer(myApp.model.layers[index], true);
+                    myApp.model.unselectAllSprites();
+                    myApp.model.selectSprite(myApp.model.sprites[index], true);
                     index3 = index + myApp.model.descendantCount(index2);
                 }
 
@@ -141,7 +141,7 @@ Rectangle {
                             var mapped = area.mapToItem(listView, mouseX, mouseY)
                             var targetIndex = listView.indexAt(mapped.x, mapped.y);
                             var targetIsSibling = !insideLabel(mouseX, mouseY);
-                            myApp.model.changeLayerParent(index2, targetIndex, targetIsSibling);
+                            myApp.model.changeSpriteParent(index2, targetIndex, targetIsSibling);
                         }
 
                         currentDelegate = null;

@@ -6,10 +6,10 @@ QtObject {
     id: root
     property real time: 0
     property int endTime: 0
-    property var layers: new Array
+    property var sprites: new Array
     property bool hasSelection: false
-    property var selectedLayers: new Array
-    property int focusedLayerIndex: -1
+    property var selectedSprites: new Array
+    property int indexOfFocusSprite: -1
     property var focusedKeyframe: null
     property int msPerFrame: 200
 
@@ -19,10 +19,10 @@ QtObject {
     property int userInterfaceState: userInterfaceStatePlay
     property bool fullScreenMode: false
 
-    signal layersUpdated(var removedLayer, var addedLayer)
-    signal selectedLayersUpdated(var unselectedLayer, var selectedLayer)
+    signal spritesUpdated(var removedSprite, var addedSprite)
+    signal selectedSpritesUpdated(var unselectedSprite, var selectedSprite)
     signal statesUpdated(var sprite)
-    signal parentHierarchyChanged(var layer)
+    signal parentHierarchyChanged(var sprite)
 
     property bool inLiveDrag: false
     property bool recordsPositionX: true
@@ -56,8 +56,8 @@ QtObject {
         statesUpdated(sprite);
         updateFocusedKeyframe();
 
-        for (var l in layers)
-            layers[l].sprite.synchReparentKeyframe(sprite);
+        for (var i in sprites)
+            sprites[i].synchReparentKeyframe(sprite);
     }
 
     function testAndSetEndTime(time)
@@ -70,108 +70,104 @@ QtObject {
     function setTime(time)
     {
         root.time = Math.max(0, time);
-        for (var l in layers) {
-            var layer = layers[l];
-            layer.sprite.setTime(time);
-        }
+        for (var i in sprites)
+            sprites[i].setTime(time);
         updateFocusedKeyframe();
     }
 
-    function setFocusLayer(layerIndex)
+    function setFocusSprite(index)
     {
         // Get the state that should be shown for the user to edit:
-        focusedLayerIndex = layerIndex;
+        indexOfFocusSprite = index;
         updateFocusedKeyframe();
     }
 
     function updateFocusedKeyframe()
     {
-        var layer = layers[focusedLayerIndex];
-        if (layer) {
-            var keyframe = layer.sprite.getCurrentKeyframe();
+        var sprite = sprites[indexOfFocusSprite];
+        if (sprite) {
+            var keyframe = sprite.getCurrentKeyframe();
             root.focusedKeyframe = (keyframe && keyframe.time === Math.floor(time)) ? keyframe : null;
         } else {
             root.focusedKeyframe = null;
         }
     }
 
-    function addLayer(layer)
+    function addSprite(sprite)
     {
-        unselectAllLayers();
-        layers.push(layer);
-        layer.selected = false;
-        layer.parentLayer = null;
+        unselectAllSprites();
+        sprites.push(sprite);
+        sprite.selected = false;
 
         // There should always be a keyframe at time 0 that can
         // never be deleted (it simplifies algorithms elsewhere)
-        var keyframe = layer.sprite.createKeyframe(0)
-        layer.sprite.layerRef = layer
-        layer.sprite.addKeyframe(keyframe);
-        layer.sprite.setTime(time);
-        layer.sprite.parentChanged.connect(function() { if (root) root.parentHierarchyChanged(layer); });
+        var keyframe = sprite.createKeyframe(0)
+        sprite.addKeyframe(keyframe);
+        sprite.setTime(time);
+        sprite.parentChanged.connect(function() { if (root) root.parentHierarchyChanged(sprite); });
 
         if (time !== 0) {
             // Make it look like the layer appears at 'time' in the scene
             keyframe.visible = false;
-            keyframe = layer.sprite.createKeyframe(time)
-            layer.sprite.addKeyframe(keyframe);
+            keyframe = sprite.createKeyframe(time)
+            sprite.addKeyframe(keyframe);
         }
 
-        selectLayer(layer, true);
-        layersUpdated(-1, layers.length);
-        statesUpdated(layer.sprite);
-        setFocusLayer(focusedLayerIndex);
+        selectSprite(sprite, true);
+        spritesUpdated(-1, sprites.length);
+        statesUpdated(sprite);
+        setFocusSprite(indexOfFocusSprite);
     }
 
-    function unselectAllLayers()
+    function unselectAllSprites()
     {
-        for (var i in selectedLayers) {
-            var layer = selectedLayers[i];
-            layer.selected = false;
+        for (var i in selectedSprites) {
+            var sprite = selectedSprites[i];
+            sprite.selected = false;
         }
-        var unselectedLayers = selectedLayers;
-        selectedLayers = new Array();
+        var unselectedSprites = selectedSprites;
+        selectedSprites = new Array();
         hasSelection = false;
-        for (var i = 0; i < unselectedLayers.length; ++i)
-            selectedLayersUpdated(layers.indexOf(unselectedLayers[i]), -1);
+        for (i = 0; i < unselectedSprites.length; ++i)
+            selectedSpritesUpdated(sprites.indexOf(unselectedSprites[i]), -1);
     }
 
-    function selectLayer(layer, select)
+    function selectSprite(sprite, select)
     {
-        if (select === layer.selected)
+        if (select === sprite.selected)
             return;
-        layer.selected = select;
+        sprite.selected = select;
         if (select) {
-            selectedLayers.push(layer)
-            var index = layers.indexOf(layer);
-            selectedLayersUpdated(-1, index);
-            hasSelection = selectedLayers.length !== 0
-            setFocusLayer(index);
+            selectedSprites.push(sprite)
+            var index = sprites.indexOf(sprite);
+            selectedSpritesUpdated(-1, index);
+            hasSelection = selectedSprites.length !== 0
+            setFocusSprite(index);
         } else {
-            selectedLayers.splice(selectedLayers.indexOf(layer), 1);
-            index = layers.indexOf(layer);
-            hasSelection = selectedLayers.length !== 0
-            selectedLayersUpdated(index, -1);
-            if (focusedLayerIndex === index) {
-                focusedLayerIndex = -1;
+            selectedSprites.splice(selectedSprites.indexOf(sprite), 1);
+            index = sprites.indexOf(sprite);
+            hasSelection = selectedSprites.length !== 0
+            selectedSpritesUpdated(index, -1);
+            if (indexOfFocusSprite === index) {
+                indexOfFocusSprite = -1;
                 updateFocusedKeyframe();
             }
         }
     }
     
-    function removeLayer(layer)
+    function removeSprite(layer)
     {
         var index = layer.indexOf(layer);
-        layers.splice(index, 1);
+        sprites.splice(index, 1);
         if (layer.selected) {
-            selectedLayers.splice(selectedLayers.indexOf(layer), 1);
-            selectedLayersUpdated(layer.indexOf(layer), -1);
-            hasSelection = selectedLayers.length !== 0
+            selectedSprites.splice(selectedSprites.indexOf(layer), 1);
+            selectedSpritesUpdated(layer.indexOf(layer), -1);
+            hasSelection = selectedSprites.length !== 0
         }
-        layersUpdated(index, -1); 
+        spritesUpdated(index, -1); 
     }
 
-    function getLayerIndentLevel(layer)
+    function getSpriteIndentLevel(layer)
     {
         var indent = 0;
         var sprite = layer.sprite;
@@ -186,40 +182,40 @@ QtObject {
     {
         // Return number of levels that the sub
         // tree pointed to by index contains:
-        var level = getLayerIndentLevel(layers[index]);
-        for (var lastDescendantIndex = index + 1; lastDescendantIndex < layers.length; ++lastDescendantIndex) {
-            if (getLayerIndentLevel(layers[lastDescendantIndex]) <= level)
+        var level = getSpriteIndentLevel(sprites[index]);
+        for (var lastDescendantIndex = index + 1; lastDescendantIndex < sprites.length; ++lastDescendantIndex) {
+            if (getSpriteIndentLevel(sprites[lastDescendantIndex]) <= level)
                 break;
         }
         return lastDescendantIndex - index - 1;
     }
 
-    function changeLayerParent(index, targetIndex, targetIsSibling)
+    function changeSpriteParent(index, targetIndex, targetIsSibling)
     {
         // Remove the layer to be moved out of
-        // layers and resolve key information:
-        var layerCount = descendantCount(index) + 1;
-        var layerTree = layers.splice(index, layerCount);
+        // sprites and resolve key information:
+        var spriteCount = descendantCount(index) + 1;
+        var spriteTree = sprites.splice(index, spriteCount);
         if (targetIndex > index)
-            targetIndex -= layerCount;
+            targetIndex -= spriteCount;
 
-        var layer = layerTree[0];
-        var parentLayer = targetIsSibling ? layers[targetIndex].parentLayer : layers[targetIndex];
-        var newLevel = parentLayer ? getLayerIndentLevel(parentLayer) + 1 : 0;
+        var layer = spriteTree[0];
+        var parentSprite = targetIsSibling ? sprites[targetIndex].parentSprite : sprites[targetIndex];
+        var newLevel = parentSprite ? getSpriteIndentLevel(parentSprite) + 1 : 0;
         var insertLevel = targetIsSibling ? newLevel + 1 : newLevel;
 
-        for (var insertIndex = targetIndex + 1; insertIndex < layers.length; ++insertIndex) {
-            if (getLayerIndentLevel(layers[insertIndex]) < insertLevel)
+        for (var insertIndex = targetIndex + 1; insertIndex < sprites.length; ++insertIndex) {
+            if (getSpriteIndentLevel(sprites[insertIndex]) < insertLevel)
                 break;
         }
 
-        for (var i = layerTree.length - 1; i >= 0; --i)
-            layers.splice(insertIndex, 0, layerTree[i]);
-        layer.parentLayer = parentLayer;
+        for (var i = spriteTree.length - 1; i >= 0; --i)
+            sprites.splice(insertIndex, 0, spriteTree[i]);
+        layer.parentSprite = parentSprite;
 
         // Store the parent change (but not the geometry changes that will occur):
         var keyframe = getOrCreateKeyframe(layer);
-        keyframe.parent = parentLayer ? parentLayer.sprite : myApp.stage.sprites;
+        keyframe.parent = parentSprite ? parentSprite.sprite : myApp.stage.sprites;
 
         // Reparent sprite:
         layer.sprite.changeParent(keyframe.parent);
@@ -229,29 +225,29 @@ QtObject {
     {
         if (!focusedKeyframe)
             return;
-        var sprite = layers[focusedLayerIndex].sprite;
+        var sprite = sprites[indexOfFocusSprite].sprite;
         sprite.removeKeyframe(sprite.getCurrentKeyframe());
         focusedKeyframe = null;
-        statesUpdated(focusedLayerIndex);
+        statesUpdated(indexOfFocusSprite);
     }
 
-    function setLayerIndex(oldIndex, newIndex)
+    function setSpriteIndex(oldIndex, newIndex)
     {
-        var layer = layers[oldIndex]
-        newIndex = Math.max(0, Math.min(layers.length - 1, newIndex));
+        var layer = sprites[oldIndex]
+        newIndex = Math.max(0, Math.min(sprites.length - 1, newIndex));
         if (newIndex === oldIndex)
             return;
-        layers.splice(oldIndex, 1);
-        layers.splice(newIndex, 0, layer);
+        sprites.splice(oldIndex, 1);
+        sprites.splice(newIndex, 0, layer);
     }
 
-    function getLayerAt(p)
+    function getSpriteAtScenePos(p)
     {
-        for (var i=layers.length - 1; i>=0; --i) {
-            var sprite = layers[i].sprite
+        for (var i=sprites.length - 1; i>=0; --i) {
+            var sprite = sprites[i];
             var m = sprite.mapFromItem(myApp.stage.sprites, p.x, p.y);
             if (m.x >= 0 && m.x <= sprite.width && m.y >= 0 && m.y <= sprite.height)
-                return layers[i]
+                return sprites[i]
         }
     }
 
@@ -261,9 +257,9 @@ QtObject {
     {
         var f = ".pragma library\n\nvar sprites = [\n{ image: 'dummy.jpeg', states: [\n";
 
-        for (var i = 0; i < layers.length; ++i) {
-            var layer = layers[i];
-            var keyframes = layer.sprite.keyframes;
+        for (var i = 0; i < sprites.length; ++i) {
+            var sprite = sprites[i];
+            var keyframes = sprite.keyframes;
             for (var j = 0; j < keyframes.length; ++j) {
                 var s = keyframes[j];
                 f += "   { time: " + s.time
@@ -278,7 +274,7 @@ QtObject {
                 if (j < keyframes.length - 1)
                     f += ",\n"
             }
-            f += (i < layers.length - 1) ? "\n]},{ image: 'dummy.jpeg', states: [\n" : "\n]}\n";
+            f += (i < sprites.length - 1) ? "\n]},{ image: 'dummy.jpeg', states: [\n" : "\n]}\n";
         }
         f += "]\n";
 

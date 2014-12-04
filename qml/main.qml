@@ -19,7 +19,7 @@ ApplicationWindow {
     property alias searchView: searchView
 
     property TimelineMenu menu
-    property Flickable layerTreeFlickable
+    property Flickable spriteTreeFlickable
     property FlickableMouseArea msPerFrameFlickable
 
     property Style style: Style {}
@@ -236,8 +236,7 @@ ApplicationWindow {
 
     function addImage(url)
     {
-        var layer = {}
-        layer.sprite = stageSpriteComponent.createObject(stage.sprites, {"objectName":"sprite " + nextSpriteNr++, "image.source":url});
-        model.addLayer(layer);
+        var sprite = stageSpriteComponent.createObject(stage.sprites, {"objectName":"sprite " + nextSpriteNr++, "image.source":url});
+        model.addSprite(sprite);
     }
 }

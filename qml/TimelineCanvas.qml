@@ -9,7 +9,7 @@ Rectangle {
     Connections {
         target: myApp.model
         onStatesUpdated: canvas.requestPaint()
-        onFocusedLayerIndexChanged: canvas.requestPaint()
+        onIndexOfFocusSpriteChanged: canvas.requestPaint()
         onMsPerFrameChanged: canvas.requestPaint()
     }
 
@@ -30,7 +30,7 @@ Rectangle {
         anchors.fill: parent
         renderTarget: Canvas.Image
         property real lineWidth: 1.0
-        property int lastLayerIndex: -1
+        property int lastSpriteIndex: -1
 //        antialiasing: false
 
         onPaint: {
@@ -42,16 +42,14 @@ Rectangle {
 
             var timeShift = (width / (2 * cellWidth));
 
-            // If there is no selected layer, show the last layer instead
-            var layerIndex = myApp.model.focusedLayerIndex;
-            if (layerIndex == -1)
-                layerIndex = lastLayerIndex
-            lastLayerIndex = layerIndex
+            // If there is no selected sprite, show the last sprite instead
+            var spriteIndex = myApp.model.indexOfFocusSprite;
+            if (spriteIndex == -1)
+                spriteIndex = lastSpriteIndex
+            lastSpriteIndex = spriteIndex
 
-            var layer = myApp.model.layers[layerIndex];
-            if (layer) {
-                var sprite = layer.sprite;
-
+            var sprite = myApp.model.sprites[spriteIndex];
+            if (sprite) {
                 var grd = ctx.createLinearGradient(0, 0, width, 200);
                 grd.addColorStop(0.00, '#516B89');
                 grd.addColorStop(0.25, '#9FBAE0');

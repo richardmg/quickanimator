@@ -6,7 +6,8 @@ Item {
     x: parent.width / 2
     y: parent.height / 2
 
-    property var layerRef: null
+    property bool selected: false
+    property Item focusIndicator: null
 
     property real anchorX: childrenRect.width / 2
     property real anchorY: childrenRect.height / 2
@@ -35,7 +36,7 @@ Item {
     {
         _updateCurrentKeyframes(time);
         spriteTime = time;
-        if (layerRef.selected && model.inLiveDrag)
+        if (selected && model.inLiveDrag)
             _interpolateWithRecordOptionFilter(spriteTime)
         else
             _interpolate(spriteTime)

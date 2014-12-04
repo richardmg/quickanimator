@@ -52,7 +52,7 @@ Item {
         }
 
         onPressed: {
-            // start new layer operation, drag or rotate:
+            // start new action, drag or rotate:
             timelineWasPlaying = myApp.timelineFlickable.playing;
             var pos = {x:mouseX, y:mouseY}
             pressStartPos = pos;
@@ -67,9 +67,7 @@ Item {
                     x: pos.x,
                     y: pos.y
                 };
-            } else if (myApp.model.selectedLayers.length !== 0) {
-                var layer = myApp.model.selectedLayers[0];
-                var sprite = layer.sprite
+            } else if (myApp.model.selectedSprites.length !== 0) {
                 currentAction = getAngleAndRadius(rotationCenterItem, pos);
             }
         }
@@ -78,40 +76,40 @@ Item {
             if (!myApp.model.hasSelection)
                 return;
 
-            // drag or rotate current layer:
+            // drag or rotate current sprite:
             var pos = {x:mouseX, y:mouseY}
 
-            if (myApp.model.selectedLayers.length !== 0) {
+            if (myApp.model.selectedSprites.length !== 0) {
                 if (myApp.model.recordsPositionX) {
                     // continue drag
                     var dx = pos.x - currentAction.x;
                     var dy = pos.y - currentAction.y;
 
                     if (false /* todo: come up with solution */) {
-                        // Move anchor
-                        var layer = myApp.model.selectedLayers[0];
-                        var sprite = layer.sprite
-                        var keyframe = myApp.model.getOrCreateKeyframe(layer);
-                        var globalPos = focusFrames.mapFromItem(sprite, keyframe.anchorX, keyframe.anchorY);
-                        var localDelta = focusFrames.mapToItem(sprite, globalPos.x + dx, globalPos.y + dy);
-                        keyframe.anchorX = localDelta.x;
-                        keyframe.anchorY = localDelta.y;
+//                        // Move anchor
+//                        var layer = myApp.model.selectedSprites[0];
+//                        var sprite = layer.sprite
+//                        var keyframe = myApp.model.getOrCreateKeyframe(layer);
+//                        var globalPos = focusFrames.mapFromItem(sprite, keyframe.anchorX, keyframe.anchorY);
+//                        var localDelta = focusFrames.mapToItem(sprite, globalPos.x + dx, globalPos.y + dy);
+//                        keyframe.anchorX = localDelta.x;
+//                        keyframe.anchorY = localDelta.y;
 
-                        // When changing origin of rotation, the focus rotate with it. But we want the focus
-                        // to follow the mouse, so move the sprite back so the focus ends up under the mouse again:
-                        var newGlobalPos = focusFrames.mapFromItem(sprite, keyframe.anchorX, keyframe.anchorY);
-                        sprite.x -= (newGlobalPos.x - globalPos.x) - dx;
-                        sprite.y -= (newGlobalPos.y - globalPos.y) - dy;
-                        keyframe.x = sprite.x;
-                        keyframe.y = sprite.y;
-                        myApp.model.syncReparentLayers(layer);
-                        if (timelinePlay)
-                            myApp.timelineFlickable.stagePlay = true;
+//                        // When changing origin of rotation, the focus rotate with it. But we want the focus
+//                        // to follow the mouse, so move the sprite back so the focus ends up under the mouse again:
+//                        var newGlobalPos = focusFrames.mapFromItem(sprite, keyframe.anchorX, keyframe.anchorY);
+//                        sprite.x -= (newGlobalPos.x - globalPos.x) - dx;
+//                        sprite.y -= (newGlobalPos.y - globalPos.y) - dy;
+//                        keyframe.x = sprite.x;
+//                        keyframe.y = sprite.y;
+//                        myApp.model.syncReparentSprites(layer);
+//                        if (timelinePlay)
+//                            myApp.timelineFlickable.stagePlay = true;
                     } else {
                         // Move selected sprites
-                        for (var i in myApp.model.selectedLayers) {
-                            sprite = myApp.model.selectedLayers[i].sprite;
-                            globalPos = sprites.mapFromItem(sprite.parent, sprite.x, sprite.y);
+                        for (var i in myApp.model.selectedSprites) {
+                            var sprite = myApp.model.selectedSprites[i];
+                            var globalPos = sprites.mapFromItem(sprite.parent, sprite.x, sprite.y);
                             var newSpritePos = sprites.mapToItem(sprite.parent, globalPos.x + dx, globalPos.y + dy);
 
                             var changes = {}
@@ -132,8 +130,8 @@ Item {
                     // continue rotate / scale
                     var aar = getAngleAndRadius(rotationCenterItem, pos);
 
-                    for (i in myApp.model.selectedLayers) {
-                        sprite = myApp.model.selectedLayers[i].sprite;
+                    for (i in myApp.model.selectedSprites) {
+                        sprite = myApp.model.selectedSprites[i];
 
                         changes = {}
                         if (myApp.model.recordsRotation) {
@@ -162,17 +160,17 @@ Item {
         onReleased: {
             var m = myApp.model;
             var pos = {x:mouseX, y:mouseY}
-            var layer = m.getLayerAt(pos);
+            var sprite = m.getSpriteAtScenePos(pos);
 
             if (clickCount == 1) {
                 currentAction = {};
 
                 if (m.hasSelection)
-                    unselectAllLayers()
-                else if (layer)
-                    m.selectLayer(layer, true);
-            } else if (clickCount == 2 && layer) {
-                m.selectLayer(layer, true);
+                    unselectAllSprites()
+                else if (sprite)
+                    m.selectSprite(sprite, true);
+            } else if (clickCount == 2 && sprite) {
+                m.selectSprite(sprite, true);
             }
 
             myApp.model.inLiveDrag = false;
@@ -180,17 +178,17 @@ Item {
         }
     }
 
-    function unselectAllLayers()
+    function unselectAllSprites()
     {
         var m = myApp.model;
-        for (var i = m.selectedLayers.length - 1; i >= 0; --i)
-            m.selectLayer(m.selectedLayers[i], false)
+        for (var i = m.selectedSprites.length - 1; i >= 0; --i)
+            m.selectSprite(m.selectedSprites[i], false)
     }
 
     Component {
-        id: layerFocus
+        id: focusIndicatorComponent
         Rectangle {
-            id: layerFocusItem
+            id: focusIndicator
             property Item target: null
             width: 8
             height: width
@@ -215,12 +213,12 @@ Item {
             function syncFocusPosition()
             {
                 var mapped = focusFrames.mapFromItem(target, target.anchorX, target.anchorY);
-                layerFocusItem.x = mapped.x - (width / 2);
-                layerFocusItem.y = mapped.y - (width / 2);
+                focusIndicator.x = mapped.x - (width / 2);
+                focusIndicator.y = mapped.y - (width / 2);
             }
 
             Connections {
-                target: layerFocusItem.target
+                target: focusIndicator.target
                 onXChanged: syncFocusPosition();
                 onYChanged: syncFocusPosition();
                 onAnchorXChanged: syncFocusPosition();
@@ -233,18 +231,18 @@ Item {
     Connections {
         target: myApp.model
 
-        onSelectedLayersUpdated: {
-            if (unselectedLayer != -1) {
-                var layer = myApp.model.layers[unselectedLayer];
-                layer.focus.visible = false;
-                layer.focus.destroy();
-                layer.focus = null;
+        onSelectedSpritesUpdated: {
+            if (unselectedSprite != -1) {
+                var sprite = myApp.model.sprites[unselectedSprite];
+                sprite.focusIndicator.visible = false;
+                sprite.focusIndicator.destroy();
+                sprite.focusIndicator = null;
             }
-            if (selectedLayer != -1) {
-                layer = myApp.model.layers[selectedLayer];
-                layer.focus = layerFocus.createObject(focusFrames);
-                layer.focus.target = layer.sprite;
-                layer.focus.syncFocusPosition();
+            if (selectedSprite != -1) {
+                sprite = myApp.model.sprites[selectedSprite];
+                sprite.focusIndicator = focusIndicatorComponent.createObject(focusFrames);
+                sprite.focusIndicator.target = sprite;
+                sprite.focusIndicator.syncFocusPosition();
             }
         }
     }

@@ -8,18 +8,18 @@ PlayMenuRow {
         if (!myApp.model.hasSelection)
             return
         guard = true
-        x = myApp.model.selectedLayers[0].sprite.opacity * (parent.width - width)
+        x = myApp.model.selectedSprites[0].opacity * (parent.width - width)
         guard = false
     }
 
     function writeOpacityToKeyframes()
     {
-        for (var i in myApp.model.selectedLayers) {
-            var layer = myApp.model.selectedLayers[i];
-            var keyframe = myApp.model.getOrCreateKeyframe(layer);
-            var sprite = layer.sprite
-            sprite.opacity = x / (parent.width - width)
-            keyframe.opacity = sprite.opacity
+        for (var i in myApp.model.selectedSprites) {
+            var sprite = myApp.model.selectedSprites[i];
+            var changes = {
+                opacity: x / (parent.width - width)
+            }
+            sprite.updateKeyframe(myApp.model.time, changes, {propagate:!myApp.stage.timelinePlay});
         }
     }
 
@@ -28,7 +28,7 @@ PlayMenuRow {
 
     Connections {
         target: opacityMenu.isCurrent ? myApp.model : null
-        onSelectedLayersUpdated: opacityMenu.syncWithSelectedLayer()
+        onSelectedSpritesUpdated: opacityMenu.syncWithSelectedLayer()
         onTimeChanged: {
             if (flickable.isPressed && myApp.stage.timelinePlay)
                 opacityMenu.writeOpacityToKeyframes()
