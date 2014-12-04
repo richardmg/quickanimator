@@ -277,9 +277,9 @@ Item {
     function _interpolated(from, to, advanceMs, curve)
     {
         // Ignore curve for now:
-        var fromStateMs = _fromKeyframe.time * model.msPerFrame
-        var totalTimeBetweenStatesMs = (_toKeyframe.time * model.msPerFrame) - fromStateMs;
-        return from + (((to - from) / totalTimeBetweenStatesMs) * advanceMs);
+        var fromKeyframeMs = _fromKeyframe.time * model.msPerFrame
+        var timeDiff = (_toKeyframe.time * model.msPerFrame) - fromKeyframeMs;
+        return from + (((to - from) / timeDiff) * advanceMs);
     }
 
     function _updateCurrentKeyframes(time)
@@ -347,9 +347,9 @@ Item {
                 break;
             low = i + 1
         }
-        var state = keyframes[i];
-        state.volatileIndex = i;
-        return state;
+        var keyframe = keyframes[i];
+        keyframe.volatileIndex = i;
+        return keyframe;
     }
 
     function changeParent(newParent)

@@ -8,7 +8,7 @@ Rectangle {
     onTimeChanged: canvas.requestPaint()
     Connections {
         target: myApp.model
-        onStatesUpdated: canvas.requestPaint()
+        onKeyframesUpdated: canvas.requestPaint()
         onIndexOfFocusSpriteChanged: canvas.requestPaint()
         onMsPerFrameChanged: canvas.requestPaint()
     }

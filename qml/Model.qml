@@ -21,7 +21,7 @@ QtObject {
 
     signal spritesUpdated(var removedSprite, var addedSprite)
     signal selectedSpritesUpdated(var unselectedSprite, var selectedSprite)
-    signal statesUpdated(var sprite)
+    signal keyframesUpdated(var sprite)
     signal parentHierarchyChanged(var sprite)
 
     property bool inLiveDrag: false
@@ -53,7 +53,7 @@ QtObject {
 
     function keyframesUpdates(sprite)
     {
-        statesUpdated(sprite);
+        keyframesUpdated(sprite);
         updateFocusedKeyframe();
 
         for (var i in sprites)
@@ -77,7 +77,6 @@ QtObject {
 
     function setFocusSprite(index)
     {
-        // Get the state that should be shown for the user to edit:
         indexOfFocusSprite = index;
         updateFocusedKeyframe();
     }
@@ -115,7 +114,7 @@ QtObject {
 
         selectSprite(sprite, true);
         spritesUpdated(-1, sprites.length);
-        statesUpdated(sprite);
+        keyframesUpdated(sprite);
         setFocusSprite(indexOfFocusSprite);
     }
 
@@ -228,7 +227,7 @@ QtObject {
         var sprite = sprites[indexOfFocusSprite].sprite;
         sprite.removeKeyframe(sprite.getCurrentKeyframe());
         focusedKeyframe = null;
-        statesUpdated(indexOfFocusSprite);
+        keyframesUpdated(indexOfFocusSprite);
     }
 
     function setSpriteIndex(oldIndex, newIndex)
@@ -255,7 +254,7 @@ QtObject {
 
     function saveJSON()
     {
-        var f = ".pragma library\n\nvar sprites = [\n{ image: 'dummy.jpeg', states: [\n";
+        var f = ".pragma library\n\nvar sprites = [\n{ image: 'dummy.jpeg', keyframes: [\n";
 
         for (var i = 0; i < sprites.length; ++i) {
             var sprite = sprites[i];
@@ -274,7 +273,7 @@ QtObject {
                 if (j < keyframes.length - 1)
                     f += ",\n"
             }
-            f += (i < sprites.length - 1) ? "\n]},{ image: 'dummy.jpeg', states: [\n" : "\n]}\n";
+            f += (i < sprites.length - 1) ? "\n]},{ image: 'dummy.jpeg', keyframes: [\n" : "\n]}\n";
         }
         f += "]\n";
 
