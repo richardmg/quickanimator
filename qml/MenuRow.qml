@@ -8,5 +8,6 @@ Row {
     opacity: parent.currentMenu === root ? 1 : 0
     visible: opacity != 0
     Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+    property bool sticky: false
     readonly property bool isCurrent: root === currentMenu
 }

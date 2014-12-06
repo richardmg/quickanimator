@@ -168,11 +168,6 @@ ApplicationWindow {
             onClicked: {
                 opacity = 0
                 menuController.toggleMenuVisible()
-
-                if (menuController.opacity !== 1) {
-                    timelineFlickable.userPlay = false
-                    menuController.showRootMenu()
-                }
             }
         }
 
