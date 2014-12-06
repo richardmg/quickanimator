@@ -55,7 +55,7 @@ Rectangle {
         TextField {
             id: searchText
             width: parent.width
-            onTextChanged: search();
+            onAccepted: search();
             inputMethodHints: Qt.ImhNoPredictiveText
         }
 
