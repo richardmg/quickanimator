@@ -95,11 +95,13 @@ Item {
 
         MenuButton {
             text: "<<"
+            closeMenuOnClick: false
             onClicked: myApp.model.setTime(0)
         }
 
         MenuButton {
             text: ">>"
+            closeMenuOnClick: false
             onClicked: myApp.model.setTime(100)
         }
 
@@ -118,6 +120,7 @@ Item {
 
         MenuButton {
             text: "Speed"
+            menu: speedMenu
         }
     }
 
@@ -182,6 +185,10 @@ Item {
 
     OpacitySlider {
         id: opacityMenu
+    }
+
+    OpacitySlider {
+        id: speedMenu
     }
 
     FlickableMouseArea {
