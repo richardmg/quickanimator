@@ -5,13 +5,12 @@ Item {
 
     function toggleMenuVisible()
     {
-        if (opacity > 0) {
-            opacity = 0
-        } else {
-            opacity = 1
-            if (!currentMenu.sticky)
-                currentMenu = rootMenu
-        }
+        opacity = (opacity > 0) ? 0 : 1
+    }
+
+    onOpacityChanged: {
+        if (opacity === 0 && !currentMenu.sticky)
+            currentMenu = rootMenu
     }
 
     property Row currentMenu: rootMenu
