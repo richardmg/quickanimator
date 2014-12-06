@@ -200,6 +200,8 @@ Item {
                 myApp.timelineFlickable.userPlay = !myApp.timelineFlickable.userPlay
             }
         }
+
+        onIsCurrentChanged: myApp.timelineFlickable.userPlay = true
     }
 
     PlaySlider {
@@ -210,10 +212,10 @@ Item {
             closeMenuOnClick: false
             color: "blue"
             textColor: "white"
-            onClicked: {
-                myApp.stage.timelinePlay = !myApp.stage.timelinePlay
-            }
+            onClicked: myApp.stage.timelinePlay = !myApp.stage.timelinePlay
         }
+
+        onIsCurrentChanged: myApp.stage.timelinePlay = true
     }
 
     FlickableMouseArea {
