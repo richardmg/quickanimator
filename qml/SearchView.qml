@@ -54,7 +54,11 @@ Rectangle {
 
         TextField {
             id: searchText
-            width: parent.width
+            y: 2
+            anchors.left: parent.left
+            anchors.right: closeButton.left
+            anchors.leftMargin: 2
+            anchors.rightMargin: 2
             onAccepted: search();
             inputMethodHints: Qt.ImhNoPredictiveText
         }
@@ -85,6 +89,27 @@ Rectangle {
                         myApp.addImage(images[index])
                     }
                 }
+            }
+        }
+
+        Rectangle {
+            id: closeButton
+            y: 2
+            anchors.right: parent.right
+            anchors.verticalCenter: searchText.verticalCenter
+            anchors.rightMargin: 2
+            width: 30
+            height: width
+            radius: width
+            color: "red"
+            Text {
+                text: "X"
+                color: "white"
+                anchors.centerIn: parent
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: root.visible = false
             }
         }
     }
