@@ -28,82 +28,82 @@ Item {
         }
     }
 
-    PlayMenuRow {
+    MenuRow {
         id: rootMenu
 
-        ProxyButton {
+        MenuButton {
             text: "Settings"
         }
 
-        ProxyButton {
+        MenuButton {
             text: "Load/Save"
         }
 
-        ProxyButton {
+        MenuButton {
             text: "Images"
             menu: imagesMenu
         }
 
-        ProxyButton {
+        MenuButton {
             text: "Playback"
             menu: playbackMenu
         }
 
-        ProxyButton {
+        MenuButton {
             text: "Action"
             menu: actionMenu
         }
     }
 
-    PlayMenuRow {
+    MenuRow {
         id: imagesMenu
 
-        ProxyButton {
+        MenuButton {
             text: "Add"
             menu: addImagesMenu
         }
 
-        ProxyButton {
+        MenuButton {
             text: "Remove"
         }
 
-        ProxyButton {
+        MenuButton {
             text: "Edit"
         }
     }
 
-    PlayMenuRow {
+    MenuRow {
         id: addImagesMenu
 
-        ProxyButton {
+        MenuButton {
             text: "Clone"
         }
 
-        ProxyButton {
+        MenuButton {
             text: "Movie"
         }
 
-        ProxyButton {
+        MenuButton {
             text: "Search"
             onClicked: myApp.searchView.search()
         }
 
     }
 
-    PlayMenuRow {
+    MenuRow {
         id: playbackMenu
 
-        ProxyButton {
+        MenuButton {
             text: "<<"
             onClicked: myApp.model.setTime(0)
         }
 
-        ProxyButton {
+        MenuButton {
             text: ">>"
             onClicked: myApp.model.setTime(100)
         }
 
-        ProxyButton {
+        MenuButton {
             text: "Play"
             onClicked: {
                 myApp.model.unselectAllSprites()
@@ -111,44 +111,44 @@ Item {
             }
         }
 
-        ProxyButton {
+        MenuButton {
             text: myApp.stage.timelinePlay ? "Stop\nRecording" : "Record"
             onClicked: myApp.stage.timelinePlay = !myApp.stage.timelinePlay
         }
 
-        ProxyButton {
+        MenuButton {
             text: "Speed"
         }
     }
 
-    PlayMenuRow {
+    MenuRow {
         id: actionMenu
 
-        ProxyButton {
+        MenuButton {
             text: "Undo"
             onClicked: print("bar")
         }
 
-        ProxyButton {
+        MenuButton {
             text: "Redo"
             onClicked: print("redo")
         }
 
-        ProxyButton {
+        MenuButton {
             text: "Cut"
             onClicked: print("foo")
         }
 
-        ProxyButton {
+        MenuButton {
             text: "Brush"
             menu: brushMenu
         }
     }
 
-    PlayMenuRow {
+    MenuRow {
         id: brushMenu
 
-        ProxyButton {
+        MenuButton {
             text: "Move"
             onClicked: {
                 myApp.model.clearRecordState();
@@ -157,7 +157,7 @@ Item {
             }
         }
 
-        ProxyButton {
+        MenuButton {
             text: "Rotate"
             onClicked: {
                 myApp.model.clearRecordState();
@@ -165,7 +165,7 @@ Item {
             }
         }
 
-        ProxyButton {
+        MenuButton {
             text: "Scale"
             onClicked: {
                 myApp.model.clearRecordState();
@@ -173,7 +173,7 @@ Item {
             }
         }
 
-        ProxyButton {
+        MenuButton {
             text: "Opacity"
             closeMenuOnClick: false
             onClicked: currentMenu = opacityMenu

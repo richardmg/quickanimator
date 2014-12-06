@@ -14,11 +14,10 @@ ApplicationWindow {
     property bool touchUI: Qt.platform.os === "ios"
 
     property alias stage: stage
-    property alias playMenu: playMenu
+    property alias menuController: menuController
     property alias timelineFlickable: timelineFlickable
     property alias searchView: searchView
 
-    property TimelineMenu menu
     property Flickable spriteTreeFlickable
     property FlickableMouseArea msPerFrameFlickable
 
@@ -139,8 +138,8 @@ ApplicationWindow {
             momentumRestX: timelineFlickable.playing ? -1 : 0
         }
 
-        PlayMenu {
-            id: playMenu
+        MenuController {
+            id: menuController
             x: menuToggleButton.width
             width: parent.width - x
             height: 70
@@ -154,7 +153,7 @@ ApplicationWindow {
         MultiTouchButton {
             id: menuToggleButton
             width: 70
-            height: playMenu.height
+            height: menuController.height
             anchors.bottom: parent.bottom
             Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
 
@@ -168,19 +167,13 @@ ApplicationWindow {
 
             onClicked: {
                 opacity = 0
-                playMenu.toggleMenuVisible()
+                menuController.toggleMenuVisible()
 
-                if (playMenu.opacity !== 1) {
+                if (menuController.opacity !== 1) {
                     timelineFlickable.userPlay = false
-                    playMenu.showRootMenu()
+                    menuController.showRootMenu()
                 }
             }
-        }
-
-        TimelineMenu {
-            id: menu
-            visible: false
-            anchors.fill: parent
         }
 
         SearchView {

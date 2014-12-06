@@ -1,6 +1,6 @@
 import QtQuick 2.0
 
-PlayMenuRow {
+MenuRow {
     id: opacityMenu
     property bool guard: false
 

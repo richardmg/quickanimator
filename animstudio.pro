@@ -15,19 +15,16 @@ SOURCES += fileio.cpp main.cpp
 OTHER_FILES += qml/*.qml \
     TODO.txt \
     qml/MultiTouchButton.qml \
-    qml/ControlPanelSubMenu.qml \
-    qml/ControlPanel.qml \
     qml/RecordButton.qml \
-    qml/MenuButton.qml \
     qml/RadioButtonGroup.qml \
-    qml/PlayMenu.qml \
-    qml/PlayMenuRow.qml \
-    qml/ProxyButton.qml \
     qml/SearchView.qml \
     qml/TimelineFlickable \
     qml/TimelineCanvas \
     qml/TimelineMenu \
-    qml/OpacitySlider.qml
+    qml/OpacitySlider.qml \
+    qml/MenuController.qml \
+    qml/MenuRow.qml \
+    qml/MenuButton.qml
 
 qml.files = $$PWD/qml
 osx: qml.path = ./Contents/Resources
