@@ -5,7 +5,7 @@
 TEMPLATE = app
 TARGET = animstudio
 INCLUDEPATH += .
-QT += quick qml widgets gui-private
+QT += quick qml gui-private
 CONFIG += release qtquickcompiler
 QMAKE_INFO_PLIST = Info.plist
 
