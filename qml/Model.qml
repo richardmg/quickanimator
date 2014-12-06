@@ -11,7 +11,9 @@ QtObject {
     property var selectedSprites: new Array
     property int indexOfFocusSprite: -1
     property var focusedKeyframe: null
-    property int msPerFrame: 200
+
+    property int targetMsPerFrame: 200
+    property int msPerFrame: targetMsPerFrame
 
     readonly property int userInterfaceStateEdit: 0
     readonly property int userInterfaceStatePlay: 1

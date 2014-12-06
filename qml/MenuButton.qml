@@ -12,6 +12,7 @@ Rectangle {
     property Item menu: null
     property bool closeMenuOnClick: !menu && !checkable
     property alias text: text.text
+    property alias textColor: text.color
     readonly property bool isButton: true
 
     signal clicked

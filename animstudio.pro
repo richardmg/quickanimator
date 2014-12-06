@@ -24,7 +24,8 @@ OTHER_FILES += qml/*.qml \
     qml/OpacitySlider.qml \
     qml/MenuController.qml \
     qml/MenuRow.qml \
-    qml/MenuButton.qml
+    qml/MenuButton.qml \
+    qml/PlaySlider.qml
 
 qml.files = $$PWD/qml
 osx: qml.path = ./Contents/Resources

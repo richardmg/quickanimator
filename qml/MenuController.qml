@@ -107,20 +107,12 @@ Item {
 
         MenuButton {
             text: "Play"
-            onClicked: {
-                myApp.model.unselectAllSprites()
-                myApp.timelineFlickable.userPlay = !myApp.timelineFlickable.userPlay
-            }
+            menu: playMenu
         }
 
         MenuButton {
-            text: myApp.stage.timelinePlay ? "Stop\nRecording" : "Record"
-            onClicked: myApp.stage.timelinePlay = !myApp.stage.timelinePlay
-        }
-
-        MenuButton {
-            text: "Speed"
-            menu: speedMenu
+            text: "Record"
+            menu: recordMenu
         }
     }
 
@@ -187,8 +179,33 @@ Item {
         id: opacityMenu
     }
 
-    OpacitySlider {
-        id: speedMenu
+    PlaySlider {
+        id: playMenu
+
+        MenuButton {
+            text: myApp.timelineFlickable.userPlay ? "Stop" : "Play"
+            closeMenuOnClick: false
+            color: "blue"
+            textColor: "white"
+            onClicked: {
+                myApp.model.unselectAllSprites()
+                myApp.timelineFlickable.userPlay = !myApp.timelineFlickable.userPlay
+            }
+        }
+    }
+
+    PlaySlider {
+        id: recordMenu
+
+        MenuButton {
+            text: myApp.stage.timelinePlay ? "Stop" : "Record"
+            closeMenuOnClick: false
+            color: "blue"
+            textColor: "white"
+            onClicked: {
+                myApp.stage.timelinePlay = !myApp.stage.timelinePlay
+            }
+        }
     }
 
     FlickableMouseArea {
