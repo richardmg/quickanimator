@@ -43,7 +43,7 @@ Item {
         }
 
         MenuButton {
-            text: "Load/Save"
+            text: "File"
         }
 
         MenuButton {
