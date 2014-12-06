@@ -4,8 +4,6 @@ Item {
     id: root
 
     function showRootMenu() { currentMenu = rootMenu }
-    function showSpriteMenu() { currentMenu = spriteMenu }
-
     function toggleMenuVisible() { opacity = opacity > 0 ? 0 : 1 }
 
     property Row currentMenu: rootMenu
@@ -34,31 +32,97 @@ Item {
         id: rootMenu
 
         ProxyButton {
-            onClicked: myApp.model.setTime(0)
-            text: myApp.model.time === 0 ? "Forward" : "Rewind"
+            text: "Settings"
         }
 
         ProxyButton {
-            text: "Google"
-            onClicked: myApp.searchView.search()
+            text: "Load/Save"
         }
 
         ProxyButton {
-            onClicked: {
-                myApp.model.unselectAllSprites()
-                myApp.timelineFlickable.userPlay = !myApp.timelineFlickable.userPlay
-            }
-            text: "Play"
+            text: "Images"
+            menu: imagesMenu
         }
 
         ProxyButton {
-            text: "Slowmo"
-            onClicked: print("undo")
-            flickStop: true
+            text: "Playback"
+            menu: playbackMenu
+        }
+
+        ProxyButton {
+            text: "Action"
+            menu: actionMenu
         }
     }
 
     PlayMenuRow {
+        id: imagesMenu
+
+        ProxyButton {
+            text: "Add"
+            menu: addImagesMenu
+        }
+
+        ProxyButton {
+            text: "Remove"
+        }
+
+        ProxyButton {
+            text: "Edit"
+        }
+    }
+
+    PlayMenuRow {
+        id: addImagesMenu
+
+        ProxyButton {
+            text: "Clone"
+        }
+
+        ProxyButton {
+            text: "Movie"
+        }
+
+        ProxyButton {
+            text: "Search"
+            onClicked: myApp.searchView.search()
+        }
+
+    }
+
+    PlayMenuRow {
+        id: playbackMenu
+
+        ProxyButton {
+            text: "<<"
+            onClicked: myApp.model.setTime(0)
+        }
+
+        ProxyButton {
+            text: ">>"
+            onClicked: myApp.model.setTime(100)
+        }
+
+        ProxyButton {
+            text: "Play"
+            onClicked: {
+                myApp.model.unselectAllSprites()
+                myApp.timelineFlickable.userPlay = !myApp.timelineFlickable.userPlay
+            }
+        }
+
+        ProxyButton {
+            text: myApp.stage.timelinePlay ? "Stop\nRecording" : "Record"
+            onClicked: myApp.stage.timelinePlay = !myApp.stage.timelinePlay
+        }
+
+        ProxyButton {
+            text: "Speed"
+        }
+    }
+
+    PlayMenuRow {
+        id: actionMenu
 
         ProxyButton {
             text: "Undo"
@@ -73,12 +137,16 @@ Item {
         ProxyButton {
             text: "Cut"
             onClicked: print("foo")
-            flickStop: true
+        }
+
+        ProxyButton {
+            text: "Brush"
+            menu: brushMenu
         }
     }
 
     PlayMenuRow {
-        id: spriteMenu
+        id: brushMenu
 
         ProxyButton {
             text: "Move"
@@ -111,53 +179,10 @@ Item {
             closeMenuOnClick: false
             onClicked: currentMenu = opacityMenu
         }
-
-        ProxyButton {
-            text: "|"
-        }
-
-        ProxyButton {
-            text: myApp.stage.timelinePlay ? "Stop\nRecording" : "Record"
-            onClicked: {
-                if (myApp.stage.timelinePlay) {
-                    myApp.stage.timelinePlay = false
-                } else {
-                    myApp.stage.timelinePlay = true
-                }
-            }
-        }
-
-        ProxyButton {
-            text: "|"
-        }
-
-        ProxyButton {
-            text: "More actions"
-            onClicked: print("More")
-            flickStop: true
-        }
     }
 
     OpacitySlider {
         id: opacityMenu
-    }
-
-    PlayMenuRow {
-
-        ProxyButton {
-            text: "Cast"
-            onClicked: print("baz")
-        }
-
-        ProxyButton {
-            text: "Google"
-            onClicked: myApp.searchView.search()
-        }
-
-        ProxyButton {
-            text: "Settings"
-            onClicked: print("baz")
-        }
     }
 
     FlickableMouseArea {

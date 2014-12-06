@@ -149,19 +149,6 @@ ApplicationWindow {
             opacity: 0
             visible: opacity !== 0
             Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
-
-            Connections {
-                target: model
-                onHasSelectionChanged: playMenu.showMenuBasedOnContext()
-            }
-
-            function showMenuBasedOnContext()
-            {
-                if (model.hasSelection)
-                    playMenu.showSpriteMenu();
-                else
-                    playMenu.showRootMenu();
-            }
         }
 
         MultiTouchButton {
@@ -180,16 +167,13 @@ ApplicationWindow {
             }
 
             onClicked: {
-                if (clickCount === 1) {
-                    timelineFlickable.userPlay = false
-                    if (!playMenu.visible)
-                        playMenu.showMenuBasedOnContext()
-                    playMenu.toggleMenuVisible()
-                } else if (clickCount === 2) {
-                    playMenu.showRootMenu()
-                    playMenu.opacity = 1
-                }
                 opacity = 0
+                playMenu.toggleMenuVisible()
+
+                if (playMenu.opacity !== 1) {
+                    timelineFlickable.userPlay = false
+                    playMenu.showRootMenu()
+                }
             }
         }
 
