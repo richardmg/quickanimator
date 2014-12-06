@@ -9,8 +9,10 @@ Rectangle {
 
     onVisibleChanged: {
         if (visible) {
-            if (searchText)
+            if (searchText) {
                 searchText.forceActiveFocus()
+                searchText.selectAll()
+            }
         } else {
             Qt.inputMethod.hide()
             searchText.focus = false
