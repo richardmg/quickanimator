@@ -62,8 +62,11 @@ QtObject {
         setTime(0);
     }
 
-    function keyframesUpdates(sprite)
+    function callbackKeyframeAdded(sprite, keyframe)
     {
+        if (keyframe.time > endTime)
+            endTime = keyframe.time;
+
         keyframesUpdated(sprite);
 
         for (var i in sprites)

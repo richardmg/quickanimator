@@ -59,7 +59,7 @@ Item {
     {
         keyframe.volatileIndex = keyframes.length === 0 ? 0 : getKeyframe(keyframe.time).volatileIndex + 1;
         keyframes.splice(keyframe.volatileIndex, 0, keyframe);
-        myApp.model.testAndSetEndTime(keyframe.time);
+        model.callbackKeyframeAdded(sprite, keyframe);
         _invalidCache = true;
     }
 
@@ -99,7 +99,6 @@ Item {
 
         if (!keyframe || keyframe.time !== intTime) {
             keyframe = createKeyframe(intTime);
-            addKeyframe(keyframe);
             newKeyframeCreated = true;
         }
 
@@ -129,7 +128,7 @@ Item {
            keyframe[key] = props[key];
 
         if (newKeyframeCreated)
-            model.keyframesUpdates(sprite);
+            addKeyframe(keyframe);
 
         return newKeyframeCreated;
     }

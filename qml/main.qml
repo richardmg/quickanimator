@@ -1,11 +1,12 @@
 import QtQuick 2.1
 import QtQuick.Controls 1.0
 import QtQuick.Layouts 1.0
+import QtQuick.Window 2.0
 
 ApplicationWindow {
     id: myApp
     visible: true
-//    visibility: Qt.Window
+    visibility: touchUI ? Window.FullScreen : Window.Windowed
     width: 1500
     height: 600
 

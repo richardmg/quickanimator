@@ -215,7 +215,12 @@ Item {
             }
         }
 
-        onIsCurrentChanged: if (isCurrent) myApp.timelineFlickable.userPlay = true
+        onIsCurrentChanged: {
+            if (isCurrent) {
+                menuController.opacity = 0
+                myApp.timelineFlickable.userPlay = true
+            }
+        }
     }
 
     PlaySlider {
