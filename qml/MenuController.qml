@@ -201,7 +201,7 @@ Item {
             }
         }
 
-        onIsCurrentChanged: myApp.timelineFlickable.userPlay = true
+        onIsCurrentChanged: if (isCurrent) myApp.timelineFlickable.userPlay = true
     }
 
     PlaySlider {
@@ -212,10 +212,18 @@ Item {
             closeMenuOnClick: false
             color: "blue"
             textColor: "white"
-            onClicked: myApp.stage.timelinePlay = !myApp.stage.timelinePlay
+            onClicked: {
+                if (myApp.stage.timelinePlay) {
+                    menuController.opacity = 0
+                    myApp.stage.timelinePlay = false
+                    myApp.model.unselectAllSprites()
+                } else {
+                    myApp.stage.timelinePlay = true
+                }
+            }
         }
 
-        onIsCurrentChanged: myApp.stage.timelinePlay = true
+        onIsCurrentChanged: if (isCurrent) myApp.stage.timelinePlay = true
     }
 
     FlickableMouseArea {
