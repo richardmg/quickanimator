@@ -57,6 +57,7 @@ Rectangle {
         TextField {
             id: searchText
             y: 2
+            z: 1
             anchors.left: parent.left
             anchors.right: closeButton.left
             anchors.leftMargin: 2
