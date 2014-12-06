@@ -10,7 +10,7 @@ Rectangle {
     property bool checkable: false
     property bool flickStop: false
     property Item menu: null
-    property bool closeMenuOnClick: false
+    property bool closeMenuOnClick: !menu && !checkable
     property alias text: text.text
     readonly property bool isButton: true
 
@@ -27,7 +27,7 @@ Rectangle {
             currentMenu = menu;
 
         if (closeMenuOnClick)
-           currentMenu.opacity = 0;
+           menuController.opacity = 0;
     }
 
     Text {

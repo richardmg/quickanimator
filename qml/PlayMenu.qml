@@ -1,7 +1,7 @@
 import QtQuick 2.0
 
 Item {
-    id: root
+    id: menuController
 
     function showRootMenu() { currentMenu = rootMenu }
     function toggleMenuVisible() { opacity = opacity > 0 ? 0 : 1 }
@@ -154,7 +154,6 @@ Item {
                 myApp.model.clearRecordState();
                 myApp.model.recordsPositionX = true;
                 myApp.model.recordsPositionY = true;
-                root.opacity = 0
             }
         }
 
