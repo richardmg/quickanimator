@@ -39,11 +39,8 @@ Item {
         id: rootMenu
 
         MenuButton {
-            text: "Settings"
-        }
-
-        MenuButton {
             text: "File"
+            menu: filesMenu
         }
 
         MenuButton {
@@ -59,6 +56,23 @@ Item {
         MenuButton {
             text: "Action"
             menu: actionMenu
+        }
+    }
+
+    MenuRow {
+        id: filesMenu
+
+        MenuButton {
+            text: "New"
+            onClicked: myApp.model.newMovie()
+        }
+
+        MenuButton {
+            text: "Load"
+        }
+
+        MenuButton {
+            text: "Save"
         }
     }
 

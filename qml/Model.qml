@@ -9,8 +9,6 @@ QtObject {
     property var sprites: new Array
     property bool hasSelection: false
     property var selectedSprites: new Array
-    property int indexOfFocusSprite: -1
-    property var focusedKeyframe: null
 
     property int targetMsPerFrame: 200
     property int msPerFrame: targetMsPerFrame
@@ -53,10 +51,20 @@ QtObject {
         recordsOpacity = false;
     }
 
+    function newMovie()
+    {
+        unselectAllSprites();
+
+        for (var i in sprites)
+            sprites[i].destroy();
+
+        sprites = new Array;
+        setTime(0);
+    }
+
     function keyframesUpdates(sprite)
     {
         keyframesUpdated(sprite);
-        updateFocusedKeyframe();
 
         for (var i in sprites)
             sprites[i].synchReparentKeyframe(sprite);
@@ -74,24 +82,6 @@ QtObject {
         root.time = Math.max(0, time);
         for (var i in sprites)
             sprites[i].setTime(time);
-        updateFocusedKeyframe();
-    }
-
-    function setFocusSprite(index)
-    {
-        indexOfFocusSprite = index;
-        updateFocusedKeyframe();
-    }
-
-    function updateFocusedKeyframe()
-    {
-        var sprite = sprites[indexOfFocusSprite];
-        if (sprite) {
-            var keyframe = sprite.getCurrentKeyframe();
-            root.focusedKeyframe = (keyframe && keyframe.time === Math.floor(time)) ? keyframe : null;
-        } else {
-            root.focusedKeyframe = null;
-        }
     }
 
     function addSprite(sprite)
@@ -117,7 +107,6 @@ QtObject {
         selectSprite(sprite, true);
         spritesUpdated(-1, sprites.length);
         keyframesUpdated(sprite);
-        setFocusSprite(indexOfFocusSprite);
     }
 
     function unselectAllSprites()
@@ -127,7 +116,7 @@ QtObject {
             sprite.selected = false;
         }
         var unselectedSprites = selectedSprites;
-        selectedSprites = new Array();
+        selectedSprites = new Array;
         hasSelection = false;
         for (i = 0; i < unselectedSprites.length; ++i)
             selectedSpritesUpdated(sprites.indexOf(unselectedSprites[i]), -1);
@@ -143,16 +132,11 @@ QtObject {
             var index = sprites.indexOf(sprite);
             selectedSpritesUpdated(-1, index);
             hasSelection = selectedSprites.length !== 0
-            setFocusSprite(index);
         } else {
             selectedSprites.splice(selectedSprites.indexOf(sprite), 1);
             index = sprites.indexOf(sprite);
             hasSelection = selectedSprites.length !== 0
             selectedSpritesUpdated(index, -1);
-            if (indexOfFocusSprite === index) {
-                indexOfFocusSprite = -1;
-                updateFocusedKeyframe();
-            }
         }
     }
     
@@ -222,14 +206,14 @@ QtObject {
         layer.sprite.changeParent(keyframe.parent);
     }
 
-    function removeFocusedKeyframe()
+    function removeCurrentKeyframe()
     {
-        if (!focusedKeyframe)
+        if (selectedSprites.length === 0)
             return;
-        var sprite = sprites[indexOfFocusSprite].sprite;
+        var index = 0;
+        var sprite = selectedSprites[index].sprite;
         sprite.removeKeyframe(sprite.getCurrentKeyframe());
-        focusedKeyframe = null;
-        keyframesUpdated(indexOfFocusSprite);
+        keyframesUpdated(index);
     }
 
     function setSpriteIndex(oldIndex, newIndex)
