@@ -123,7 +123,7 @@ Item {
         MenuButton {
             text: ">>"
             closeMenuOnClick: false
-            onClicked: myApp.model.setTime(100)
+            onClicked: myApp.model.setTime(myApp.model.endTime)
         }
 
         MenuButton {
