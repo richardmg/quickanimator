@@ -54,6 +54,7 @@ QtObject {
     function newMovie()
     {
         unselectAllSprites();
+        keyframesUpdated(null);
 
         for (var i in sprites)
             sprites[i].destroy();
