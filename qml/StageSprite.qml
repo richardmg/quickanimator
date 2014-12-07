@@ -130,7 +130,7 @@ Item {
         if (newKeyframeCreated)
             addKeyframe(keyframe);
 
-        return newKeyframeCreated;
+        return keyframe;
     }
 
     function _createKeyframeRelativeToParent(time, keyframeParent)
