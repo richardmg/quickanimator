@@ -269,19 +269,11 @@ Item {
             closeMenuOnClick: false
             color: "blue"
             textColor: "white"
-            onClicked: {
-                if (myApp.stage.timelinePlay) {
-                    myApp.stage.timelinePlay = false
-                    currentMenu = rootMenu
-                    myApp.model.unselectAllSprites()
-                } else {
-                    myApp.stage.timelinePlay = true
-                }
-            }
         }
 
         onXChanged: sticky = true
         onVisibleChanged: if (visible) sticky = false
+        onIsCurrentChanged: if (!isCurrent) myApp.stage.timelinePlay = false
     }
 
     FlickableMouseArea {
