@@ -210,8 +210,13 @@ Item {
             color: "blue"
             textColor: "white"
             onClicked: {
-                myApp.model.unselectAllSprites()
-                myApp.timelineFlickable.userPlay = !myApp.timelineFlickable.userPlay
+                if (myApp.timelineFlickable.userPlay) {
+                    menuController.opacity = 0
+                    myApp.timelineFlickable.userPlay = false;
+                    myApp.model.unselectAllSprites()
+                } else {
+                    myApp.timelineFlickable.userPlay = true;
+                }
             }
         }
 
@@ -225,6 +230,7 @@ Item {
 
     PlaySlider {
         id: recordMenu
+        sticky: myApp.stage.timelinePlay
 
         MenuButton {
             text: myApp.stage.timelinePlay ? "Stop" : "Record"
@@ -242,7 +248,12 @@ Item {
             }
         }
 
-        onIsCurrentChanged: if (isCurrent) myApp.stage.timelinePlay = true
+        onIsCurrentChanged: {
+            if (isCurrent) {
+                menuController.opacity = 0
+                myApp.stage.timelinePlay = true
+            }
+        }
     }
 
     FlickableMouseArea {
