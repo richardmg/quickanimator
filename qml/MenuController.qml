@@ -165,7 +165,7 @@ Item {
             text: "Record\nframes"
             closeMenuOnClick: false
             onClicked: {
-                myApp.stage.recording = true
+                myApp.model.recording = true
                 currentMenu = brushMenu
             }
         }
@@ -176,7 +176,7 @@ Item {
 
         function testAndSetRecordSlider()
         {
-            if (myApp.stage.recording) {
+            if (myApp.model.recording) {
                 recordSliderMenu.sticky = true
                 currentMenu = recordSliderMenu
             }
@@ -226,7 +226,7 @@ Item {
         sticky: myApp.timelineFlickable.userPlay
 
         MenuButton {
-            text: (myApp.model.targetMsPerFrame / myApp.model.msPerFrame).toFixed(1)
+            text: (myApp.model.targetMPF / myApp.model.playbackMPF).toFixed(1)
             closeMenuOnClick: false
             color: "blue"
             textColor: "white"
@@ -252,7 +252,7 @@ Item {
         id: recordSliderMenu
 
         MenuButton {
-            text: (myApp.model.targetMsPerFrame / myApp.model.msPerFrame).toFixed(1)
+            text: (myApp.model.targetMPF / myApp.model.playbackMPF).toFixed(1)
             closeMenuOnClick: false
             color: "blue"
             textColor: "white"
@@ -260,7 +260,7 @@ Item {
 
         onXChanged: sticky = true
         onVisibleChanged: if (visible) sticky = false
-        onIsCurrentChanged: if (!isCurrent) myApp.stage.recording = false
+        onIsCurrentChanged: if (!isCurrent) myApp.model.recording = false
     }
 
     FlickableMouseArea {

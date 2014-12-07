@@ -10,7 +10,6 @@ Item {
 
     property var pressStartPos: undefined
     property var currentAction: new Object()
-    property bool recording: false
 
     Rectangle {
         id: sprites
@@ -101,8 +100,8 @@ Item {
 //                        keyframe.x = sprite.x;
 //                        keyframe.y = sprite.y;
 //                        myApp.model.syncReparentSprites(layer);
-//                        if (recording)
-//                            myApp.timelineFlickable.stagePlay = true;
+//                        if (myApp.model.recording)
+//                            myApp.timelineFlickable.recordPlay = true;
                     } else {
                         // Move selected sprites
                         for (var i in myApp.model.selectedSprites) {
@@ -115,10 +114,10 @@ Item {
                                 changes.x = newSpritePos.x;
                             if (model.recordsPositionY)
                                 changes.y = newSpritePos.y;
-                            sprite.updateKeyframe(myApp.model.time, changes, {propagate:!recording});
+                            sprite.updateKeyframe(myApp.model.time, changes, {propagate:!myApp.model.recording});
 
-                            if (recording)
-                                myApp.timelineFlickable.stagePlay = true;
+                            if (myApp.model.recording)
+                                myApp.timelineFlickable.recordPlay = true;
                         }
                     }
 
@@ -144,10 +143,10 @@ Item {
                             changes.transScaleX = sprite.transScaleX * (aar.radius / currentAction.radius);
                             changes.transScaleY = sprite.transScaleY * (aar.radius / currentAction.radius);
                         }
-                        sprite.updateKeyframe(myApp.model.time, changes, {propagate:!recording});
+                        sprite.updateKeyframe(myApp.model.time, changes, {propagate:!myApp.model.recording});
 
-                        if (recording)
-                            myApp.timelineFlickable.stagePlay = true;
+                        if (myApp.model.recording)
+                            myApp.timelineFlickable.recordPlay = true;
                     }
                     currentAction.angle = aar.angle;
                     currentAction.radius = aar.radius;
@@ -172,7 +171,7 @@ Item {
             }
 
             myApp.model.inLiveDrag = false;
-            myApp.timelineFlickable.stagePlay = false;
+            myApp.timelineFlickable.recordPlay = false;
         }
     }
 

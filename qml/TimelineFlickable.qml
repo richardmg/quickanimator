@@ -4,8 +4,8 @@ import QtQuick.Controls 1.0
 Item {
     id: root
 
-    readonly property bool playing: userPlay || stagePlay;
-    property bool stagePlay: false
+    readonly property bool playing: userPlay || recordPlay;
+    property bool recordPlay: false
     property bool userPlay: false
     onPlayingChanged: updatePlayAnimation();
 
@@ -40,7 +40,7 @@ Item {
         onTickChanged: {
             var tickTime = (new Date()).getTime();
             var flickAdjust = flickable ? -flickable.momentumX : 1
-            var timeIncrement = ((tickTime - lastTickTime) / myApp.model.msPerFrame) * flickAdjust
+            var timeIncrement = ((tickTime - lastTickTime) / myApp.model.playbackMPF) * flickAdjust
             myApp.model.setTime(myApp.model.time + timeIncrement);
             lastTickTime = tickTime;
         }

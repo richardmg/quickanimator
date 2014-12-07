@@ -10,13 +10,13 @@ MenuRow {
             return
         _guard = true
         var slowdown = (parent.width - width) / Math.max(1, x)
-        myApp.model.msPerFrame = myApp.model.targetMsPerFrame * slowdown
+        myApp.model.playbackMPF = myApp.model.targetMPF * slowdown
         _guard = false
     }
 
     onIsCurrentChanged: {
         _guard = true
-        var slowdown = myApp.model.msPerFrame / myApp.model.targetMsPerFrame
+        var slowdown = myApp.model.playbackMPF / myApp.model.targetMPF
         x = (parent.width - width) / slowdown
         _guard = false
     }

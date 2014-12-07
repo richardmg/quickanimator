@@ -20,7 +20,7 @@ ApplicationWindow {
     property alias searchView: searchView
 
     property Flickable spriteTreeFlickable
-    property FlickableMouseArea msPerFrameFlickable
+    property FlickableMouseArea playbackMPFFlickable
 
     property Style style: Style {}
     property Model model: Model {}
@@ -97,14 +97,14 @@ ApplicationWindow {
             height: timeline.height - (y * 2)
             width: height
             radius: height
-            color: !model.hasSelection || !stage.flickable ? "lightgray" : stage.recording ? "red" : model.hasSelection ? "orange" : "lightgray"
+            color: !model.hasSelection || !stage.flickable ? "lightgray" : model.recording ? "red" : model.hasSelection ? "orange" : "lightgray"
             anchors.top: parent.top
             anchors.right: parent.right
             anchors.margins: 2
             opacity: timeline.opacity
 
             SequentialAnimation {
-                running: model.hasSelection && stage.flickable && stage.recording
+                running: model.hasSelection && stage.flickable && model.recording
                 onRunningChanged: if (!running) recordingIndicator.opacity = Qt.binding(function() { return timeline.opacity })
                 loops: Animation.Infinite
                 PauseAnimation { duration: 1000 }

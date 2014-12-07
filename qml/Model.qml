@@ -6,12 +6,16 @@ QtObject {
     id: root
     property real time: 0
     property int endTime: 0
+
     property var sprites: new Array
     property bool hasSelection: false
     property var selectedSprites: new Array
 
-    property int targetMsPerFrame: 200
-    property int msPerFrame: targetMsPerFrame
+    // Milliseconds Per Frame (MPF)
+    property int targetMPF: 200
+    property int playbackMPF: targetMPF
+    property int recordMPF: targetMPF
+    property bool recording: false
 
     readonly property int userInterfaceStateEdit: 0
     readonly property int userInterfaceStatePlay: 1

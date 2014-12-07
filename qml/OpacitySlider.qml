@@ -19,7 +19,7 @@ MenuRow {
             var changes = {
                 opacity: x / (parent.width - width)
             }
-            sprite.updateKeyframe(myApp.model.time, changes, {propagate:!myApp.stage.recording});
+            sprite.updateKeyframe(myApp.model.time, changes, {propagate:!myApp.model.recording});
         }
     }
 
@@ -30,7 +30,7 @@ MenuRow {
         target: opacityMenu.isCurrent ? myApp.model : null
         onSelectedSpritesUpdated: opacityMenu.syncWithSelectedLayer()
         onTimeChanged: {
-            if (flickable.isPressed && myApp.stage.recording)
+            if (flickable.isPressed && myApp.model.recording)
                 opacityMenu.writeOpacityToKeyframes()
             else
                 opacityMenu.syncWithSelectedLayer()
@@ -42,14 +42,14 @@ MenuRow {
         onPressed: {
             myApp.model.recordsOpacity = true
             myApp.model.inLiveDrag = true
-            if (myApp.stage.recording)
-                myApp.timelineFlickable.stagePlay = true;
+            if (myApp.model.recording)
+                myApp.timelineFlickable.recordPlay = true;
         }
         onReleased: {
             myApp.model.recordsOpacity = false
             myApp.model.inLiveDrag = false
-            if (myApp.stage.recording)
-                myApp.timelineFlickable.stagePlay = false;
+            if (myApp.model.recording)
+                myApp.timelineFlickable.recordPlay = false;
         }
     }
 
