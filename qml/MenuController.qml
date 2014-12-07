@@ -99,18 +99,17 @@ Item {
         id: addImagesMenu
 
         MenuButton {
+            text: "Search"
+            onClicked: myApp.searchView.search()
+        }
+
+        MenuButton {
             text: "Clone"
         }
 
         MenuButton {
             text: "Movie"
         }
-
-        MenuButton {
-            text: "Search"
-            onClicked: myApp.searchView.search()
-        }
-
     }
 
     MenuRow {
