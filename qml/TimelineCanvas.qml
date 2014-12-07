@@ -3,24 +3,18 @@ import QtQuick 2.1
 Rectangle {
     id: root
     property int cellWidth: myApp.style.cellWidth
-    property real time: myApp.model.time
 
-    onTimeChanged: canvas.requestPaint()
     Connections {
         target: myApp.model
+        onTimeChanged: canvas.requestPaint()
         onSelectedSpritesUpdated: canvas.requestPaint()
         onKeyframesUpdated: canvas.requestPaint()
         onMsPerFrameChanged: canvas.requestPaint()
     }
 
     Connections {
-        target: myApp.timelineFlickable
-        onPlayingChanged: canvas.requestPaint()
-    }
-
-    Connections {
         target: myApp.stage
-        onTimelinePlayChanged: canvas.requestPaint()
+        onRecordingChanged: canvas.requestPaint()
     }
 
     color: "white"
@@ -34,6 +28,8 @@ Rectangle {
 //        antialiasing: false
 
         onPaint: {
+            var time = myApp.model.time
+
             var ctx = getContext('2d');
             ctx.strokeStyle = myApp.style.timelineline;
             ctx.lineWidth = 1
@@ -96,7 +92,7 @@ Rectangle {
                 ctx.fillText(label, posX + 5, parent.height - 2);
             }
 
-            if (myApp.stage.timelinePlay)
+            if (myApp.stage.recording)
                 ctx.fillStyle = "red"
             else
                 ctx.fillStyle = myApp.style.timelineline;

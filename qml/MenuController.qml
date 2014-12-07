@@ -165,7 +165,7 @@ Item {
             text: "Record\nframes"
             closeMenuOnClick: false
             onClicked: {
-                myApp.stage.timelinePlay = true
+                myApp.stage.recording = true
                 currentMenu = brushMenu
             }
         }
@@ -176,7 +176,7 @@ Item {
 
         function testAndSetRecordSlider()
         {
-            if (myApp.stage.timelinePlay) {
+            if (myApp.stage.recording) {
                 recordSliderMenu.sticky = true
                 currentMenu = recordSliderMenu
             }
@@ -260,7 +260,7 @@ Item {
 
         onXChanged: sticky = true
         onVisibleChanged: if (visible) sticky = false
-        onIsCurrentChanged: if (!isCurrent) myApp.stage.timelinePlay = false
+        onIsCurrentChanged: if (!isCurrent) myApp.stage.recording = false
     }
 
     FlickableMouseArea {

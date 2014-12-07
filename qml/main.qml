@@ -97,14 +97,14 @@ ApplicationWindow {
             height: timeline.height - (y * 2)
             width: height
             radius: height
-            color: !model.hasSelection || !stage.flickable ? "lightgray" : stage.timelinePlay ? "red" : model.hasSelection ? "orange" : "lightgray"
+            color: !model.hasSelection || !stage.flickable ? "lightgray" : stage.recording ? "red" : model.hasSelection ? "orange" : "lightgray"
             anchors.top: parent.top
             anchors.right: parent.right
             anchors.margins: 2
             opacity: timeline.opacity
 
             SequentialAnimation {
-                running: model.hasSelection && stage.flickable && stage.timelinePlay
+                running: model.hasSelection && stage.flickable && stage.recording
                 onRunningChanged: if (!running) recordingIndicator.opacity = Qt.binding(function() { return timeline.opacity })
                 loops: Animation.Infinite
                 PauseAnimation { duration: 1000 }
