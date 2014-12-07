@@ -54,8 +54,8 @@ Item {
         }
 
         MenuButton {
-            text: "Action"
-            menu: actionMenu
+            text: "Edit"
+            menu: editMenu
         }
     }
 
@@ -128,17 +128,12 @@ Item {
 
         MenuButton {
             text: "Play"
-            menu: playMenu
-        }
-
-        MenuButton {
-            text: "Record"
-            menu: recordMenu
+            menu: playSliderMenu
         }
     }
 
     MenuRow {
-        id: actionMenu
+        id: editMenu
 
         MenuButton {
             text: "Undo"
@@ -156,8 +151,21 @@ Item {
         }
 
         MenuButton {
-            text: "Brush"
-            menu: brushMenu
+            text: "Single\nframe"
+            closeMenuOnClick: false
+            onClicked: {
+                myApp.timelineFlickable.userPlay = false
+                currentMenu = brushMenu
+            }
+        }
+
+        MenuButton {
+            text: "Record\nframes"
+            closeMenuOnClick: false
+            onClicked: {
+                myApp.timelineFlickable.userPlay = true
+                currentMenu = brushMenu
+            }
         }
     }
 
@@ -170,6 +178,8 @@ Item {
                 myApp.model.clearRecordState();
                 myApp.model.recordsPositionX = true;
                 myApp.model.recordsPositionY = true;
+                if (myApp.timelineFlickable.userPlay)
+                    currentMenu = recordSliderMenu
             }
         }
 
@@ -178,6 +188,8 @@ Item {
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsRotation = true;
+                if (myApp.timelineFlickable.userPlay)
+                    currentMenu = recordSliderMenu
             }
         }
 
@@ -186,22 +198,24 @@ Item {
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsScale = true;
+                if (myApp.timelineFlickable.userPlay)
+                    currentMenu = recordSliderMenu
             }
         }
 
         MenuButton {
             text: "Opacity"
             closeMenuOnClick: false
-            onClicked: currentMenu = opacityMenu
+            onClicked: currentMenu = opacitySliderMenu
         }
     }
 
     OpacitySlider {
-        id: opacityMenu
+        id: opacitySliderMenu
     }
 
     PlaySlider {
-        id: playMenu
+        id: playSliderMenu
         sticky: myApp.timelineFlickable.userPlay
 
         MenuButton {
@@ -228,7 +242,7 @@ Item {
         }
 
         Connections {
-            target: playMenu.isCurrent ? myApp.model : null
+            target: playSliderMenu.isCurrent ? myApp.model : null
             onTimeChanged: {
                 if (myApp.model.time >= myApp.model.endTime) {
                     menuController.currentMenu = rootMenu
@@ -241,7 +255,7 @@ Item {
     }
 
     PlaySlider {
-        id: recordMenu
+        id: recordSliderMenu
         sticky: myApp.stage.timelinePlay
 
         MenuButton {
