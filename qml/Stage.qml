@@ -54,9 +54,6 @@ Item {
             var pos = {x:mouseX, y:mouseY}
             pressStartPos = pos;
 
-            if (!myApp.model.hasSelection)
-                return;
-
             myApp.model.inLiveDrag = true;
 
             if (myApp.model.recordsPositionX) {
@@ -68,14 +65,29 @@ Item {
                 currentAction = getAngleAndRadius(rotationCenterItem, pos);
             }
 
+            // Start the keyframe sequence by taking a snapshot the current
+            // position of the selected sprites.
+            for (var i in myApp.model.selectedSprites) {
+                var sprite = myApp.model.selectedSprites[i];
+                var changes = {}
+                if (model.recordsPositionX)
+                    changes.x = sprite.x;
+                if (model.recordsPositionY)
+                    changes.y = sprite.y;
+                if (myApp.model.recordsRotation)
+                    changes.transRotation = sprite.transRotation;
+                if (myApp.model.recordsScale) {
+                    changes.transScaleX = sprite.transScaleX;
+                    changes.transScaleY = sprite.transScaleY;
+                }
+                sprite.beginKeyframeSequence(myApp.model.time, changes);
+            }
+
             if (myApp.model.recording)
                 myApp.timelineFlickable.recordPlay = true;
         }
 
         onPositionChanged: {
-            if (!myApp.model.hasSelection)
-                return;
-
             // drag or rotate current sprite:
             var pos = {x:mouseX, y:mouseY}
 
@@ -117,7 +129,7 @@ Item {
                                 changes.x = newSpritePos.x;
                             if (model.recordsPositionY)
                                 changes.y = newSpritePos.y;
-                            sprite.updateKeyframe(myApp.model.time, changes, {propagate:!myApp.model.recording});
+                            var keyframe = sprite.updateKeyframeSequence(myApp.model.time, changes)
                         }
                     }
 
@@ -143,7 +155,7 @@ Item {
                             changes.transScaleX = sprite.transScaleX * (aar.radius / currentAction.radius);
                             changes.transScaleY = sprite.transScaleY * (aar.radius / currentAction.radius);
                         }
-                        sprite.updateKeyframe(myApp.model.time, changes, {propagate:!myApp.model.recording});
+                        sprite.updateKeyframeSequence(myApp.model.time, changes);
                     }
                     currentAction.angle = aar.angle;
                     currentAction.radius = aar.radius;
@@ -152,6 +164,22 @@ Item {
         }
 
         onReleased: {
+            for (var i in myApp.model.selectedSprites) {
+                var sprite = myApp.model.selectedSprites[i];
+                var changes = {}
+                if (model.recordsPositionX)
+                    changes.x = sprite.x;
+                if (model.recordsPositionY)
+                    changes.y = sprite.y;
+                if (myApp.model.recordsRotation)
+                    changes.transRotation = sprite.transRotation;
+                if (myApp.model.recordsScale) {
+                    changes.transScaleX = sprite.transScaleX;
+                    changes.transScaleY = sprite.transScaleY;
+                }
+                sprite.endKeyframeSequence(myApp.model.time, changes);
+            }
+
             var m = myApp.model;
             var pos = {x:mouseX, y:mouseY}
             var sprite = m.getSpriteAtScenePos(pos);

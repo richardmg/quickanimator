@@ -30,6 +30,8 @@ Item {
     property var _toKeyframe
     property bool _invalidCache: true
 
+    property var _firstKeyframeInSequence: null
+
     objectName: "unknown sprite"
 
     function setTime(time)
@@ -79,58 +81,123 @@ Item {
             x:sprite.x,
             y:sprite.y,
             z:sprite.z,
-            anchorX: tScale.origin.x,
-            anchorY: tScale.origin.y,
+            anchorX:tScale.origin.x,
+            anchorY:tScale.origin.y,
             width:sprite.width,
             height:sprite.height,
             transRotation:transRotation,
             transScaleX:transScaleX,
             transScaleY:transScaleY,
             opacity:sprite.opacity,
-            visible: sprite.visible
+            visible:sprite.visible,
+            changedProps:null,
+            volatileIndex:0
         };
     }
 
-    function updateKeyframe(time, props, flags)
+    function cloneKeyframe(keyframe)
+    {
+        // NB: Note that clone will copy props
+        // like time and volatileIndex as well
+        var clone = new Object
+        for (var key in keyframe)
+           clone[key] = keyframe[key];
+        return clone
+    }
+
+    function beginKeyframeSequence(time, props)
+    {
+        // All updates done in a sequence is seen as belonging together. We can then do some
+        // sensible post processing in the end to ensure that existing (but unmodified) keyframes
+        // in-between appear connected to the sequence as well.
+        _firstKeyframeInSequence = updateKeyframeSequence(time, props)
+        return _firstKeyframeInSequence
+    }
+
+    function updateKeyframeSequence(time, props)
     {
         var newKeyframeCreated = false;
         var intTime = Math.floor(time);
         var keyframe = getKeyframe(intTime);
 
-        if (!keyframe || keyframe.time !== intTime) {
-            keyframe = createKeyframe(intTime);
+        if (keyframe.time !== intTime) {
+            // The keyframe we're going to add needs to be a clone of its
+            // antecedent keyframe so that the changedProps logic below will work.
+            keyframe = cloneKeyframe(keyframe)
+            keyframe.time = intTime;
+            keyframe.volatileIndex++;
             newKeyframeCreated = true;
         }
 
-        if (time === spriteTime) {
+        if (!keyframe.changedProps) {
+            // Before we update keyframe, store original values in keyframe.changedProps
+            // so that we can determine later if subsequent keyframes need propagation
+            var changedProps = new Object
             for (var key in props)
-                sprite[key] = props[key];
+                changedProps[key] = keyframe[key];
+            keyframe.changedProps = changedProps;
         }
 
-        if (flags.propagate) {
-            // Iterate through subsequent keyframes and update props
-            // that has the same value set as keyframe.
-            for (var i = keyframe.volatileIndex + 1; i < keyframes.length; ++i) {
-                var kf = keyframes[i];
-                for (key in props) {
-                    var noPropSet = true;
-                    if (kf[key] === keyframe[key]) {
-                        kf[key] = props[key];
-                        noPropSet = false;
-                    }
-                }
-                if (noPropSet)
-                    break;
+        // If the sprite is currently at the update
+        // time, move it to the new keyframe
+        if (time === spriteTime) {
+            for (key in props) {
+                var prop = props[key]
+                keyframe[key] = prop;
+                sprite[key] = prop;
             }
+        } else {
+            for (key in props)
+                keyframe[key] = props[key];
         }
-
-        for (key in props)
-           keyframe[key] = props[key];
 
         if (newKeyframeCreated)
             addKeyframe(keyframe);
 
         return keyframe;
+    }
+
+    function endKeyframeSequence(time, props)
+    {
+        var lastKeyframeInSequence = updateKeyframeSequence(time, props)
+
+        // All keyframes in a sequence [_firstKeyframeInSequence, lastKeyframeInSequence] should get
+        // updated, even if no changes occured at the time of a specific keyframe. Otherwise the
+        // sprite will "jump" when entering unupdated keyframes in a sequence.
+        var updatedKeyframe = _firstKeyframeInSequence;
+        var changedProps = updatedKeyframe.changedProps
+        for (var i = _firstKeyframeInSequence.volatileIndex + 1; i < lastKeyframeInSequence.volatileIndex; ++i) {
+            var keyframe = keyframes[i];
+            if (keyframe.changedProps) {
+                updatedKeyframe.changedProps = null;
+                updatedKeyframe = keyframe;
+                changedProps = updatedKeyframe.changedProps;
+                continue;
+            } else {
+                for (var key in changedProps)
+                    keyframe[key] = updatedKeyframe[key];
+            }
+        }
+
+        // If a prop in an unupdated keyframe had the same value as its antecedent updated keyframe
+        // before it got updated, we update the susequent keyframe with the same changes as well.
+        changedProps = lastKeyframeInSequence.changedProps
+        for (i = lastKeyframeInSequence.volatileIndex + 1; i < keyframes.length; ++i) {
+            keyframe = keyframes[i];
+            var keyframeModified = false
+            for (key in changedProps) {
+                if (keyframe[key] === changedProps[key]) {
+                    keyframe[key] = lastKeyframeInSequence[key];
+                    keyframeModified = true
+                }
+            }
+            if (!keyframeModified)
+                break;
+        }
+
+        lastKeyframeInSequence.changedProps = null;
+        _firstKeyframeInSequence.changedProps = null;
+        _firstKeyframeInSequence = null;
     }
 
     function _createKeyframeRelativeToParent(time, keyframeParent)
