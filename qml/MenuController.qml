@@ -129,6 +129,7 @@ Item {
 
         MenuButton {
             text: "Play"
+            closeMenuOnClick: true
             menu: playSliderMenu
         }
     }
@@ -229,34 +230,21 @@ Item {
             closeMenuOnClick: false
             color: "blue"
             textColor: "white"
-            onClicked: {
-                if (myApp.timelineFlickable.userPlay) {
-                    menuController.opacity = 0
-                    myApp.timelineFlickable.userPlay = false;
-                } else {
-                    myApp.timelineFlickable.userPlay = true;
-                }
-            }
-        }
-
-        onIsCurrentChanged: {
-            myApp.model.unselectAllSprites()
-            if (isCurrent) {
-                menuController.opacity = 0
-                myApp.timelineFlickable.userPlay = true
-            }
         }
 
         Connections {
             target: playSliderMenu.isCurrent ? myApp.model : null
             onTimeChanged: {
-                if (myApp.model.time >= myApp.model.endTime) {
-                    menuController.currentMenu = rootMenu
-                    myApp.timelineFlickable.userPlay = false;
-                    myApp.model.unselectAllSprites()
-                }
+                if (myApp.model.time >= myApp.model.endTime)
+                    menuController.currentMenu = playbackMenu
             }
+        }
 
+        onXChanged: sticky = true
+        onVisibleChanged: if (visible) sticky = false
+        onIsCurrentChanged: {
+            myApp.model.unselectAllSprites()
+            myApp.timelineFlickable.userPlay = isCurrent
         }
     }
 
