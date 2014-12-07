@@ -168,7 +168,7 @@ ApplicationWindow {
 
             onClicked: {
                 opacity = 0
-                menuController.toggleMenuVisible()
+                menuController.toggle()
             }
         }
 

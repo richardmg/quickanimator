@@ -3,14 +3,15 @@ import QtQuick 2.0
 Item {
     id: menuController
 
-    function toggleMenuVisible()
-    {
-        opacity = (opacity > 0) ? 0 : 1
-    }
-
-    onOpacityChanged: {
-        if (opacity === 0 && !currentMenu.sticky)
-            currentMenu = rootMenu
+    function toggle() {
+        if (currentMenu === rootMenu) {
+            opacity = (opacity > 0) ? 0 : 1
+        } else {
+            if (opacity < 1)
+                opacity = 1
+            else
+                currentMenu = rootMenu
+        }
     }
 
     property Row currentMenu: rootMenu
@@ -216,7 +217,6 @@ Item {
 
     PlaySlider {
         id: playSliderMenu
-        sticky: myApp.timelineFlickable.userPlay
 
         MenuButton {
             text: myApp.timelineFlickable.userPlay ? "Stop" : "Play"
@@ -256,7 +256,6 @@ Item {
 
     PlaySlider {
         id: recordSliderMenu
-        sticky: myApp.stage.timelinePlay
 
         MenuButton {
             text: myApp.stage.timelinePlay ? "Stop" : "Record"
