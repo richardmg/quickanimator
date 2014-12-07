@@ -124,7 +124,7 @@ Item {
         MenuButton {
             text: ">>"
             closeMenuOnClick: false
-            onClicked: myApp.model.setTime(myApp.model.endTime)
+            onClicked: myApp.model.setTime(myApp.model.endTime + 1)
         }
 
         MenuButton {
@@ -235,7 +235,7 @@ Item {
         Connections {
             target: playSliderMenu.isCurrent ? myApp.model : null
             onTimeChanged: {
-                if (myApp.model.time >= myApp.model.endTime)
+                if (myApp.model.time >= myApp.model.endTime + 1)
                     menuController.currentMenu = playbackMenu
             }
         }
