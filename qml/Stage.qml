@@ -67,6 +67,9 @@ Item {
             } else if (myApp.model.selectedSprites.length !== 0) {
                 currentAction = getAngleAndRadius(rotationCenterItem, pos);
             }
+
+            if (myApp.model.recording)
+                myApp.timelineFlickable.recordPlay = true;
         }
 
         onPositionChanged: {
@@ -115,9 +118,6 @@ Item {
                             if (model.recordsPositionY)
                                 changes.y = newSpritePos.y;
                             sprite.updateKeyframe(myApp.model.time, changes, {propagate:!myApp.model.recording});
-
-                            if (myApp.model.recording)
-                                myApp.timelineFlickable.recordPlay = true;
                         }
                     }
 
@@ -144,9 +144,6 @@ Item {
                             changes.transScaleY = sprite.transScaleY * (aar.radius / currentAction.radius);
                         }
                         sprite.updateKeyframe(myApp.model.time, changes, {propagate:!myApp.model.recording});
-
-                        if (myApp.model.recording)
-                            myApp.timelineFlickable.recordPlay = true;
                     }
                     currentAction.angle = aar.angle;
                     currentAction.radius = aar.radius;
