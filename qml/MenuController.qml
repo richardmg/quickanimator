@@ -226,7 +226,7 @@ Item {
         sticky: myApp.timelineFlickable.userPlay
 
         MenuButton {
-            text: (myApp.model.targetMPF / myApp.model.playbackMPF).toFixed(1)
+            text: (myApp.model.targetMpf / myApp.model.playbackMpf).toFixed(1)
             closeMenuOnClick: false
             color: "blue"
             textColor: "white"
@@ -252,7 +252,7 @@ Item {
         id: recordSliderMenu
 
         MenuButton {
-            text: (myApp.model.targetMPF / myApp.model.playbackMPF).toFixed(1)
+            text: (myApp.model.targetMpf / myApp.model.recordingMpf).toFixed(1)
             closeMenuOnClick: false
             color: "blue"
             textColor: "white"
@@ -260,7 +260,7 @@ Item {
 
         onXChanged: sticky = true
         onVisibleChanged: if (visible) sticky = false
-        onIsCurrentChanged: if (!isCurrent) myApp.model.recording = false
+        onIsCurrentChanged: myApp.model.recording = isCurrent
     }
 
     FlickableMouseArea {

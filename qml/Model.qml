@@ -12,9 +12,8 @@ QtObject {
     property var selectedSprites: new Array
 
     // Milliseconds Per Frame (MPF)
-    property int targetMPF: 200
-    property int playbackMPF: targetMPF
-    property int recordMPF: targetMPF
+    property int targetMpf: 200
+    property int mpf: targetMpf
     property bool recording: false
 
     signal spritesUpdated(var removedSprite, var addedSprite)

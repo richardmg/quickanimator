@@ -20,7 +20,7 @@ ApplicationWindow {
     property alias searchView: searchView
 
     property Flickable spriteTreeFlickable
-    property FlickableMouseArea playbackMPFFlickable
+    property FlickableMouseArea playbackMpfFlickable
 
     property Style style: Style {}
     property Model model: Model {}
