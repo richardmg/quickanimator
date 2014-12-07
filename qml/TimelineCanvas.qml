@@ -66,7 +66,7 @@ Rectangle {
 
             ctx.font = "15px Arial";
             ctx.fillStyle = myApp.style.timelineline;
-            var timeBetweenTickmarks = 30; // sec = (30 / myApp.model.playbackMpf)
+            var timeBetweenTickmarks = 30; // sec = (30 / myApp.model.mpf)
             var halfTickCount = Math.ceil(width / (2 * cellWidth * timeBetweenTickmarks));
             for (var tickmark = -halfTickCount; tickmark <= halfTickCount; ++tickmark) {
                 var relativeTime = (tickmark * timeBetweenTickmarks) - (time % timeBetweenTickmarks);
@@ -77,7 +77,7 @@ Rectangle {
                 var posX = (relativeTime + timeShift) * cellWidth;
                 ctx.fillRect(posX, 0, 2, parent.height);
 
-                var clockTimeSec = (myApp.model.playbackMpf * absoluteTime) / 1000;
+                var clockTimeSec = (myApp.model.mpf * absoluteTime) / 1000;
                 var hours = Math.floor(clockTimeSec / 3600) % 24;
                 var minutes = Math.floor(clockTimeSec / 60) % 60;
                 var seconds = Math.floor(clockTimeSec % 60);

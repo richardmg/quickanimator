@@ -211,8 +211,8 @@ Item {
             transRotation = keyframe.transRotation;
             opacity = keyframe.opacity;
         } else {
-            var reparentKeyframeMs = keyframe.time * model.playbackMpf
-            var advanceMs = (spriteTime * model.playbackMpf) - reparentKeyframeMs;
+            var reparentKeyframeMs = keyframe.time * model.mpf
+            var advanceMs = (spriteTime * model.mpf) - reparentKeyframeMs;
             x = _interpolated(keyframe.x, _toKeyframe.x, advanceMs, "linear");
             y = _interpolated(keyframe.y, _toKeyframe.y, advanceMs, "linear");
             z = _interpolated(keyframe.z, _toKeyframe.z, advanceMs, "linear");
@@ -251,8 +251,8 @@ Item {
             if (!model.recordsOpacity)
                 opacity = keyframe.opacity;
         } else {
-            var reparentKeyframeMs = keyframe.time * model.playbackMpf
-            var advanceMs = (spriteTime * model.playbackMpf) - reparentKeyframeMs;
+            var reparentKeyframeMs = keyframe.time * model.mpf
+            var advanceMs = (spriteTime * model.mpf) - reparentKeyframeMs;
             if (!model.recordsPositionX)
                 x = _interpolated(keyframe.x, _toKeyframe.x, advanceMs, "linear");
             if (!model.recordsPositionY)
@@ -276,8 +276,8 @@ Item {
     function _interpolated(from, to, advanceMs, curve)
     {
         // Ignore curve for now:
-        var fromKeyframeMs = _fromKeyframe.time * model.playbackMpf
-        var timeDiff = (_toKeyframe.time * model.playbackMpf) - fromKeyframeMs;
+        var fromKeyframeMs = _fromKeyframe.time * model.mpf
+        var timeDiff = (_toKeyframe.time * model.mpf) - fromKeyframeMs;
         return from + (((to - from) / timeDiff) * advanceMs);
     }
 

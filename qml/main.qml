@@ -19,9 +19,6 @@ ApplicationWindow {
     property alias timelineFlickable: timelineFlickable
     property alias searchView: searchView
 
-    property Flickable spriteTreeFlickable
-    property FlickableMouseArea playbackMpfFlickable
-
     property Style style: Style {}
     property Model model: Model {}
 

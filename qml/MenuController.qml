@@ -226,7 +226,7 @@ Item {
         sticky: myApp.timelineFlickable.userPlay
 
         MenuButton {
-            text: (myApp.model.targetMpf / myApp.model.playbackMpf).toFixed(1)
+            text: (myApp.model.targetMpf / myApp.model.mpf).toFixed(1)
             closeMenuOnClick: false
             color: "blue"
             textColor: "white"
@@ -242,9 +242,11 @@ Item {
 
         onXChanged: sticky = true
         onVisibleChanged: if (visible) sticky = false
+        onMultiplierChanged: myApp.model.mpf = myApp.model.targetMpf * multiplier
         onIsCurrentChanged: {
             myApp.model.unselectAllSprites()
             myApp.timelineFlickable.userPlay = isCurrent
+            myApp.model.mpf = myApp.model.targetMpf * (isCurrent ? multiplier : recordSliderMenu.multiplier)
         }
     }
 
@@ -252,13 +254,17 @@ Item {
         id: recordSliderMenu
 
         MenuButton {
-            text: (myApp.model.targetMpf / myApp.model.recordingMpf).toFixed(1)
+            text: (myApp.model.targetMpf / myApp.model.mpf).toFixed(1)
             closeMenuOnClick: false
             color: "blue"
             textColor: "white"
         }
 
-        onXChanged: sticky = true
+        onMultiplierChanged: {
+            sticky = true
+            myApp.model.mpf = myApp.model.targetMpf * multiplier
+        }
+
         onVisibleChanged: if (visible) sticky = false
         onIsCurrentChanged: myApp.model.recording = isCurrent
     }
