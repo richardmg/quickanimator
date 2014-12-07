@@ -213,7 +213,6 @@ Item {
                 if (myApp.timelineFlickable.userPlay) {
                     menuController.opacity = 0
                     myApp.timelineFlickable.userPlay = false;
-                    myApp.model.unselectAllSprites()
                 } else {
                     myApp.timelineFlickable.userPlay = true;
                 }
@@ -221,10 +220,23 @@ Item {
         }
 
         onIsCurrentChanged: {
+            myApp.model.unselectAllSprites()
             if (isCurrent) {
                 menuController.opacity = 0
                 myApp.timelineFlickable.userPlay = true
             }
+        }
+
+        Connections {
+            target: playMenu.isCurrent ? myApp.model : null
+            onTimeChanged: {
+                if (myApp.model.time >= myApp.model.endTime) {
+                    menuController.currentMenu = rootMenu
+                    myApp.timelineFlickable.userPlay = false;
+                    myApp.model.unselectAllSprites()
+                }
+            }
+
         }
     }
 
