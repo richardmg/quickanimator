@@ -17,12 +17,6 @@ QtObject {
     property int recordMPF: targetMPF
     property bool recording: false
 
-    readonly property int userInterfaceStateEdit: 0
-    readonly property int userInterfaceStatePlay: 1
-    readonly property int userInterfaceStateMenu: 2
-    property int userInterfaceState: userInterfaceStatePlay
-    property bool fullScreenMode: false
-
     signal spritesUpdated(var removedSprite, var addedSprite)
     signal selectedSpritesUpdated(var unselectedSprite, var selectedSprite)
     signal keyframesUpdated(var sprite)
