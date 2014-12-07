@@ -4,7 +4,7 @@ Item {
     id: menuController
 
     function toggle() {
-        if (currentMenu === rootMenu) {
+        if (currentMenu.sticky) {
             opacity = (opacity > 0) ? 0 : 1
         } else {
             if (opacity < 1)
@@ -38,6 +38,7 @@ Item {
 
     MenuRow {
         id: rootMenu
+        sticky: true
 
         MenuButton {
             text: "File"
@@ -164,7 +165,7 @@ Item {
             text: "Record\nframes"
             closeMenuOnClick: false
             onClicked: {
-                myApp.timelineFlickable.userPlay = true
+                myApp.stage.timelinePlay = true
                 currentMenu = brushMenu
             }
         }
@@ -174,12 +175,17 @@ Item {
         id: brushMenu
 
         MenuButton {
-            text: "Move"
+            text: "Opacity"
+            closeMenuOnClick: false
+            onClicked: currentMenu = opacitySliderMenu
+        }
+
+        MenuButton {
+            text: "Scale"
             onClicked: {
                 myApp.model.clearRecordState();
-                myApp.model.recordsPositionX = true;
-                myApp.model.recordsPositionY = true;
-                if (myApp.timelineFlickable.userPlay)
+                myApp.model.recordsScale = true;
+                if (myApp.stage.timelinePlay)
                     currentMenu = recordSliderMenu
             }
         }
@@ -189,25 +195,20 @@ Item {
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsRotation = true;
-                if (myApp.timelineFlickable.userPlay)
+                if (myApp.stage.timelinePlay)
                     currentMenu = recordSliderMenu
             }
         }
 
         MenuButton {
-            text: "Scale"
+            text: "Move"
             onClicked: {
                 myApp.model.clearRecordState();
-                myApp.model.recordsScale = true;
-                if (myApp.timelineFlickable.userPlay)
+                myApp.model.recordsPositionX = true;
+                myApp.model.recordsPositionY = true;
+                if (myApp.stage.timelinePlay)
                     currentMenu = recordSliderMenu
             }
-        }
-
-        MenuButton {
-            text: "Opacity"
-            closeMenuOnClick: false
-            onClicked: currentMenu = opacitySliderMenu
         }
     }
 
@@ -217,6 +218,7 @@ Item {
 
     PlaySlider {
         id: playSliderMenu
+        sticky: myApp.timelineFlickable.userPlay
 
         MenuButton {
             text: myApp.timelineFlickable.userPlay ? "Stop" : "Play"
@@ -256,6 +258,7 @@ Item {
 
     PlaySlider {
         id: recordSliderMenu
+        sticky: myApp.stage.timelinePlay
 
         MenuButton {
             text: myApp.stage.timelinePlay ? "Stop" : "Record"
@@ -264,19 +267,12 @@ Item {
             textColor: "white"
             onClicked: {
                 if (myApp.stage.timelinePlay) {
-                    menuController.opacity = 0
                     myApp.stage.timelinePlay = false
+                    currentMenu = rootMenu
                     myApp.model.unselectAllSprites()
                 } else {
                     myApp.stage.timelinePlay = true
                 }
-            }
-        }
-
-        onIsCurrentChanged: {
-            if (isCurrent) {
-                menuController.opacity = 0
-                myApp.stage.timelinePlay = true
             }
         }
     }
