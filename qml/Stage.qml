@@ -10,7 +10,6 @@ Item {
 
     property var pressStartPos: undefined
     property var currentAction: new Object()
-    property bool timelineWasPlaying: false
     property bool timelinePlay: false
 
     Rectangle {
@@ -53,7 +52,6 @@ Item {
 
         onPressed: {
             // start new action, drag or rotate:
-            timelineWasPlaying = myApp.timelineFlickable.playing;
             var pos = {x:mouseX, y:mouseY}
             pressStartPos = pos;
 
