@@ -174,6 +174,14 @@ Item {
     MenuRow {
         id: brushMenu
 
+        function testAndSetRecordSlider()
+        {
+            if (myApp.stage.timelinePlay) {
+                recordSliderMenu.sticky = true
+                currentMenu = recordSliderMenu
+            }
+        }
+
         MenuButton {
             text: "Opacity"
             closeMenuOnClick: false
@@ -185,8 +193,7 @@ Item {
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsScale = true;
-                if (myApp.stage.timelinePlay)
-                    currentMenu = recordSliderMenu
+                brushMenu.testAndSetRecordSlider()
             }
         }
 
@@ -195,8 +202,7 @@ Item {
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsRotation = true;
-                if (myApp.stage.timelinePlay)
-                    currentMenu = recordSliderMenu
+                brushMenu.testAndSetRecordSlider()
             }
         }
 
@@ -206,8 +212,7 @@ Item {
                 myApp.model.clearRecordState();
                 myApp.model.recordsPositionX = true;
                 myApp.model.recordsPositionY = true;
-                if (myApp.stage.timelinePlay)
-                    currentMenu = recordSliderMenu
+                brushMenu.testAndSetRecordSlider()
             }
         }
     }
@@ -221,7 +226,7 @@ Item {
         sticky: myApp.timelineFlickable.userPlay
 
         MenuButton {
-            text: myApp.timelineFlickable.userPlay ? "Stop" : "Play"
+            text: (myApp.model.targetMsPerFrame / myApp.model.msPerFrame).toFixed(1)
             closeMenuOnClick: false
             color: "blue"
             textColor: "white"
@@ -258,10 +263,9 @@ Item {
 
     PlaySlider {
         id: recordSliderMenu
-        sticky: myApp.stage.timelinePlay
 
         MenuButton {
-            text: myApp.stage.timelinePlay ? "Stop" : "Record"
+            text: (myApp.model.targetMsPerFrame / myApp.model.msPerFrame).toFixed(1)
             closeMenuOnClick: false
             color: "blue"
             textColor: "white"
@@ -275,6 +279,9 @@ Item {
                 }
             }
         }
+
+        onXChanged: sticky = true
+        onVisibleChanged: if (visible) sticky = false
     }
 
     FlickableMouseArea {
