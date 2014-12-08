@@ -44,8 +44,6 @@ ApplicationWindow {
 
             if (event.key === Qt.Key_P) {
                 timelineFlickable.userPlay = !timelineFlickable.userPlay;
-            } else if (event.key === Qt.Key_M) {
-               menuToggleButton.clicked(1)
             } else if (event.key === Qt.Key_R) {
                 menu.interactionPlayButton.checked = !menu.interactionPlayButton.checked;
             } else if (event.key === Qt.Key_S) {
