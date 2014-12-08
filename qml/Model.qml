@@ -130,8 +130,8 @@ QtObject {
         if (select) {
             selectedSprites.push(sprite)
             var index = sprites.indexOf(sprite);
-            selectedSpritesUpdated(-1, index);
             hasSelection = selectedSprites.length !== 0
+            selectedSpritesUpdated(-1, index);
         } else {
             selectedSprites.splice(selectedSprites.indexOf(sprite), 1);
             index = sprites.indexOf(sprite);
