@@ -21,7 +21,6 @@ QtObject {
     signal keyframesUpdated(var sprite)
     signal parentHierarchyChanged(var sprite)
 
-    property bool inLiveDrag: false
     property bool recordsPositionX: true
     property bool recordsPositionY: true
     property bool recordsRotation: false

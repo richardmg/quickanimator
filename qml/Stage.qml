@@ -12,7 +12,6 @@ Item {
         target: flickable
 
         onPressed: {
-            myApp.model.inLiveDrag = true;
             _prevState = createState(mouseX, mouseY);
             updateKeyframes(_prevState, _prevState, "beginKeyframeSequence");
             myApp.timelineFlickable.recordPlay = myApp.model.recording;
@@ -28,7 +27,6 @@ Item {
             var newState = createState(mouseX, mouseY);
             updateKeyframes(_prevState, newState, "endKeyframeSequence");
             selectOrUnselectSprites(mouseX, mouseY, clickCount)
-            myApp.model.inLiveDrag = false;
             myApp.timelineFlickable.recordPlay = false;
         }
     }

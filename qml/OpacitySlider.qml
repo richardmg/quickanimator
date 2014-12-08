@@ -12,28 +12,20 @@ MenuRow {
         guard = false
     }
 
-    function writeOpacityToKeyframes()
-    {
-        for (var i in myApp.model.selectedSprites) {
-            var sprite = myApp.model.selectedSprites[i];
-            var changes = {
-                opacity: x / (parent.width - width)
-            }
-            sprite.updateKeyframe(myApp.model.time, changes, {propagate:!myApp.model.recording});
-        }
-    }
-
     onIsCurrentChanged: syncWithSelectedLayer()
-    onXChanged: if (!guard) writeOpacityToKeyframes()
 
     Connections {
         target: opacityMenu.isCurrent ? myApp.model : null
         onSelectedSpritesUpdated: opacityMenu.syncWithSelectedLayer()
-        onTimeChanged: {
-            if (flickable.isPressed && myApp.model.recording)
-                opacityMenu.writeOpacityToKeyframes()
-            else
-                opacityMenu.syncWithSelectedLayer()
+    }
+
+    onXChanged: {
+        if (guard)
+            return;
+        for (var i in myApp.model.selectedSprites) {
+            var sprite = myApp.model.selectedSprites[i];
+            var changes = { opacity: x / (parent.width - width) }
+            sprite.updateKeyframeSequence(myApp.model.time, changes);
         }
     }
 
@@ -41,15 +33,21 @@ MenuRow {
         target: opacityMenu.isCurrent ? flickable : null
         onPressed: {
             myApp.model.recordsOpacity = true
-            myApp.model.inLiveDrag = true
-            if (myApp.model.recording)
-                myApp.timelineFlickable.recordPlay = true;
+            for (var i in myApp.model.selectedSprites) {
+                var sprite = myApp.model.selectedSprites[i];
+                var changes = { opacity: sprite.opacity }
+                sprite.beginKeyframeSequence(myApp.model.time, changes);
+            }
+            myApp.timelineFlickable.recordPlay = myApp.model.recording;
         }
         onReleased: {
             myApp.model.recordsOpacity = false
-            myApp.model.inLiveDrag = false
-            if (myApp.model.recording)
-                myApp.timelineFlickable.recordPlay = false;
+            for (var i in myApp.model.selectedSprites) {
+                var sprite = myApp.model.selectedSprites[i];
+                var changes = { opacity: sprite.opacity }
+                sprite.endKeyframeSequence(myApp.model.time, changes);
+            }
+            myApp.timelineFlickable.recordPlay = false;
         }
     }
 
