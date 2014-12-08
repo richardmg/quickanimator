@@ -10,4 +10,5 @@ Row {
     Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
     readonly property bool isCurrent: root === currentMenu
     property bool sticky: false
+    property bool unflickable: false
 }

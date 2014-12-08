@@ -317,6 +317,8 @@ Item {
         }
 
         onMomentumXUpdated: {
+            if (currentMenu.unflickable)
+                return;
             var overshootDist = (momentumX > 0) ? currentMenu.x - flickStopRight : flickStopLeft - currentMenu.x;
             var factor = Math.max(0, Math.min(1, overshootDist / overshoot))
             var increment = momentumX * Math.pow(1 - factor, 2);
@@ -326,10 +328,14 @@ Item {
         }
 
         onPressed: {
+            if (currentMenu.unflickable)
+                return;
             bounceAnimation.stop();
         }
 
         onReleased: {
+            if (currentMenu.unflickable)
+                return;
             bounceMenuBack(true)
 
             if (!clickCount)

@@ -3,20 +3,32 @@ import QtQuick 2.0
 MenuRow {
     id: opacityMenu
     property bool guard: false
+    property Item lastSprite: null
+
+    unflickable: !myApp.model.hasSelection
 
     function syncWithSelectedLayer() {
-        if (!myApp.model.hasSelection)
+        if (myApp.model.hasSelection) {
+            var sprite = myApp.model.selectedSprites[0];
+            lastSprite = sprite;
+        } else {
+            var useLast = myApp.model.sprites.indexOf(lastSprite) != -1;
+            if (useLast)
+                sprite = lastSprite;
+        }
+        if (!sprite)
             return
         guard = true
-        x = myApp.model.selectedSprites[0].opacity * (parent.width - width)
+        x = sprite.opacity * (parent.width - width)
         guard = false
     }
 
     onIsCurrentChanged: syncWithSelectedLayer()
 
     Connections {
-        target: opacityMenu.isCurrent ? myApp.model : null
-        onSelectedSpritesUpdated: opacityMenu.syncWithSelectedLayer()
+        target: isCurrent ? myApp.model : null
+        onSelectedSpritesUpdated: syncWithSelectedLayer()
+        onTimeChanged: syncWithSelectedLayer()
     }
 
     onXChanged: {
@@ -54,6 +66,8 @@ MenuRow {
     Rectangle {
         width: 70
         height: parent.height
-        color: "blue"
+        color: unflickable ? "transparent" : border.color
+        border.color: "blue"
+        border.width: 4
     }
 }
