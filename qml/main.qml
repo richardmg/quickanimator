@@ -22,6 +22,8 @@ ApplicationWindow {
     property Style style: Style {}
     property Model model: Model {}
 
+    property bool flicking: !model.hasSelection || menuToggleButton.pressed
+
     property bool controlPressed: false
     onControlPressedChanged: menuToggleButton.setPressed(controlPressed, true)
 
@@ -65,7 +67,7 @@ ApplicationWindow {
         Stage {
             id: stage
             anchors.fill: parent
-            flickable: (controlPressed || flickable.touchCount > 1) ? null : flickable
+            flickable: flickable
         }
 
         TimelineCanvas {
@@ -87,7 +89,7 @@ ApplicationWindow {
             font.pixelSize: 15
             horizontalAlignment: Text.AlignRight
             opacity: timeline.opacity
-            text: !myApp.model.hasSelection || !stage.flickable ? "Flick"
+            text: myApp.flicking ? "Flick"
                   : myApp.model.recordsPositionX || myApp.model.recordsPositionY ? "Move"
                   : myApp.model.recordsRotation ? "Rotate"
                   : myApp.model.recordsScale ? "Scale"
@@ -135,7 +137,7 @@ ApplicationWindow {
         TimelineFlickable {
             id: timelineFlickable
             anchors.fill: parent
-            flickable: (model.hasSelection && !controlPressed && flickable.touchCount < 2) ? null : flickable
+            flickable: myApp.flicking ? flickable : null
         }
 
         FlickableMouseArea {

@@ -12,22 +12,39 @@ Item {
         target: flickable
 
         onPressed: {
-            _prevState = createState(mouseX, mouseY);
-            updateKeyframes(_prevState, _prevState, "beginKeyframeSequence");
-            myApp.timelineFlickable.recordPlay = myApp.model.recording;
+            if (!myApp.flicking) {
+                _prevState = createState(mouseX, mouseY);
+                updateKeyframes(_prevState, _prevState, "beginKeyframeSequence");
+                myApp.timelineFlickable.recordPlay = myApp.model.recording;
+            }
         }
 
         onPositionChanged: {
-            var newState = createState(mouseX, mouseY);
-            updateKeyframes(_prevState, newState, "updateKeyframeSequence");
-            _prevState = newState;
+            if (_prevState) {
+                var newState = createState(mouseX, mouseY);
+                updateKeyframes(_prevState, newState, "updateKeyframeSequence");
+                _prevState = newState;
+            }
         }
 
         onReleased: {
-            var newState = createState(mouseX, mouseY);
-            updateKeyframes(_prevState, newState, "endKeyframeSequence");
+            if (_prevState) {
+                var newState = createState(mouseX, mouseY);
+                updateKeyframes(_prevState, newState, "endKeyframeSequence");
+                _prevState = null;
+            }
             selectOrUnselectSprites(mouseX, mouseY, clickCount)
             myApp.timelineFlickable.recordPlay = false;
+        }
+    }
+
+    Connections {
+        target: myApp
+        onFlickingChanged: {
+            if (myApp.flicking && _prevState) {
+                updateKeyframes(_prevState, _prevState, "endKeyframeSequence");
+                _prevState = null;
+            }
         }
     }
 
