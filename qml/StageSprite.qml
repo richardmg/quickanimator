@@ -38,8 +38,8 @@ Item {
     {
         _updateCurrentKeyframes(time);
         spriteTime = time;
-        if (selected && model.inLiveDrag)
-            _interpolateWithRecordOptionFilter(spriteTime)
+        if (selected && _firstKeyframeInSequence)
+            _interpolateWithSequenceFilter(spriteTime)
         else
             _interpolate(spriteTime)
     }
@@ -299,7 +299,7 @@ Item {
         }
     }
 
-    function _interpolateWithRecordOptionFilter(time)
+    function _interpolateWithSequenceFilter(time)
     {
         var keyframe = _fromKeyframe.reparentKeyframe ? _fromKeyframe.reparentKeyframe : _fromKeyframe;
         visible = keyframe.visible;
@@ -440,7 +440,7 @@ Item {
         parent = null;
         parent = newParent
 
-        if (!myApp.model.inLiveDrag)
+        if (!_firstKeyframeInSequence)
             _interpolate(spriteTime);
     }
 
