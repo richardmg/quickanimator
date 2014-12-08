@@ -5,11 +5,8 @@ Item {
     id: root
 
     property FlickableMouseArea flickable: null
-
     property alias sprites: sprites
-
-    property var pressStartPos: undefined
-    property var currentAction: new Object()
+    property var _prevState: new Object
 
     Rectangle {
         id: sprites
@@ -39,150 +36,25 @@ Item {
     Connections {
         target: flickable
 
-        function getAngleAndRadius(p1, p2)
-        {
-            var dx = p2.x - p1.x;
-            var dy = p1.y - p2.y;
-            return {
-                angle: (Math.atan2(dx, dy) / Math.PI) * 180,
-                radius: Math.sqrt(dx*dx + dy*dy)
-            }; 
-        }
-
         onPressed: {
-            // start new action, drag or rotate:
-            var pos = {x:mouseX, y:mouseY}
-            pressStartPos = pos;
-
             myApp.model.inLiveDrag = true;
-
-            if (myApp.model.recordsPositionX) {
-                currentAction = {
-                    x: pos.x,
-                    y: pos.y
-                };
-            } else if (myApp.model.selectedSprites.length !== 0) {
-                currentAction = getAngleAndRadius(rotationCenterItem, pos);
-            }
-
-            // Start the keyframe sequence by taking a snapshot the current
-            // position of the selected sprites.
-            for (var i in myApp.model.selectedSprites) {
-                var sprite = myApp.model.selectedSprites[i];
-                var changes = {}
-                if (model.recordsPositionX)
-                    changes.x = sprite.x;
-                if (model.recordsPositionY)
-                    changes.y = sprite.y;
-                if (myApp.model.recordsRotation)
-                    changes.transRotation = sprite.transRotation;
-                if (myApp.model.recordsScale) {
-                    changes.transScaleX = sprite.transScaleX;
-                    changes.transScaleY = sprite.transScaleY;
-                }
-                sprite.beginKeyframeSequence(myApp.model.time, changes);
-            }
-
-            if (myApp.model.recording)
-                myApp.timelineFlickable.recordPlay = true;
+            _prevState = createState(mouseX, mouseY);
+            updateKeyframes(_prevState, _prevState, "beginKeyframeSequence");
+            myApp.timelineFlickable.recordPlay = myApp.model.recording;
         }
 
         onPositionChanged: {
-            // drag or rotate current sprite:
-            var pos = {x:mouseX, y:mouseY}
-
-            if (myApp.model.selectedSprites.length !== 0) {
-                if (myApp.model.recordsPositionX) {
-                    // continue drag
-                    var dx = pos.x - currentAction.x;
-                    var dy = pos.y - currentAction.y;
-
-                    if (false /* todo: come up with solution */) {
-//                        // Move anchor
-//                        var layer = myApp.model.selectedSprites[0];
-//                        var sprite = layer.sprite
-//                        var keyframe = myApp.model.getOrCreateKeyframe(layer);
-//                        var globalPos = focusFrames.mapFromItem(sprite, keyframe.anchorX, keyframe.anchorY);
-//                        var localDelta = focusFrames.mapToItem(sprite, globalPos.x + dx, globalPos.y + dy);
-//                        keyframe.anchorX = localDelta.x;
-//                        keyframe.anchorY = localDelta.y;
-
-//                        // When changing origin of rotation, the focus rotate with it. But we want the focus
-//                        // to follow the mouse, so move the sprite back so the focus ends up under the mouse again:
-//                        var newGlobalPos = focusFrames.mapFromItem(sprite, keyframe.anchorX, keyframe.anchorY);
-//                        sprite.x -= (newGlobalPos.x - globalPos.x) - dx;
-//                        sprite.y -= (newGlobalPos.y - globalPos.y) - dy;
-//                        keyframe.x = sprite.x;
-//                        keyframe.y = sprite.y;
-//                        myApp.model.syncReparentSprites(layer);
-//                        if (myApp.model.recording)
-//                            myApp.timelineFlickable.recordPlay = true;
-                    } else {
-                        // Move selected sprites
-                        for (var i in myApp.model.selectedSprites) {
-                            var sprite = myApp.model.selectedSprites[i];
-                            var globalPos = sprites.mapFromItem(sprite.parent, sprite.x, sprite.y);
-                            var newSpritePos = sprites.mapToItem(sprite.parent, globalPos.x + dx, globalPos.y + dy);
-
-                            var changes = {}
-                            if (model.recordsPositionX)
-                                changes.x = newSpritePos.x;
-                            if (model.recordsPositionY)
-                                changes.y = newSpritePos.y;
-                            var keyframe = sprite.updateKeyframeSequence(myApp.model.time, changes)
-                        }
-                    }
-
-                    currentAction.x = pos.x;
-                    currentAction.y = pos.y;
-                } else {
-                    // continue rotate / scale
-                    var aar = getAngleAndRadius(rotationCenterItem, pos);
-
-                    for (i in myApp.model.selectedSprites) {
-                        sprite = myApp.model.selectedSprites[i];
-
-                        changes = {}
-                        if (myApp.model.recordsRotation) {
-                            var a = aar.angle - currentAction.angle;
-                            var b = a - 360;
-                            var c = a + 360;
-                            a = Math.abs(a) < Math.abs(b) ? a : b;
-                            a = Math.abs(a) < Math.abs(c) ? a : c;
-                            changes.transRotation = sprite.transRotation + a;
-                        }
-                        if (myApp.model.recordsScale) {
-                            changes.transScaleX = sprite.transScaleX * (aar.radius / currentAction.radius);
-                            changes.transScaleY = sprite.transScaleY * (aar.radius / currentAction.radius);
-                        }
-                        sprite.updateKeyframeSequence(myApp.model.time, changes);
-                    }
-                    currentAction.angle = aar.angle;
-                    currentAction.radius = aar.radius;
-                }
-            }
+            var newState = createState(mouseX, mouseY);
+            updateKeyframes(_prevState, newState, "updateKeyframeSequence");
+            _prevState = newState;
         }
 
         onReleased: {
-            for (var i in myApp.model.selectedSprites) {
-                var sprite = myApp.model.selectedSprites[i];
-                var changes = {}
-                if (model.recordsPositionX)
-                    changes.x = sprite.x;
-                if (model.recordsPositionY)
-                    changes.y = sprite.y;
-                if (myApp.model.recordsRotation)
-                    changes.transRotation = sprite.transRotation;
-                if (myApp.model.recordsScale) {
-                    changes.transScaleX = sprite.transScaleX;
-                    changes.transScaleY = sprite.transScaleY;
-                }
-                sprite.endKeyframeSequence(myApp.model.time, changes);
-            }
+            var newState = createState(mouseX, mouseY);
+            updateKeyframes(_prevState, newState, "endKeyframeSequence");
 
             var m = myApp.model;
-            var pos = {x:mouseX, y:mouseY}
-            var sprite = m.getSpriteAtScenePos(pos);
+            var sprite = getSpriteAtPos(newState);
 
             if (clickCount == 1) {
                 currentAction = {};
@@ -200,11 +72,67 @@ Item {
         }
     }
 
+    function createState(mouseX, mouseY)
+    {
+        var dx = mouseX - rotationCenterItem.x;
+        var dy = rotationCenterItem.y - mouseY;
+        return {
+            x:mouseX,
+            y:mouseY,
+            angle: (Math.atan2(dx, dy) / Math.PI) * 180,
+            radius: Math.sqrt(dx*dx + dy*dy)
+        }
+    }
+
     function unselectAllSprites()
     {
         var m = myApp.model;
         for (var i = m.selectedSprites.length - 1; i >= 0; --i)
             m.selectSprite(m.selectedSprites[i], false)
+    }
+
+    function getSpriteAtPos(p)
+    {
+        for (var i = sprites.children.length - 1; i >= 0; --i) {
+            var sprite = sprites.children[i];
+            var m = sprite.mapFromItem(sprites, p.x, p.y);
+            if (m.x >= 0 && m.x <= sprite.width && m.y >= 0 && m.y <= sprite.height)
+                return sprite
+        }
+    }
+
+    function updateKeyframes(_prevState, newState, call)
+    {
+        for (var i in myApp.model.selectedSprites) {
+            var sprite = myApp.model.selectedSprites[i];
+            var changes = new Object
+
+            if (model.recordsPositionX || myApp.model.recordsPositionY) {
+                var dx = newState.x - _prevState.x;
+                var dy = newState.y - _prevState.y;
+                var globalPos = sprites.mapFromItem(sprite.parent, sprite.x, sprite.y);
+                var newSpritePos = sprites.mapToItem(sprite.parent, globalPos.x + dx, globalPos.y + dy);
+                if (model.recordsPositionX)
+                    changes.x = newSpritePos.x;
+                if (model.recordsPositionY)
+                    changes.y = newSpritePos.y;
+            } else {
+                if (myApp.model.recordsRotation) {
+                    var a = newState.angle - _prevState.angle;
+                    var b = a - 360;
+                    var c = a + 360;
+                    a = Math.abs(a) < Math.abs(b) ? a : b;
+                    a = Math.abs(a) < Math.abs(c) ? a : c;
+                    changes.transRotation = sprite.transRotation + a;
+                }
+                if (myApp.model.recordsScale) {
+                    changes.transScaleX = sprite.transScaleX * (newState.radius / _prevState.radius);
+                    changes.transScaleY = sprite.transScaleY * (newState.radius / _prevState.radius);
+                }
+            }
+
+            sprite[call](myApp.model.time, changes);
+        }
     }
 
     Component {

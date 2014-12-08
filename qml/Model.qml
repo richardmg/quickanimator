@@ -227,16 +227,6 @@ QtObject {
         sprites.splice(newIndex, 0, layer);
     }
 
-    function getSpriteAtScenePos(p)
-    {
-        for (var i=sprites.length - 1; i>=0; --i) {
-            var sprite = sprites[i];
-            var m = sprite.mapFromItem(myApp.stage.sprites, p.x, p.y);
-            if (m.x >= 0 && m.x <= sprite.width && m.y >= 0 && m.y <= sprite.height)
-                return sprites[i]
-        }
-    }
-
     property FileIO file: FileIO { source: "save.anim.js" }
 
     function saveJSON()
