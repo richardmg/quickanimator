@@ -22,6 +22,9 @@ ApplicationWindow {
     property Style style: Style {}
     property Model model: Model {}
 
+    property bool controlPressed: false
+    onControlPressedChanged: menuToggleButton.setPressed(controlPressed)
+
     FocusScope {
         id: focusScope
         anchors.fill: parent
@@ -36,6 +39,8 @@ ApplicationWindow {
 
             if (!(event.modifiers & Qt.ControlModifier))
                 return;
+
+            controlPressed = true
 
             if (event.key === Qt.Key_P) {
                 timelineFlickable.userPlay = !timelineFlickable.userPlay;
@@ -54,10 +59,14 @@ ApplicationWindow {
             }
         }
 
+        Keys.onReleased: {
+            controlPressed = false
+        }
+
         Stage {
             id: stage
             anchors.fill: parent
-            flickable: (menuToggleButton.pressed || flickable.touchCount > 1) ? null : flickable
+            flickable: (controlPressed || flickable.touchCount > 1) ? null : flickable
         }
 
         TimelineCanvas {
@@ -127,7 +136,7 @@ ApplicationWindow {
         TimelineFlickable {
             id: timelineFlickable
             anchors.fill: parent
-            flickable: (model.hasSelection && !menuToggleButton.pressed && flickable.touchCount < 2) ? null : flickable
+            flickable: (model.hasSelection && !controlPressed && flickable.touchCount < 2) ? null : flickable
         }
 
         FlickableMouseArea {
