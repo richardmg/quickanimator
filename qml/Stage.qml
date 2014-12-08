@@ -8,6 +8,50 @@ Item {
     property alias sprites: sprites
     property var _prevState: new Object
 
+    Connections {
+        target: flickable
+
+        onPressed: {
+            myApp.model.inLiveDrag = true;
+            _prevState = createState(mouseX, mouseY);
+            updateKeyframes(_prevState, _prevState, "beginKeyframeSequence");
+            myApp.timelineFlickable.recordPlay = myApp.model.recording;
+        }
+
+        onPositionChanged: {
+            var newState = createState(mouseX, mouseY);
+            updateKeyframes(_prevState, newState, "updateKeyframeSequence");
+            _prevState = newState;
+        }
+
+        onReleased: {
+            var newState = createState(mouseX, mouseY);
+            updateKeyframes(_prevState, newState, "endKeyframeSequence");
+            selectOrUnselectSprites(mouseX, mouseY, clickCount)
+            myApp.model.inLiveDrag = false;
+            myApp.timelineFlickable.recordPlay = false;
+        }
+    }
+
+    Connections {
+        target: myApp.model
+
+        onSelectedSpritesUpdated: {
+            if (unselectedSprite != -1) {
+                var sprite = myApp.model.sprites[unselectedSprite];
+                sprite.focusIndicator.visible = false;
+                sprite.focusIndicator.destroy();
+                sprite.focusIndicator = null;
+            }
+            if (selectedSprite != -1) {
+                sprite = myApp.model.sprites[selectedSprite];
+                sprite.focusIndicator = focusIndicatorComponent.createObject(focusFrames);
+                sprite.focusIndicator.target = sprite;
+                sprite.focusIndicator.syncFocusPosition();
+            }
+        }
+    }
+
     Rectangle {
         id: sprites
         anchors.fill: parent
@@ -33,45 +77,6 @@ Item {
         }
     }
 
-    Connections {
-        target: flickable
-
-        onPressed: {
-            myApp.model.inLiveDrag = true;
-            _prevState = createState(mouseX, mouseY);
-            updateKeyframes(_prevState, _prevState, "beginKeyframeSequence");
-            myApp.timelineFlickable.recordPlay = myApp.model.recording;
-        }
-
-        onPositionChanged: {
-            var newState = createState(mouseX, mouseY);
-            updateKeyframes(_prevState, newState, "updateKeyframeSequence");
-            _prevState = newState;
-        }
-
-        onReleased: {
-            var newState = createState(mouseX, mouseY);
-            updateKeyframes(_prevState, newState, "endKeyframeSequence");
-
-            var model = myApp.model;
-            var sprite = getSpriteAtPos(newState);
-
-            if (clickCount == 1) {
-                if (model.hasSelection) {
-                    for (var i = model.selectedSprites.length - 1; i >= 0; --i)
-                        model.selectSprite(model.selectedSprites[i], false)
-                } else if (sprite) {
-                    model.selectSprite(sprite, true);
-                }
-            } else if (clickCount == 2 && sprite) {
-                model.selectSprite(sprite, true);
-            }
-
-            myApp.model.inLiveDrag = false;
-            myApp.timelineFlickable.recordPlay = false;
-        }
-    }
-
     function createState(mouseX, mouseY)
     {
         var dx = mouseX - rotationCenterItem.x;
@@ -84,11 +89,28 @@ Item {
         }
     }
 
-    function getSpriteAtPos(p)
+    function selectOrUnselectSprites(mouseX, mouseY, clickCount)
+    {
+        var model = myApp.model;
+        var sprite = getSpriteAtPos(mouseX, mouseY);
+
+        if (clickCount === 1) {
+            if (model.hasSelection) {
+                for (var i = model.selectedSprites.length - 1; i >= 0; --i)
+                    model.selectSprite(model.selectedSprites[i], false)
+            } else if (sprite) {
+                model.selectSprite(sprite, true);
+            }
+        } else if (clickCount === 2 && sprite) {
+            model.selectSprite(sprite, true);
+        }
+    }
+
+    function getSpriteAtPos(x, y)
     {
         for (var i = sprites.children.length - 1; i >= 0; --i) {
             var sprite = sprites.children[i];
-            var m = sprite.mapFromItem(sprites, p.x, p.y);
+            var m = sprite.mapFromItem(sprites, x, y);
             if (m.x >= 0 && m.x <= sprite.width && m.y >= 0 && m.y <= sprite.height)
                 return sprite
         }
@@ -152,7 +174,6 @@ Item {
                 }
             }
 
-
             function syncFocusPosition()
             {
                 var mapped = focusFrames.mapFromItem(target, target.anchorX, target.anchorY);
@@ -167,25 +188,6 @@ Item {
                 onAnchorXChanged: syncFocusPosition();
                 onAnchorYChanged: syncFocusPosition();
                 onParentChanged: syncFocusPosition();
-            }
-        }
-    }
-
-    Connections {
-        target: myApp.model
-
-        onSelectedSpritesUpdated: {
-            if (unselectedSprite != -1) {
-                var sprite = myApp.model.sprites[unselectedSprite];
-                sprite.focusIndicator.visible = false;
-                sprite.focusIndicator.destroy();
-                sprite.focusIndicator = null;
-            }
-            if (selectedSprite != -1) {
-                sprite = myApp.model.sprites[selectedSprite];
-                sprite.focusIndicator = focusIndicatorComponent.createObject(focusFrames);
-                sprite.focusIndicator.target = sprite;
-                sprite.focusIndicator.syncFocusPosition();
             }
         }
     }
