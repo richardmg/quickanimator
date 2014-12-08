@@ -23,7 +23,7 @@ ApplicationWindow {
     property Model model: Model {}
 
     property bool controlPressed: false
-    onControlPressedChanged: menuToggleButton.setPressed(controlPressed)
+    onControlPressedChanged: menuToggleButton.setPressed(controlPressed, true)
 
     FocusScope {
         id: focusScope

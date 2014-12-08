@@ -17,6 +17,9 @@ Rectangle {
     width: 100
     radius: 4
 
+    property double pressTime: 0
+    property int clickCount: 0
+
     onClicked: {
         if (checkable)
             checked = !checked;
@@ -44,8 +47,6 @@ Rectangle {
         property TouchPoint activeTouchPoint: null
         touchPoints: [ TouchPoint { id: tp1; }, TouchPoint { id: tp2; } ]
         property TouchPoint tp: null
-        property double pressTime: 0
-        property int clickCount: 0
 
         onPressed: {
             if (tp1.pressed && contains(Qt.point(tp1.x, tp1.y)))
@@ -54,7 +55,7 @@ Rectangle {
                 tp = tp2;
             else
                 return;
-            setPressed(true);
+            setPressed(true, true);
         }
 
         onReleased: {
