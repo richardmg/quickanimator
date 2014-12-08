@@ -53,18 +53,18 @@ Item {
             var newState = createState(mouseX, mouseY);
             updateKeyframes(_prevState, newState, "endKeyframeSequence");
 
-            var m = myApp.model;
+            var model = myApp.model;
             var sprite = getSpriteAtPos(newState);
 
             if (clickCount == 1) {
-                currentAction = {};
-
-                if (m.hasSelection)
-                    unselectAllSprites()
-                else if (sprite)
-                    m.selectSprite(sprite, true);
+                if (model.hasSelection) {
+                    for (var i = model.selectedSprites.length - 1; i >= 0; --i)
+                        model.selectSprite(model.selectedSprites[i], false)
+                } else if (sprite) {
+                    model.selectSprite(sprite, true);
+                }
             } else if (clickCount == 2 && sprite) {
-                m.selectSprite(sprite, true);
+                model.selectSprite(sprite, true);
             }
 
             myApp.model.inLiveDrag = false;
@@ -82,13 +82,6 @@ Item {
             angle: (Math.atan2(dx, dy) / Math.PI) * 180,
             radius: Math.sqrt(dx*dx + dy*dy)
         }
-    }
-
-    function unselectAllSprites()
-    {
-        var m = myApp.model;
-        for (var i = m.selectedSprites.length - 1; i >= 0; --i)
-            m.selectSprite(m.selectedSprites[i], false)
     }
 
     function getSpriteAtPos(p)
