@@ -14,6 +14,8 @@ Item {
         }
     }
 
+    function showEditMenu() { currentMenu = editMenu }
+
     property Row currentMenu: rootMenu
 
     Rectangle {

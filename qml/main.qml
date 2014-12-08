@@ -44,10 +44,11 @@ ApplicationWindow {
 
             if (event.key === Qt.Key_P) {
                 timelineFlickable.userPlay = !timelineFlickable.userPlay;
-            } else if (event.key === Qt.Key_R) {
-                menu.interactionPlayButton.checked = !menu.interactionPlayButton.checked;
             } else if (event.key === Qt.Key_S) {
                 searchView.visible = true
+            } else if (event.key === Qt.Key_E) {
+                menuController.showEditMenu();
+                menuToggleButton.clicked(1)
             } else if (event.key === Qt.Key_Left) {
                 model.setTime(0);
             } else if (event.key === Qt.Key_Up) {
