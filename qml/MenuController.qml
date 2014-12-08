@@ -183,6 +183,24 @@ Item {
         }
 
         MenuButton {
+            text: "Offset"
+            closeMenuOnClick: false
+            onClicked: currentMenu = opacitySliderMenu
+        }
+
+        MenuButton {
+            text: "Parent"
+            closeMenuOnClick: false
+            onClicked: currentMenu = opacitySliderMenu
+        }
+
+        MenuButton {
+            text: "Anchors"
+            closeMenuOnClick: false
+            onClicked: currentMenu = opacitySliderMenu
+        }
+
+        MenuButton {
             text: "Opacity"
             closeMenuOnClick: false
             onClicked: currentMenu = opacitySliderMenu
