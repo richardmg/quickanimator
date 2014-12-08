@@ -51,6 +51,11 @@ Item {
                 ? getCurrentKeyframe() : _getKeyframeBinarySearch(intTime);
     }
 
+    function updateVolatileIndex(keyframe)
+    {
+        return getKeyframe(keyframe.time)
+    }
+
     function getCurrentKeyframe()
     {
         _updateCurrentKeyframes(spriteTime);
@@ -121,11 +126,13 @@ Item {
         var keyframe = getKeyframe(intTime);
 
         if (keyframe.time !== intTime) {
-            // The keyframe we're going to add needs to be a clone of its
-            // antecedent keyframe so that the changedProps logic below will work.
-            keyframe = cloneKeyframe(keyframe)
-            keyframe.time = intTime;
-            keyframe.volatileIndex++;
+            // The new keyframe needs to copy the old prop values from its antecedent
+            // keyframe so that the changedProps logic below will work.
+            var newKeyframe = createKeyframe(intTime)
+            for (var key in props)
+                newKeyframe[key] = keyframe[key];
+
+            keyframe = newKeyframe
             newKeyframeCreated = true;
         }
 
@@ -133,7 +140,7 @@ Item {
             // Before we update keyframe, store original values in keyframe.changedProps
             // so that we can determine later if subsequent keyframes need propagation
             var changedProps = new Object
-            for (var key in props)
+            for (key in props)
                 changedProps[key] = keyframe[key];
             keyframe.changedProps = changedProps;
         }
