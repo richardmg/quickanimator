@@ -52,6 +52,7 @@ Item {
     }
 
     property var _pressTime
+    property var _updateTime
     property int _clickCount: 0
     property real _pressMouseX
     property real _pressMouseY
@@ -190,9 +191,11 @@ Item {
             root.isPressed = true
             root.pressed(mouseX, mouseY)
         } else {
-            animateMomentumToRest(1);
-
+            var timeSinceUpdate = new Date().getTime() - _updateTime;
             var timeSincePress = new Date().getTime() - _pressTime;
+
+            animateMomentumToRest(timeSinceUpdate < 150 ? 1 : Number.MAX_VALUE);
+
             var click = timeSincePress < 300
                     && Math.abs(mouseX - _pressMouseX) < 10
                     && Math.abs(mouseY - _pressMouseY) < 10;
@@ -214,6 +217,7 @@ Item {
 
         positionChanged(mx, my)
 
+        _updateTime = (new Date()).getTime();
         var prevMomentumX = momentumX;
         var prevMomentumY = momentumY;
         var distx = mouseX - _prevMouseX
