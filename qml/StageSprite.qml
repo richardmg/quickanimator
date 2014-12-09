@@ -188,23 +188,21 @@ Item {
             }
         }
 
-        print("--------------------------------")
-
-//        // If a prop in an unupdated keyframe had the same value as its antecedent updated keyframe
-//        // before it got updated, we update the susequent keyframe with the same changes as well.
-//        changedProps = lastKeyframeInSequence.changedProps
-//        for (i = lastKeyframeInSequence.volatileIndex + 1; i < keyframes.length; ++i) {
-//            keyframe = keyframes[i];
-//            var keyframeModified = false
-//            for (key in changedProps) {
-//                if (keyframe[key] === changedProps[key]) {
-//                    keyframe[key] = lastKeyframeInSequence[key];
-//                    keyframeModified = true
-//                }
-//            }
-//            if (!keyframeModified)
-//                break;
-//        }
+        // If a prop in an unupdated keyframe had the same value as its antecedent updated keyframe
+        // before it got updated, we update the susequent keyframe with the same changes as well.
+        changedProps = lastKeyframeInSequence.changedProps
+        for (i = lastKeyframeInSequence.volatileIndex + 1; i < keyframes.length; ++i) {
+            keyframe = keyframes[i];
+            var keyframeModified = false
+            for (key in changedProps) {
+                if (keyframe[key] === changedProps[key]) {
+                    keyframe[key] = lastKeyframeInSequence[key];
+                    keyframeModified = true
+                }
+            }
+            if (!keyframeModified)
+                break;
+        }
 
         lastKeyframeInSequence.changedProps = null;
         _firstKeyframeInSequence.changedProps = null;

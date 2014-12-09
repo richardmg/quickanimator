@@ -17,7 +17,13 @@ Item {
         target: flickable
         onAnimatingChanged: updatePlayAnimation();
         onMomentumXUpdated: myApp.model.setTime(myApp.model.time - (flickable.momentumX * 0.1));
-        onReleased: if (clickCount == 1) userPlay = false;
+        onReleased: if (clickCount == 1) startPlayTimer.restart()
+    }
+
+    Timer {
+        id: startPlayTimer
+        interval: 100
+        onTriggered: userPlay = myApp.model.hasSelection ? false : !userPlay
     }
 
     function updatePlayAnimation()
