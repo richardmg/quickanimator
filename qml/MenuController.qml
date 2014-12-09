@@ -360,8 +360,6 @@ Item {
 
             if (child && child.isButton)
                 child.clicked();
-            else
-                bounceMenuBack(false)
         }
     }
 
