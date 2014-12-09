@@ -97,6 +97,7 @@ ApplicationWindow {
                   : myApp.model.recordsPositionX || myApp.model.recordsPositionY ? "Move"
                   : myApp.model.recordsRotation ? "Rotate"
                   : myApp.model.recordsScale ? "Scale"
+                  : myApp.model.recordsOpacity ? "Opacity"
                   : "Unknown"
 
             anchors.right: recordingIndicator.left

@@ -234,7 +234,11 @@ Item {
         MenuButton {
             text: "Opacity"
             closeMenuOnClick: false
-            onClicked: currentMenu = opacitySliderMenu
+            menu: opacitySliderMenu
+            onClicked: {
+                myApp.model.clearRecordState();
+                myApp.model.recordsOpacity = true;
+            }
         }
 
         MenuButton {

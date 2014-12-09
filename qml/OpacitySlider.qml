@@ -4,6 +4,7 @@ MenuRow {
     id: opacityMenu
     property bool guard: false
     property Item lastSprite: null
+    property bool inSequence: false
 
     unflickable: !myApp.model.hasSelection
 
@@ -35,40 +36,47 @@ MenuRow {
         if (guard)
             return;
 
-        myApp.timeController.recordPlay = myApp.model.recording;
-        for (var i in myApp.model.selectedSprites) {
-            var sprite = myApp.model.selectedSprites[i];
-            var changes = { opacity: x / (parent.width - width) }
-            sprite.updateKeyframeSequence(myApp.model.time, changes);
+        if (beginRecordingTimer.running)
+            beginRecordingTimer.triggered();
+        if (inSequence) {
+            for (var i in myApp.model.selectedSprites) {
+                var sprite = myApp.model.selectedSprites[i];
+                var changes = { opacity: x / (parent.width - width) }
+                sprite.updateKeyframeSequence(myApp.model.time, changes);
+            }
         }
     }
 
     Connections {
         target: opacityMenu.isCurrent ? flickable : null
-        onPressed: {
-            beginRecordingTimer.restart();
-            myApp.model.recordsOpacity = true;
-            for (var i in myApp.model.selectedSprites) {
-                var sprite = myApp.model.selectedSprites[i];
-                var changes = { opacity: sprite.opacity }
-                sprite.beginKeyframeSequence(myApp.model.time, changes);
-            }
-        }
+        onPressed: beginRecordingTimer.restart();
         onReleased: {
-            myApp.model.recordsOpacity = false
-            for (var i in myApp.model.selectedSprites) {
-                var sprite = myApp.model.selectedSprites[i];
-                var changes = { opacity: sprite.opacity }
-                sprite.endKeyframeSequence(myApp.model.time, changes);
-            }
+            beginRecordingTimer.stop();
             myApp.timeController.recordPlay = false;
+            if (inSequence) {
+                for (var i in myApp.model.selectedSprites) {
+                    var sprite = myApp.model.selectedSprites[i];
+                    var changes = { opacity: sprite.opacity }
+                    sprite.endKeyframeSequence(myApp.model.time, changes);
+                }
+                inSequence = false;
+            }
         }
     }
 
     Timer {
         id: beginRecordingTimer
         interval: 500
-        onTriggered: myApp.timeController.recordPlay = myApp.model.recording;
+        onTriggered: {
+            stop();
+            myApp.timeController.recordPlay = myApp.model.recording;
+            for (var i in myApp.model.selectedSprites) {
+                var sprite = myApp.model.selectedSprites[i];
+                var changes = { opacity: sprite.opacity }
+                sprite.beginKeyframeSequence(myApp.model.time, changes);
+            }
+            inSequence = true;
+        }
     }
 
     Rectangle {
