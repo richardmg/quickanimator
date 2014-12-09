@@ -102,7 +102,7 @@ ApplicationWindow {
             anchors.rightMargin: 4
         }
 
-        Rectangle {
+        RecordingIndicator {
             id: recordingIndicator
             height: timeline.height - (y * 2)
             width: height
@@ -111,30 +111,6 @@ ApplicationWindow {
             anchors.top: parent.top
             anchors.right: parent.right
             anchors.margins: 2
-            opacity: timeline.opacity
-
-            SequentialAnimation {
-                running: model.hasSelection && stage.flickable && model.recording
-                onRunningChanged: if (!running) recordingIndicator.opacity = Qt.binding(function() { return timeline.opacity })
-                loops: Animation.Infinite
-                PauseAnimation { duration: 1000 }
-                PropertyAnimation {
-                    target: recordingIndicator
-                    property: "opacity"
-                    duration: 200
-                    easing.type: Easing.OutQuad
-                    to: 0.0
-                }
-                PauseAnimation { duration: 1000 }
-                PropertyAnimation {
-                    target: recordingIndicator
-                    property: "opacity"
-                    duration: 200
-                    easing.type: Easing.InQuad
-                    to: 1
-                }
-            }
-
         }
 
         TimeController {

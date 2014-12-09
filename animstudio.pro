@@ -31,3 +31,6 @@ osx: qml.path = ./Contents/Resources
 dummy.files = $$PWD/dummy.jpeg
 osx: dummy.path = ./Contents/Resources
 QMAKE_BUNDLE_DATA += qml dummy
+
+DISTFILES += \
+    qml/RecordingIndicator.qml
