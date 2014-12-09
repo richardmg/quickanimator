@@ -124,10 +124,23 @@ Item {
         id: playbackMenu
 
         MenuButton {
-            text: "Record"
-            closeMenuOnClick: true
+            text: "Record speed"
+            menu: recordSliderMenu
+        }
+
+        MenuButton {
+            text: "Play speed"
             menu: playSliderMenu
-            onClicked: myApp.model.recording = true
+        }
+
+        MenuButton {
+            text: "Record"
+            checked: myApp.model.recording
+            onClicked: {
+                myApp.timelineFlickable.userPlay = false
+                myApp.model.recording = !myApp.model.recording
+                myApp.model.mpf = myApp.model.targetMpf * recordSliderMenu.multiplier
+            }
         }
 
         MenuButton {
@@ -144,8 +157,13 @@ Item {
 
         MenuButton {
             text: "Play"
-            closeMenuOnClick: true
-            menu: playSliderMenu
+            checked: myApp.timelineFlickable.userPlay
+            onClicked: {
+                myApp.model.unselectAllSprites()
+                myApp.model.recording = false
+                myApp.model.mpf = myApp.model.targetMpf * (checked ? playSliderMenu.multiplier : recordSliderMenu.multiplier)
+                myApp.timelineFlickable.userPlay = !myApp.timelineFlickable.userPlay
+            }
         }
     }
 
@@ -273,13 +291,9 @@ Item {
             }
         }
 
-        onXChanged: sticky = true
-        onVisibleChanged: if (visible) sticky = false
         onMultiplierChanged: myApp.model.mpf = myApp.model.targetMpf * multiplier
         onIsCurrentChanged: {
             myApp.model.unselectAllSprites()
-            myApp.timelineFlickable.userPlay = isCurrent
-            myApp.model.mpf = myApp.model.targetMpf * (isCurrent ? multiplier : recordSliderMenu.multiplier)
         }
     }
 
@@ -293,12 +307,7 @@ Item {
             textColor: "white"
         }
 
-        onMultiplierChanged: {
-            sticky = true
-            myApp.model.mpf = myApp.model.targetMpf * multiplier
-        }
-
-        onVisibleChanged: if (visible) sticky = false
+        onMultiplierChanged: myApp.model.mpf = myApp.model.targetMpf * multiplier
         onIsCurrentChanged: myApp.model.recording = isCurrent
     }
 
