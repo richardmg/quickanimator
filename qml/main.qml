@@ -73,7 +73,7 @@ ApplicationWindow {
             flickable: flickable
         }
 
-        TimelineCanvas {
+        Timeline {
             id: timeline
             anchors.left: parent.left
             anchors.right: actionLabel.left
