@@ -194,7 +194,7 @@ Item {
             var timeSinceUpdate = new Date().getTime() - _updateTime;
             var timeSincePress = new Date().getTime() - _pressTime;
 
-            animateMomentumToRest(timeSinceUpdate < 150 ? 1 : Number.MAX_VALUE);
+            animateMomentumToRest(timeSinceUpdate < 100 ? 1 : Number.MAX_VALUE);
 
             var click = timeSincePress < 300
                     && Math.abs(mouseX - _pressMouseX) < 10

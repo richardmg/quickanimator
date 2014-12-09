@@ -14,6 +14,7 @@ QtObject {
     // Milliseconds Per Frame (MPF)
     property real targetMpf: 200
     property real mpf: targetMpf
+    property real recordingMpf: targetMpf
     property bool recording: false
 
     signal spritesUpdated(var removedSprite, var addedSprite)

@@ -17,6 +17,7 @@ Item {
         target: flickable
         onAnimatingChanged: updatePlayAnimation();
         onMomentumXUpdated: myApp.model.setTime(myApp.model.time - (flickable.momentumX * 0.1));
+        onReleased: if (clickCount == 1) userPlay = false;
     }
 
     function updatePlayAnimation()
@@ -36,13 +37,17 @@ Item {
 
         property real tick: 0
         property var lastTickTime: new Date()
+        property real mpf: userPlay ? myApp.model.mpf : myApp.model.recordingMpf
 
         onTickChanged: {
             var tickTime = (new Date()).getTime();
             var flickAdjust = flickable ? -flickable.momentumX : 1
-            var timeIncrement = ((tickTime - lastTickTime) / myApp.model.mpf) * flickAdjust
-            myApp.model.setTime(myApp.model.time + timeIncrement);
+            var timeIncrement = ((tickTime - lastTickTime) / mpf) * flickAdjust
+            var newTime = myApp.model.time + timeIncrement
+            myApp.model.setTime(newTime);
             lastTickTime = tickTime;
+            if (newTime > myApp.model.endTime + 1)
+                userPlay = false;
         }
     }
 }

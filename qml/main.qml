@@ -17,6 +17,7 @@ ApplicationWindow {
     property alias stage: stage
     property alias menuController: menuController
     property alias timeController: timeController
+    property alias timeline: timeline
     property alias searchView: searchView
 
     property Style style: Style {}

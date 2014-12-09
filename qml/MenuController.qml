@@ -139,7 +139,6 @@ Item {
             onClicked: {
                 myApp.timeController.userPlay = false
                 myApp.model.recording = !myApp.model.recording
-                myApp.model.mpf = myApp.model.targetMpf * recordSliderMenu.multiplier
             }
         }
 
@@ -161,7 +160,6 @@ Item {
             onClicked: {
                 myApp.model.unselectAllSprites()
                 myApp.model.recording = false
-                myApp.model.mpf = myApp.model.targetMpf * (checked ? playSliderMenu.multiplier : recordSliderMenu.multiplier)
                 myApp.timeController.userPlay = !myApp.timeController.userPlay
             }
         }
@@ -283,32 +281,20 @@ Item {
             textColor: "white"
         }
 
-        Connections {
-            target: playSliderMenu.isCurrent ? myApp.model : null
-            onTimeChanged: {
-                if (myApp.model.time >= myApp.model.endTime + 1)
-                    menuController.currentMenu = playbackMenu
-            }
-        }
-
         onMultiplierChanged: myApp.model.mpf = myApp.model.targetMpf * multiplier
-        onIsCurrentChanged: {
-            myApp.model.unselectAllSprites()
-        }
     }
 
     PlaySlider {
         id: recordSliderMenu
 
         MenuButton {
-            text: (myApp.model.targetMpf / myApp.model.mpf).toFixed(1)
+            text: (myApp.model.targetMpf / myApp.model.recordingMpf).toFixed(1)
             closeMenuOnClick: false
             color: "blue"
             textColor: "white"
         }
 
-        onMultiplierChanged: myApp.model.mpf = myApp.model.targetMpf * multiplier
-        onIsCurrentChanged: myApp.model.recording = isCurrent
+        onMultiplierChanged: myApp.model.recordingMpf = myApp.model.targetMpf * multiplier
     }
 
     FlickableMouseArea {
