@@ -6,13 +6,13 @@ Item {
 
     property FlickableMouseArea flickable: null
     property alias sprites: sprites
-    property var _prevState: new Object
+    property var _prevState: null
 
     Connections {
         target: flickable
 
         onPressed: {
-            if (!myApp.flicking) {
+            if (!myApp.flicking && myApp.model.hasSelection) {
                 _prevState = createState(mouseX, mouseY);
                 updateKeyframes(_prevState, _prevState, "beginKeyframeSequence");
                 myApp.timelineFlickable.recordPlay = myApp.model.recording;
@@ -52,6 +52,10 @@ Item {
         target: myApp.model
 
         onSelectedSpritesUpdated: {
+            if (_prevState) {
+                updateKeyframes(_prevState, _prevState, "endKeyframeSequence");
+                _prevState = null;
+            }
             if (unselectedSprite != -1) {
                 var sprite = myApp.model.sprites[unselectedSprite];
                 sprite.focusIndicator.visible = false;
