@@ -34,6 +34,8 @@ MenuRow {
     onXChanged: {
         if (guard)
             return;
+
+        myApp.timeController.recordPlay = myApp.model.recording;
         for (var i in myApp.model.selectedSprites) {
             var sprite = myApp.model.selectedSprites[i];
             var changes = { opacity: x / (parent.width - width) }
@@ -44,13 +46,13 @@ MenuRow {
     Connections {
         target: opacityMenu.isCurrent ? flickable : null
         onPressed: {
-            myApp.model.recordsOpacity = true
+            beginRecordingTimer.restart();
+            myApp.model.recordsOpacity = true;
             for (var i in myApp.model.selectedSprites) {
                 var sprite = myApp.model.selectedSprites[i];
                 var changes = { opacity: sprite.opacity }
                 sprite.beginKeyframeSequence(myApp.model.time, changes);
             }
-            myApp.timeController.recordPlay = myApp.model.recording;
         }
         onReleased: {
             myApp.model.recordsOpacity = false
@@ -61,6 +63,12 @@ MenuRow {
             }
             myApp.timeController.recordPlay = false;
         }
+    }
+
+    Timer {
+        id: beginRecordingTimer
+        interval: 500
+        onTriggered: myApp.timeController.recordPlay = myApp.model.recording;
     }
 
     Rectangle {
