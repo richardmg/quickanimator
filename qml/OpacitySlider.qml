@@ -50,7 +50,7 @@ MenuRow {
                 var changes = { opacity: sprite.opacity }
                 sprite.beginKeyframeSequence(myApp.model.time, changes);
             }
-            myApp.timelineFlickable.recordPlay = myApp.model.recording;
+            myApp.timeController.recordPlay = myApp.model.recording;
         }
         onReleased: {
             myApp.model.recordsOpacity = false
@@ -59,7 +59,7 @@ MenuRow {
                 var changes = { opacity: sprite.opacity }
                 sprite.endKeyframeSequence(myApp.model.time, changes);
             }
-            myApp.timelineFlickable.recordPlay = false;
+            myApp.timeController.recordPlay = false;
         }
     }
 

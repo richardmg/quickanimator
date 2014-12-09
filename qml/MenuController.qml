@@ -137,7 +137,7 @@ Item {
             text: "Record"
             checked: myApp.model.recording
             onClicked: {
-                myApp.timelineFlickable.userPlay = false
+                myApp.timeController.userPlay = false
                 myApp.model.recording = !myApp.model.recording
                 myApp.model.mpf = myApp.model.targetMpf * recordSliderMenu.multiplier
             }
@@ -157,12 +157,12 @@ Item {
 
         MenuButton {
             text: "Play"
-            checked: myApp.timelineFlickable.userPlay
+            checked: myApp.timeController.userPlay
             onClicked: {
                 myApp.model.unselectAllSprites()
                 myApp.model.recording = false
                 myApp.model.mpf = myApp.model.targetMpf * (checked ? playSliderMenu.multiplier : recordSliderMenu.multiplier)
-                myApp.timelineFlickable.userPlay = !myApp.timelineFlickable.userPlay
+                myApp.timeController.userPlay = !myApp.timeController.userPlay
             }
         }
     }
@@ -195,7 +195,7 @@ Item {
             text: "Single\nframe"
             closeMenuOnClick: false
             onClicked: {
-                myApp.timelineFlickable.userPlay = false
+                myApp.timeController.userPlay = false
                 currentMenu = actionMenu
             }
         }
@@ -274,7 +274,7 @@ Item {
 
     PlaySlider {
         id: playSliderMenu
-        sticky: myApp.timelineFlickable.userPlay
+        sticky: myApp.timeController.userPlay
 
         MenuButton {
             text: (myApp.model.targetMpf / myApp.model.mpf).toFixed(1)

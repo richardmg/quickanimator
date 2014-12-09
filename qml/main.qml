@@ -16,7 +16,7 @@ ApplicationWindow {
 
     property alias stage: stage
     property alias menuController: menuController
-    property alias timelineFlickable: timelineFlickable
+    property alias timeController: timeController
     property alias searchView: searchView
 
     property Style style: Style {}
@@ -45,7 +45,7 @@ ApplicationWindow {
             controlPressed = true
 
             if (event.key === Qt.Key_P) {
-                timelineFlickable.userPlay = !timelineFlickable.userPlay;
+                timeController.userPlay = !timeController.userPlay;
             } else if (event.key === Qt.Key_S) {
                 searchView.visible = true
             } else if (event.key === Qt.Key_A) {
@@ -79,7 +79,7 @@ ApplicationWindow {
             anchors.right: actionLabel.left
             anchors.rightMargin: 4
             height: 15
-            opacity: timelineFlickable.userPlay ? 0 : 1
+            opacity: timeController.userPlay ? 0 : 1
             visible: opacity !== 0
             Behavior on opacity { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
         }
@@ -137,8 +137,8 @@ ApplicationWindow {
 
         }
 
-        TimelineFlickable {
-            id: timelineFlickable
+        TimeController {
+            id: timeController
             anchors.fill: parent
             flickable: myApp.flicking ? flickable : null
         }
@@ -146,7 +146,7 @@ ApplicationWindow {
         FlickableMouseArea {
             id: flickable
             anchors.fill: parent
-            momentumRestX: timelineFlickable.playing ? -1 : 0
+            momentumRestX: timeController.playing ? -1 : 0
         }
 
         MenuController {

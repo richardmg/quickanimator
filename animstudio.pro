@@ -18,9 +18,8 @@ OTHER_FILES += qml/*.qml \
     qml/RecordButton.qml \
     qml/RadioButtonGroup.qml \
     qml/SearchView.qml \
-    qml/TimelineFlickable \
+    qml/TimeController \
     qml/TimelineCanvas \
-    qml/TimelineMenu \
     qml/OpacitySlider.qml \
     qml/MenuController.qml \
     qml/MenuRow.qml \

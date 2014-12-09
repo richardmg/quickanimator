@@ -15,7 +15,7 @@ Item {
             if (!myApp.flicking && myApp.model.hasSelection) {
                 _prevState = createState(mouseX, mouseY);
                 updateKeyframes(_prevState, _prevState, "beginKeyframeSequence");
-                myApp.timelineFlickable.recordPlay = myApp.model.recording;
+                myApp.timeController.recordPlay = myApp.model.recording;
             }
         }
 
@@ -34,7 +34,7 @@ Item {
                 _prevState = null;
             }
             selectOrUnselectSprites(mouseX, mouseY, clickCount)
-            myApp.timelineFlickable.recordPlay = false;
+            myApp.timeController.recordPlay = false;
         }
     }
 
