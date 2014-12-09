@@ -13,7 +13,7 @@ Item {
 
         onPressed: {
             // Record first keyframe on press'n'hold or position change
-            if (!myApp.flicking && myApp.model.hasSelection)
+            if (stageShouldRecord())
                 beginKeyframeSequenceTimer.restart()
         }
 
@@ -112,6 +112,14 @@ Item {
             anchors.rightMargin: 100
             anchors.bottomMargin: 150
         }
+    }
+
+    function stageShouldRecord()
+    {
+        var m = myApp.model;
+        return !myApp.flicking
+                && m.hasSelection
+                && !m.recordsOpacity
     }
 
     function createState(mouseX, mouseY)
