@@ -12,17 +12,17 @@ Item {
         target: flickable
 
         onPressed: {
-            // Start record play on press'n'hold
+            // Record first keyframe on press'n'hold or position change
             if (!myApp.flicking && myApp.model.hasSelection)
                 beginKeyframeSequenceTimer.restart()
         }
 
         onPositionChanged: {
             if (!_prevState) {
-                if (myApp.flicking || !myApp.model.hasSelection)
+                if (beginKeyframeSequenceTimer.running)
+                    beginKeyframeSequenceTimer.triggered()
+                else
                     return;
-                beginKeyframeSequenceTimer.stop();
-                beginKeyframeSequence();
             }
 
             var newState = createState(mouseX, mouseY);
@@ -45,7 +45,12 @@ Item {
     Timer {
         id: beginKeyframeSequenceTimer
         interval: 500
-        onTriggered: beginKeyframeSequence()
+        onTriggered: {
+            stop()
+            _prevState = createState(flickable.mouseX, flickable.mouseY);
+            updateKeyframes(_prevState, _prevState, "beginKeyframeSequence");
+            myApp.timeController.recordPlay = myApp.model.recording;
+        }
     }
 
     Connections {
@@ -145,15 +150,6 @@ Item {
             if (m.x >= 0 && m.x <= sprite.width && m.y >= 0 && m.y <= sprite.height)
                 return sprite
         }
-    }
-
-    function beginKeyframeSequence()
-    {
-        if (_prevState)
-            return;
-        _prevState = createState(flickable.mouseX, flickable.mouseY);
-        updateKeyframes(_prevState, _prevState, "beginKeyframeSequence");
-        myApp.timeController.recordPlay = myApp.model.recording;
     }
 
     function updateKeyframes(_prevState, newState, call)
