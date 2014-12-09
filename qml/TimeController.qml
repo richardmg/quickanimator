@@ -17,16 +17,8 @@ Item {
         target: flickable
         onAnimatingChanged: updatePlayAnimation();
         onMomentumXUpdated: myApp.model.setTime(myApp.model.time - (flickable.momentumX * 0.1));
-        onReleased: if (clickCount == 1) startPlayTimer.restart()
-    }
-
-    Timer {
-        id: startPlayTimer
-        interval: 100
-        onTriggered: {
-            // Use a timer to let sprite selection take precedence
-            // when stopping/starting from flickable click
-            if (myApp.model.hasSelection)
+        onReleased:  {
+            if (clickCount != 1 || myApp.model.hasSelection)
                 return;
             userPlay = (myApp.model.time < myApp.model.endTime) ? !userPlay : false
         }
