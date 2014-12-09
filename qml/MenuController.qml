@@ -15,6 +15,7 @@ Item {
     }
 
     function showEditMenu() { currentMenu = editMenu }
+    function showActionMenu() { currentMenu = actionMenu }
 
     property Row currentMenu: rootMenu
 
@@ -60,6 +61,11 @@ Item {
         MenuButton {
             text: "Edit"
             menu: editMenu
+        }
+
+        MenuButton {
+            text: "Action"
+            menu: actionMenu
         }
     }
 
@@ -118,6 +124,13 @@ Item {
         id: playbackMenu
 
         MenuButton {
+            text: "Record"
+            closeMenuOnClick: true
+            menu: playSliderMenu
+            onClicked: myApp.model.recording = true
+        }
+
+        MenuButton {
             text: "<<"
             closeMenuOnClick: false
             onClicked: myApp.model.setTime(0)
@@ -155,11 +168,17 @@ Item {
         }
 
         MenuButton {
+            text: "Inspect"
+            onClicked: print("foo")
+        }
+
+
+        MenuButton {
             text: "Single\nframe"
             closeMenuOnClick: false
             onClicked: {
                 myApp.timelineFlickable.userPlay = false
-                currentMenu = brushMenu
+                currentMenu = actionMenu
             }
         }
 
@@ -168,38 +187,32 @@ Item {
             closeMenuOnClick: false
             onClicked: {
                 myApp.model.recording = true
-                currentMenu = brushMenu
+                currentMenu = actionMenu
             }
         }
     }
 
     MenuRow {
-        id: brushMenu
+        id: actionMenu
 
-        function testAndSetRecordSlider()
-        {
-            if (myApp.model.recording) {
-                recordSliderMenu.sticky = true
-                currentMenu = recordSliderMenu
-            }
+        MenuButton {
+            text: "Time"
+            closeMenuOnClick: false
         }
 
         MenuButton {
             text: "Offset"
             closeMenuOnClick: false
-            onClicked: currentMenu = opacitySliderMenu
         }
 
         MenuButton {
             text: "Parent"
             closeMenuOnClick: false
-            onClicked: currentMenu = opacitySliderMenu
         }
 
         MenuButton {
             text: "Anchors"
             closeMenuOnClick: false
-            onClicked: currentMenu = opacitySliderMenu
         }
 
         MenuButton {
@@ -210,29 +223,29 @@ Item {
 
         MenuButton {
             text: "Scale"
+            checked: myApp.model.recordsScale
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsScale = true;
-                brushMenu.testAndSetRecordSlider()
             }
         }
 
         MenuButton {
             text: "Rotate"
+            checked: myApp.model.recordsRotation
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsRotation = true;
-                brushMenu.testAndSetRecordSlider()
             }
         }
 
         MenuButton {
             text: "Move"
+            checked: myApp.model.recordsPositionX
             onClicked: {
                 myApp.model.clearRecordState();
                 myApp.model.recordsPositionX = true;
                 myApp.model.recordsPositionY = true;
-                brushMenu.testAndSetRecordSlider()
             }
         }
     }

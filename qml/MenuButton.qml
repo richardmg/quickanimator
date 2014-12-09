@@ -11,7 +11,7 @@ Rectangle {
     property bool flickStop: false
     property Item menu: null
     property bool closeMenuOnClick: !menu && !checkable
-    property alias text: text.text
+    property string text: ""
     property alias textColor: text.color
     readonly property bool isButton: true
 
@@ -32,8 +32,9 @@ Rectangle {
     }
 
     Text {
+        id: text
         anchors.centerIn: parent
         color: "darkblue"
-        id: text
+        text: checked ? "<u>" + root.text + "</u>" : root.text
     }
 }
