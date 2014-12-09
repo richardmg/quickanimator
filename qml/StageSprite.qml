@@ -174,7 +174,6 @@ Item {
         var updatedKeyframe = _firstKeyframeInSequence;
         var changedProps = updatedKeyframe.changedProps
         for (var i = _firstKeyframeInSequence.volatileIndex + 1; i < lastKeyframeInSequence.volatileIndex; ++i) {
-            print("check frame:", i)
             var keyframe = keyframes[i];
             if (keyframe.changedProps) {
                 updatedKeyframe.changedProps = null;
@@ -182,7 +181,6 @@ Item {
                 changedProps = updatedKeyframe.changedProps;
                 continue;
             } else {
-                print("  need propagation")
                 for (var key in changedProps)
                     keyframe[key] = updatedKeyframe[key];
             }
@@ -204,6 +202,7 @@ Item {
                 break;
         }
 
+        updatedKeyframe.changedProps = null;
         lastKeyframeInSequence.changedProps = null;
         _firstKeyframeInSequence.changedProps = null;
         _firstKeyframeInSequence = null;
