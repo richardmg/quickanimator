@@ -31,6 +31,7 @@ Item {
     property bool _invalidCache: true
 
     property var _firstKeyframeInSequence: null
+    property var _keyframeSequencePreState: null
 
     objectName: "unknown sprite"
 
@@ -115,40 +116,36 @@ Item {
         // All updates done in a sequence is seen as belonging together. We can then do some
         // sensible post processing in the end to ensure that existing (but unmodified) keyframes
         // in-between appear connected to the sequence as well.
+
+        // Save the state of the keyframe in
+        // front of the sequence for clamping later
+        var intTime = Math.floor(time);
+        var keyframe = getKeyframe(intTime);
+        _keyframeSequencePreState = new Object
+        for (var key in props)
+            _keyframeSequencePreState[key] = keyframe[key];
+
         _firstKeyframeInSequence = updateKeyframeSequence(time, props)
         return _firstKeyframeInSequence
     }
 
     function updateKeyframeSequence(time, props)
     {
-        var newKeyframeCreated = false;
         var intTime = Math.floor(time);
         var keyframe = getKeyframe(intTime);
+        var prevKeyframe = keyframe
 
-        if (keyframe.time !== intTime) {
-            // The new keyframe needs to copy the old prop values from its antecedent
-            // keyframe so that the changedProps logic below will work.
-            var newKeyframe = createKeyframe(intTime)
-            for (var key in props)
-                newKeyframe[key] = keyframe[key];
+        if (keyframe.time !== intTime)
+            keyframe = createKeyframe(intTime);
 
-            keyframe = newKeyframe
-            newKeyframeCreated = true;
-        }
+        // Mark it as updated so that we know which
+        // keyframes to post-processed in the end
+        keyframe.updated = true;
 
-        if (!keyframe.changedProps) {
-            // Before we update keyframe, store original values in keyframe.changedProps
-            // so that we can determine later if subsequent keyframes need propagation
-            var changedProps = new Object
-            for (key in props)
-                changedProps[key] = keyframe[key];
-            keyframe.changedProps = changedProps;
-        }
-
-        // If the sprite is currently at the update
-        // time, move it to the new keyframe
         if (time === spriteTime) {
-            for (key in props) {
+            // The sprite is currently at the update time
+            // so update keyframe and sprite in one loop
+            for (var key in props) {
                 var prop = props[key]
                 keyframe[key] = prop;
                 sprite[key] = prop;
@@ -158,7 +155,7 @@ Item {
                 keyframe[key] = props[key];
         }
 
-        if (newKeyframeCreated)
+        if (keyframe !== prevKeyframe)
             addKeyframe(keyframe);
 
         return keyframe;
@@ -171,29 +168,24 @@ Item {
         // All keyframes in a sequence [_firstKeyframeInSequence, lastKeyframeInSequence] should get
         // updated, even if no changes occured at the time of a specific keyframe. Otherwise the
         // sprite will "jump" when entering unupdated keyframes in a sequence.
-        var updatedKeyframe = _firstKeyframeInSequence;
-        var changedProps = updatedKeyframe.changedProps
-        for (var i = _firstKeyframeInSequence.volatileIndex + 1; i < lastKeyframeInSequence.volatileIndex; ++i) {
+        for (var i = _firstKeyframeInSequence.volatileIndex; i <= lastKeyframeInSequence.volatileIndex; ++i) {
             var keyframe = keyframes[i];
-            if (keyframe.changedProps) {
-                updatedKeyframe.changedProps = null;
-                updatedKeyframe = keyframe;
-                changedProps = updatedKeyframe.changedProps;
-                continue;
+            if (keyframe.updated) {
+                keyframe.updated = false;
             } else {
-                for (var key in changedProps)
-                    keyframe[key] = updatedKeyframe[key];
+                var prevKeyframe = keyframes[i-1];
+                for (var key in props)
+                    keyframe[key] = prevKeyframe[key];
             }
         }
 
-        // If a prop in an unupdated keyframe had the same value as its antecedent updated keyframe
-        // before it got updated, we update the susequent keyframe with the same changes as well.
-        changedProps = lastKeyframeInSequence.changedProps
+        // As long as we find keyframes trailing the sequence that has the same value as the
+        // keyframe in front of the sequence, we choose to clamp them to the sequence as well
         for (i = lastKeyframeInSequence.volatileIndex + 1; i < keyframes.length; ++i) {
             keyframe = keyframes[i];
             var keyframeModified = false
-            for (key in changedProps) {
-                if (keyframe[key] === changedProps[key]) {
+            for (key in props) {
+                if (keyframe[key] === _keyframeSequencePreState[key]) {
                     keyframe[key] = lastKeyframeInSequence[key];
                     keyframeModified = true
                 }
@@ -202,10 +194,8 @@ Item {
                 break;
         }
 
-        updatedKeyframe.changedProps = null;
-        lastKeyframeInSequence.changedProps = null;
-        _firstKeyframeInSequence.changedProps = null;
         _firstKeyframeInSequence = null;
+        _keyframeSequencePreState = null;
     }
 
     function _createKeyframeRelativeToParent(time, keyframeParent)
