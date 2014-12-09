@@ -24,7 +24,18 @@ MenuRow {
         guard = false
     }
 
-    onIsCurrentChanged: syncWithSelectedLayer()
+    onIsCurrentChanged: {
+        if (isCurrent) {
+            myApp.model.clearRecordState();
+            myApp.model.recordsOpacity = true;
+            syncWithSelectedLayer()
+        } else {
+            // fixme: store previous record state
+            myApp.model.clearRecordState();
+            myApp.model.recordsPositionX = true;
+            myApp.model.recordsPositionY = true;
+        }
+    }
 
     Connections {
         target: isCurrent ? myApp.model : null
