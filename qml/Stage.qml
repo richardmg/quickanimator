@@ -36,7 +36,7 @@ Item {
                 updateKeyframes(_prevState, newState, "endKeyframeSequence");
                 _prevState = null;
                 myApp.timeController.recordPlay = false;
-            } else {
+            } else if (!myApp.timeController.playing) {
                 selectOrUnselectSprites(mouseX, mouseY, clickCount)
             }
         }

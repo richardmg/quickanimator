@@ -23,7 +23,13 @@ Item {
     Timer {
         id: startPlayTimer
         interval: 100
-        onTriggered: userPlay = myApp.model.hasSelection ? false : !userPlay
+        onTriggered: {
+            // Use a timer to let sprite selection take precedence
+            // when stopping/starting from flickable click
+            if (myApp.model.hasSelection)
+                return;
+            userPlay = (myApp.model.time < myApp.model.endTime) ? !userPlay : false
+        }
     }
 
     function updatePlayAnimation()
