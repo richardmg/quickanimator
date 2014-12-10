@@ -181,6 +181,11 @@ Item {
         MenuButton {
             text: "Cut"
             menu: cutMenu
+            onClicked: {
+                myApp.model.recording = false
+                myApp.model.clearRecordState()
+                myApp.model.recordsCut = true
+            }
         }
 
         MenuButton {
@@ -193,15 +198,29 @@ Item {
         id: cutMenu
 
         MenuButton {
+            id: cutButton
             text: "Cut"
             closeMenuOnClick: false
-            checkable: true
-            onCheckedChanged: myApp.model.recordsCut = pressed || checked
-            onPressedChanged:{
-                if (pressed)
-                    myApp.model.removeCurrentKeyframe()
-                myApp.model.clearRecordState()
-                myApp.model.recordsCut = pressed || checked
+            onClicked: removeCurrentKeyframe()
+
+            Connections {
+                target: cutMenu.isCurrent ? myApp.model : null
+                onTimeChanged: {
+                    if (myApp.model.recordsCut)
+                        cutButton.removeCurrentKeyframe()
+                }
+            }
+
+            function removeCurrentKeyframe()
+            {
+                if (!myApp.model.hasSelection)
+                    return;
+                var index = 0;
+                var time = Math.floor(myApp.model.time);
+                var sprite = myApp.model.selectedSprites[index];
+                var keyframe = sprite.getKeyframe(time);
+                if (keyframe.time === time)
+                    sprite.removeKeyframe(keyframe);
             }
         }
 

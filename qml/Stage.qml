@@ -119,7 +119,12 @@ Item {
         var m = myApp.model;
         return !myApp.flicking
                 && m.hasSelection
-                && !m.recordsOpacity
+                && (m.recordsPositionX
+                || m.recordsPositionY
+                || m.recordsScale
+                || m.recordsRotation
+                || m.recordsAnchorX
+                || m.recordsAnchorY)
     }
 
     function createState(mouseX, mouseY)

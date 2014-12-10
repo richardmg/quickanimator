@@ -69,6 +69,18 @@ QtObject {
             sprites[i].synchReparentKeyframe(sprite);
     }
 
+    function callbackKeyframeRemoved(sprite, keyframe)
+    {
+// fixme: recalculate endTime
+//        if (keyframe.time > endTime)
+//            endTime = keyframe.time;
+
+        keyframesUpdated(sprite);
+
+        for (var i in sprites)
+            sprites[i].synchReparentKeyframe(sprite);
+    }
+
     function testAndSetEndTime(time)
     {
         if (time <= endTime)
@@ -203,16 +215,6 @@ QtObject {
 
         // Reparent sprite:
         layer.sprite.changeParent(keyframe.parent);
-    }
-
-    function removeCurrentKeyframe()
-    {
-        if (selectedSprites.length === 0)
-            return;
-        var index = 0;
-        var sprite = selectedSprites[index];
-        sprite.removeKeyframe(sprite.getCurrentKeyframe());
-        keyframesUpdated(index);
     }
 
     function setSpriteIndex(oldIndex, newIndex)

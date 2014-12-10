@@ -98,6 +98,7 @@ ApplicationWindow {
                   : myApp.model.recordsRotation ? "Rotate"
                   : myApp.model.recordsScale ? "Scale"
                   : myApp.model.recordsOpacity ? "Opacity"
+                  : myApp.model.recordsCut ? "Cut"
                   : "Unknown"
 
             anchors.right: recordingIndicator.left

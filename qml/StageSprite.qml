@@ -67,8 +67,8 @@ Item {
     {
         keyframe.volatileIndex = keyframes.length === 0 ? 0 : getKeyframe(keyframe.time).volatileIndex + 1;
         keyframes.splice(keyframe.volatileIndex, 0, keyframe);
-        model.callbackKeyframeAdded(sprite, keyframe);
         _invalidCache = true;
+        model.callbackKeyframeAdded(sprite, keyframe);
     }
 
     function removeKeyframe(keyframe)
@@ -76,6 +76,7 @@ Item {
         keyframes.splice(keyframes.indexOf(keyframe), 1);
         _invalidCache = true;
         setTime(spriteTime);
+        model.callbackKeyframeRemoved(sprite, keyframe);
     }
 
     function createKeyframe(time)
