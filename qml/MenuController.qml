@@ -200,6 +200,7 @@ Item {
             onPressedChanged:{
                 if (pressed)
                     myApp.model.removeCurrentKeyframe()
+                myApp.model.clearRecordState()
                 myApp.model.recordsCut = pressed || checked
             }
         }
