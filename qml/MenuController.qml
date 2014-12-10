@@ -194,11 +194,19 @@ Item {
 
         MenuButton {
             text: "Cut"
-            onClicked: print("bar")
+            closeMenuOnClick: false
+            checkable: true
+            onCheckedChanged: myApp.model.recordsCut = pressed || checked
+            onPressedChanged:{
+                if (pressed)
+                    myApp.model.removeCurrentKeyframe()
+                myApp.model.recordsCut = pressed || checked
+            }
         }
 
         MenuButton {
             text: "Cut all"
+            closeMenuOnClick: false
             onClicked: print("redo")
         }
     }
@@ -322,6 +330,17 @@ Item {
             }
         }
 
+        function buttonAt(mouseX, mouseY)
+        {
+            var p = currentMenu;
+            do {
+                var pos = mapToItem(p, mouseX, mouseY);
+                var child = p.childAt(pos.x, pos.y);
+                p = child;
+            } while (p && !child.isButton);
+            return (child && child.isButton) ? child : null;
+        }
+
         onMomentumXUpdated: {
             if (currentMenu.unflickable)
                 return;
@@ -337,6 +356,9 @@ Item {
             if (currentMenu.unflickable)
                 return;
             bounceAnimation.stop();
+            var button = buttonAt(mouseX, mouseY)
+            if (button)
+                button.pressed = true;
         }
 
         onReleased: {
@@ -344,18 +366,12 @@ Item {
                 return;
             bounceMenuBack(true)
 
-            if (!clickCount)
-                return
-
-            var p = currentMenu;
-            do {
-                var pos = mapToItem(p, mouseX, mouseY);
-                var child = p.childAt(pos.x, pos.y);
-                p = child;
-            } while (p && !child.isButton);
-
-            if (child && child.isButton)
-                child.clicked();
+            var button = buttonAt(mouseX, mouseY)
+            if (button) {
+                button.pressed = false;
+                if (clickCount === 1)
+                    button.clicked();
+            }
         }
     }
 

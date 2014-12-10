@@ -29,6 +29,8 @@ QtObject {
     property bool recordsAnchorX: false
     property bool recordsAnchorY: false
     property bool recordsOpacity: false
+    property bool recordsCut: false
+    property bool recordsCutAll: false
 
     function clearRecordState()
     {
@@ -39,6 +41,8 @@ QtObject {
         recordsAnchorX = false;
         recordsAnchorY = false;
         recordsOpacity = false;
+        recordsCut = false;
+        recordsCutAll = false;
     }
 
     function newMovie()
