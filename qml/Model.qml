@@ -30,13 +30,6 @@ QtObject {
     property bool recordsAnchorY: false
     property bool recordsOpacity: false
 
-    function shiftUserInterfaceState()
-    {
-        ++userInterfaceState;
-        if (userInterfaceState > 1) // NB: skipping 3rd state for now
-            userInterfaceState = 0
-    }
-
     function clearRecordState()
     {
         recordsPositionX = false;
