@@ -210,7 +210,7 @@ QtObject {
         if (selectedSprites.length === 0)
             return;
         var index = 0;
-        var sprite = selectedSprites[index].sprite;
+        var sprite = selectedSprites[index];
         sprite.removeKeyframe(sprite.getCurrentKeyframe());
         keyframesUpdated(index);
     }
