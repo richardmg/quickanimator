@@ -187,25 +187,6 @@ Item {
             text: "Inspect"
             onClicked: print("foo")
         }
-
-
-        MenuButton {
-            text: "Single\nframe"
-            closeMenuOnClick: false
-            onClicked: {
-                myApp.timeController.userPlay = false
-                currentMenu = actionMenu
-            }
-        }
-
-        MenuButton {
-            text: "Record\nframes"
-            closeMenuOnClick: false
-            onClicked: {
-                myApp.model.recording = true
-                currentMenu = actionMenu
-            }
-        }
     }
 
     MenuRow {
