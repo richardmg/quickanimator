@@ -180,7 +180,7 @@ Item {
 
         MenuButton {
             text: "Cut"
-            onClicked: print("foo")
+            menu: cutMenu
         }
 
         MenuButton {
@@ -188,6 +188,21 @@ Item {
             onClicked: print("foo")
         }
     }
+
+    MenuRow {
+        id: cutMenu
+
+        MenuButton {
+            text: "Cut"
+            onClicked: print("bar")
+        }
+
+        MenuButton {
+            text: "Cut all"
+            onClicked: print("redo")
+        }
+    }
+
 
     MenuRow {
         id: actionMenu
