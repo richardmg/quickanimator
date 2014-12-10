@@ -58,6 +58,7 @@ QtObject {
 
         sprites = new Array;
         setTime(0);
+        endTime = 0;
     }
 
     function callbackKeyframeAdded(sprite, keyframe)
